@@ -1,6 +1,10 @@
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
+import 'package:chat_line/pages/tabs/bio_tab.dart';
+import 'package:chat_line/pages/tabs/comments_tab.dart';
+import 'package:chat_line/pages/tabs/follows_tab.dart';
+import 'package:chat_line/pages/tabs/likes_tab.dart';
 import 'package:chat_line/shared_components/comment_thread.dart';
 import 'package:chat_line/shared_components/follows_thread.dart';
 import 'package:chat_line/shared_components/likes_thread.dart';
@@ -341,397 +345,138 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
   Widget _widgetOptions(_selectedIndex) {
     var theOptions = <Widget>[
-      Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Flexible(
-              child: ListView(
-                children: [
-                  // !_isThisMe
-                  //     ? ListTile(
-                  //         title: Column(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             ToolButton(
-                  //               key: ObjectKey("${_profileLikes}-likes"),
-                  //               action: _likeThisProfile,
-                  //               iconData: Icons.thumb_up,
-                  //               color: Colors.green,
-                  //               isLoading: _isLiking,
-                  //               text: _profileLikes?.length.toString(),
-                  //               label: 'Like',
-                  //               isActive: _profileLikedByMe != null,
-                  //             ),
-                  //             ToolButton(
-                  //                 action: _followThisProfile,
-                  //                 text: _profileFollows?.length.toString(),
-                  //                 isActive: _profileFollowedByMe != null,
-                  //                 iconData: Icons.favorite,
-                  //                 isLoading: _isFollowing,
-                  //                 color: Colors.blue,
-                  //                 label: 'Follow'),
-                  //             ToolButton(
-                  //                 key: ObjectKey("$_profileComments-comments"),
-                  //                 text: _profileComments?.length.toString(),
-                  //                 action: (context) {
-                  //                   setState(() {
-                  //                     _selectedIndex = 2;
-                  //                   });
-                  //                 },
-                  //                 iconData: Icons.comment,
-                  //                 color: Colors.yellow,
-                  //                 label: 'Comment'),
-                  //             // ToolButton(
-                  //             //     action: _dislikeThisProfile,
-                  //             //     iconData: Icons.comment,
-                  //             //     color: Colors.red,
-                  //             //     label: 'Dislike'),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     : Text("This is you"),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: const BoxConstraints(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _thisProfile?.profileImage != null
-                              ? Image.network(
-                                  MyImageBuilder()
-                                          .urlFor(
-                                              _thisProfile?.profileImage ?? "")
-                                          ?.height(200)
-                                          .width(200)
-                                          .url() ??
-                                      "",
-                                  height: 200,
-                                  width: 200,
-                                )
-                              : SizedBox(
-                                  height: 200,
-                                  width: 200,
-                                ),
-                          Flexible(
-                            key: ObjectKey(_profileLikes),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ToolButton(
-                                  key: ObjectKey("${_profileLikes}-likes"),
-                                  action: _likeThisProfile,
-                                  iconData: Icons.thumb_up,
-                                  color: Colors.green,
-                                  isLoading: _isLiking,
-                                  text: _profileLikes?.length.toString(),
-                                  label: 'Like',
-                                  isActive: _profileLikedByMe != null,
-                                ),
-                                ToolButton(
-                                    action: _followThisProfile,
-                                    text: _profileFollows?.length.toString(),
-                                    isActive: _profileFollowedByMe != null,
-                                    iconData: Icons.favorite,
-                                    isLoading: _isFollowing,
-                                    color: Colors.blue,
-                                    label: 'Follow'),
-                                ToolButton(
-                                    key: ObjectKey("$_profileComments-comments"),
-                                    text: _profileComments?.length.toString(),
-                                    action: (context) {
-                                      setState(() {
-                                        _selectedIndex = 2;
-                                      });
-                                    },
-                                    iconData: Icons.comment,
-                                    color: Colors.yellow,
-                                    label: 'Comment'),
-                                // ToolButton(
-                                //     action: _dislikeThisProfile,
-                                //     iconData: Icons.comment,
-                                //     color: Colors.red,
-                                //     label: 'Dislike'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              Text("account name"),
-                              Text(_thisProfile?.displayName ?? ""),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              children: [
-                                Text("Age"),
-                                Text(extProfile?.age.toString() ?? ""),
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            child: Column(
-                              children: [
-                                Text("Weight"),
-                                Text(extProfile?.weight.toString() ?? ""),
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    Text("Height"),
-                                    Text(
-                                        ("${extProfile?.height?.feet}'") ?? ""),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(""),
-                                    Text("${extProfile?.height?.inches}\""),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Short Bio"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text(extProfile?.shortBio ?? ""),
-                  ),
-                  ExpansionTile(
-                    children: [
-                      ListTile(
-                        title: Text(extProfile?.longBio ?? ""),
-                      ),
-                    ],
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("Long Bio")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.iAm ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("I am")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.imInto ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("I'm Into")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.imOpenTo ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("I'm Open to")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.whatIDo ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("What I do")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.whatImLookingFor ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("What I'm looking for")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ExpansionTile(
-                    subtitle: Text(extProfile?.whatInterestsMe ?? ""),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [Text("What Interests me")],
-                        ),
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Where I Live?"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text(extProfile?.whereILive ?? ""),
-                  ),
-                  ListTile(
-                    title: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Sex Preferences?"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text(extProfile?.sexPreferences ?? ""),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      BioTab(
+        thisProfile: _thisProfile,
+        chatController: widget.chatController,
+        authController: widget.authController,
+        id: widget.id,
+        profileLikes: _profileLikes,
+        profileFollows: _profileFollows,
+        updateLikes: (context, String likeResponse, bool isUnlike) async {
+          List<Like> theLikes = await _getProfileLikes();
+          Like? isLikedResponse = isThisProfileLikedByMe(theLikes);
+
+          setState(() {
+            _isLiking = false;
+            _profileLikes = theLikes;
+            _profileLikedByMe = isLikedResponse;
+          });
+
+          if (!isUnlike && likeResponse != "SUCCESS") {
+            return showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertMessagePopup(
+                      title: "FAIL",
+                      message: "That like didnt register. Try Again.",
+                      isError: true);
+                });
+          }
+        },
+        updateFollows: (context, String followResponse, bool isUnfollow) async {
+          List<Follow> theFollows = await _getProfileFollows();
+          Follow? isFollowdResponse = isThisProfileFollowedByMe(theFollows);
+
+          setState(() {
+            _isFollowing = false;
+            _profileFollows = theFollows;
+            _profileFollowedByMe = isFollowdResponse;
+          });
+
+          if (!isUnfollow && followResponse != "SUCCESS") {
+            return showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertMessagePopup(
+                      title: "FAIL",
+                      message: "That like didnt register. Try Again.",
+                      isError: true);
+                });
+          }
+        },
+        isThisMe: _isThisMe,
+        profileComments: _profileComments,
+        updateComments:
+            (context, String commentResponse, bool isUncomment) async {
+          List<Comment> theComments = await _getProfileComments();
+
+          setState(() {
+            _isCommenting = false;
+            _profileComments = theComments;
+          });
+
+          if (!isUncomment && commentResponse != "SUCCESS") {
+            return showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertMessagePopup(
+                      title: "FAIL",
+                      message: "That like didnt register. Try Again.",
+                      isError: true);
+                });
+          }
+        },
+        profileLikedByMe: _profileLikedByMe,
+        profileFollowedByMe: _profileFollowedByMe,
       ),
-      ConstrainedBox(
-        constraints: BoxConstraints(),
-        child: Column(
-          children: [
-            Flexible(
-              flex: 8,
-              child: CommentThread(
-                key: ObjectKey(_profileComments),
-                comments: _profileComments ?? [],
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: TextFormField(
-                // key: ObjectKey(
-                //     "${widget.chatController.extProfile?.iAm}-comment-body"),
-                // controller: _longBioController,
-                // initialValue: widget.chatController.extProfile?.iAm ?? "",
-                onChanged: (e) {
-                  _setCommentBody(e);
-                },
-                minLines: 2,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Comment:',
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: MaterialButton(
-                color: Colors.red,
-                textColor: Colors.white,
-                // style: ButtonStyle(
-                //     backgroundColor: _isMenuItemsOnly
-                //         ? MaterialStateProperty.all(Colors.red)
-                //         : MaterialStateProperty.all(Colors.white)),
-                onPressed: () {
-                  _commentThisProfile(context);
-                },
-                child: Text("Leave Comment"),
-              ),
-            )
-          ],
-        ),
+      CommentsTab(
+          chatController: widget.chatController,
+          authController: widget.authController,
+          id: widget.id,
+          profileComments: _profileComments,
+          thisProfile: _thisProfile,
+          updateComments: (context, String updateCommentResponse) async {
+            List<Comment> theComments =
+                await widget.chatController.getProfileComments(widget.id);
+            setState(() {
+              _isCommenting = false;
+              _profileComments = theComments;
+            });
+
+            Navigator.of(context).pop();
+
+            if (updateCommentResponse != "SUCCESS") {
+              return showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertMessagePopup(
+                        title: "FAIL",
+                        message: "That like didnt register. Try Again.",
+                        isError: true);
+                  });
+            } else {
+              return showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertMessagePopup(
+                      title: "SUCCESS",
+                      message: "Comment Posted.",
+                      isError: false,
+                      isSuccess: true,
+                    );
+                  });
+            }
+          },
+          isThisMe: _isThisMe),
+      FollowsTab(
+        chatController: widget.chatController,
+        authController: widget.authController,
+        thisProfile: _thisProfile,
+        isThisMe: _isThisMe,
+        profileFollowedByMe: _profileFollowedByMe,
+        profileFollows: _profileFollows,
+        id: widget.id,
       ),
-      ConstrainedBox(
-        constraints: BoxConstraints(),
-        child: Column(
-          children: [
-            Flexible(
-              flex: 1,
-              child: FollowThread(
-                key: ObjectKey(_profileFollows),
-                follows: _profileFollows ?? [],
-              ),
-            ),
-          ],
-        ),
+      LikesTab(
+        chatController: widget.chatController,
+        authController: widget.authController,
+        thisProfile: _thisProfile,
+        isThisMe: _isThisMe,
+        profileLikedByMe: _profileLikedByMe,
+        profileLikes: _profileLikes,
+        id: widget.id,
       ),
-      ConstrainedBox(
-        constraints: BoxConstraints(),
-        child: Column(
-          children: [
-            Flexible(
-              flex: 1,
-              child: LikeThread(
-                key: ObjectKey(_profileFollows),
-                likes: _profileLikes ?? [],
-              ),
-            ),
-          ],
-        ),
-      ),
-      Text(
+      const Text(
         'Index 3: Photo',
         style: optionStyle,
       ),
@@ -756,7 +501,10 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text("Chat Line - ${_getTagLine()}"),
       ),
-      body: ConstrainedBox(key: Key(_selectedIndex.toString()),constraints:BoxConstraints(),child: _widgetOptions(_selectedIndex)),
+      body: ConstrainedBox(
+          key: Key(_selectedIndex.toString()),
+          constraints: BoxConstraints(),
+          child: _widgetOptions(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -775,7 +523,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             icon: Icon(Icons.thumb_up),
             label: 'Likes',
           ),
-        BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.photo_album),
             label: 'Photos',
           ),
