@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "853598734701",
+    "project_id": "the-handsomest-nerd-auth",
+    "storage_bucket": "the-handsomest-nerd-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853598734701:android:c6f4eac320608c54177264",
+        "android_client_info": {
+          "package_name": "com.thehandsomestnerd.chat_line"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853598734701-5jm20g58g8jdsa0qamk3i4svibm5523s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5FkJAr9E4EmbMjKZNuTmG7eFWQJk8Y-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853598734701-5jm20g58g8jdsa0qamk3i4svibm5523s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
