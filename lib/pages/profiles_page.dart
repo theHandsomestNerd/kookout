@@ -2,11 +2,10 @@ import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
-import '../models/Profile.dart';
 import '../shared_components/profile_list.dart';
 
-class LoggedInHomePage extends StatefulWidget {
-  const LoggedInHomePage(
+class ProfilesPage extends StatefulWidget {
+  const ProfilesPage(
       {super.key,
       required this.authController,
       required this.chatController,
@@ -17,10 +16,10 @@ class LoggedInHomePage extends StatefulWidget {
   final Widget drawer;
 
   @override
-  State<LoggedInHomePage> createState() => _LoggedInHomePageState();
+  State<ProfilesPage> createState() => _ProfilesPageState();
 }
 
-class _LoggedInHomePageState extends State<LoggedInHomePage> {
+class _ProfilesPageState extends State<ProfilesPage> {
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done

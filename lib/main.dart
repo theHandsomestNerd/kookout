@@ -2,9 +2,9 @@ import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/edit_profile_page.dart';
 import 'package:chat_line/pages/home_page.dart';
-import 'package:chat_line/pages/logged_in_home_page.dart';
 import 'package:chat_line/pages/logout_page.dart';
-import 'package:chat_line/pages/registration/register_page.dart';
+import 'package:chat_line/pages/profiles_page.dart';
+import 'package:chat_line/pages/register_page.dart';
 import 'package:chat_line/pages/solo_profile_page.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,17 +30,20 @@ Future<void> main() async {
   Widget globalDrawer = AppDrawer(authController: manager);
 
   runApp(MyApp(
-    authController: manager,
-    drawer: globalDrawer,
-    chatController: chatController
-  ));
+      authController: manager,
+      drawer: globalDrawer,
+      chatController: chatController));
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key, this.authController, this.drawer, this.chatController});
+  MyApp(
+      {super.key,
+      required this.authController,
+      required this.drawer,
+      required this.chatController});
 
-  final authController;
-  final chatController;
+  final AuthController authController;
+  final ChatController chatController;
   final drawer;
 
   @override
@@ -52,30 +55,42 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: Key(widget.authController.isLoggedIn.toString()),
+      key: Key(widget.authController?.isLoggedIn.toString() ?? "-logged-in"),
       title: 'Chat Line',
       routes: {
-        '/': (context) =>
-            HomePage(authController: widget.authController, drawer: widget.drawer),
+        '/': (context) => HomePage(
+            authController: widget.authController, drawer: widget.drawer),
         '/register': (context) => RegisterPage(
             authController: widget.authController, drawer: widget.drawer),
-        '/login': (context) =>
-            LoginPage(authController: widget.authController, drawer: widget.drawer),
-        '/editProfile': (context) => EditProfilePage(
-            authController: widget.authController, drawer: widget.drawer, chatController: widget.chatController),
-        '/logout': (context) =>
-            LogoutPage(authController: widget.authController, drawer: widget.drawer),
-        '/loggedInHome': (context) => LoggedInHomePage(
-            chatController: widget.chatController,
+        '/login': (context) => LoginPage(
             authController: widget.authController, drawer: widget.drawer),
+        '/editProfile': (context) => EditProfilePage(
+            authController: widget.authController,
+            drawer: widget.drawer,
+            chatController: widget.chatController),
+        '/logout': (context) => LogoutPage(
+            authController: widget.authController, drawer: widget.drawer),
+        '/loggedInHome': (context) => ProfilesPage(
+            chatController: widget.chatController,
+            authController: widget.authController,
+            drawer: widget.drawer),
         '/profile': (context) {
-          var arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+          var arguments = (ModalRoute.of(context)?.settings.arguments ??
+              <String, dynamic>{}) as Map;
 
           return SoloProfilePage(
             chatController: widget.chatController,
             authController: widget.authController,
             drawer: widget.drawer,
             id: arguments["id"] ?? "",
+          );
+        },
+        '/myProfile': (context) {
+          return SoloProfilePage(
+            chatController: widget.chatController,
+            authController: widget.authController,
+            drawer: widget.drawer,
+            id: widget.authController.myAppUser?.userId.toString() ?? "",
           );
         },
       },

@@ -4,7 +4,7 @@ import 'package:chat_line/shared_components/alert_message_popup.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared_components/app_drawer.dart';
+import '../shared_components/app_drawer.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage(
