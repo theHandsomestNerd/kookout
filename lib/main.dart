@@ -7,6 +7,7 @@ import 'package:chat_line/pages/posts_thread_page.dart';
 import 'package:chat_line/pages/profiles_page.dart';
 import 'package:chat_line/pages/register_page.dart';
 import 'package:chat_line/pages/solo_profile_page.dart';
+import 'package:chat_line/platform_dependent/image_uploader_abstract.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +15,9 @@ import 'package:flutter/material.dart';
 
 import 'config/firebase_options.dart';
 import 'pages/login_page.dart';
+import '../../platform_dependent/image_uploader.dart'
+    if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
+    if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,20 +33,24 @@ Future<void> main() async {
   AuthController manager = AuthController.init();
   ChatController chatController = ChatController.init();
   Widget globalDrawer = AppDrawer(authController: manager);
+  ImageUploader imageUploader = ImageUploaderImpl();
 
   runApp(MyApp(
       authController: manager,
       drawer: globalDrawer,
-      chatController: chatController));
+      chatController: chatController,
+      imageUploader: imageUploader));
 }
 
 class MyApp extends StatefulWidget {
   MyApp(
       {super.key,
       required this.authController,
+      required this.imageUploader,
       required this.drawer,
       required this.chatController});
 
+  final ImageUploader imageUploader;
   final AuthController authController;
   final ChatController chatController;
   final drawer;
@@ -65,6 +73,8 @@ class _MyAppState extends State<MyApp> {
             authController: widget.authController, drawer: widget.drawer),
         '/login': (context) => LoginPage(drawer: widget.drawer),
         '/editProfile': (context) => EditProfilePage(
+              key: ObjectKey(widget.imageUploader.filename),
+              imageUploader: widget.imageUploader,
               chatController: widget.chatController,
               authController: widget.authController,
               drawer: widget.drawer,

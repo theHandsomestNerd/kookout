@@ -10,19 +10,15 @@ class Like {
 
   Like.fromJson(Map<String, dynamic> json) {
     if (json['_id'] != null && json['_id'] != "null") {
-      print("processing id ${json['_id']}");
       id = json["_id"];
     }
     if (json['liker'] != null && json['liker'] != "null") {
-      print("processing Liker ${json['liker']}");
       liker = AppUser.fromJson(json["liker"]);
     }
     if (json['likee'] != null && json['likee'] != "null") {
-      print("processing likee ${json['likee']}");
       likee = AppUser.fromJson(json["likee"]);
     }
   if (json['likeCategory'] != null && json['likeCategory'] != "null") {
-      print("processing likeCategory ${json['likeCategory']}");
       likeCategory = json["likeCategory"];
     }
   }
@@ -36,12 +32,12 @@ class Like {
     return data;
   }
 
-  @override
-  toString(){
-    return '\n______________Like:${id}______________\n'
-        '\nliker:${liker?.userId} '
-        '\nlikee:${likee?.userId} '
-        '\nlikeCategory:$likeCategory '
-        '\n-----------------------------\n';
-  }
+  // @override
+  // toString(){
+  //   return '\n______________Like:${id}______________\n'
+  //       '\nliker:${liker?.userId} '
+  //       '\nlikee:${likee?.userId} '
+  //       '\nlikeCategory:$likeCategory '
+  //       '\n-----------------------------\n';
+  // }
 }

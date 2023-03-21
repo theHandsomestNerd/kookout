@@ -9,15 +9,12 @@ class Follow {
 
   Follow.fromJson(Map<String, dynamic> json) {
     if (json['_id'] != null && json['_id'] != "null") {
-      print("processing id ${json['_id']}");
       id = json["_id"];
     }
     if (json['follower'] != null && json['follower'] != "null") {
-      print("processing Liker ${json['follower']}");
       follower = AppUser.fromJson(json["follower"]);
     }
     if (json['followed'] != null && json['followed'] != "null") {
-      print("processing followed ${json['followed']}");
       followed = AppUser.fromJson(json["followed"]);
     }
   }
@@ -30,11 +27,11 @@ class Follow {
     return data;
   }
 
-  @override
-  toString(){
-    return '\n______________Follow:${id}______________\n'
-        '\nfollower:${follower?.userId} '
-        '\nfollowed:${followed?.userId} '
-        '\n-----------------------------\n';
-  }
+  // @override
+  // toString(){
+  //   return '\n______________Follow:${id}______________\n'
+  //       '\nfollower:${follower?.userId} '
+  //       '\nfollowed:${followed?.userId} '
+  //       '\n-----------------------------\n';
+  // }
 }

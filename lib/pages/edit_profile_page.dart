@@ -1,9 +1,8 @@
-import 'dart:html';
 import 'dart:typed_data';
-
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
+import 'package:chat_line/platform_dependent/image_uploader_abstract.dart';
 import 'package:chat_line/shared_components/alert_message_popup.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:chat_line/shared_components/height_input.dart';
@@ -17,10 +16,12 @@ class EditProfilePage extends StatefulWidget {
       {super.key,
       required this.authController,
       required this.chatController,
+      required this.imageUploader,
       this.drawer});
 
   final AuthController authController;
   final ChatController chatController;
+  final ImageUploader? imageUploader;
   final AppDrawer? drawer;
 
   @override
@@ -30,7 +31,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String _loginUsername = "";
   String _displayName = "";
-  String _filename = "";
+
+  // String _filename = "";
 
   String _shortBio = "";
   String _longBio = "";
@@ -47,8 +49,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   int _weight = 0;
 
   late ExtendedProfile? extProfile = null;
-
-  var _fileData;
 
   void _setUsername(String newUsername) {
     setState(() {
@@ -134,10 +134,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  var _filename;
+
   Future<void> _updateProfile(context) async {
     try {
       var authUser = await widget.authController.updateUser(
-          _loginUsername, _displayName, _filename, _fileData, context);
+          _loginUsername,
+          _displayName,
+          widget.imageUploader?.filename ?? "",
+          widget.imageUploader?.fileData,
+          context);
       print("updated fields in authuser result: $authUser");
       print("id to create ${authUser?.uid}");
 
@@ -175,40 +181,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
   }
 
-  void _updateProfilePhoto(context) async {
-    // var file = await ImagePicker().pickImage(source: ImageSource.gallery);
-    // setState(() {
-    //   _filename = file?.path ?? "";
-    // });
-
-    FileUploadInputElement uploadInput = FileUploadInputElement();
-    uploadInput.click();
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      if (files?.length == 1) {
-        final File file = files![0];
-        final reader = FileReader();
-        reader.onLoadEnd.listen((e) {
-          setState(() {
-            _filename = uploadInput.value ?? "";
-            _fileData = reader.result;
-          });
-          print("loaded: ${file.name} from ${uploadInput.value} ");
-          print("type: ${reader.result.runtimeType}");
-        });
-        reader.onError.listen((e) {
-          print(e);
-        });
-        reader.readAsArrayBuffer(file);
-      }
-    });
-  }
+  // void _updateProfilePhoto(context) async {
+  //   // var file = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   // setState(() {
+  //   //   _filename = file?.path ?? "";
+  //   // });
+  //
+  //   FileUploadInputElement uploadInput = FileUploadInputElement();
+  //   uploadInput.click();
+  //
+  //   uploadInput.onChange.listen((e) {
+  //     final files = uploadInput.files;
+  //     if (files?.length == 1) {
+  //       final File file = files![0];
+  //       final reader = FileReader();
+  //       reader.onLoadEnd.listen((e) {
+  //         setState(() {
+  //           _filename = uploadInput.value ?? "";
+  //           _fileData = reader.result;
+  //         });
+  //         print("loaded: ${file.name} from ${uploadInput.value} ");
+  //         print("type: ${reader.result.runtimeType}");
+  //       });
+  //       reader.onError.listen((e) {
+  //         print(e);
+  //       });
+  //       reader.readAsArrayBuffer(file);
+  //     }
+  //   });
+  // }
 
   _getMyProfileImage() {
-    if (_filename != "") {
+    if (widget.imageUploader != null &&
+        (widget.imageUploader?.filename ?? "") != "") {
       return Image.memory(
-        Uint8List.fromList(_fileData),
+        Uint8List.fromList(widget.imageUploader?.fileData),
         height: 100,
         width: 100,
       );
@@ -228,16 +235,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Height? _height;
 
-  // @override
-  // initState(){
-  //   print("height editprofile    ${widget.chatController.extProfile?.height}");
-  //   _height = widget.chatController.extProfile?.height;
-  // }
-
   _updateHeight(int newFeet, int newInches) {
     setState(() {
       _height = Height.withValues(newFeet, newInches);
     });
+  }
+
+  var _fileData;
+
+  _updateFileDataItems(response) async {
+    // print("In edit profile page $response");
+    setState(() {
+      _filename = response['filename'];
+      _fileData = response['fileData'];
+    });
+
+    return;
   }
 
   @override
@@ -248,6 +261,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: Text("Chat Line - Edit Profile"),
       ),
       body: Padding(
+        key: ObjectKey(widget.imageUploader?.filename),
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -268,8 +282,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ],
                         ),
                         OutlinedButton(
-                          onPressed: () {
-                            _updateProfilePhoto(context);
+                          onPressed: () async {
+                            var theResponse =
+                                await widget.imageUploader?.uploadImage();
+
+                            await _updateFileDataItems(theResponse);
                           },
                           child: Text("Change Profile Photo"),
                         ),

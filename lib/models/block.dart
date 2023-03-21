@@ -9,15 +9,12 @@ class Block {
 
   Block.fromJson(Map<String, dynamic> json) {
     if (json['_id'] != null && json['_id'] != "null") {
-      print("processing id ${json['_id']}");
       id = json["_id"];
     }
     if (json['blocker'] != null && json['blocker'] != "null") {
-      print("processing Liker ${json['blocker']}");
       blocker = AppUser.fromJson(json["blocker"]);
     }
     if (json['blocked'] != null && json['blocked'] != "null") {
-      print("processing blocked ${json['blocked']}");
       blocked = AppUser.fromJson(json["blocked"]);
     }
   }
@@ -30,11 +27,11 @@ class Block {
     return data;
   }
 
-  @override
-  toString(){
-    return '\n______________Block:${id}______________\n'
-        '\nblocker:${blocker?.userId} '
-        '\nblocked:${blocked?.userId} '
-        '\n-----------------------------\n';
-  }
+  // @override
+  // toString(){
+  //   return '\n______________Block:${id}______________\n'
+  //       '\nblocker:${blocker?.userId} '
+  //       '\nblocked:${blocked?.userId} '
+  //       '\n-----------------------------\n';
+  // }
 }

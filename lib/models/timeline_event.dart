@@ -41,26 +41,21 @@ class TimelineEvent {
 
   TimelineEvent.fromJson(Map<String, dynamic> json) {
     if (json['_id'] != null && json['_id'] != "null") {
-      print("processing id ${json['_id']}");
       id = json["_id"];
     }
     if (json['actor'] != null && json['actor'] != "null") {
-      print("processing Liker ${json['actor']}");
       actor = AppUser.fromJson(json["actor"]);
     }
 
     if (json['action'] != null && json['action'] != "null") {
-      print("processing id ${json['action']}");
       action = json["action"];
     }
 
     if (json['recipient'] != null && json['recipient'] != "null") {
-      print("processing recipient ${json['recipient']}");
       recipient = AppUser.fromJson(json["recipient"]);
     }
 
     if (json['item'] != null && json['item'] != "null") {
-      print("processing item ${json['item']}");
       var theItem = CmsDocument.fromJson(json["item"]);
 
       switch(theItem.type){
@@ -97,14 +92,14 @@ class TimelineEvent {
     return data;
   }
 
-  @override
-  toString(){
-    return '\n______________TimelineEvent:${id}______________\n'
-        '\n actor:${isPublic} '
-        '\n actor:${actor?.userId} '
-        '\n action:${action} '
-        '\n recipient:${recipient?.userId} '
-        '\n item:${item} '
-        '\n-----------------------------\n';
-  }
+  // @override
+  // toString(){
+  //   return '\n______________TimelineEvent:${id}______________\n'
+  //       '\n actor:${isPublic} '
+  //       '\n actor:${actor?.userId} '
+  //       '\n action:${action} '
+  //       '\n recipient:${recipient?.userId} '
+  //       '\n item:${item} '
+  //       '\n-----------------------------\n';
+  // }
 }

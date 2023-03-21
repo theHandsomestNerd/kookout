@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 import '../../shared_components/alert_message_popup.dart';
 import '../app_user.dart';
@@ -118,10 +119,25 @@ class AuthController {
         "authorization": "Bearer $token"
       });
 
+      Configuration config = const Configuration(
+        outputType: ImageOutputType.jpg,
+        // can only be true for Android and iOS while using ImageOutputType.jpg or ImageOutputType.pngÏ
+        useJpgPngNativeCompressor: false,
+        // set quality between 0-100
+        quality: 90,
+      );
+
+      final param = ImageFileConfiguration(
+          input: ImageFile(
+              filePath: filename,
+              rawBytes: fileBytes),
+          config: config);
+      final compressed = await compressor.compressWebpThenJpg(param);
+
       if(filename != "") {
         request.files.add(http.MultipartFile.fromBytes(
             'file',
-            fileBytes,
+            compressed.rawBytes,
             contentType: MediaType('application', 'octet-stream'),
             filename: filename));
       }
