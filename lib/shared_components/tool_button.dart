@@ -59,7 +59,7 @@ class _ToolButtonState extends State<ToolButton> {
     return Row(
       children: [
         Text(
-          widget.text ?? "0",
+          widget.text ?? "",
           style: TextStyle(
             color: widget.isActive == true ? widget.color : Colors.black,
           ),

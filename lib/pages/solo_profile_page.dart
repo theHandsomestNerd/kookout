@@ -5,19 +5,14 @@ import 'package:chat_line/pages/tabs/bio_tab.dart';
 import 'package:chat_line/pages/tabs/comments_tab.dart';
 import 'package:chat_line/pages/tabs/follows_tab.dart';
 import 'package:chat_line/pages/tabs/likes_tab.dart';
-import 'package:chat_line/shared_components/comment_thread.dart';
-import 'package:chat_line/shared_components/follows_thread.dart';
-import 'package:chat_line/shared_components/likes_thread.dart';
-import 'package:chat_line/shared_components/search_box.dart';
-import 'package:chat_line/shared_components/tool_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
+import '../models/block.dart';
 import '../models/comment.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
-import '../sanity/image_url_builder.dart';
 import '../shared_components/alert_message_popup.dart';
 
 class SoloProfilePage extends StatefulWidget {
@@ -38,18 +33,17 @@ class SoloProfilePage extends StatefulWidget {
 }
 
 class _SoloProfilePageState extends State<SoloProfilePage> {
-  late AppUser? _thisProfile = null;
-  late ExtendedProfile? extProfile = null;
-  late List<Comment>? _profileComments = null;
-  late Like? _profileLikedByMe = null;
-  late List<Like>? _profileLikes = null;
-  late bool _isLiking = false;
-  late bool _isCommenting = false;
   late bool _isThisMe = false;
-  late String? _commentBody = null;
-  late Follow? _profileFollowedByMe = null;
-  late List<Follow>? _profileFollows = null;
-  late bool _isFollowing = false;
+  late AppUser? _thisProfile=null;
+  late ExtendedProfile? extProfile=null;
+
+  late List<Comment>? _profileComments=null;
+
+  late Like? _profileLikedByMe=null;
+  late List<Like>? _profileLikes=null;
+
+  late Follow? _profileFollowedByMe=null;
+  late List<Follow>? _profileFollows=null;
 
   @override
   initState() {
@@ -101,12 +95,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     return theComments;
   }
 
-  void _setCommentBody(String newCommentBody) {
-    setState(() {
-      _commentBody = newCommentBody;
-    });
-  }
-
   // _showCommentDialog(context) async {
   //   await showDialog<void>(
   //       context: context,
@@ -128,9 +116,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   //                 flex: 1,
   //                 child: TextFormField(
   //                   // key: ObjectKey(
-  //                   //     "${widget.chatController.extProfile?.iAm}-comment-body"),
+  //                   //     "${ChatController(.extProfile?.iAm}-comment-body"),
   //                   // controller: _longBioController,
-  //                   // initialValue: widget.chatController.extProfile?.iAm ?? "",
+  //                   // initialValue: ChatController(.extProfile?.iAm ?? "",
   //                   onChanged: (e) {
   //                     _setCommentBody(e);
   //                   },
@@ -214,131 +202,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     return profileFollowedByMe;
   }
 
-  _likeThisProfile(context) async {
-    setState(() {
-      _isLiking = true;
-    });
-    String? likeResponse = null;
-    bool isUnlike = false;
-
-    if (_profileLikedByMe == null) {
-      likeResponse = await widget.chatController.likeProfile(widget.id);
-    } else {
-      print("sending to server to unlike $_profileLikedByMe");
-      if (_profileLikedByMe != null) {
-        isUnlike = true;
-        likeResponse = await widget.chatController
-            .unlikeProfile(widget.id, _profileLikedByMe!);
-      }
-    }
-
-    List<Like> theLikes = await _getProfileLikes();
-
-    Like? isLikedResponse = isThisProfileLikedByMe(theLikes);
-
-    setState(() {
-      _isLiking = false;
-      _profileLikes = theLikes;
-      _profileLikedByMe = isLikedResponse;
-    });
-
-    if (!isUnlike && likeResponse != "SUCCESS") {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertMessagePopup(
-                title: "FAIL",
-                message: "That like didnt register. Try Again.",
-                isError: true);
-          });
-    }
-    return;
-  }
-
-  _followThisProfile(context) async {
-    setState(() {
-      _isFollowing = true;
-    });
-    String? followResponse;
-    bool isUnfollow = false;
-
-    if (_profileFollowedByMe == null) {
-      followResponse = await widget.chatController.followProfile(widget.id);
-    } else {
-      print("sending to server to unfollow $_profileFollowedByMe");
-      if (_profileFollowedByMe != null) {
-        isUnfollow = true;
-        followResponse = await widget.chatController
-            .unfollowProfile(widget.id, _profileFollowedByMe!);
-      }
-    }
-
-    List<Follow> theFollows = await _getProfileFollows();
-
-    Follow? isFollowedResponse = isThisProfileFollowedByMe(theFollows);
-
-    setState(() {
-      _isFollowing = false;
-      _profileFollows = theFollows;
-      _profileFollowedByMe = isFollowedResponse;
-    });
-
-    if (!isUnfollow && followResponse != "SUCCESS") {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertMessagePopup(
-                title: "FAIL",
-                message: "That like didnt register. Try Again.",
-                isError: true);
-          });
-    }
-    return;
-  }
-
-  _commentThisProfile(context) async {
-    setState(() {
-      _isCommenting = true;
-    });
-    String? commentResponse;
-
-    commentResponse = await widget.chatController
-        .commentProfile(widget.id, _commentBody ?? "");
-
-    List<Comment> theComments = await _getProfileComments();
-
-    setState(() {
-      _isCommenting = false;
-      _profileComments = theComments;
-    });
-
-    Navigator.of(context).pop();
-
-    if (commentResponse != "SUCCESS") {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertMessagePopup(
-                title: "FAIL",
-                message: "That like didnt register. Try Again.",
-                isError: true);
-          });
-    } else {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertMessagePopup(
-              title: "SUCCESS",
-              message: "Comment Posted.",
-              isError: false,
-              isSuccess: true,
-            );
-          });
-    }
-  }
-
-  _dislikeThisProfile() {}
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -346,10 +209,27 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   Widget _widgetOptions(_selectedIndex) {
     var theOptions = <Widget>[
       BioTab(
+
         thisProfile: _thisProfile,
-        chatController: widget.chatController,
-        authController: widget.authController,
         id: widget.id,
+        updateBlocks: (innercontext, String blockResponse) async {
+          // List<Block> theBlocks = await _getProfileBlocks();
+          await widget.chatController.updateMyBlocks();
+
+          if (blockResponse != "SUCCESS") {
+
+            return showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertMessagePopup(
+                      title: "FAIL",
+                      message: "That block didnt register. Try Again.",
+                      isError: true);
+                });
+          } else {
+            Navigator.popAndPushNamed(context, '/profilesPage');
+          }
+        },
         profileLikes: _profileLikes,
         profileFollows: _profileFollows,
         updateLikes: (context, String likeResponse, bool isUnlike) async {
@@ -357,7 +237,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           Like? isLikedResponse = isThisProfileLikedByMe(theLikes);
 
           setState(() {
-            _isLiking = false;
+            // _isLiking = false;
             _profileLikes = theLikes;
             _profileLikedByMe = isLikedResponse;
           });
@@ -378,7 +258,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           Follow? isFollowdResponse = isThisProfileFollowedByMe(theFollows);
 
           setState(() {
-            _isFollowing = false;
+            // _isFollowing = false;
             _profileFollows = theFollows;
             _profileFollowedByMe = isFollowdResponse;
           });
@@ -401,7 +281,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           List<Comment> theComments = await _getProfileComments();
 
           setState(() {
-            _isCommenting = false;
+            // _isCommenting = false;
             _profileComments = theComments;
           });
 
@@ -417,11 +297,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           }
         },
         profileLikedByMe: _profileLikedByMe,
-        profileFollowedByMe: _profileFollowedByMe,
+        profileFollowedByMe: _profileFollowedByMe, chatController: widget.chatController,authController: widget.authController,
       ),
       CommentsTab(
-          chatController: widget.chatController,
-          authController: widget.authController,
           id: widget.id,
           profileComments: _profileComments,
           thisProfile: _thisProfile,
@@ -429,7 +307,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             List<Comment> theComments =
                 await widget.chatController.getProfileComments(widget.id);
             setState(() {
-              _isCommenting = false;
+              // _isCommenting = false;
               _profileComments = theComments;
             });
 
@@ -457,7 +335,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
                   });
             }
           },
-          isThisMe: _isThisMe),
+          isThisMe: _isThisMe, chatController: widget.chatController, authController: widget.authController,),
       FollowsTab(
         chatController: widget.chatController,
         authController: widget.authController,

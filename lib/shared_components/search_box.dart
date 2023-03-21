@@ -47,7 +47,8 @@ class _SearchBoxState extends State<SearchBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return ConstrainedBox(
+      constraints: BoxConstraints(),
       child: Row(
         children: <Widget>[
           Expanded(

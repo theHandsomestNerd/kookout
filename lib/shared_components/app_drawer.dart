@@ -39,7 +39,7 @@ class AppDrawer extends StatelessWidget {
           ),
           authController.myAppUser != null ? UserBlockMini(user: authController.myAppUser): Text("no logged in user"),
            ListTile(title: Text("Profiles"),onTap: (){
-            Navigator.popAndPushNamed(context, '/loggedInHome');
+            Navigator.popAndPushNamed(context, '/profilesPage');
           },),
           ListTile(title: const Text("Login"),
             onTap: (){

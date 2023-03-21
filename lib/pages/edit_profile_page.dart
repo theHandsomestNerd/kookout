@@ -343,7 +343,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         Flexible(
                             child: HeightInput(
-                          initialValue: widget.chatController.extProfile?.height,
+                          initialValue:
+                              widget.chatController.extProfile?.height,
                           updateHeight: _updateHeight,
                         )),
                       ],
@@ -351,7 +352,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey("${widget.chatController.extProfile?.shortBio}-short-bio"),
+                      key: ObjectKey(
+                          "${widget.chatController.extProfile?.shortBio}-short-bio"),
                       initialValue: widget.chatController.extProfile?.shortBio,
                       onChanged: (e) {
                         _setShortBio(e);

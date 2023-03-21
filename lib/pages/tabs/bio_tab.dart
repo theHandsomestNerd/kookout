@@ -1,20 +1,15 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
-import 'package:chat_line/shared_components/comment_thread.dart';
-import 'package:chat_line/shared_components/follows_thread.dart';
-import 'package:chat_line/shared_components/likes_thread.dart';
-import 'package:chat_line/shared_components/search_box.dart';
 import 'package:chat_line/shared_components/tool_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
+import '../../models/controllers/auth_controller.dart';
 import '../../models/follow.dart';
 import '../../models/like.dart';
 import '../../sanity/image_url_builder.dart';
-import '../../shared_components/alert_message_popup.dart';
+
 const PROFILE_IMAGE_SQUARE_SIZE = 200;
 
 class BioTab extends StatefulWidget {
@@ -26,6 +21,7 @@ class BioTab extends StatefulWidget {
     required this.thisProfile,
     required this.profileLikes,
     required this.updateLikes,
+    required this.updateBlocks,
     required this.isThisMe,
     required this.profileComments,
     required this.updateComments,
@@ -38,6 +34,7 @@ class BioTab extends StatefulWidget {
   final AuthController authController;
   final ChatController chatController;
   final String id;
+  final updateBlocks;
   final updateLikes;
   final updateComments;
   final updateFollows;
@@ -57,13 +54,13 @@ class _BioTabState extends State<BioTab> {
   late ExtendedProfile? extProfile = null;
   late bool _isLiking = false;
   late bool _isFollowing = false;
+  late bool _isBlocking = false;
 
   @override
   initState() {
     super.initState();
     _getExtProfile(widget.id ?? "");
   }
-
 
   Future<ExtendedProfile?> _getExtProfile(String userId) async {
     var aProfile =
@@ -75,12 +72,12 @@ class _BioTabState extends State<BioTab> {
     return aProfile;
   }
 
-  Future<List<Comment>?> _getComments(String userId) async {
-    var theComments =
-        await widget.chatController.getProfileComments(widget.id ?? "");
-    print("extended profile ${theComments}");
-    return theComments;
-  }
+  // Future<List<Comment>?> _getComments(String userId) async {
+  //   var theComments =
+  //       await widget.chatController.getProfileComments(widget.id ?? "");
+  //   print("extended profile ${theComments}");
+  //   return theComments;
+  // }
 
   _likeThisProfile(context) async {
     setState(() {
@@ -100,7 +97,10 @@ class _BioTabState extends State<BioTab> {
       }
     }
 
-    return widget.updateLikes(context, likeResponse, isUnlike);
+    await widget.updateLikes(context, likeResponse, isUnlike);
+    setState(() {
+      _isLiking = false;
+    });
   }
 
   _followThisProfile(context) async {
@@ -121,7 +121,25 @@ class _BioTabState extends State<BioTab> {
       }
     }
 
-    return widget.updateFollows(context, followResponse, isUnfollow);
+    await widget.updateFollows(context, followResponse, isUnfollow);
+
+    setState(() {
+      _isFollowing = false;
+    });
+  }
+
+  _blockThisProfile(context) async {
+    setState(() {
+      _isBlocking = true;
+    });
+    String? blockResponse;
+
+    blockResponse = await widget.chatController.blockProfile(widget.id);
+    setState(() {
+      _isBlocking =false;
+    });
+
+    await widget.updateBlocks(context, blockResponse);
   }
 
   @override
@@ -145,13 +163,13 @@ class _BioTabState extends State<BioTab> {
                             ? Image.network(
                                 MyImageBuilder()
                                         .urlFor(
-                                            widget.thisProfile?.profileImage ?? "")
+                                            widget.thisProfile?.profileImage ??
+                                                "")
                                         ?.height(PROFILE_IMAGE_SQUARE_SIZE)
                                         .width(PROFILE_IMAGE_SQUARE_SIZE)
                                         .url() ??
                                     "",
-                                height: PROFILE_IMAGE_SQUARE_SIZE as double
-                          ,
+                                height: PROFILE_IMAGE_SQUARE_SIZE as double,
                                 width: PROFILE_IMAGE_SQUARE_SIZE as double,
                               )
                             : SizedBox(
@@ -175,19 +193,32 @@ class _BioTabState extends State<BioTab> {
                               ),
                               ToolButton(
                                   action: _followThisProfile,
-                                  text: widget.profileFollows?.length.toString(),
+                                  text:
+                                      widget.profileFollows?.length.toString(),
                                   isActive: widget.profileFollowedByMe != null,
                                   iconData: Icons.favorite,
                                   isLoading: _isFollowing,
                                   color: Colors.blue,
                                   label: 'Follow'),
                               ToolButton(
-                                  key: ObjectKey("${widget.profileComments}-comments"),
-                                  text: widget.profileComments?.length.toString(),
+                                  key: ObjectKey(
+                                      "${widget.profileComments}-comments"),
+                                  text:
+                                      widget.profileComments?.length.toString(),
                                   action: (context) {},
                                   iconData: Icons.comment,
                                   color: Colors.yellow,
                                   label: 'Comment'),
+                              ToolButton(
+                                key: ObjectKey(widget.chatController.myBlockedProfiles),
+                                action: _blockThisProfile,
+                                iconData: Icons.block,
+                                color: Colors.red,
+                                isLoading: _isBlocking,
+                                text: "Block",
+                                label: 'Block',
+                                isActive: widget.chatController.isProfileBlockedByMe(widget.id),
+                              ),
                               // ToolButton(
                               //     action: _dislikeThisProfile,
                               //     iconData: Icons.comment,

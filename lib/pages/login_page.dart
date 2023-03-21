@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage(
-      {super.key, required this.authController, required, this.drawer});
+      {super.key, required, this.drawer});
 
-  final AuthController authController;
   final drawer;
 
   @override

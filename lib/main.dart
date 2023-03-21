@@ -3,6 +3,7 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/edit_profile_page.dart';
 import 'package:chat_line/pages/home_page.dart';
 import 'package:chat_line/pages/logout_page.dart';
+import 'package:chat_line/pages/posts_thread_page.dart';
 import 'package:chat_line/pages/profiles_page.dart';
 import 'package:chat_line/pages/register_page.dart';
 import 'package:chat_line/pages/solo_profile_page.dart';
@@ -62,17 +63,16 @@ class _MyAppState extends State<MyApp> {
             authController: widget.authController, drawer: widget.drawer),
         '/register': (context) => RegisterPage(
             authController: widget.authController, drawer: widget.drawer),
-        '/login': (context) => LoginPage(
-            authController: widget.authController, drawer: widget.drawer),
+        '/login': (context) => LoginPage(drawer: widget.drawer),
         '/editProfile': (context) => EditProfilePage(
+              chatController: widget.chatController,
+              authController: widget.authController,
+              drawer: widget.drawer,
+            ),
+        '/logout': (context) => LogoutPage(drawer: widget.drawer),
+        '/profilesPage': (context) => ProfilesPage(
             authController: widget.authController,
-            drawer: widget.drawer,
-            chatController: widget.chatController),
-        '/logout': (context) => LogoutPage(
-            authController: widget.authController, drawer: widget.drawer),
-        '/loggedInHome': (context) => ProfilesPage(
             chatController: widget.chatController,
-            authController: widget.authController,
             drawer: widget.drawer),
         '/profile': (context) {
           var arguments = (ModalRoute.of(context)?.settings.arguments ??
@@ -91,6 +91,13 @@ class _MyAppState extends State<MyApp> {
             authController: widget.authController,
             drawer: widget.drawer,
             id: widget.authController.myAppUser?.userId.toString() ?? "",
+          );
+        },
+        '/postsPage': (context) {
+          return PostsThreadPage(
+            chatController: widget.chatController,
+            authController: widget.authController,
+            drawer: widget.drawer,
           );
         },
       },

@@ -12,17 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // bool _isUserLoggedIn = false;
-  // late User? _loggedInUser;
-
-  @override
-  _HomePageState() {
-    // _isUserLoggedIn = widget.authController.isLoggedIn ?? false;
-    // if(widget.authController.loggedInUser != null) {
-    //   _loggedInUser = widget.authController.loggedInUser;
-    // }
-  }
-
   _getMenu() {
     List<Widget> widgets = [];
 
@@ -36,7 +25,7 @@ class _HomePageState extends State<HomePage> {
           //         ? MaterialStateProperty.all(Colors.red)
           //         : MaterialStateProperty.all(Colors.white)),
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/loggedInHome');
+            Navigator.popAndPushNamed(context, '/profilesPage');
           },
           child: Text("Go to Logged in"),
         ),

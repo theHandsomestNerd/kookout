@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:chat_line/config/api_options.dart';
+import 'package:chat_line/models/block.dart';
 import 'package:chat_line/models/extended_profile.dart';
+import 'package:chat_line/models/timeline_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +13,11 @@ import '../comment.dart';
 import '../follow.dart';
 import '../like.dart';
 import '../responses/auth_api_profile_list_response.dart';
+import '../responses/chat_api_get_profile_block_response.dart';
 import '../responses/chat_api_get_profile_comments_response.dart';
 import '../responses/chat_api_get_profile_follows_response.dart';
 import '../responses/chat_api_get_profile_likes_response.dart';
+import '../responses/chat_api_get_timeline_events_response.dart';
 
 class ChatController {
   static final ChatController _singleton = ChatController._internal();
@@ -27,9 +31,11 @@ class ChatController {
   String authBaseUrl = DefaultAppOptions.currentPlatform.authBaseUrl;
 
   ExtendedProfile? extProfile;
-  List<AppUser> profilesFuture=[];
+  List<AppUser> profileList = [];
+  List<Block> myBlockedProfiles = [];
+  List<TimelineEvent> timelineOfEvents = [];
 
-  Future<List<AppUser>> retrieveProfiles() async {
+  Future<List<AppUser>> fetchProfiles() async {
     print("Retrieving Profiles");
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
@@ -44,24 +50,58 @@ class ChatController {
             AuthApiProfileListResponse.fromJson(processedResponse['profiles']);
         print(
             "retrieve profiles Auth api response ${responseModelList.list.length}");
-        profilesFuture = responseModelList.list;
         return responseModelList.list;
       }
     }
     return <AppUser>[];
   }
 
-  refetchProfiles() async {
-    return retrieveProfiles();
+  Future<List<TimelineEvent>> retrieveTimelineEvents() async {
+    print("Retrieving Timeline Events");
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.get(
+          Uri.parse("$authBaseUrl/get-timeline-events"),
+          headers: {"Authorization": ("Bearer ${token ?? ""}")});
+
+      if (response.body != null) {
+        var processedResponse = jsonDecode(response.body);
+
+        if (processedResponse['profileTimelineEvents'] != null) {
+          ChatApiGetTimelineEventsResponse responseModel =
+              ChatApiGetTimelineEventsResponse.fromJson(
+                  processedResponse['profileTimelineEvents']);
+          print("get timeline events api response ${responseModel.list}");
+
+          responseModel.list.forEach((element) {
+            print(element);
+          });
+
+          return responseModel.list;
+        } else {
+          return [];
+        }
+      }
+    }
+    return [];
   }
 
   ChatController.init() {
-    getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "")
-        .then((theProfile) {
-      extProfile = theProfile;
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "")
+          .then((theProfile) {
+        extProfile = theProfile;
+      });
 
+      getMyBlockedProfiles().then((theBlocks) {
+        print("Setting myBlockedProfiels $theBlocks");
+        myBlockedProfiles = theBlocks;
+      });
 
+      retrieveTimelineEvents().then((theTimeline) {
+        timelineOfEvents = theTimeline;
+      });
+    }
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
@@ -70,14 +110,45 @@ class ChatController {
         print('chatController: User is signed in!');
         extProfile = await getExtendedProfile(
             FirebaseAuth.instance.currentUser?.uid ?? "");
-        profilesFuture = await retrieveProfiles();
+        profileList = await fetchProfiles();
+        myBlockedProfiles = await getMyBlockedProfiles();
+        timelineOfEvents = await retrieveTimelineEvents();
       }
     });
   }
 
-  refetchExtProfile() async {
-    return getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
+  updateExtProfile() async {
+    var theExtProfile =
+        await getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
+
+    extProfile = theExtProfile;
+    profileList = await fetchProfiles();
+    return theExtProfile;
   }
+  updateTimelineEvents() async {
+    var theTimelineEvents =
+        await retrieveTimelineEvents();
+    List<Block> theNewBlocks = await getMyBlockedProfiles();
+    myBlockedProfiles = theNewBlocks;
+    timelineOfEvents = theTimelineEvents;
+    profileList = await fetchProfiles();
+    return theTimelineEvents;
+  }
+
+  updateProfiles() async {
+    var theProfiles = await fetchProfiles();
+    theProfiles = theProfiles;
+    return theProfiles;
+  }
+
+  updateMyBlocks() async {
+    List<Block> theNewBlocks = await getMyBlockedProfiles();
+    myBlockedProfiles = theNewBlocks;
+    timelineOfEvents = await retrieveTimelineEvents();
+    profileList = await fetchProfiles();
+  }
+
+
 
   updateExtProfileChatUser(
       String userId, BuildContext context, ExtendedProfile newProfile) async {
@@ -177,8 +248,6 @@ class ChatController {
             ExtendedProfile.fromJson(processedResponse['newExtProfile']);
 
         print("Auth api response ${myExtProfile}");
-        extProfile = myExtProfile;
-        await refetchProfiles();
         return myExtProfile;
       }
     }
@@ -237,7 +306,70 @@ class ChatController {
     }
     return [];
   }
-Future<List<Follow>> getProfileFollows(String userId) async {
+
+  Future<List<Block>> getProfileBlocks(String userId) async {
+    print("Retrieving Profile Blocks ${userId}");
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.get(
+          Uri.parse("$authBaseUrl/get-profile-blocks/$userId"),
+          headers: {"Authorization": ("Bearer ${token ?? ""}")});
+
+      if (response.body != null) {
+        var processedResponse = jsonDecode(response.body);
+
+        if (processedResponse['profileBlocks'] != null) {
+          ChatApiGetProfileBlocksResponse responseModel =
+              ChatApiGetProfileBlocksResponse.fromJson(
+                  processedResponse['profileBlocks']);
+          print("get profile block api response ${responseModel.list}");
+
+          responseModel.list.forEach((element) {
+            print(element);
+          });
+
+          return responseModel.list;
+        } else {
+          return [];
+        }
+      }
+    }
+    return [];
+  }
+
+  Future<List<Block>> getMyBlockedProfiles() async {
+    print("Retrieving My Profile Blocks(blocked profiles)");
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.get(
+          Uri.parse("$authBaseUrl/get-my-profile-blocks"),
+          headers: {"Authorization": ("Bearer ${token ?? ""}")});
+
+      print("getMyBlocks response ${response.body}");
+      if (response.body != null) {
+        var processedResponse = jsonDecode(response.body);
+
+        if (processedResponse['profileBlocks'] != null) {
+          print("from response ${processedResponse['profileBlocks']}");
+          ChatApiGetProfileBlocksResponse responseModel =
+              ChatApiGetProfileBlocksResponse.fromJson(
+                  processedResponse['profileBlocks']);
+          print("get my profile block api response ${responseModel.list}");
+
+          // responseModel.list.forEach((element) {
+          //   print(element);
+          // });
+
+          return responseModel.list;
+        } else {
+          return [];
+        }
+      }
+    }
+    return [];
+  }
+
+  Future<List<Follow>> getProfileFollows(String userId) async {
     print("Retrieving Profile Follows ${userId}");
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
@@ -293,7 +425,35 @@ Future<List<Follow>> getProfileFollows(String userId) async {
     }
     return "FAIL";
   }
-Future<String> followProfile(String userId) async {
+
+  Future<String> blockProfile(String userId) async {
+    var message =
+        "Block Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
+    print(message);
+
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.post(Uri.parse("$authBaseUrl/block-profile"),
+          body: {"userId": userId},
+          headers: {"Authorization": ("Bearer ${token ?? ""}")});
+
+      if (response.body != null) {
+        var processedResponse = jsonDecode(response.body);
+
+        if (processedResponse['blockStatus'] != null) {
+          print(processedResponse['blockStatus']);
+          String responseModel = processedResponse['blockStatus'];
+          print("${message} status: ${responseModel}");
+          return responseModel;
+        } else {
+          return "FAIL";
+        }
+      }
+    }
+    return "FAIL";
+  }
+
+  Future<String> followProfile(String userId) async {
     var message =
         "Follow Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
     print(message);
@@ -325,12 +485,10 @@ Future<String> followProfile(String userId) async {
         "UnLike Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
     print(message);
 
-
-
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
       final response = await http.post(Uri.parse("$authBaseUrl/unlike-profile"),
-          body: {"likeId":currentLike.id},
+          body: {"likeId": currentLike.id},
           headers: {"Authorization": ("Bearer ${token ?? ""}")});
 
       if (response.body != null) {
@@ -348,17 +506,45 @@ Future<String> followProfile(String userId) async {
     }
     return "FAIL";
   }
-Future<String> unfollowProfile(String userId, Follow currentFollow) async {
+
+  Future<String> unblockProfile(String userId, Block currentLike) async {
+    var message =
+        "Unblock Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
+    print(message);
+
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.post(
+          Uri.parse("$authBaseUrl/unblock-profile"),
+          body: {"blockId": currentLike.id},
+          headers: {"Authorization": ("Bearer ${token ?? ""}")});
+
+      if (response.body != null) {
+        var processedResponse = jsonDecode(response.body);
+
+        if (processedResponse['unblockStatus'] != null) {
+          print(processedResponse['unblockStatus']);
+          String responseModel = processedResponse['unblockStatus'];
+          print("${message} status: ${responseModel}");
+          return responseModel;
+        } else {
+          return "FAIL";
+        }
+      }
+    }
+    return "FAIL";
+  }
+
+  Future<String> unfollowProfile(String userId, Follow currentFollow) async {
     var message =
         "UnFollow Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
     print(message);
 
-
-
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/unfollow-profile"),
-          body: {"followId":currentFollow.id},
+      final response = await http.post(
+          Uri.parse("$authBaseUrl/unfollow-profile"),
+          body: {"followId": currentFollow.id},
           headers: {"Authorization": ("Bearer ${token ?? ""}")});
 
       if (response.body != null) {
@@ -390,8 +576,8 @@ Future<String> unfollowProfile(String userId, Follow currentFollow) async {
 
         if (processedResponse['profileComments'] != null) {
           ChatApiGetProfileCommentsResponse responseModel =
-          ChatApiGetProfileCommentsResponse.fromJson(
-              processedResponse['profileComments']);
+              ChatApiGetProfileCommentsResponse.fromJson(
+                  processedResponse['profileComments']);
           print("get profile comments api response ${responseModel.list}");
 
           responseModel.list.forEach((element) {
@@ -415,7 +601,8 @@ Future<String> unfollowProfile(String userId, Follow currentFollow) async {
 
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/comment-profile"),
+      final response = await http.post(
+          Uri.parse("$authBaseUrl/comment-profile"),
           body: {"userId": userId, "commentBody": commentBody},
           headers: {"Authorization": ("Bearer ${token ?? ""}")});
 
@@ -433,5 +620,17 @@ Future<String> unfollowProfile(String userId, Follow currentFollow) async {
       }
     }
     return "FAIL";
+  }
+
+  bool isProfileBlockedByMe(String userId) {
+    bool foundBlock = false;
+
+    myBlockedProfiles.forEach((element) {
+      if (element.blocked?.userId == userId) {
+        foundBlock = true;
+      }
+    });
+
+    return foundBlock;
   }
 }

@@ -37,12 +37,12 @@ class _CommentsTabState extends State<CommentsTab> {
     super.initState();
   }
 
-  Future<List<Comment>?> _getComments(String userId) async {
-    var theComments =
-        await widget.chatController.getProfileComments(widget.id ?? "");
-    print("extended profile ${theComments}");
-    return theComments;
-  }
+  // Future<List<Comment>?> _getComments(String userId) async {
+  //   var theComments =
+  //       await widget.chatController.getProfileComments(widget.id ?? "");
+  //   print("extended profile ${theComments}");
+  //   return theComments;
+  // }
 
   void _setCommentBody(String newCommentBody) {
     setState(() {

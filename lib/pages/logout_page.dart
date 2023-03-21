@@ -1,12 +1,10 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LogoutPage extends StatefulWidget {
-  const LogoutPage({super.key, required this.authController, required this.drawer});
+  const LogoutPage({super.key, required this.drawer});
 
-  final AuthController authController;
   final Widget drawer;
 
   @override
