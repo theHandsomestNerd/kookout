@@ -1,5 +1,16 @@
+import 'dart:async';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
+
 abstract class ImageUploader {
-  late String filename="";
-  late var fileData = null;
-  Future<dynamic> uploadImage();
-}
+  late PlatformFile? file;
+  late String? fileExtension;
+  late String? contentType;
+  late Completer? theCompressedCompleter;
+  late Future<PlatformFile> compressedPlatformFuture;
+  late bool? isCompressing;
+
+  Future<PlatformFile?> uploadImage();
+
+  }

@@ -6,6 +6,7 @@ import 'package:chat_line/platform_dependent/image_uploader_abstract.dart';
 import 'package:chat_line/shared_components/alert_message_popup.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:chat_line/shared_components/height_input.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../models/submodels/height.dart';
@@ -141,8 +142,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       var authUser = await widget.authController.updateUser(
           _loginUsername,
           _displayName,
-          widget.imageUploader?.filename ?? "",
-          widget.imageUploader?.fileData,
+          widget.imageUploader?.file?.name ?? "",
+          widget.imageUploader?.file?.bytes,
           context);
       print("updated fields in authuser result: $authUser");
       print("id to create ${authUser?.uid}");
@@ -211,26 +212,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   //   });
   // }
 
-  _getMyProfileImage() {
-    if (widget.imageUploader != null &&
-        (widget.imageUploader?.filename ?? "") != "") {
+  Widget? imageToBeUploaded = null;
+
+  _getMyProfileImage(PlatformFile? theFile) {
+    if (theFile != null) {
+      print("profile image is froom memory");
       return Image.memory(
-        Uint8List.fromList(widget.imageUploader?.fileData),
-        height: 100,
-        width: 100,
+        theFile.bytes ?? [] as Uint8List,
+        height: 350,
+        width: 350,
       );
     }
 
     if (widget.authController.myAppUser?.profileImage != null) {
+      print("profile image is froom db");
       return Image.network(MyImageBuilder()
               .urlFor(widget.authController.myAppUser?.profileImage)
-              ?.height(100)
-              .width(100)
+              ?.height(350)
+              .width(350)
               .url() ??
           "");
     }
 
-    return Image.asset(height: 100, width: 100, 'assets/blankProfileImage.png');
+    print("profile image is default");
+    return Image.asset(height: 350, width: 350, 'assets/blankProfileImage.png');
   }
 
   Height? _height;
@@ -241,27 +246,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  var _fileData;
-
-  _updateFileDataItems(response) async {
-    // print("In edit profile page $response");
-    setState(() {
-      _filename = response['filename'];
-      _fileData = response['fileData'];
-    });
-
-    return;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("init");
+    imageToBeUploaded = _getMyProfileImage(null);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget.key,
       drawer: widget.drawer,
       appBar: AppBar(
         title: Text("Chat Line - Edit Profile"),
       ),
       body: Padding(
-        key: ObjectKey(widget.imageUploader?.filename),
+        key: ObjectKey(widget.imageUploader?.file?.name),
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -274,19 +276,47 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   ListTile(
                     title: Column(
+                      // key:ObjectKey(widget.imageUploader?.file),
                       children: [
-                        Row(
+                        Column(
+                          key: ObjectKey(widget.imageUploader),
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _getMyProfileImage(),
+                            imageToBeUploaded != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      imageToBeUploaded!,
+                                      Text(widget.imageUploader?.file?.name ??
+                                          ""),
+                                      Text(
+                                          widget.imageUploader?.isCompressing ==
+                                                  true
+                                              ? "...compressing"
+                                              : ""),
+                                      SizedBox(
+                                        width: 16,
+                                      ),
+                                      Text(
+                                          "${widget.imageUploader?.file?.size.toString() ?? ''} bytes"),
+                                    ],
+                                  )
+                                : Text("no image"),
                           ],
                         ),
                         OutlinedButton(
                           onPressed: () async {
-                            var theResponse =
-                                await widget.imageUploader?.uploadImage();
+                            await widget.imageUploader
+                                ?.uploadImage()
+                                .then((theImage) async {
+                              setState(() {
+                                // print("the image from uploadImage befoe comprssion $theImage");
+                                imageToBeUploaded =
+                                    _getMyProfileImage(theImage);
+                              });
+                              setState(() {});
 
-                            await _updateFileDataItems(theResponse);
+                            });
                           },
                           child: Text("Change Profile Photo"),
                         ),
@@ -553,7 +583,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       onPressed: () {
                         _updateProfile(context);
                       },
-                      child: Text("Save"),
+                      child: Text("Save Profile"),
                     ),
                   ),
                 ],

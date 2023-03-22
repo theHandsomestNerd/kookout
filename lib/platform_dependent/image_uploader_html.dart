@@ -1,55 +1,61 @@
 import 'dart:async';
 import 'dart:html';
+import 'dart:math';
 import 'dart:typed_data';
+import 'package:file_support/file_support.dart';
 
-import 'package:image_compression_flutter/image_compression_flutter.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
   @override
-  Future<dynamic> uploadImage() async {
+  late PlatformFile? file = null;
+  @override
+  late String? fileExtension = "";
+  @override
+  late String? contentType = "";
+  @override
+  late Completer? theCompressedCompleter = new Completer();
+  @override
+  late Future<PlatformFile> compressedPlatformFuture;
+  @override
+  late bool? isCompressing = false;
 
-    FileUploadInputElement uploadInput = FileUploadInputElement();
-    uploadInput.click();
-
-    var completer = new Completer();
-
-    uploadInput.onChange.listen((e) {
-      print("The file input changed ${uploadInput.files?.length}");
-      final files = uploadInput.files;
-      if (files?.length == 1) {
-        final File file = files![0];
-        final reader = FileReader();
-        reader.onLoadEnd.listen((e) async {
-          completer.complete(
-              {"filename": uploadInput.value ?? "", "fileData": reader.result});
-          // filename = uploadInput.value ?? "";
-          // fileData = reader.result;
-          print("loaded: ${file.name} from ${uploadInput.value} ");
-          print("type: ${reader.result.runtimeType}");
-          return;
-        });
-        reader.onError.listen((e) {
-          completer.completeError(e);
-          print(e);
-          return;
-        });
-        reader.onProgress.listen((ProgressEvent event) {
-          print("${event.loaded}/${event.total}");
-        });
-        reader.readAsArrayBuffer(file);
-      }
+  ImageUploader() {
+    theCompressedCompleter?.future.then((value) {
+      print("compressed completer done $value");
+      file = value;
+      isCompressing = false;
+      print("Ending Compression");
     });
-
-    Map<String, dynamic> completedFileResponse = await completer.future;
-
-    print("afterr future complert ${completedFileResponse['filename']}");
-
-    filename = completedFileResponse['filename'];
-
-    fileData = completedFileResponse['fileData'];
-
-    return {"filename": filename, "fileData": completedFileResponse['fileData']};
   }
+
+  @override
+  Future<PlatformFile?> uploadImage() async {
+    final XFile? pickedImageFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 90,
+        maxWidth: 1000,
+        preferredCameraDevice: CameraDevice.rear);
+
+    PlatformFile? theFile;
+    if (pickedImageFile != null) {
+      theFile = PlatformFile(
+          bytes: await pickedImageFile.readAsBytes(),
+          name: pickedImageFile.name,
+          size: await pickedImageFile.length());
+
+      file = theFile;
+      print(
+          "File Picked ${theFile.name} extension:${theFile?.extension} ${theFile?.size} bytes");
+      return theFile;
+    } else {
+      // User canceled the picker
+    }
+    return null;
+  }
+
 }

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'image_uploader_abstract.dart';
@@ -5,16 +6,18 @@ import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
   @override
-  late String filename="";
+  late PlatformFile? file=null;
   @override
-  late var fileData = null;
-  @override
-  Future<dynamic> uploadImage() async {
-    var file = await ImagePicker().pickImage(source: ImageSource.gallery);
-    filename = file?.path ?? "";
-    return;
+  Future<PlatformFile?> uploadImage( ) async {
+    // var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    // file = pickedFile;
+    // return pickedFile;
+    return null;
   }
 
+  Future<PlatformFile?> compressImageUploader() async {
+  throw Exception("Stub implementation");
+  }
   void _updateProfilePhoto() async {
 
   }

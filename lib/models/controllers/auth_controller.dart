@@ -119,25 +119,12 @@ class AuthController {
         "authorization": "Bearer $token"
       });
 
-      Configuration config = const Configuration(
-        outputType: ImageOutputType.jpg,
-        // can only be true for Android and iOS while using ImageOutputType.jpg or ImageOutputType.pngÏ
-        useJpgPngNativeCompressor: false,
-        // set quality between 0-100
-        quality: 90,
-      );
 
-      final param = ImageFileConfiguration(
-          input: ImageFile(
-              filePath: filename,
-              rawBytes: fileBytes),
-          config: config);
-      final compressed = await compressor.compressWebpThenJpg(param);
 
       if(filename != "") {
         request.files.add(http.MultipartFile.fromBytes(
             'file',
-            compressed.rawBytes,
+            fileBytes,
             contentType: MediaType('application', 'octet-stream'),
             filename: filename));
       }

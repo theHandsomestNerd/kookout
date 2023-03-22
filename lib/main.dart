@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             authController: widget.authController, drawer: widget.drawer),
         '/login': (context) => LoginPage(drawer: widget.drawer),
         '/editProfile': (context) => EditProfilePage(
-              key: ObjectKey(widget.imageUploader.filename),
+              key: ObjectKey(widget.imageUploader.file?.name),
               imageUploader: widget.imageUploader,
               chatController: widget.chatController,
               authController: widget.authController,
