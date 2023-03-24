@@ -19,7 +19,7 @@ class CommentThread extends StatelessWidget {
             return Column(
               children: [
                 CommentSolo(comment: comment),
-                Divider()
+                const Divider()
               ],
             );
           }).toList()],

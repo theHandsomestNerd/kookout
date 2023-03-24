@@ -1,6 +1,7 @@
+import 'package:chat_line/layout/search_and_list.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/blocks_thread.dart';
+import 'package:chat_line/shared_components/blocks/blocks_thread.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/block.dart';
@@ -31,18 +32,8 @@ class _BlocksTabState extends State<BlocksTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      key: widget.key,
-      constraints: BoxConstraints(),
-      child: Column(
-        children: [
-          Flexible(
-            child: BlockThread(
-              blocks: widget.blocks,
-            ),
-          ),
-        ],
-      ),
-    );
+    return SearchAndList(isSearchEnabled:false, listChild: BlockThread(
+      blocks: widget.blocks,
+    ),);
   }
 }

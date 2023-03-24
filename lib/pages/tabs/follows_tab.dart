@@ -1,10 +1,11 @@
+import 'package:chat_line/layout/search_and_list.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 import '../../models/follow.dart';
-import '../../shared_components/follows_thread.dart';
+import '../../shared_components/follows/follows_thread.dart';
 
 class FollowsTab extends StatefulWidget {
   const FollowsTab(
@@ -30,21 +31,12 @@ class FollowsTab extends StatefulWidget {
 }
 
 class _FollowsTabState extends State<FollowsTab> {
-
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(),
-      child: Column(
-        children: [
-          Flexible(
-            flex: 1,
-            child: FollowThread(
-              key: ObjectKey(widget.profileFollows),
-              follows: widget.profileFollows ?? [],
-            ),
-          ),
-        ],
+    return SearchAndList(
+      listChild: FollowThread(
+        key: ObjectKey(widget.profileFollows),
+        follows: widget.profileFollows ?? [],
       ),
     );
   }

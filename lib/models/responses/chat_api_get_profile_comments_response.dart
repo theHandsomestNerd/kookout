@@ -11,7 +11,7 @@ class ChatApiGetProfileCommentsResponse {
   factory ChatApiGetProfileCommentsResponse.fromJson(List<dynamic> parsedJson) {
     List<Comment> list = <Comment>[];
 
-    print("get-comments-response ${parsedJson[0]}");
+    print("get-comments-response ${parsedJson}");
 
     list = parsedJson.map((i) => Comment.fromJson(i)).toList();
 

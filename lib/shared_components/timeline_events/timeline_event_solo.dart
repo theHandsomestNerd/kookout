@@ -32,28 +32,24 @@ class TimelineEventSolo extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(),
-      child: Flexible(
-        child: ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(flex: 1, child: UserBlockText(user: event.actor)),
-              Expanded(
-                flex: 3,
-                child: Center(
-                  child: Icon(
-                    getActionIcon(event.action ?? ""),
-                    size: 24.0,
-                    semanticLabel: 'Likes',
-                  ),
-                ),
+    return ListTile(
+      title: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(flex: 1, child: UserBlockText(user: event.actor)),
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: Icon(
+                getActionIcon(event.action ?? ""),
+                size: 24.0,
+                semanticLabel: 'Likes',
               ),
-              Expanded(flex: 1, child: UserBlockText(user: event.recipient)),
-            ],
+            ),
           ),
-        ),
+          Expanded(flex: 1, child: UserBlockText(user: event.recipient)),
+        ],
       ),
     );
   }

@@ -33,9 +33,12 @@ class _ToolButtonState extends State<ToolButton> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: widget.isDisabled != true ? () {
-          widget.action(context);
-        }:null,
+        key: Key(widget.text ?? ""),
+        onPressed: widget.isDisabled != true
+            ? () {
+                widget.action(context);
+              }
+            : null,
         child: Row(
           children: [
             widget.isLoading != true
@@ -63,6 +66,7 @@ class _ToolButtonState extends State<ToolButton> {
             ),
             widget.isHideLabel != true
                 ? Text(
+                    key: Key(widget.text ?? "0"),
                     widget.text ?? "0",
                     style: TextStyle(
                       fontSize: ((widget.text?.length ?? 0) > 4) ? 16 : 30,

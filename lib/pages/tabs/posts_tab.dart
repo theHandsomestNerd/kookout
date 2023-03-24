@@ -1,7 +1,8 @@
+import 'package:chat_line/layout/list_and_small_form.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/post.dart';
-import 'package:chat_line/shared_components/post_thread.dart';
+import 'package:chat_line/shared_components/posts/post_thread.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/post_controller.dart';
@@ -25,7 +26,7 @@ class _PostsTabState extends State<PostsTab> {
   @override
   initState() {
     super.initState();
-    _getPosts().then((listOfPosts){
+    _getPosts().then((listOfPosts) {
       _postsList = listOfPosts;
     });
   }
@@ -36,11 +37,14 @@ class _PostsTabState extends State<PostsTab> {
     return thePosts;
   }
 
-  // void _setPostBody(String newPostBody) {
-  //   setState(() {
-  //     _commentBody = newPostBody;
-  //   });
-  // }
+  String? _postBody;
+  bool? _isPosting;
+
+  void _setPostBody(String newPostBody) {
+    setState(() {
+      _postBody = newPostBody;
+    });
+  }
 
   _makePost(context) async {
     String? postResponse;
@@ -54,48 +58,41 @@ class _PostsTabState extends State<PostsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(),
-      child: Column(
+    return ListAndSmallFormLayout(
+      listChild: PostThread(
+        key: ObjectKey(_postsList),
+        posts: _postsList ?? [],
+      ),
+      formChild: Column(
         children: [
-          Flexible(
-            flex: 8,
-            child: PostThread(
-              key: ObjectKey(_postsList),
-              posts: _postsList ?? [],
+          TextFormField(
+            autofocus: true,
+            onChanged: (e) {
+              _setPostBody(e);
+            },
+            minLines: 2,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Post:',
             ),
           ),
-          Flexible(
-            flex: 1,
-            child: TextFormField(
-              // key: ObjectKey(
-              //     "${widget.chatController.extProfile?.iAm}-comment-body"),
-              // controller: _longBioController,
-              // initialValue: widget.chatController.extProfile?.iAm ?? "",
-              onChanged: (e) {
-                // Create post here
-              },
-              minLines: 2,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Post:',
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: MaterialButton(
-              color: Colors.red,
-              textColor: Colors.white,
-              // style: ButtonStyle(
-              //     backgroundColor: _isMenuItemsOnly
-              //         ? MaterialStateProperty.all(Colors.red)
-              //         : MaterialStateProperty.all(Colors.white)),
-              onPressed: () {
-                _makePost(context);
-              },
-              child: const Text("Post"),
+          MaterialButton(
+            color: Colors.red,
+            disabledColor: Colors.black12,
+            textColor: Colors.white,
+            // style: ButtonStyle(
+            //     backgroundColor: _isMenuItemsOnly
+            //         ? MaterialStateProperty.all(Colors.red)
+            //         : MaterialStateProperty.all(Colors.white)),
+            onPressed: _isPosting != true
+                ? () {
+                    _makePost(context);
+                  }
+                : null,
+            child: SizedBox(
+              height: 48,
+              child: _isPosting == true ? Text("Posting...") : Text("Post"),
             ),
           )
         ],

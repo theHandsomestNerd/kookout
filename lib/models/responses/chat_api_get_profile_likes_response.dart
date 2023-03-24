@@ -10,7 +10,7 @@ class ChatApiGetProfileLikesResponse {
   factory ChatApiGetProfileLikesResponse.fromJson(List<dynamic> parsedJson) {
     List<Like> list = <Like>[];
 
-    print("get-likes-response ${parsedJson[0]}");
+    print("get-likes-response ${parsedJson}");
 
     list = parsedJson.map((i) => Like.fromJson(i)).toList();
 

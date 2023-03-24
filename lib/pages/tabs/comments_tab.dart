@@ -1,6 +1,7 @@
+import 'package:chat_line/layout/list_and_small_form.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/comment_thread.dart';
+import 'package:chat_line/shared_components/comments/comment_thread.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
@@ -68,57 +69,42 @@ class _CommentsTabState extends State<CommentsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: CommentThread(
-                key: ObjectKey(widget.profileComments),
-                comments: widget.profileComments ?? [],
-              ),
+    return ListAndSmallFormLayout(
+      listChild: CommentThread(
+        key: ObjectKey(widget.profileComments),
+        comments: widget.profileComments ?? [],
+      ),
+      formChild: Column(
+        children: [
+          TextFormField(
+            autofocus: true,
+            onChanged: (e) {
+              _setCommentBody(e);
+            },
+            minLines: 2,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Comment:',
             ),
-            SizedBox(
-              height: 120,
-              child: Column(
-                children: [
-                  TextFormField(
-                    autofocus: true,
-                    onChanged: (e) {
-                      _setCommentBody(e);
-                    },
-                    minLines: 2,
-                    maxLines: 4,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Comment:',
-                    ),
-                  ),
-                  MaterialButton(
-                    color: Colors.red,
-                    disabledColor: Colors.black12,
-                    textColor: Colors.white,
-                    onPressed: !isCommenting
-                        ? () {
-                            _commentThisProfile(context);
-                          }
-                        : null,
-                    child: SizedBox(
-                      height: 48,
-                      child: InkWell(
-                        child: isCommenting
-                            ? Text("Posting comment...")
-                            : Text("Leave Comment"),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+          ),
+          MaterialButton(
+            color: Colors.red,
+            disabledColor: Colors.black12,
+            textColor: Colors.white,
+            onPressed: !isCommenting
+                ? () {
+                    _commentThisProfile(context);
+                  }
+                : null,
+            child: SizedBox(
+              height: 48,
+              child: isCommenting
+                  ? Text("Commenting...")
+                  : Text("Leave Comment"),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

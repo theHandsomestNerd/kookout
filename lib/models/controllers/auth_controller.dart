@@ -199,7 +199,7 @@ class AuthController {
   Future<AppUser?> getAppUser(String userId) async {
     print("Retrieving App Profile ${userId}");
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    if (userId!= null && userId !="" && token != null) {
       final response = await http.get(
           Uri.parse("$authBaseUrl/get-profile/$userId"),
           headers: {"Authorization": ("Bearer ${token ?? ""}")});

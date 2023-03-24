@@ -580,10 +580,6 @@ class ChatController {
                   processedResponse['profileComments']);
           print("get profile comments api response ${responseModel.list}");
 
-          responseModel.list.forEach((element) {
-            print(element);
-          });
-
           return responseModel.list;
         } else {
           return [];

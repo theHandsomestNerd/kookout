@@ -1,10 +1,10 @@
-import 'package:chat_line/shared_components/profile_solo.dart';
+import 'package:chat_line/shared_components/profile/profile_solo.dart';
 import 'package:flutter/material.dart';
 
-import '../models/app_user.dart';
+import '../../models/app_user.dart';
 
-class ProfileList extends StatelessWidget {
-  ProfileList({
+class ProfileGrid extends StatelessWidget {
+  ProfileGrid({
     super.key,
     required this.profiles,
   }){

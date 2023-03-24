@@ -3,8 +3,6 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
-import '../shared_components/profile_list.dart';
-
 class PostsThreadPage extends StatefulWidget {
   const PostsThreadPage({super.key, required this.drawer, required this.chatController,
     required this.authController,});

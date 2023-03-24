@@ -3,7 +3,7 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
-import '../../shared_components/profile_list.dart';
+import '../../shared_components/profile/profile_grid.dart';
 import '../../shared_components/search_box.dart';
 
 class ProfileListTab extends StatefulWidget {
@@ -82,7 +82,7 @@ class _ProfileListTabState extends State<ProfileListTab> {
             ]
             ),
           ),
-          Expanded(key: widget.key,child: ProfileList(profiles: profileList)),
+          Expanded(key: widget.key,child: ProfileGrid(profiles: profileList)),
         ],
       ),
     );

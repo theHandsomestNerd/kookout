@@ -1,14 +1,7 @@
-import 'package:chat_line/models/comment.dart';
-import 'package:chat_line/shared_components/search_box.dart';
 import 'package:flutter/material.dart';
 
-import '../models/block.dart';
-import '../models/follow.dart';
-import '../models/like.dart';
+import '../../models/block.dart';
 import 'block_solo.dart';
-import 'comment_solo.dart';
-import 'follow_solo.dart';
-import 'like_solo.dart';
 
 class BlockThread extends StatelessWidget {
   BlockThread({

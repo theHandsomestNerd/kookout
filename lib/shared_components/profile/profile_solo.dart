@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/Profile.dart';
-import '../models/app_user.dart';
-import '../sanity/image_url_builder.dart';
+import '../../models/Profile.dart';
+import '../../models/app_user.dart';
+import '../../sanity/image_url_builder.dart';
 
 class ProfileSolo extends StatelessWidget {
   const ProfileSolo({

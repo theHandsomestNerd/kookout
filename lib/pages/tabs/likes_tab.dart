@@ -1,6 +1,7 @@
+import 'package:chat_line/layout/search_and_list.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/likes_thread.dart';
+import 'package:chat_line/shared_components/likes/likes_thread.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
@@ -30,21 +31,12 @@ class LikesTab extends StatefulWidget {
 }
 
 class _LikesTabState extends State<LikesTab> {
-
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(),
-      child: Column(
-        children: [
-          Flexible(
-            flex: 1,
-            child: LikeThread(
-              key: ObjectKey(widget.profileLikes),
-              likes: widget.profileLikes ?? [],
-            ),
-          ),
-        ],
+    return SearchAndList(
+      listChild: LikeThread(
+        key: ObjectKey(widget.profileLikes),
+        likes: widget.profileLikes ?? [],
       ),
     );
   }

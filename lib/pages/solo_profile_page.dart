@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
-import '../models/block.dart';
 import '../models/comment.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
@@ -48,6 +47,10 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   @override
   initState() {
     super.initState();
+
+    if (widget.id == null || widget.id == "") {
+      Navigator.popAndPushNamed(context, '/profilesPage');
+    }
 
     _isThisMe = widget.id == widget.authController.loggedInUser?.uid;
 
@@ -209,10 +212,11 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   Widget _widgetOptions(_selectedIndex) {
     var theOptions = <Widget>[
       BioTab(
-        key: ObjectKey((_profileLikes?.length.toString() ??"") +
-            (_profileFollows?.length.toString() ?? "") +
-            (_profileComments?.length.toString() ?? "")),
+        key: ObjectKey((_profileLikes?.length.toString() ?? "0-likes") +
+            (_profileFollows?.length.toString() ?? "0-follows") +
+            (_profileComments?.length.toString() ?? "0-comments")),
         thisProfile: _thisProfile,
+        profileLikes: _profileLikes,
         id: widget.id,
         updateBlocks: (innercontext, String blockResponse) async {
           // List<Block> theBlocks = await _getProfileBlocks();
@@ -231,7 +235,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             Navigator.popAndPushNamed(context, '/profilesPage');
           }
         },
-        profileLikes: _profileLikes,
         profileFollows: _profileFollows,
         updateLikes: (context, String likeResponse, bool isUnlike) async {
           List<Like> theLikes = await _getProfileLikes();
@@ -386,10 +389,13 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text("Chat Line - ${_getTagLine()}"),
       ),
-      body: ConstrainedBox(
-          key: Key(_selectedIndex.toString()),
-          constraints: BoxConstraints(),
-          child: _widgetOptions(_selectedIndex)),
+      // body: Center(child: Text("just text")),
+      body: Center(
+        key: Key(_selectedIndex.toString()),
+        child: Flex(
+            direction: Axis.vertical,
+            children: [Expanded(child: _widgetOptions(_selectedIndex))]),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

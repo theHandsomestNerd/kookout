@@ -1,7 +1,7 @@
 import 'package:chat_line/shared_components/user_block_text.dart';
 import 'package:flutter/material.dart';
 
-import '../models/block.dart';
+import '../../models/block.dart';
 
 class BlockSolo extends StatelessWidget {
   const BlockSolo({

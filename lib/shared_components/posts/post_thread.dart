@@ -1,9 +1,9 @@
 import 'package:chat_line/models/comment.dart';
 import 'package:chat_line/models/post.dart';
-import 'package:chat_line/shared_components/post_solo.dart';
+import 'package:chat_line/shared_components/posts/post_solo.dart';
 import 'package:flutter/material.dart';
 
-import 'comment_solo.dart';
+import '../comments/comment_solo.dart';
 
 class PostThread extends StatelessWidget {
   PostThread({
