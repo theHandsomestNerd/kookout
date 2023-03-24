@@ -2,6 +2,7 @@ import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/app_user.dart';
 import '../../shared_components/profile_list.dart';
 import '../../shared_components/search_box.dart';
 
@@ -20,22 +21,26 @@ class ProfileListTab extends StatefulWidget {
 }
 
 class _ProfileListTabState extends State<ProfileListTab> {
+
+  late List<AppUser> profileList=widget.chatController.profileList;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    widget.chatController.updateProfiles();
+    widget.chatController.updateProfiles().then((theProfileList){
+      profileList = theProfileList;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
+      key: widget.key,
       constraints: BoxConstraints(),
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
       child: Column(
-        key: Key(widget.authController.toString()),
         // Column is also a layout widget. It takes a list of children and
         // arranges them vertically. By default, it sizes itself to fit its
         // children horizontally, and tries to be as tall as its parent.
@@ -77,7 +82,7 @@ class _ProfileListTabState extends State<ProfileListTab> {
             ]
             ),
           ),
-          Expanded(child: ProfileList(profiles: widget.chatController.profileList)),
+          Expanded(key: widget.key,child: ProfileList(profiles: profileList)),
         ],
       ),
     );

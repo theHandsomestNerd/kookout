@@ -72,13 +72,6 @@ class _BioTabState extends State<BioTab> {
     return aProfile;
   }
 
-  // Future<List<Comment>?> _getComments(String userId) async {
-  //   var theComments =
-  //       await widget.chatController.getProfileComments(widget.id ?? "");
-  //   print("extended profile ${theComments}");
-  //   return theComments;
-  // }
-
   _likeThisProfile(context) async {
     setState(() {
       _isLiking = true;
@@ -136,7 +129,7 @@ class _BioTabState extends State<BioTab> {
 
     blockResponse = await widget.chatController.blockProfile(widget.id);
     setState(() {
-      _isBlocking =false;
+      _isBlocking = false;
     });
 
     await widget.updateBlocks(context, blockResponse);
@@ -159,72 +152,114 @@ class _BioTabState extends State<BioTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        widget.thisProfile?.profileImage != null
-                            ? Image.network(
-                                MyImageBuilder()
-                                        .urlFor(
-                                            widget.thisProfile?.profileImage ??
+                        Expanded(
+                          child: widget.thisProfile?.profileImage != null
+                              ? FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Image.network(
+                                    MyImageBuilder()
+                                            .urlFor(widget.thisProfile
+                                                    ?.profileImage ??
                                                 "")
-                                        ?.height(PROFILE_IMAGE_SQUARE_SIZE)
-                                        .width(PROFILE_IMAGE_SQUARE_SIZE)
-                                        .url() ??
-                                    "",
-                                height: PROFILE_IMAGE_SQUARE_SIZE as double,
-                                width: PROFILE_IMAGE_SQUARE_SIZE as double,
-                              )
-                            : SizedBox(
-                                height: PROFILE_IMAGE_SQUARE_SIZE as double,
-                                width: PROFILE_IMAGE_SQUARE_SIZE as double,
-                              ),
-                        Flexible(
-                          key: ObjectKey(widget.profileLikes),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ToolButton(
-                                key: ObjectKey("${widget.profileLikes}-likes"),
-                                action: _likeThisProfile,
-                                iconData: Icons.thumb_up,
-                                color: Colors.green,
-                                isLoading: _isLiking,
-                                text: widget.profileLikes?.length.toString(),
-                                label: 'Like',
-                                isActive: widget.profileLikedByMe != null,
-                              ),
-                              ToolButton(
-                                  action: _followThisProfile,
-                                  text:
-                                      widget.profileFollows?.length.toString(),
-                                  isActive: widget.profileFollowedByMe != null,
-                                  iconData: Icons.favorite,
-                                  isLoading: _isFollowing,
-                                  color: Colors.blue,
-                                  label: 'Follow'),
-                              ToolButton(
-                                  key: ObjectKey(
-                                      "${widget.profileComments}-comments"),
-                                  text:
-                                      widget.profileComments?.length.toString(),
-                                  action: (context) {},
-                                  iconData: Icons.comment,
-                                  color: Colors.yellow,
-                                  label: 'Comment'),
-                              ToolButton(
-                                key: ObjectKey(widget.chatController.myBlockedProfiles),
-                                action: _blockThisProfile,
-                                iconData: Icons.block,
-                                color: Colors.red,
-                                isLoading: _isBlocking,
-                                text: "Block",
-                                label: 'Block',
-                                isActive: widget.chatController.isProfileBlockedByMe(widget.id),
-                              ),
-                              // ToolButton(
-                              //     action: _dislikeThisProfile,
-                              //     iconData: Icons.comment,
-                              //     color: Colors.red,
-                              //     label: 'Dislike'),
-                            ],
+                                            ?.height(PROFILE_IMAGE_SQUARE_SIZE)
+                                            .width(PROFILE_IMAGE_SQUARE_SIZE)
+                                            .url() ??
+                                        "",
+                                    height: PROFILE_IMAGE_SQUARE_SIZE as double,
+                                    width: PROFILE_IMAGE_SQUARE_SIZE as double,
+                                  ),
+                                )
+                              : SizedBox(
+                                  height: PROFILE_IMAGE_SQUARE_SIZE as double,
+                                  width: PROFILE_IMAGE_SQUARE_SIZE as double,
+                                ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          key: ObjectKey(
+                              (widget.profileLikes.toString() ?? "") +
+                                  (widget.profileFollows.toString() ?? "") +
+                                  (widget.profileComments.toString() ?? "")),
+                          child: Expanded(
+                            child: Column(
+                              children: [
+                                Divider(
+                                  color: Colors.black12,
+                                  thickness: 2,
+                                ),
+                                ListTile(
+                                  title: ToolButton(
+                                    isDisabled:(widget.isThisMe == true),
+                                    key: ObjectKey(
+                                        "${widget.profileLikes}-likes"),
+                                    action: _likeThisProfile,
+                                    iconData: Icons.thumb_up,
+                                    color: Colors.green,
+                                    isLoading: _isLiking,
+                                    text:
+                                        widget.profileLikes?.length.toString(),
+                                    label: 'Like',
+                                    isActive: widget.profileLikedByMe != null,
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.black12,
+                                  thickness: 2,
+                                ),
+                                ListTile(
+                                  title: ToolButton(
+                                  isDisabled:(widget.isThisMe == true),
+                                      action: _followThisProfile,
+                                      text: widget.profileFollows?.length
+                                          .toString(),
+                                      isActive:
+                                          widget.profileFollowedByMe != null,
+                                      iconData: Icons.favorite,
+                                      isLoading: _isFollowing,
+                                      color: Colors.blue,
+                                      label: 'Follow'),
+                                ),
+                                Divider(
+                                  color: Colors.black12,
+                                  thickness: 2,
+                                ),
+                                ListTile(
+                                  title: ToolButton(
+                                      isDisabled:(widget.isThisMe == true),
+                                      key: ObjectKey(
+                                          "${widget.profileComments}-comments"),
+                                      text: widget.profileComments?.length
+                                          .toString(),
+                                      action: (context) {},
+                                      iconData: Icons.comment,
+                                      color: Colors.yellow,
+                                      label: 'Comment'),
+                                ),
+                                Divider(
+                                  color: Colors.black12,
+                                  thickness: 2,
+                                ),
+                                ListTile(
+                                  title: ToolButton(
+                                    isDisabled:(widget.isThisMe == true),
+                                    key: ObjectKey(widget
+                                        .chatController.myBlockedProfiles),
+                                    action: _blockThisProfile,
+                                    iconData: Icons.block,
+                                    color: Colors.red,
+                                    isLoading: _isBlocking,
+                                    text: "Block",
+                                    label: 'Block',
+                                    isActive: widget.chatController
+                                        .isProfileBlockedByMe(widget.id),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.black12,
+                                  thickness: 2,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -236,11 +271,9 @@ class _BioTabState extends State<BioTab> {
                     constraints: BoxConstraints(),
                     child: Row(
                       children: [
-                        Column(
-                          children: [
-                            Text("Name"),
-                            Text(widget.thisProfile?.displayName ?? ""),
-                          ],
+                        Text(
+                          widget.thisProfile?.displayName ?? "",
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
                       ],
                     ),
@@ -252,76 +285,140 @@ class _BioTabState extends State<BioTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          child: Column(
-                            children: [
-                              Text("Age"),
-                              Text(extProfile?.age.toString() ?? ""),
-                            ],
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.pin_drop,
+                              size: 32.0,
+                              semanticLabel: "Location",
+                            ),
+                            Text('mi. away'),
+                          ],
                         ),
-                        Flexible(
-                          child: Column(
-                            children: [
-                              Text("Weight"),
-                              Text(extProfile?.weight.toString() ?? ""),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          child: Row(
-                            children: [
-                              Column(
+                        if (extProfile?.whereILive?.isNotEmpty == true) Column(
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("Height"),
-                                  Text(("${extProfile?.height?.feet}'") ?? ""),
+                                  Column(
+                                    children: const [
+                                      Text("Where I Live?"),
+                                    ],
+                                  ),
                                 ],
                               ),
-                              Column(
-                                children: [
-                                  Text(""),
-                                  Text("${extProfile?.height?.inches}\""),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                ListTile(
-                  title: ConstrainedBox(
-                    constraints: BoxConstraints(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: const [
-                            Text("Short Bio"),
+                            ),
+                            Text(extProfile?.whereILive ?? ""),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  subtitle: Text(extProfile?.shortBio ?? ""),
                 ),
-                ExpansionTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: const [Text("Long Bio")],
-                      ),
-                    ],
-                  ),
-                  children: [
-                    ListTile(
-                      title: Text(extProfile?.longBio ?? ""),
+                Divider(
+                  color: Colors.black12,
+                  thickness: 2,
+                ),
+                ListTile(
+                  title: ConstrainedBox(
+                    constraints: BoxConstraints(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if(extProfile?.age != null && ((extProfile?.age?? 0) > 0) == true) Flexible(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "${extProfile?.age.toString()}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
+                                  ),
+                                  Text(
+                                    "years",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        if(extProfile?.height != null && ((extProfile?.height?.feet?? 0) > 0) == true || (extProfile?.height?.inches?? 0) > 0 == true) Flexible(
+                          child: Row(
+                            children: [
+                              Text(
+                                ("${extProfile?.height?.feet}'") ?? "",
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                              Text(""),
+                              Text(
+                                "${extProfile?.height?.inches}\"",
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        if(extProfile?.weight != null && ((extProfile?.weight?? 0) > 0) == true)Flexible(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "${extProfile?.weight.toString()}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
+                                  ),
+                                  Text(
+                                    " lbs",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-                ExpansionTile(
+                Divider(
+                  color: Colors.black12,
+                  thickness: 2,
+                ),
+                if (extProfile?.shortBio?.isNotEmpty == true)
+                  ListTile(
+                    title: ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: const [
+                              Text("Short Bio"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    subtitle: Text(extProfile?.shortBio ?? ""),
+                  ),
+                if(extProfile?.longBio?.isNotEmpty == true) ListTile(
+                  title: Column(
+                    children: const [Text("Long Bio")],
+                  ),
+                  subtitle: Text(extProfile?.longBio ?? ""),
+                ),
+                if(extProfile?.iAm?.isNotEmpty == true) ExpansionTile(
                   subtitle: Text(extProfile?.iAm ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -332,7 +429,7 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ExpansionTile(
+                if(extProfile?.imInto?.isNotEmpty == true)ExpansionTile(
                   subtitle: Text(extProfile?.imInto ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -343,7 +440,7 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ExpansionTile(
+                if(extProfile?.imOpenTo?.isNotEmpty == true)ExpansionTile(
                   subtitle: Text(extProfile?.imOpenTo ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -354,7 +451,7 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ExpansionTile(
+                if(extProfile?.whatIDo?.isNotEmpty == true)ExpansionTile(
                   subtitle: Text(extProfile?.whatIDo ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -365,7 +462,7 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ExpansionTile(
+                if(extProfile?.whatImLookingFor?.isNotEmpty == true)ExpansionTile(
                   subtitle: Text(extProfile?.whatImLookingFor ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -376,7 +473,7 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ExpansionTile(
+                if(extProfile?.whatInterestsMe?.isNotEmpty == true)ExpansionTile(
                   subtitle: Text(extProfile?.whatInterestsMe ?? ""),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -387,23 +484,23 @@ class _BioTabState extends State<BioTab> {
                     ],
                   ),
                 ),
-                ListTile(
-                  title: ConstrainedBox(
-                    constraints: BoxConstraints(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: const [
-                            Text("Where I Live?"),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: Text(extProfile?.whereILive ?? ""),
-                ),
-                ListTile(
+                // ListTile(
+                //   title: ConstrainedBox(
+                //     constraints: BoxConstraints(),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: [
+                //         Column(
+                //           children: const [
+                //             Text("Where I Live?"),
+                //           ],
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                //   subtitle: Text(extProfile?.whereILive ?? ""),
+                // ),
+                if(extProfile?.sexPreferences?.isNotEmpty == true)ListTile(
                   title: ConstrainedBox(
                     constraints: BoxConstraints(),
                     child: Row(

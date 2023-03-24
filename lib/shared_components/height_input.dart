@@ -30,14 +30,14 @@ class _HeightInputState extends State<HeightInput> {
       _inches = newInches;
     });
 
-    widget.updateHeight(_feet, _inches);
+    widget.updateHeight(_feet ?? 0, _inches);
   }
 
   void _setFeet(int newFeet) {
     setState(() {
       _feet = newFeet;
     });
-    widget.updateHeight(_feet, _inches);
+    widget.updateHeight(_feet, _inches ?? 0);
   }
 
   // This widget is the root of your application.

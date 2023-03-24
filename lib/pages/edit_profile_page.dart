@@ -12,17 +12,21 @@ import 'package:flutter/material.dart';
 import '../models/submodels/height.dart';
 import '../sanity/image_url_builder.dart';
 
+import '../../platform_dependent/image_uploader.dart'
+if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
+if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
+
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage(
       {super.key,
       required this.authController,
       required this.chatController,
-      required this.imageUploader,
+      // required this.imageUploader,
       this.drawer});
 
   final AuthController authController;
   final ChatController chatController;
-  final ImageUploader? imageUploader;
+  // final ImageUploader? imageUploader;
   final AppDrawer? drawer;
 
   @override
@@ -32,6 +36,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   String _loginUsername = "";
   String _displayName = "";
+  ImageUploader? imageUploader;
 
   // String _filename = "";
 
@@ -142,8 +147,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       var authUser = await widget.authController.updateUser(
           _loginUsername,
           _displayName,
-          widget.imageUploader?.file?.name ?? "",
-          widget.imageUploader?.file?.bytes,
+          imageUploader?.file?.name ?? "",
+          imageUploader?.file?.bytes,
           context);
       print("updated fields in authuser result: $authUser");
       print("id to create ${authUser?.uid}");
@@ -251,19 +256,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // TODO: implement initState
     super.initState();
     print("init");
+    imageUploader = ImageUploaderImpl();
+
     imageToBeUploaded = _getMyProfileImage(null);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget.key,
+      key: ObjectKey(imageUploader),
       drawer: widget.drawer,
       appBar: AppBar(
         title: Text("Chat Line - Edit Profile"),
       ),
       body: Padding(
-        key: ObjectKey(widget.imageUploader?.file?.name),
+        key: ObjectKey(imageUploader?.file?.name),
         padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -276,10 +283,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   ListTile(
                     title: Column(
-                      // key:ObjectKey(widget.imageUploader?.file),
+                      // key:ObjectKey(imageUploader?.file),
                       children: [
                         Column(
-                          key: ObjectKey(widget.imageUploader),
+                          key: ObjectKey(imageUploader),
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             imageToBeUploaded != null
@@ -287,18 +294,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       imageToBeUploaded!,
-                                      Text(widget.imageUploader?.file?.name ??
+                                      Text(imageUploader?.file?.name ??
                                           ""),
-                                      Text(
-                                          widget.imageUploader?.isCompressing ==
-                                                  true
-                                              ? "...compressing"
-                                              : ""),
                                       SizedBox(
                                         width: 16,
                                       ),
                                       Text(
-                                          "${widget.imageUploader?.file?.size.toString() ?? ''} bytes"),
+                                          "${imageUploader?.file?.size.toString() ?? ''} bytes"),
                                     ],
                                   )
                                 : Text("no image"),
@@ -306,7 +308,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         OutlinedButton(
                           onPressed: () async {
-                            await widget.imageUploader
+                            await imageUploader
                                 ?.uploadImage()
                                 .then((theImage) async {
                               setState(() {

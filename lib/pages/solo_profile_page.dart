@@ -34,16 +34,16 @@ class SoloProfilePage extends StatefulWidget {
 
 class _SoloProfilePageState extends State<SoloProfilePage> {
   late bool _isThisMe = false;
-  late AppUser? _thisProfile=null;
-  late ExtendedProfile? extProfile=null;
+  late AppUser? _thisProfile = null;
+  late ExtendedProfile? extProfile = null;
 
-  late List<Comment>? _profileComments=null;
+  late List<Comment>? _profileComments = null;
 
-  late Like? _profileLikedByMe=null;
-  late List<Like>? _profileLikes=null;
+  late Like? _profileLikedByMe = null;
+  late List<Like>? _profileLikes = null;
 
-  late Follow? _profileFollowedByMe=null;
-  late List<Follow>? _profileFollows=null;
+  late Follow? _profileFollowedByMe = null;
+  late List<Follow>? _profileFollows = null;
 
   @override
   initState() {
@@ -209,7 +209,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   Widget _widgetOptions(_selectedIndex) {
     var theOptions = <Widget>[
       BioTab(
-
+        key: ObjectKey((_profileLikes?.length.toString() ??"") +
+            (_profileFollows?.length.toString() ?? "") +
+            (_profileComments?.length.toString() ?? "")),
         thisProfile: _thisProfile,
         id: widget.id,
         updateBlocks: (innercontext, String blockResponse) async {
@@ -217,7 +219,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           await widget.chatController.updateMyBlocks();
 
           if (blockResponse != "SUCCESS") {
-
             return showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
@@ -297,45 +298,51 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           }
         },
         profileLikedByMe: _profileLikedByMe,
-        profileFollowedByMe: _profileFollowedByMe, chatController: widget.chatController,authController: widget.authController,
+        profileFollowedByMe: _profileFollowedByMe,
+        chatController: widget.chatController,
+        authController: widget.authController,
       ),
       CommentsTab(
-          id: widget.id,
-          profileComments: _profileComments,
-          thisProfile: _thisProfile,
-          updateComments: (context, String updateCommentResponse) async {
-            List<Comment> theComments =
-                await widget.chatController.getProfileComments(widget.id);
-            setState(() {
-              // _isCommenting = false;
-              _profileComments = theComments;
-            });
+        key: ObjectKey(_profileComments),
+        id: widget.id,
+        profileComments: _profileComments,
+        thisProfile: _thisProfile,
+        updateComments: (context, String updateCommentResponse) async {
+          List<Comment> theComments =
+              await widget.chatController.getProfileComments(widget.id);
+          setState(() {
+            // _isCommenting = false;
+            _profileComments = theComments;
+          });
 
-            Navigator.of(context).pop();
+          // Navigator.of(context).pop();
 
-            if (updateCommentResponse != "SUCCESS") {
-              return showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertMessagePopup(
-                        title: "FAIL",
-                        message: "That like didnt register. Try Again.",
-                        isError: true);
-                  });
-            } else {
-              return showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertMessagePopup(
-                      title: "SUCCESS",
-                      message: "Comment Posted.",
-                      isError: false,
-                      isSuccess: true,
-                    );
-                  });
-            }
-          },
-          isThisMe: _isThisMe, chatController: widget.chatController, authController: widget.authController,),
+          if (updateCommentResponse != "SUCCESS") {
+            return showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertMessagePopup(
+                      title: "FAIL",
+                      message: "That like didnt register. Try Again.",
+                      isError: true);
+                });
+          } else {
+            // return showDialog<void>(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return const AlertMessagePopup(
+            //         title: "SUCCESS",
+            //         message: "Comment Posted.",
+            //         isError: false,
+            //         isSuccess: true,
+            //       );
+            //     });
+          }
+        },
+        isThisMe: _isThisMe,
+        chatController: widget.chatController,
+        authController: widget.authController,
+      ),
       FollowsTab(
         chatController: widget.chatController,
         authController: widget.authController,

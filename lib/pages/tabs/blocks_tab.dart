@@ -21,8 +21,6 @@ class BlocksTab extends StatefulWidget {
 }
 
 class _BlocksTabState extends State<BlocksTab> {
-  List<Block> theBlocks = [];
-
   @override
   void initState() {
     // TODO: implement initState
@@ -34,13 +32,13 @@ class _BlocksTabState extends State<BlocksTab> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      key: ObjectKey(widget.chatController),
+      key: widget.key,
       constraints: BoxConstraints(),
       child: Column(
         children: [
           Flexible(
             child: BlockThread(
-              blocks: theBlocks,
+              blocks: widget.blocks,
             ),
           ),
         ],

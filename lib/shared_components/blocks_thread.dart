@@ -22,7 +22,7 @@ class BlockThread extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      key: key,
+      key: super.key,
       constraints: BoxConstraints(),
       child: blocks.length > 0 ? ListView(
         children: [

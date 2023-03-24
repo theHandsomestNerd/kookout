@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 
 import 'config/firebase_options.dart';
 import 'pages/login_page.dart';
-import '../../platform_dependent/image_uploader.dart'
-    if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
-    if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
+// import '../../platform_dependent/image_uploader.dart'
+//     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
+//     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,24 +33,23 @@ Future<void> main() async {
   AuthController manager = AuthController.init();
   ChatController chatController = ChatController.init();
   Widget globalDrawer = AppDrawer(authController: manager);
-  ImageUploader imageUploader = ImageUploaderImpl();
+  // ImageUploader imageUploader = ImageUploaderImpl();
 
   runApp(MyApp(
       authController: manager,
       drawer: globalDrawer,
-      chatController: chatController,
-      imageUploader: imageUploader));
+      chatController: chatController,));
 }
 
 class MyApp extends StatefulWidget {
   MyApp(
       {super.key,
       required this.authController,
-      required this.imageUploader,
+      // required this.imageUploader,
       required this.drawer,
       required this.chatController});
 
-  final ImageUploader imageUploader;
+  // final ImageUploader imageUploader;
   final AuthController authController;
   final ChatController chatController;
   final drawer;
@@ -73,8 +72,8 @@ class _MyAppState extends State<MyApp> {
             authController: widget.authController, drawer: widget.drawer),
         '/login': (context) => LoginPage(drawer: widget.drawer),
         '/editProfile': (context) => EditProfilePage(
-              key: ObjectKey(widget.imageUploader.file?.name),
-              imageUploader: widget.imageUploader,
+              // key: ObjectKey(widget.imageUploader.file?.name),
+              // imageUploader: widget.imageUploader,
               chatController: widget.chatController,
               authController: widget.authController,
               drawer: widget.drawer,
@@ -121,6 +120,11 @@ class _MyAppState extends State<MyApp> {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(fontSize: 36.0),
+          bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        ),
         primarySwatch: Colors.blue,
       ),
     );

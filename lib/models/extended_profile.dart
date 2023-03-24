@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:chat_line/models/app_user.dart';
+
 import 'submodels/height.dart';
 
 class ExtendedProfile {
@@ -31,6 +33,8 @@ class ExtendedProfile {
   DateTime? lastTested;
   List<String>? pronouns = [];
   List<String>? hashtags = [];
+
+  AppUser? userRef;
 
   processJsonStringArr(pronounsJson) {
     List<dynamic> pronounList = pronounsJson ?? [];
@@ -71,6 +75,7 @@ class ExtendedProfile {
     this.lastTested,
     this.pronouns,
     this.hashtags,
+    this.userRef
   }) {
     age = age;
     weight = weight;
@@ -96,6 +101,7 @@ class ExtendedProfile {
     // lastTested = DateTime.now();
     pronouns = pronouns;
     hashtags = hashtags;
+    userRef = userRef;
   }
 
   ExtendedProfile.fromJson(Map<String, dynamic> json) {
@@ -117,6 +123,9 @@ class ExtendedProfile {
     }
     if(json["height"] != null && json["height"] != "null") {
       height = Height.fromJson(json['height']);
+    }
+    if(json["userRef"] != null && json["userRef"] != "null") {
+      userRef = AppUser.fromJson(json['userRef']);
     }
     shortBio = json['shortBio'];
     longBio = json['longBio'];
@@ -149,6 +158,7 @@ class ExtendedProfile {
     data['shortBio'] = shortBio;
     data['longBio'] = longBio;
     data['userId'] = userId;
+    data['userRef'] = userRef;
     data['gender'] = gender;
     data['facebook'] = facebook;
     data['twitter'] = twitter;

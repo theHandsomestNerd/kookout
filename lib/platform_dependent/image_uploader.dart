@@ -7,7 +7,7 @@ import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
   @override
-  late PlatformFile? file;
+  late PlatformFile? file = null;
   @override
   late String? fileExtension;
   @override
@@ -16,8 +16,6 @@ class ImageUploaderImpl extends ImageUploader {
   late Completer? theCompressedCompleter;
   @override
   late Future<PlatformFile> compressedPlatformFuture;
-  @override
-  late bool? isCompressing;
 
   @override
   late Future<ImageFile> futureCompressedFile;

@@ -1,18 +1,23 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+
 class ToolButton extends StatefulWidget {
   const ToolButton(
       {super.key,
-        required this.action,
-        required this.iconData,
-        required this.color,
-        required this.label,
-        this.isLoading,
-        this.text,
-        this.isActive});
+      required this.action,
+      required this.iconData,
+      required this.color,
+      required this.label,
+      this.isHideLabel,
+      this.isLoading,
+      this.isDisabled,
+      this.text,
+      this.isActive});
 
   final String label;
+  final bool? isHideLabel;
+  final bool? isDisabled;
   final String? text;
   final action;
   final IconData iconData;
@@ -25,67 +30,48 @@ class ToolButton extends StatefulWidget {
 }
 
 class _ToolButtonState extends State<ToolButton> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-
   @override
   Widget build(BuildContext context) {
-    // return Flexible(
-    //   child: MaterialButton(
-    //     color: widget.isActive == true ? Colors.white : widget.color,
-    //     textColor: widget.isActive == true ? widget.color : Colors.white,
-    //     onPressed: () {
-    //       // _toggleActive();
-    //       widget.action(context);
-    //     },
-    //     child: Padding(
-    //       padding: const EdgeInsets.fromLTRB(25, 16, 25, 16),
-    //       child: (widget.isLoading == false || widget.isLoading == null) ?Icon(
-    //         widget.iconData,
-    //         size: 48.0,
-    //         semanticLabel: widget.label,
-    //       ):CircularProgressIndicator(
-    //         color: widget.isActive == true ? widget.color : Colors.white,
-    //       ),
-    //     ),
-    //   ),
-    // );
-
-    return Row(
-      children: [
-        Text(
-          widget.text ?? "",
-          style: TextStyle(
-            color: widget.isActive == true ? widget.color : Colors.black,
-          ),
-        ),
-        widget.isLoading != true ?IconButton(
-          onPressed: () {
-            widget.action(context);
-          },
-          isSelected: widget.isActive,
-          icon: Icon(
-            widget.iconData,
-            color: widget.isActive == true ? widget.color : Colors.black,
-            size: 24.0,
-            semanticLabel: widget.label,
-          ),
-        ):Padding(
-          padding: const EdgeInsets.fromLTRB(12,8,8,8),
-          child: SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(
-                color: widget.isActive == true ? widget.color : Colors.grey,
-              ),
-          ),
-        ),
-      ],
-    );
+    return TextButton(
+        onPressed: widget.isDisabled != true ? () {
+          widget.action(context);
+        }:null,
+        child: Row(
+          children: [
+            widget.isLoading != true
+                ? Icon(
+                    widget.iconData,
+                    color:
+                        widget.isActive == true ? widget.color : Colors.black,
+                    size: 30.0,
+                    semanticLabel: widget.label,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        color: widget.isActive == true
+                            ? widget.color
+                            : Colors.grey,
+                      ),
+                    ),
+                  ),
+            SizedBox(
+              width: 16,
+            ),
+            widget.isHideLabel != true
+                ? Text(
+                    widget.text ?? "0",
+                    style: TextStyle(
+                      fontSize: ((widget.text?.length ?? 0) > 4) ? 16 : 30,
+                      color:
+                          widget.isActive == true ? widget.color : Colors.black,
+                    ),
+                  )
+                : Text(""),
+          ],
+        ));
   }
 }

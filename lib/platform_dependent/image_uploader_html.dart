@@ -18,19 +18,9 @@ class ImageUploaderImpl extends ImageUploader {
   @override
   late String? contentType = "";
   @override
-  late Completer? theCompressedCompleter = new Completer();
-  @override
   late Future<PlatformFile> compressedPlatformFuture;
-  @override
-  late bool? isCompressing = false;
 
   ImageUploader() {
-    theCompressedCompleter?.future.then((value) {
-      print("compressed completer done $value");
-      file = value;
-      isCompressing = false;
-      print("Ending Compression");
-    });
   }
 
   @override

@@ -9,7 +9,6 @@ abstract class ImageUploader {
   late String? contentType;
   late Completer? theCompressedCompleter;
   late Future<PlatformFile> compressedPlatformFuture;
-  late bool? isCompressing;
 
   Future<PlatformFile?> uploadImage();
 

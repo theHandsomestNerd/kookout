@@ -37,6 +37,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
   Widget _widgetOptions(_selectedIndex) {
     var theOptions = <Widget>[
       ProfileListTab(
+        key: ObjectKey(widget.chatController.profileList),
         authController: widget.authController,
         chatController: widget.chatController,
       ),
