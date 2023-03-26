@@ -1,7 +1,7 @@
 import 'package:chat_line/models/comment.dart';
 import 'package:chat_line/models/like.dart';
 import 'package:chat_line/models/post.dart';
-import 'package:chat_line/models/sanity/app_user_ref.dart';
+import 'package:flutter/foundation.dart';
 
 import 'app_user.dart';
 import 'follow.dart';
@@ -12,7 +12,9 @@ class CmsDocument {
 
   CmsDocument.fromJson(Map<String, dynamic> json) {
     if (json['_type'] != null && json['_type'] != "null") {
-      print("processing type of this thing ${json['_type']}");
+      if (kDebugMode) {
+        print("processing type of this thing ${json['_type']}");
+      }
       type = json["_type"];
     }
   }
@@ -26,7 +28,7 @@ class CmsDocument {
   @override
   toString(){
     return '\n______________CmsDocument:______________\n'
-        '\n type:${type} '
+        '\n type:$type '
         '\n-----------------------------\n';
   }
 }

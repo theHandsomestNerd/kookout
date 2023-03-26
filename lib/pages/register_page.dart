@@ -1,16 +1,22 @@
 import 'package:chat_line/models/app_user.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/shared_components/alert_message_popup.dart';
+import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../models/controllers/auth_inherited.dart';
 import '../shared_components/app_drawer.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage(
-      {super.key, required this.authController, required, this.drawer});
+  const RegisterPage({
+    super.key,
+    // required this.authController,
+    required,
+    this.drawer,
+  });
 
-  final AuthController authController;
+  // final AuthController authController;
   final AppDrawer? drawer;
 
   @override
@@ -53,27 +59,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _registerUser(context) async {
     try {
-      AppUser myAppUser = await widget.authController
-          .registerUser(_loginUsername, _loginPassword, context);
-      print(myAppUser);
+      print("authcontroller ${AuthInherited.of(context)?.authController}");
+      AppUser myAppUser = await AuthInherited.of(context)?.authController?.registerUser(_loginUsername, _loginPassword, context);
+      if (kDebugMode) {
+        print(myAppUser);
+      }
       Navigator.popAndPushNamed(context, '/editProfile');
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return const AlertMessagePopup(
-              title: "Success",
-              message:
-                  "Account Created...Take a second to Fill in your profile.",
-              isError: false,
-            isSuccess: true,
-          );
-        });
-  }
 
-  _gotoHomePage(context) {}
+    AlertSnackbar().showSuccessAlert('Account Created...Take a second to Fill in your profile.', context);
+
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         // Here we take the value from the RegisterPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Chat Line - Register"),
+        title: const Text("Chat Line - Register"),
       ),
       body: CardWrapped(
         height: 450,
@@ -120,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     TextFormField(
-                      key: ObjectKey(_loginUsername + _loginPassword + "-user"),
+                      key: ObjectKey("$_loginUsername$_loginPassword-user"),
                       autofocus:
                           _loginPassword.isEmpty && _loginUsername.isNotEmpty,
                       initialValue: _loginUsername,
@@ -133,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     TextFormField(
-                      key: ObjectKey(_loginPassword + _loginUsername + "-pass"),
+                      key: ObjectKey("$_loginPassword$_loginUsername-pass"),
                       autofocus: _loginPassword.isNotEmpty &&
                           _loginUsername.isNotEmpty,
                       initialValue: _loginPassword,
@@ -151,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         MaterialButton(
@@ -164,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           onPressed: () {
                             _registerUser(context);
                           },
-                          child: Text("Register"),
+                          child: const Text("Register"),
                         ),
                       ],
                     ),

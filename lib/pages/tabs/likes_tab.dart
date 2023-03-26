@@ -7,19 +7,15 @@ import 'package:flutter/material.dart';
 import '../../models/app_user.dart';
 import '../../models/like.dart';
 
-class LikesTab extends StatefulWidget {
+class LikesTab extends StatelessWidget {
   const LikesTab(
       {super.key,
-      required this.chatController,
-      required this.authController,
       required this.thisProfile,
       required this.isThisMe,
       required this.profileLikedByMe,
       required this.profileLikes,
       required this.id});
 
-  final AuthController authController;
-  final ChatController chatController;
   final AppUser? thisProfile;
   final String id;
   final bool isThisMe;
@@ -27,16 +23,11 @@ class LikesTab extends StatefulWidget {
   final Like? profileLikedByMe;
 
   @override
-  State<LikesTab> createState() => _LikesTabState();
-}
-
-class _LikesTabState extends State<LikesTab> {
-  @override
   Widget build(BuildContext context) {
     return SearchAndList(
       listChild: LikeThread(
-        key: ObjectKey(widget.profileLikes),
-        likes: widget.profileLikes ?? [],
+        key: ObjectKey(profileLikes),
+        likes: profileLikes ?? [],
       ),
     );
   }

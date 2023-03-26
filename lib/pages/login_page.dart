@@ -1,13 +1,11 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/shared_components/alert_message_popup.dart';
+import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatefulWidget {
-  const LoginPage(
-      {super.key, required, this.drawer});
+  const LoginPage({super.key, required, this.drawer});
 
   final drawer;
 
@@ -18,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _loginUsername = "";
   String _loginPassword = "";
+  AlertSnackbar _alertSnackbar = AlertSnackbar();
 
   @override
   void initState() {
@@ -55,38 +54,29 @@ class _LoginPageState extends State<LoginPage> {
         email: _loginUsername,
         password: _loginPassword,
       );
-      print(credential);
-      await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertMessagePopup(
-                title: "Success",
-                message: "${credential.user?.email ?? ""}Logged In",
-                isError: false);
-          });
+      if (kDebugMode) {
+        print(credential);
+      }
+
+      _alertSnackbar
+          .showSuccessAlert("${credential.user?.email ?? ""}Logged In", context);
       Navigator.pushNamed(context, '/');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-        await showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return const AlertMessagePopup(
-                  title: "Error",
-                  message: "No user found for that email.",
-                  isError: true);
-            });
+        if (kDebugMode) {
+          print('No user found for that email.');
+        }
+
+        _alertSnackbar.showSuccessAlert("No user found for that email.", context);
+
         Navigator.pushNamed(context, '/');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-        await showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return const AlertMessagePopup(
-                  title: "Error",
-                  message: "Wrong password provided for that user.",
-                  isError: true);
-            });
+        if (kDebugMode) {
+          print('Wrong password provided for that user.');
+        }
+        _alertSnackbar
+            .showSuccessAlert("Wrong password provided for that user.", context);
+
         Navigator.pushNamed(context, '/');
       }
     }
@@ -106,26 +96,12 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Chat Line - Login"),
+        title: const Text("Chat Line - Login"),
       ),
       body: CardWrapped(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
@@ -136,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     TextFormField(
-                      key: ObjectKey(_loginUsername + _loginPassword + "-user"),
+                      key: ObjectKey("$_loginUsername$_loginPassword-user"),
                       autofocus:
                           _loginPassword.isEmpty && _loginUsername.isNotEmpty,
                       initialValue: _loginUsername,
@@ -149,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextFormField(
-                      key: ObjectKey(_loginPassword + _loginUsername + "-pass"),
+                      key: ObjectKey("$_loginPassword$_loginUsername-pass"),
                       autofocus: _loginPassword.isNotEmpty &&
                           _loginUsername.isNotEmpty,
                       initialValue: _loginPassword,
@@ -177,9 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             _loginUser(context);
                           },
-                          child: Text("Login"),
+                          child: const Text("Login"),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                       ],

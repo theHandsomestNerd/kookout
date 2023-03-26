@@ -1,4 +1,6 @@
 
+import 'package:flutter/foundation.dart';
+
 import '../post.dart';
 
 class ChatApiGetProfilePostsResponse {
@@ -11,7 +13,9 @@ class ChatApiGetProfilePostsResponse {
   factory ChatApiGetProfilePostsResponse.fromJson(List<dynamic> parsedJson) {
     List<Post> list = <Post>[];
 
-    print("get-posts-response ${parsedJson[0]}");
+    if (kDebugMode) {
+      print("get-posts-response ${parsedJson[0]}");
+    }
 
     list = parsedJson.map((i) => Post.fromJson(i)).toList();
 

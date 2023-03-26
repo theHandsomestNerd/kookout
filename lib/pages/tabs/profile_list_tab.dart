@@ -3,18 +3,15 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
+import '../../models/controllers/auth_inherited.dart';
 import '../../shared_components/profile/profile_grid.dart';
 import '../../shared_components/search_box.dart';
 
 class ProfileListTab extends StatefulWidget {
   const ProfileListTab({
     super.key,
-    required this.chatController,
-    required this.authController,
   });
 
-  final AuthController authController;
-  final ChatController chatController;
 
   @override
   State<ProfileListTab> createState() => _ProfileListTabState();
@@ -22,22 +19,32 @@ class ProfileListTab extends StatefulWidget {
 
 class _ProfileListTabState extends State<ProfileListTab> {
 
-  late List<AppUser> profileList=widget.chatController.profileList;
+  late List<AppUser> profileList=[];
+  late ChatController? chatController = null;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    widget.chatController.updateProfiles().then((theProfileList){
-      profileList = theProfileList;
-    });
+
+  }
+
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    var theChatController = AuthInherited.of(context)?.chatController;
+    chatController = theChatController;
+    profileList = await chatController?.updateProfiles();
+    setState(() {});
+    print("dependencies changed profile list ${profileList}");
   }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       key: widget.key,
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
       child: Column(

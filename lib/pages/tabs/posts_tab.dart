@@ -1,19 +1,18 @@
 import 'package:chat_line/layout/list_and_small_form.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/shared_components/posts/post_thread.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/controllers/auth_inherited.dart';
 import '../../models/controllers/post_controller.dart';
+import '../../wrappers/loading_button.dart';
 
 class PostsTab extends StatefulWidget {
   const PostsTab({
     super.key,
-    required this.id,
   });
 
-  final String id;
 
   @override
   State<PostsTab> createState() => _PostsTabState();
@@ -32,9 +31,15 @@ class _PostsTabState extends State<PostsTab> {
   }
 
   Future<List<Post>> _getPosts() async {
-    var thePosts = await postController.getPosts(widget.id ?? "");
-    print("extended profile ${thePosts}");
-    return thePosts;
+    String id = AuthInherited.of(context)?.authController?.loggedInUser?.uid ??"";
+    if(id != null && id != "") {
+      var thePosts = await postController.getPosts(id);
+      if (kDebugMode) {
+        print("posts $thePosts");
+      }
+      return thePosts;
+    }
+    return [];
   }
 
   String? _postBody;
@@ -49,9 +54,7 @@ class _PostsTabState extends State<PostsTab> {
   _makePost(context) async {
     String? postResponse;
 
-    Post? aPost;
-
-    postResponse = await postController.createPost(aPost);
+    postResponse = await postController.createPost(_postBody);
 
     return postResponse;
   }
@@ -61,7 +64,7 @@ class _PostsTabState extends State<PostsTab> {
     return ListAndSmallFormLayout(
       listChild: PostThread(
         key: ObjectKey(_postsList),
-        posts: _postsList ?? [],
+        posts: _postsList,
       ),
       formChild: Column(
         children: [
@@ -77,23 +80,12 @@ class _PostsTabState extends State<PostsTab> {
               labelText: 'Post:',
             ),
           ),
-          MaterialButton(
-            color: Colors.red,
-            disabledColor: Colors.black12,
-            textColor: Colors.white,
-            // style: ButtonStyle(
-            //     backgroundColor: _isMenuItemsOnly
-            //         ? MaterialStateProperty.all(Colors.red)
-            //         : MaterialStateProperty.all(Colors.white)),
-            onPressed: _isPosting != true
-                ? () {
-                    _makePost(context);
-                  }
-                : null,
-            child: SizedBox(
-              height: 48,
-              child: _isPosting == true ? Text("Posting...") : Text("Post"),
-            ),
+          LoadingButton(
+            action: () {
+              _makePost(context);
+            },
+            isLoading: _isPosting,
+            text: "Comment",
           )
         ],
       ),

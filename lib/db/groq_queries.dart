@@ -1,4 +1,3 @@
-import 'package:chat_line/db/profile_filter.dart';
 
 const String USER = '''
           _id,

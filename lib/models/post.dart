@@ -1,4 +1,3 @@
-import 'package:chat_line/models/sanity/app_user_ref.dart';
 import 'package:chat_line/models/sanity/document_slug.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 

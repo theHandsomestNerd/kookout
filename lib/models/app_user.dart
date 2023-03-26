@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 class AppUser {
@@ -15,7 +16,9 @@ class AppUser {
       try {
         profileImage = SanityImage.fromJson(json['profileImage']);
       }catch(e){
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       }
     }
 

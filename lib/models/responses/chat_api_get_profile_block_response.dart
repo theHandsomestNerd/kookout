@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../block.dart';
 
 class ChatApiGetProfileBlocksResponse {
@@ -10,9 +12,11 @@ class ChatApiGetProfileBlocksResponse {
   factory ChatApiGetProfileBlocksResponse.fromJson(List<dynamic> parsedJson) {
     List<Block> tempList = <Block>[];
 
-    print("get-block-response ${parsedJson}");
+    if (kDebugMode) {
+      print("get-block-response $parsedJson");
+    }
 
-    if(parsedJson.length > 0) {
+    if(parsedJson.isNotEmpty) {
       tempList = parsedJson.map((i) => Block.fromJson(i)).toList();
     } else {
       tempList = [];

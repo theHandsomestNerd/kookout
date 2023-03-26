@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'comment_solo.dart';
 
 class CommentThread extends StatelessWidget {
-  CommentThread({
+  const CommentThread({
     super.key,
     required this.comments,
   });

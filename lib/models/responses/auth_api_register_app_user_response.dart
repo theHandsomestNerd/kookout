@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../Profile.dart';
 
 class AuthApiRegisterAppUserResponse {
@@ -8,7 +10,9 @@ class AuthApiRegisterAppUserResponse {
   });
 
   factory AuthApiRegisterAppUserResponse.fromJson(Map<String, dynamic> json) {
-    print("authregisterAppUserresponse ${json["profile"]}");
+    if (kDebugMode) {
+      print("authregisterAppUserresponse ${json["profile"]}");
+    }
 
     Profile profile = json["profile"];
 

@@ -1,4 +1,5 @@
-import 'package:chat_line/models/sanity/app_user_ref.dart';
+
+import 'package:flutter/foundation.dart';
 
 import 'app_user.dart';
 
@@ -24,7 +25,9 @@ class Comment {
     }
 
     if (json['publishedAt'] != null && json['publishedAt'] != "null") {
-      print("processing publishedAt ${DateTime.parse(json["publishedAt"].toString())}");
+      if (kDebugMode) {
+        print("processing publishedAt ${DateTime.parse(json["publishedAt"].toString())}");
+      }
       publishedAt = DateTime.parse(json["publishedAt"].toString());
     }
   }

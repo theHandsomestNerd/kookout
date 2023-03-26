@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:chat_line/models/app_user.dart';
 
@@ -41,11 +40,11 @@ class ExtendedProfile {
 
     List<String> pronounListStr = <String>[];
 
-    pronounList.forEach((element) {
+    for (var element in pronounList) {
       var elementInQuestion = element;
 
       pronounListStr.add(elementInQuestion);
-    });
+    }
 
     return pronounListStr;
   }

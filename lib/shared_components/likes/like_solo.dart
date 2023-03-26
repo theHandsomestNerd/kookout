@@ -2,7 +2,6 @@ import 'package:chat_line/shared_components/user_block_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/like.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class LikeSolo extends StatelessWidget {
   const LikeSolo({

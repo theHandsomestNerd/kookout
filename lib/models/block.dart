@@ -1,4 +1,3 @@
-import 'package:chat_line/models/sanity/app_user_ref.dart';
 
 import 'app_user.dart';
 

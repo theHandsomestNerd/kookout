@@ -22,10 +22,6 @@ class _SearchBoxState extends State<SearchBox> {
     });
   }
 
-  void _openFilterMenu() {
-    log('open filter menu');
-  }
-
   void _clearSearch() {
     log("clear search");
     setTerms("");
@@ -48,7 +44,7 @@ class _SearchBoxState extends State<SearchBox> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
       child: Row(
         children: <Widget>[
           Expanded(

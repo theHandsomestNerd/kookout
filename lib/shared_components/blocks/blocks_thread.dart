@@ -4,7 +4,7 @@ import '../../models/block.dart';
 import 'block_solo.dart';
 
 class BlockThread extends StatelessWidget {
-  BlockThread({
+  const BlockThread({
     super.key,
     required this.blocks,
   });
@@ -16,17 +16,17 @@ class BlockThread extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       key: super.key,
-      constraints: BoxConstraints(),
-      child: blocks.length > 0 ? ListView(
+      constraints: const BoxConstraints(),
+      child: blocks.isNotEmpty ? ListView(
         children: [
           ...(blocks).map((block) {
             return Column(
               // children: [Text("block: block"), Divider()],
-              children: [BlockSolo(block: block), Divider()],
+              children: [BlockSolo(block: block), const Divider()],
             );
           }).toList()
         ],
-      ):Text("You dont have any blocks"),
+      ):const Text("You dont have any blocks"),
     );
   }
 }

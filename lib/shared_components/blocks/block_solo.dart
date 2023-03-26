@@ -15,13 +15,13 @@ class BlockSolo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
       child: Flexible(
         child: ListTile(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: Center(
                   child: Icon(

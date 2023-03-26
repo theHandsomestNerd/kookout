@@ -18,16 +18,16 @@ class PostSolo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
       child: ListTile(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserBlockText(user: post.author),
             ConstrainedBox(
-              constraints: BoxConstraints(),
+              constraints: const BoxConstraints(),
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(38, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(38, 0, 0, 0),
                   child: Column(
                     children: [
                       post.mainImage != null
@@ -47,7 +47,7 @@ class PostSolo extends StatelessWidget {
                         height: POST_IMAGE_SQUARE_SIZE as double,
                         width: POST_IMAGE_SQUARE_SIZE as double,
                       ),
-                      Text("${post.body}" ?? "hi"),
+                      Text("${post.body}"),
                       Text((post.publishedAt != null
                           ? timeago.format(post.publishedAt!)
                           : "Forever and a day ago")),

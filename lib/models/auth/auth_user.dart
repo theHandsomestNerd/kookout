@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 class AuthUser {

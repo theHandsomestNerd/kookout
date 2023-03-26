@@ -2,24 +2,22 @@ import 'package:chat_line/layout/list_and_small_form.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/shared_components/comments/comment_thread.dart';
+import 'package:chat_line/wrappers/loading_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
+import '../../models/controllers/auth_inherited.dart';
 
 class CommentsTab extends StatefulWidget {
   const CommentsTab(
       {super.key,
-      required this.chatController,
-      required this.authController,
       required this.id,
       required this.profileComments,
       required this.thisProfile,
       required this.updateComments,
       required this.isThisMe});
 
-  final AuthController authController;
-  final ChatController chatController;
   final List<Comment>? profileComments;
   final AppUser? thisProfile;
   final String id;
@@ -31,20 +29,30 @@ class CommentsTab extends StatefulWidget {
 }
 
 class _CommentsTabState extends State<CommentsTab> {
+  late ChatController? chatController = null;
   late String? _commentBody = null;
   bool isCommenting = false;
+  late List<Comment> _comments = [];
 
   @override
   initState() {
     super.initState();
+
+    _comments = widget.profileComments ?? [];
   }
 
-  // Future<List<Comment>?> _getComments(String userId) async {
-  //   var theComments =
-  //       await widget.chatController.getProfileComments(widget.id ?? "");
-  //   print("extended profile ${theComments}");
-  //   return theComments;
-  // }
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    var theChatController = AuthInherited.of(context)?.chatController;
+    _comments =
+        await theChatController?.profileClient.getProfileComments(widget.id) ??
+            [];
+    chatController = theChatController;
+
+    setState(() {});
+    print("timeline events dependencies changed ${_comments}");
+  }
 
   void _setCommentBody(String newCommentBody) {
     setState(() {
@@ -58,7 +66,7 @@ class _CommentsTabState extends State<CommentsTab> {
     });
     String? commentResponse;
 
-    commentResponse = await widget.chatController
+    commentResponse = await chatController?.profileClient
         .commentProfile(widget.id, _commentBody ?? "");
 
     await widget.updateComments(context, commentResponse);
@@ -71,8 +79,8 @@ class _CommentsTabState extends State<CommentsTab> {
   Widget build(BuildContext context) {
     return ListAndSmallFormLayout(
       listChild: CommentThread(
-        key: ObjectKey(widget.profileComments),
-        comments: widget.profileComments ?? [],
+        key: ObjectKey(_comments),
+        comments: _comments ?? [],
       ),
       formChild: Column(
         children: [
@@ -88,21 +96,12 @@ class _CommentsTabState extends State<CommentsTab> {
               labelText: 'Comment:',
             ),
           ),
-          MaterialButton(
-            color: Colors.red,
-            disabledColor: Colors.black12,
-            textColor: Colors.white,
-            onPressed: !isCommenting
-                ? () {
-                    _commentThisProfile(context);
-                  }
-                : null,
-            child: SizedBox(
-              height: 48,
-              child: isCommenting
-                  ? Text("Commenting...")
-                  : Text("Leave Comment"),
-            ),
+          LoadingButton(
+            action: () {
+              _commentThisProfile(context);
+            },
+            isLoading: isCommenting,
+            text: "Comment",
           )
         ],
       ),

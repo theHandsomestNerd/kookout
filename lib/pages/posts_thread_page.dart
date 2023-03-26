@@ -3,14 +3,14 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
+import '../models/app_user.dart';
+import '../models/controllers/auth_inherited.dart';
+
 class PostsThreadPage extends StatefulWidget {
-  const PostsThreadPage({super.key, required this.drawer, required this.chatController,
-    required this.authController,});
+  const PostsThreadPage({super.key, required this.drawer,
+    });
 
   final Widget drawer;
-  final AuthController authController;
-  final ChatController chatController;
-
 
   @override
   State<PostsThreadPage> createState() => _PostsThreadPageState();
@@ -22,18 +22,16 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
   @override
   void initState() {
     super.initState();
-    widget.chatController.updateProfiles();
+    // widget.chatController.updateProfiles();
   }
+
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  Widget _widgetOptions(_selectedIndex) {
+  Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      ProfileListTab(
-        chatController: widget.chatController,
-        authController: widget.authController,
-      ),
+      const ProfileListTab(),
       const Text(
         'Index 2: Timeline',
         style: optionStyle,
@@ -52,7 +50,7 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
       ),
     ];
 
-    return theOptions.elementAt(_selectedIndex);
+    return theOptions.elementAt(selectedIndex);
   }
 
   void _onItemTapped(int index) {
@@ -75,11 +73,11 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
         appBar: AppBar(
           // Here we take the value from the LoggedInHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Text("Chat Line - Login"),
+          title: const Text("Chat Line - Login"),
         ),
         body: ConstrainedBox(
             key: Key(_selectedIndex.toString()),
-            constraints: BoxConstraints(),
+            constraints: const BoxConstraints(),
             child: _widgetOptions(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

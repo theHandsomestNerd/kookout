@@ -21,13 +21,13 @@ class CommentSolo extends StatelessWidget {
         children: [
           UserBlockText(user: comment.author),
           ConstrainedBox(
-            constraints: BoxConstraints(),
+            constraints: const BoxConstraints(),
             child: Padding(
-                padding: EdgeInsets.fromLTRB(38, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(38, 0, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${comment.commentBody}" ?? "hi"),
+                    Text("${comment.commentBody}"),
                     Text((comment.publishedAt != null
                         ? timeago.format(comment.publishedAt!)
                         : "Forever and a day ago")),

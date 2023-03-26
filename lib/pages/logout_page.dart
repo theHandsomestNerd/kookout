@@ -26,7 +26,7 @@ class _LogoutPageState extends State<LogoutPage> {
       appBar: AppBar(
         // Here we take the value from the Logout object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Chat Line - Logout"),
+        title: const Text("Chat Line - Logout"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -56,7 +56,7 @@ class _LogoutPageState extends State<LogoutPage> {
                 width: 350,
                 child: Column(
                   children: [
-                    Text("logoutBelow"),
+                    const Text("logoutBelow"),
                     MaterialButton(
                       color: Colors.red,
                       textColor: Colors.white,
@@ -68,7 +68,7 @@ class _LogoutPageState extends State<LogoutPage> {
                         FirebaseAuth.instance.signOut();
                         Navigator.popAndPushNamed(context, '/');
                       },
-                      child: Text("Logout"),
+                      child: const Text("Logout"),
                     ),
                   ],
                 ),

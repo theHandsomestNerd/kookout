@@ -40,7 +40,7 @@ class UserBlockMini extends StatelessWidget {
                             height: 80,
                             width: 80,
                           )
-                        : SizedBox(
+                        : const SizedBox(
                             height: 80,
                             width: 80,
                           ),

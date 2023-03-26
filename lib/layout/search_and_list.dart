@@ -1,10 +1,5 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/comments/comment_thread.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/app_user.dart';
-import '../../models/comment.dart';
 import '../shared_components/search_box.dart';
 
 class SearchAndList extends StatefulWidget {
@@ -34,7 +29,7 @@ class _SearchAndListState extends State<SearchAndList> {
                   setTerms: () {},
                 ),
               )
-            : Text(""),
+            : const Text(""),
         Expanded(
           child: widget.listChild,
         ),

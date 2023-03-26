@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -61,7 +60,7 @@ class _ToolButtonState extends State<ToolButton> {
                       ),
                     ),
                   ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             widget.isHideLabel != true
@@ -74,7 +73,7 @@ class _ToolButtonState extends State<ToolButton> {
                           widget.isActive == true ? widget.color : Colors.black,
                     ),
                   )
-                : Text(""),
+                : const Text(""),
           ],
         ));
   }

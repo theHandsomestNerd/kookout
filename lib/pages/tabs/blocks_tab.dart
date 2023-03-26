@@ -5,16 +5,13 @@ import 'package:chat_line/shared_components/blocks/blocks_thread.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/block.dart';
+import '../../models/controllers/auth_inherited.dart';
 
 class BlocksTab extends StatefulWidget {
   const BlocksTab(
       {super.key,
-      required this.authController,
-      required this.chatController,
       required this.blocks});
 
-  final AuthController authController;
-  final ChatController chatController;
   final List<Block> blocks;
 
   @override
@@ -22,18 +19,27 @@ class BlocksTab extends StatefulWidget {
 }
 
 class _BlocksTabState extends State<BlocksTab> {
+  late List<Block>? blocks;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
 
-    widget.chatController.updateMyBlocks();
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    var theChatController = AuthInherited.of(context)?.chatController;
+    blocks = await theChatController?.updateMyBlocks();
+    setState(() {});
+    print("blocks dependencies changed ${blocks}");
   }
 
   @override
   Widget build(BuildContext context) {
     return SearchAndList(isSearchEnabled:false, listChild: BlockThread(
-      blocks: widget.blocks,
+      blocks: blocks ?? [],
     ),);
   }
 }

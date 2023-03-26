@@ -4,7 +4,7 @@ class CardWrapped extends StatelessWidget {
   const CardWrapped({super.key, required this.child, this.height});
 
   final double? height;
-  final child;
+  final Widget child;
 
   // This widget is the root of your application.
   @override

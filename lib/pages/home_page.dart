@@ -1,10 +1,10 @@
 import 'package:chat_line/models/controllers/auth_controller.dart';
+import 'package:chat_line/models/controllers/auth_inherited.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.authController, required this.drawer});
+  const HomePage({super.key, required this.drawer});
 
-  final AuthController authController;
   final drawer;
 
   @override
@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   _getMenu() {
     List<Widget> widgets = [];
 
-    if (widget.authController.isLoggedIn == true) {
+    if (AuthInherited.of(context)?.authController?.isLoggedIn == true) {
       widgets.add(
         MaterialButton(
           color: Colors.red,
@@ -27,12 +27,12 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.popAndPushNamed(context, '/profilesPage');
           },
-          child: Text("Go to Logged in"),
+          child: const Text("Go to Logged in"),
         ),
       );
     } else {
-      widgets.addAll(
-        [MaterialButton(
+      widgets.addAll([
+        MaterialButton(
           color: Colors.red,
           textColor: Colors.white,
           // style: ButtonStyle(
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.popAndPushNamed(context, '/login');
           },
-          child: Text("Login"),
+          child: const Text("Login"),
         ),
         MaterialButton(
           color: Colors.red,
@@ -54,9 +54,9 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.popAndPushNamed(context, '/register');
           },
-          child: Text("New Account"),
-        ),]
-      );
+          child: const Text("New Account"),
+        ),
+      ]);
     }
 
     return SizedBox(
@@ -82,13 +82,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Chat Line - Home"),
+        title: const Text("Chat Line - Home"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          key: Key(widget.authController.isLoggedIn.toString()),
+          key: Key(AuthInherited.of(context)
+                  ?.authController
+                  ?.isLoggedIn
+                  .toString() ??
+              ""),
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -112,8 +116,9 @@ class _HomePageState extends State<HomePage> {
               width: 350,
               child: Column(
                 children: [
-                  Text(widget.authController.isLoggedIn
-                      ? "You are logged in as ${widget.authController.loggedInUser?.email}"
+                  Text(AuthInherited.of(context)?.authController?.isLoggedIn ==
+                          true
+                      ? "You are logged in as ${AuthInherited.of(context)?.authController?.loggedInUser?.email}"
                       : "you are logged out"),
                 ],
               ),

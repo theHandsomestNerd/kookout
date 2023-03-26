@@ -1,26 +1,18 @@
 import 'dart:async';
-import 'dart:html';
-import 'dart:math';
-import 'dart:typed_data';
-import 'package:file_support/file_support.dart';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
-  @override
-  late PlatformFile? file = null;
-  @override
-  late String? fileExtension = "";
-  @override
-  late String? contentType = "";
-  @override
-  late Future<PlatformFile> compressedPlatformFuture;
-
-  ImageUploader() {
+  ImageUploaderImpl() {
+    file = null;
+    fileExtension = null;
+    contentType = null;
+    theCompressedCompleter = null;
+    compressedPlatformFuture = null;
   }
 
   @override
@@ -39,13 +31,14 @@ class ImageUploaderImpl extends ImageUploader {
           size: await pickedImageFile.length());
 
       file = theFile;
-      print(
-          "File Picked ${theFile.name} extension:${theFile?.extension} ${theFile?.size} bytes");
+      if (kDebugMode) {
+        print(
+          "File Picked ${theFile.name} extension:${theFile.extension} ${theFile.size} bytes");
+      }
       return theFile;
     } else {
       // User canceled the picker
     }
     return null;
   }
-
 }

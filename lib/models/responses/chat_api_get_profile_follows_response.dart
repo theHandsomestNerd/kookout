@@ -1,4 +1,6 @@
 
+import 'package:flutter/foundation.dart';
+
 import '../follow.dart';
 
 class ChatApiGetProfileFollowsResponse {
@@ -11,7 +13,9 @@ class ChatApiGetProfileFollowsResponse {
   factory ChatApiGetProfileFollowsResponse.fromJson(List<dynamic> parsedJson) {
     List<Follow> list = <Follow>[];
 
-    print("get-comments-response ${parsedJson.length} comments");
+    if (kDebugMode) {
+      print("get-comments-response ${parsedJson.length} comments");
+    }
 
     list = parsedJson.map((i) => Follow.fromJson(i)).toList();
 

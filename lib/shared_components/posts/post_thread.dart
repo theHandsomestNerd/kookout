@@ -1,12 +1,10 @@
-import 'package:chat_line/models/comment.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/shared_components/posts/post_solo.dart';
 import 'package:flutter/material.dart';
 
-import '../comments/comment_solo.dart';
 
 class PostThread extends StatelessWidget {
-  PostThread({
+  const PostThread({
     super.key,
     required this.posts,
   });
@@ -21,7 +19,7 @@ class PostThread extends StatelessWidget {
             return Column(
               children: [
                 PostSolo(post: post),
-                Divider()
+                const Divider()
               ],
             );
           }).toList()],

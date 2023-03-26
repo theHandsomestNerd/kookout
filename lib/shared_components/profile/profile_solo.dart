@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../models/Profile.dart';
 import '../../models/app_user.dart';
 import '../../sanity/image_url_builder.dart';
 
@@ -27,7 +26,7 @@ class ProfileSolo extends StatelessWidget {
             .width(200)
             .url() ??
             ""):Image.asset(height: 200,width: 200,'assets/blankProfileImage.png'),
-          Text("${profile.displayName}" ?? "hi")],
+          Text("${profile.displayName}")],
       ),
     );
   }

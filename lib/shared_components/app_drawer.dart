@@ -2,20 +2,19 @@ import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/shared_components/user_block_mini.dart';
 import 'package:flutter/material.dart';
 
+import '../models/controllers/auth_inherited.dart';
+
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
     super.key,
-    required this.authController,
   });
-
-  final AuthController authController;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      key: Key(authController.myAppUser.toString() + authController.loggedInUser.toString()),
+      key: Key((AuthInherited.of(context)?.authController?.myAppUser.toString()??"") + (AuthInherited.of(context)?.authController?.loggedInUser.toString() ?? "")),
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
@@ -37,8 +36,8 @@ class AppDrawer extends StatelessWidget {
                       color: Colors.white)),
             ),
           ),
-          authController.myAppUser != null ? UserBlockMini(user: authController.myAppUser): Text("no logged in user"),
-           ListTile(title: Text("Profiles"),onTap: (){
+          AuthInherited.of(context)?.authController?.myAppUser != null ? UserBlockMini(user: AuthInherited.of(context)?.authController?.myAppUser): const Text("no logged in user"),
+           ListTile(title: const Text("Profiles"),onTap: (){
             Navigator.popAndPushNamed(context, '/profilesPage');
           },),
           ListTile(title: const Text("Login"),
@@ -46,11 +45,11 @@ class AppDrawer extends StatelessWidget {
             Navigator.popAndPushNamed(context, '/login');
           },
           ),
-           ListTile(title: Text("Logout"),
+           ListTile(title: const Text("Logout"),
             onTap: (){
               Navigator.popAndPushNamed(context, '/logout');
             },),
-           ListTile(title: Text("Register User"),onTap: (){
+           ListTile(title: const Text("Register User"),onTap: (){
              Navigator.popAndPushNamed(context, '/register');
            },),
         ],
