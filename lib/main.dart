@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/edit_profile_page.dart';
@@ -34,7 +32,7 @@ Future<void> main() async {
 
   // AuthController manager = AuthController.init();
   ChatController chatController = ChatController.init();
-  AppDrawer globalDrawer = AppDrawer();
+  AppDrawer globalDrawer = const AppDrawer();
 
   runApp(MyApp(
       // authController: manager,

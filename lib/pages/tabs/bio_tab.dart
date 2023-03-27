@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
-import '../../models/controllers/auth_controller.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../models/follow.dart';
 import '../../models/like.dart';
@@ -30,10 +29,12 @@ class BioTab extends StatefulWidget {
     required this.profileLikedByMe,
     required this.profileFollowedByMe,
     required this.profileFollows,
+    required this.goToCommentsTab
   });
 
   final String? id;
   final updateBlocks;
+  final goToCommentsTab;
   final updateLikes;
   final updateComments;
   final updateFollows;
@@ -78,19 +79,11 @@ class _BioTabState extends State<BioTab> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
-    extProfile = await theChatController?.updateExtProfile();
+    extProfile = await theChatController?.profileClient.getExtendedProfile(widget.id??"");
     profileClient = theChatController?.profileClient;
     chatController = theChatController;
     setState(() {});
-    print("tab bio dependencies changed ${extProfile}");
-  }
-
-  Future<ExtendedProfile?> _getExtProfile(String userId) async {
-    var aProfile = await profileClient?.getExtendedProfile(userId!);
-    if (kDebugMode) {
-      print("bio tab looking for extended profile $userId's $aProfile");
-    }
-    return aProfile;
+    print("tab bio dependencies changed $extProfile");
   }
 
   _likeThisProfile(context) async {
@@ -214,7 +207,6 @@ class _BioTabState extends State<BioTab> {
                             ListTile(
                               title: ToolButton(
                                 isDisabled: (widget.isThisMe == true),
-                                key: ObjectKey("${widget.profileLikes}-likes"),
                                 action: _likeThisProfile,
                                 iconData: Icons.thumb_up,
                                 color: Colors.green,
@@ -229,8 +221,8 @@ class _BioTabState extends State<BioTab> {
                               thickness: 2,
                             ),
                             ListTile(
-                              key:
-                                  ObjectKey("${widget.profileFollows}-follows"),
+                              // key:
+                                  // ObjectKey("${widget.profileFollows}-follows"),
                               title: ToolButton(
                                   isDisabled: (widget.isThisMe == true),
                                   action: _followThisProfile,
@@ -249,11 +241,13 @@ class _BioTabState extends State<BioTab> {
                             ListTile(
                               title: ToolButton(
                                   isDisabled: (widget.isThisMe == true),
-                                  key: ObjectKey(
-                                      "${widget.profileComments?.length}-comments"),
+                                  // key: ObjectKey(
+                                  //     "${widget.profileComments?.length}-comments"),
                                   text:
                                       widget.profileComments?.length.toString(),
-                                  action: (context) {},
+                                  action: (context) {
+                                    widget.goToCommentsTab();
+                                  },
                                   iconData: Icons.comment,
                                   color: Colors.yellow,
                                   label: 'Comment'),
@@ -265,8 +259,8 @@ class _BioTabState extends State<BioTab> {
                             ListTile(
                               title: ToolButton(
                                 isDisabled: (widget.isThisMe == true),
-                                key: ObjectKey(
-                                    chatController?.myBlockedProfiles),
+                                // key: ObjectKey(
+                                //     chatController?.myBlockedProfiles),
                                 action: _blockThisProfile,
                                 iconData: Icons.block,
                                 color: Colors.red,

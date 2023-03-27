@@ -7,14 +7,14 @@ import '../auth/auth_user.dart';
 import 'auth_controller.dart';
 
 class AuthInherited extends InheritedWidget {
-  AuthController? authController;
-  ChatController? chatController;
-  AppUser? myAppUser;
-  AuthUser? myLoggedInUser;
-  SanityImage? profileImage;
+  final AuthController? authController;
+  final ChatController? chatController;
+  final AppUser? myAppUser;
+  final AuthUser? myLoggedInUser;
+  final SanityImage? profileImage;
 
   AuthInherited(
-      {this.profileImage,
+      {super.key, this.profileImage,
       this.authController,
       this.chatController,
       this.myAppUser,

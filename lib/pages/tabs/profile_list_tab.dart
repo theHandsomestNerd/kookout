@@ -1,4 +1,3 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 

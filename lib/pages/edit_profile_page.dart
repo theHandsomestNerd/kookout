@@ -1,10 +1,8 @@
 import 'package:chat_line/models/app_user.dart';
-import 'package:chat_line/models/auth/auth_user.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/platform_dependent/image_uploader_abstract.dart';
-import 'package:chat_line/shared_components/alert_message_popup.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:chat_line/shared_components/height_input.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
@@ -34,7 +32,6 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   late AppUser? _myAppUser = null;
-  late AuthUser? _loggedInUser = null;
   late AuthController? authController = null;
   late ChatController? chatController = null;
   late SanityImage? profileImage = null;
@@ -46,7 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _loginUsername = "";
   String _displayName = "";
   ImageUploader? imageUploader;
-  AlertSnackbar _alertSnackbar = AlertSnackbar();
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
 
   String _shortBio = "";
@@ -84,9 +81,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     authController = AuthInherited.of(context)?.authController;
     _myAppUser = theUser;
     profileImage = theUser?.profileImage;
-    _loggedInUser = AuthInherited.of(context)?.myLoggedInUser;
+    // _loggedInUser = AuthInherited.of(context)?.myLoggedInUser;
     imageToBeUploaded = await _getMyProfileImage(null);
-    extProfile = await theChatController?.updateExtProfile();
+    extProfile = await theChatController?.updateExtProfile(theUser?.userId ??"");
     setState(() {});
     print("dependencies changed ${_myAppUser}");
   }

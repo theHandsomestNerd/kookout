@@ -80,7 +80,7 @@ class _CommentsTabState extends State<CommentsTab> {
     return ListAndSmallFormLayout(
       listChild: CommentThread(
         key: ObjectKey(_comments),
-        comments: _comments ?? [],
+        comments: _comments,
       ),
       formChild: Column(
         children: [

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
@@ -15,7 +16,9 @@ class SearchBox extends StatefulWidget {
 class _SearchBoxState extends State<SearchBox> {
   String _searchTerms = "";
   void setTerms(terms) {
-    print(terms);
+    if (kDebugMode) {
+      print(terms);
+    }
     widget.setTerms(terms);
     setState(() {
       _searchTerms = terms;

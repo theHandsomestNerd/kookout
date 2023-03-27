@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../app_user.dart';
+import '../like.dart';
 
 class ChatController {
   ExtendedProfile? myExtProfile;
@@ -46,9 +47,9 @@ class ChatController {
     });
   }
 
-  updateExtProfile() async {
+  updateExtProfile(String userId) async {
     var theExtProfile =
-        await profileClient.getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
+        await profileClient.getExtendedProfile(userId);
 
     myExtProfile = theExtProfile;
     profileList = await profileClient.fetchProfiles();
@@ -87,5 +88,17 @@ class ChatController {
     }
 
     return foundBlock;
+  }
+
+  bool isProfileLikedByMe(String userId, List<Like> theLikesPassed)  {
+    bool foundLike = false;
+
+    for (var element in theLikesPassed) {
+      if (element.liker?.userId == userId) {
+        foundLike = true;
+      }
+    }
+
+    return foundLike;
   }
 }

@@ -255,44 +255,6 @@ class ChatClient {
       print(commentBody);
     }
 
-    Future<List<Block>> getMyBlockedProfiles() async {
-      if (kDebugMode) {
-        print("Retrieving My Profile Blocks(blocked profiles)");
-      }
-      String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-      if (token != null) {
-        final response = await http.get(
-            Uri.parse("$authBaseUrl/get-my-profile-blocks"),
-            headers: {"Authorization": ("Bearer $token")});
-
-        if (kDebugMode) {
-          print("getMyBlocks response ${response.body}");
-        }
-        var processedResponse = jsonDecode(response.body);
-
-        if (processedResponse['profileBlocks'] != null) {
-          if (kDebugMode) {
-            print("from response ${processedResponse['profileBlocks']}");
-          }
-          ChatApiGetProfileBlocksResponse responseModel =
-              ChatApiGetProfileBlocksResponse.fromJson(
-                  processedResponse['profileBlocks']);
-          if (kDebugMode) {
-            print("get my profile block api response ${responseModel.list}");
-          }
-
-          // responseModel.list.forEach((element) {
-          //   print(element);
-          // });
-
-          return responseModel.list;
-        } else {
-          return [];
-        }
-      }
-      return [];
-    }
-
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
       final response = await http.post(
@@ -318,7 +280,7 @@ class ChatClient {
     return "FAIL";
   }
 
-  Future<List<Like>> getProfileLikes(String userId) async {
+  Future<ChatApiGetProfileLikesResponse> getProfileLikes(String userId) async {
     if (kDebugMode) {
       print("Retrieving Profile Likes $userId");
     }
@@ -333,17 +295,17 @@ class ChatClient {
       if (processedResponse['profileLikes'] != null) {
         ChatApiGetProfileLikesResponse responseModel =
             ChatApiGetProfileLikesResponse.fromJson(
-                processedResponse['profileLikes']);
+                processedResponse);
         if (kDebugMode) {
           print("get profile likes api response ${responseModel.list}");
         }
 
-        return responseModel.list;
+        return responseModel;
       } else {
-        return [];
+        return ChatApiGetProfileLikesResponse(list: [], amIInThisList: null);
       }
     }
-    return [];
+    return ChatApiGetProfileLikesResponse(list: [], amIInThisList: null);
   }
 
   updateExtProfileChatUser(
@@ -564,7 +526,7 @@ class ChatClient {
     return "FAIL";
   }
 
-  Future<List<Follow>> getProfileFollows(String userId) async {
+  Future<ChatApiGetProfileFollowsResponse> getProfileFollows(String userId) async {
     if (kDebugMode) {
       print("Retrieving Profile Follows $userId");
     }
@@ -579,7 +541,7 @@ class ChatClient {
       if (processedResponse['profileFollows'] != null) {
         ChatApiGetProfileFollowsResponse responseModel =
             ChatApiGetProfileFollowsResponse.fromJson(
-                processedResponse['profileFollows']);
+                processedResponse);
         if (kDebugMode) {
           print("get profile follows api response ${responseModel.list}");
         }
@@ -590,12 +552,12 @@ class ChatClient {
           }
         }
 
-        return responseModel.list;
+        return responseModel;
       } else {
-        return [];
+        return ChatApiGetProfileFollowsResponse(list: []);
       }
     }
-    return [];
+    return ChatApiGetProfileFollowsResponse(list: []);
   }
 
   Future<String> likeProfile(String userId) async {

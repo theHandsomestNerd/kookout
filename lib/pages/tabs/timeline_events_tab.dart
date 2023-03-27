@@ -1,6 +1,4 @@
 import 'package:chat_line/layout/search_and_list.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/auth_inherited.dart';
@@ -39,7 +37,7 @@ class _TimelineEventsTabState extends State<TimelineEventsTab> {
     var theChatController = AuthInherited.of(context)?.chatController;
     timelineEvents = await theChatController?.updateTimelineEvents();
     setState(() {});
-    print("timeline events dependencies changed ${timelineEvents}");
+    print("timeline events dependencies changed $timelineEvents");
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/tabs/blocks_tab.dart';
 import 'package:chat_line/pages/tabs/posts_tab.dart';
@@ -40,7 +39,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
     chatController = theChatController;
     myUserId = AuthInherited.of(context)?.myAppUser?.userId ?? "";
     setState(() {});
-    print("dependencies changed ${myUserId}");
+    print("dependencies changed $myUserId");
   }
 
   static const TextStyle optionStyle =
@@ -48,7 +47,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      ProfileListTab(),
+      const ProfileListTab(),
       TimelineEventsTab(timelineEvents: chatController?.timelineOfEvents, id: AuthInherited.of(context)?.authController?.myAppUser?.userId??""),
       const Text(
         'Index 3: Likes and Follows',
@@ -62,7 +61,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
         'Index 4: Albums',
         style: optionStyle,
       ),
-      PostsTab(
+      const PostsTab(
       ),
     ];
 

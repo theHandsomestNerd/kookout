@@ -1,7 +1,8 @@
 import 'package:chat_line/models/clients/chat_client.dart';
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/models/extended_profile.dart';
+import 'package:chat_line/models/responses/chat_api_get_profile_follows_response.dart';
+import 'package:chat_line/models/responses/chat_api_get_profile_likes_response.dart';
 import 'package:chat_line/pages/tabs/bio_tab.dart';
 import 'package:chat_line/pages/tabs/comments_tab.dart';
 import 'package:chat_line/pages/tabs/follows_tab.dart';
@@ -38,19 +39,21 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   late Follow? _profileFollowedByMe = null;
   late List<Follow>? _profileFollows = [];
 
-  AlertSnackbar _alertSnackbar = AlertSnackbar();
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
   ChatClient? profileClient = null;
   AuthController? authController = null;
   ChatController? chatController = null;
 
-  @override
-  initState() {
-    super.initState();
-
+  SoloProfilePage() {
     if (widget == null || widget.id == "") {
       Navigator.popAndPushNamed(context, '/profilesPage');
     }
+  }
+
+  @override
+  initState() {
+    super.initState();
   }
 
   @override
@@ -58,62 +61,32 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     var theAuthController = AuthInherited.of(context)?.authController;
-    var theFollows =
-        await theChatController?.profileClient.getProfileFollows(widget.id) ??
-            [];
-    var theLikes =
-        await theChatController?.profileClient.getProfileLikes(widget.id) ?? [];
+    var theFollows = await theChatController?.profileClient
+        .getProfileFollows(widget.id) as ChatApiGetProfileFollowsResponse;
+    var theLikes = await theChatController?.profileClient
+        .getProfileLikes(widget.id) as ChatApiGetProfileLikesResponse;
     var theComments =
         await theChatController?.profileClient.getProfileComments(widget.id) ??
             [];
 
     _profileComments = theComments;
-    _profileLikes = theLikes;
-    _profileFollows = theFollows;
-    _profileFollowedByMe = isThisProfileFollowedByMe(theFollows);
-    _profileLikedByMe = isThisProfileLikedByMe(theLikes);
+    _profileLikes = theLikes.list;
+    _profileFollows = theFollows.list;
+    _profileFollowedByMe = theFollows.amIInThisList;
+
+    _profileLikedByMe = theLikes.amIInThisList;
     var theProfile = await theAuthController?.getAppUser(widget.id);
     _thisProfile = theProfile;
 
     print("the profile retrieved in this page $theProfile");
 
-
     profileClient = theChatController?.profileClient;
     authController = theAuthController;
 
-    _isThisMe = widget.id ==
-        theAuthController?.loggedInUser?.uid;
+    _isThisMe = widget.id == theAuthController?.myAppUser?.userId;
 
     setState(() {});
     print("timeline events dependencies changed ${_thisProfile}");
-  }
-
-  // Future<AppUser?> _getAppUser(String userId) async {
-  //   var aProfile =
-  //       await authController?.getAppUser(widget.id);
-  //   if (kDebugMode) {
-  //     print("compled in consteucrto $aProfile");
-  //   }
-  //
-  //   return aProfile;
-  // }
-
-  // Future<ExtendedProfile?> _getExtProfile(String userId) async {
-  //   var aProfile = await widget.chatController.getExtendedProfile(widget.id);
-  //   if (kDebugMode) {
-  //     print("extended profile $aProfile");
-  //   }
-  //
-  //   return aProfile;
-  // }
-
-  Future<List<Comment>?> _getComments(String userId) async {
-    var theComments =
-        await profileClient?.getProfileComments(widget.id);
-    if (kDebugMode) {
-      print("the comments $theComments");
-    }
-    return theComments;
   }
 
   _getTagLine() {
@@ -123,8 +96,8 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     return _thisProfile?.displayName;
   }
 
-  _getProfileLikes() async {
-    return profileClient?.getProfileLikes(widget.id);
+  Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
+    return await profileClient?.getProfileLikes(widget.id);
   }
 
   _getProfileFollows() async {
@@ -135,30 +108,28 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     return profileClient?.getProfileComments(widget.id);
   }
 
-  isThisProfileLikedByMe(List<Like> theLikes) {
-    Like? profileLikedByMe;
-    for (var like in theLikes) {
-      if (like.liker?.userId ==
-          authController?.loggedInUser?.uid) {
-        if (kDebugMode) {
-          print(
-              "I'm ${authController?.loggedInUser?.uid} in the likes?");
-        }
-        profileLikedByMe = like;
-      }
-    }
-
-    return profileLikedByMe;
-  }
+  // isThisProfileLikedByMe(List<Like> theLikes) {
+  //   Like? profileLikedByMe;
+  //   for (var like in theLikes) {
+  //     if (like.liker?.userId ==
+  //         authController?.loggedInUser?.uid) {
+  //       if (kDebugMode) {
+  //         print(
+  //             "I'm ${authController?.loggedInUser?.uid} in the likes?");
+  //       }
+  //       profileLikedByMe = like;
+  //     }
+  //   }
+  //
+  //   return profileLikedByMe;
+  // }
 
   isThisProfileFollowedByMe(List<Follow> theFollows) {
     Follow? profileFollowedByMe;
     for (var follow in theFollows) {
-      if (follow.follower?.userId ==
-          authController?.loggedInUser?.uid) {
+      if (follow.follower?.userId == authController?.loggedInUser?.uid) {
         if (kDebugMode) {
-          print(
-              "I'm ${authController?.loggedInUser?.uid} in the follows?");
+          print("I'm ${authController?.loggedInUser?.uid} in the follows?");
         }
         profileFollowedByMe = follow;
       }
@@ -174,9 +145,11 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
       BioTab(
-        // key: ObjectKey((_profileLikes?.length.toString() ?? "0-likes") +
-        //     (_profileFollows?.length.toString() ?? "0-follows") +
-        //     (_profileComments?.length.toString() ?? "0-comments")),
+        goToCommentsTab: () {
+          setState(() {
+            _selectedIndex = 1;
+          });
+        },
         thisProfile: _thisProfile,
         profileLikes: _profileLikes,
         id: widget.id,
@@ -186,22 +159,21 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
           if (blockResponse != "SUCCESS") {
             _alertSnackbar.showErrorAlert(
-                "That block didnt register. Try Again.", context);
+                "That block didnt register. Try Again.", innercontext);
           } else {
             _alertSnackbar.showSuccessAlert(
-                "You blocked this user. Ew!", context);
+                "You blocked this user. Ew!", innercontext);
 
             Navigator.popAndPushNamed(innercontext, '/profilesPage');
           }
         },
         profileFollows: _profileFollows,
         updateLikes: (innerContext, String likeResponse, bool isUnlike) async {
-          List<Like> theLikes = await _getProfileLikes();
-          Like? isLikedResponse = isThisProfileLikedByMe(theLikes);
+          ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
 
           setState(() {
-            _profileLikes = theLikes;
-            _profileLikedByMe = isLikedResponse;
+            _profileLikes = theLikes?.list;
+            _profileLikedByMe = theLikes?.amIInThisList;
           });
 
           if (!isUnlike && likeResponse != "SUCCESS") {
@@ -210,16 +182,18 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
                 innerContext);
           } else {
             _alertSnackbar.showSuccessAlert(
-                "You liked this profile.", innerContext);
+                "You ${isUnlike ? "unlike" : "like"} this profile.",
+                innerContext);
           }
         },
         updateFollows:
             (innerContext, String followResponse, bool isUnfollow) async {
-          List<Follow> theFollows = await _getProfileFollows();
-          Follow? isFollowdResponse = isThisProfileFollowedByMe(theFollows);
+          ChatApiGetProfileFollowsResponse theFollows =
+              await _getProfileFollows();
+          Follow? isFollowdResponse = theFollows.amIInThisList;
 
           setState(() {
-            _profileFollows = theFollows;
+            _profileFollows = theFollows.list;
             _profileFollowedByMe = isFollowdResponse;
           });
 
@@ -263,7 +237,8 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         profileComments: _profileComments,
         thisProfile: _thisProfile,
         updateComments: (innerContext, String updateCommentResponse) async {
-          List<Comment> theComments = await profileClient?.getProfileComments(widget.id) ?? [];
+          List<Comment> theComments =
+              await profileClient?.getProfileComments(widget.id) ?? [];
           setState(() {
             _profileComments = theComments;
           });
@@ -325,7 +300,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
               Expanded(
                   child: widget.id != null
                       ? _widgetOptions(_selectedIndex)
-                      : Text("No Profile ID"))
+                      : const Text("No Profile ID"))
             ]),
       ),
       bottomNavigationBar: BottomNavigationBar(

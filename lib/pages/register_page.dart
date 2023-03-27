@@ -1,5 +1,4 @@
 import 'package:chat_line/models/app_user.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:flutter/foundation.dart';

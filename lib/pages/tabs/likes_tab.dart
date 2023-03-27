@@ -1,6 +1,4 @@
 import 'package:chat_line/layout/search_and_list.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/shared_components/likes/likes_thread.dart';
 import 'package:flutter/material.dart';
 

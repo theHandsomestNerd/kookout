@@ -8,7 +8,7 @@ class AlertSnackbar {
 
   showSuccessAlert(String? message, context) {
     var snackBar = SnackBar(
-      content: message != null ? Text(message) : Text("Success"),
+      content: message != null ? Text(message) : const Text("Success"),
       backgroundColor: (Colors.green),
       action: SnackBarAction(
         label: 'dismiss',
@@ -20,7 +20,7 @@ class AlertSnackbar {
 
   showErrorAlert(String? message, context) {
     var snackBar =  SnackBar(
-      content: message != null ? Text(message) : Text("Error"),
+      content: message != null ? Text(message) : const Text("Error"),
       backgroundColor: (Colors.red),
       action: SnackBarAction(
         label: 'dismiss',
@@ -31,7 +31,7 @@ class AlertSnackbar {
   }
   showUserNoticeAlert(String? message, context) {
     var snackBar =  SnackBar(
-      content: message != null ? Text(message) : Text("Notice"),
+      content: message != null ? Text(message) : const Text("Notice"),
       backgroundColor: (Colors.yellow),
       action: SnackBarAction(
         label: 'dismiss',

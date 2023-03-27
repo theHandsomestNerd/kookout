@@ -9,11 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-import '../../shared_components/alert_message_popup.dart';
 import '../app_user.dart';
 
 class AuthController {
-  AlertSnackbar _alertSnackbar = AlertSnackbar();
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
   String authBaseUrl = DefaultAppOptions.currentPlatform.authBaseUrl;
 
