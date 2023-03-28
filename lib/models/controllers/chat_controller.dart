@@ -17,11 +17,11 @@ class ChatController {
   ChatClient profileClient = ChatClient();
 
   updateChatController() async {
-    // myExtProfile =
-    //     await profileClient.getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
-    // profileList = await profileClient.fetchProfiles();
-    // myBlockedProfiles = await profileClient.getMyBlockedProfiles();
-    // timelineOfEvents = await profileClient.retrieveTimelineEvents();
+    myExtProfile =
+        await profileClient.getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
+    profileList = await profileClient.fetchProfiles();
+    myBlockedProfiles = await profileClient.getMyBlockedProfiles();
+    timelineOfEvents = await profileClient.retrieveTimelineEvents();
     return;
   }
 
@@ -89,6 +89,14 @@ class ChatController {
 
     return foundBlock;
   }
+  unblockProfile(Block block)async{
+    String? unblockResponse = await profileClient.unblockProfile(block);
+    if(unblockResponse == "SUCCESS") {
+      await updateMyBlocks();
+    }
+      return unblockResponse;
+  }
+
 
   bool isProfileLikedByMe(String userId, List<Like> theLikesPassed)  {
     bool foundLike = false;

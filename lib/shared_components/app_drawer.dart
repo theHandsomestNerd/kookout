@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../models/controllers/auth_inherited.dart';
 
-
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
     super.key,
@@ -13,7 +12,13 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      key: Key((AuthInherited.of(context)?.authController?.myAppUser.toString()??"") + (AuthInherited.of(context)?.authController?.loggedInUser.toString() ?? "")),
+      // key: Key((AuthInherited.of(context)
+      //             ?.authController
+      //             ?.myAppUser?.userId
+      //             .toString() ??
+      //         "") +
+      //     (AuthInherited.of(context)?.authController?.loggedInUser?.uid.toString() ??
+      //         "")),
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
@@ -31,26 +36,38 @@ class AppDrawer extends StatelessWidget {
               child: Text('Chat Menu',
                   style: TextStyle(
                       fontSize:
-                      Theme.of(context).textTheme.headlineSmall?.fontSize,
+                          Theme.of(context).textTheme.headlineSmall?.fontSize,
                       color: Colors.white)),
             ),
           ),
-          AuthInherited.of(context)?.authController?.myAppUser != null ? UserBlockMini(user: AuthInherited.of(context)?.authController?.myAppUser): const Text("no logged in user"),
-           ListTile(title: const Text("Profiles"),onTap: (){
-            Navigator.popAndPushNamed(context, '/profilesPage');
-          },),
-          ListTile(title: const Text("Login"),
-            onTap: (){
-            Navigator.popAndPushNamed(context, '/login');
-          },
+          ListTile(
+            title: AuthInherited.of(context)?.authController?.myAppUser != null
+                ? UserBlockMini(
+                    user: AuthInherited.of(context)?.authController?.myAppUser)
+                : Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.popAndPushNamed(context, '/login');
+                        },
+                        child: Icon(Icons.login),
+                      ),
+                      Text("Login"),
+                    ],
+                  ),
           ),
-           ListTile(title: const Text("Logout"),
-            onTap: (){
-              Navigator.popAndPushNamed(context, '/logout');
-            },),
-           ListTile(title: const Text("Register User"),onTap: (){
-             Navigator.popAndPushNamed(context, '/register');
-           },),
+          ListTile(
+            title: const Text("Profiles"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, '/profilesPage');
+            },
+          ),
+          ListTile(
+            title: const Text("Register User"),
+            onTap: () {
+              Navigator.popAndPushNamed(context, '/register');
+            },
+          ),
         ],
       ),
     );

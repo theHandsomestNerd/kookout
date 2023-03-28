@@ -1,5 +1,5 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
+import 'package:chat_line/shared_components/menus/login_menu.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,6 +68,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
+
+  void _showAction(BuildContext context, int index) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(_actionTitles[index]),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -78,6 +97,7 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
+      floatingActionButton: LoginMenu(),
       drawer: widget.drawer,
       appBar: AppBar(
         // Here we take the value from the HomePage object that was created by

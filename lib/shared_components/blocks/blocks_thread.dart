@@ -7,22 +7,25 @@ class BlockThread extends StatelessWidget {
   const BlockThread({
     super.key,
     required this.blocks,
+    required this.unblockProfile
   });
 
   final List<Block> blocks;
+  final unblockProfile;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      key: super.key,
+      key: ObjectKey(blocks),
       constraints: const BoxConstraints(),
       child: blocks.isNotEmpty ? ListView(
         children: [
           ...(blocks).map((block) {
-            return Column(
+            return Flex(
+              direction: Axis.vertical,
               // children: [Text("block: block"), Divider()],
-              children: [BlockSolo(block: block), const Divider()],
+              children: [BlockSolo(block: block, unblockProfile: unblockProfile), const Divider()],
             );
           }).toList()
         ],

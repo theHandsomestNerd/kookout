@@ -413,7 +413,7 @@ class ChatClient {
       print("Retrieving Ext Profile $userId");
     }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    if (token != null && userId != null) {
       final response = await http.get(
           Uri.parse("$authBaseUrl/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
@@ -494,9 +494,9 @@ class ChatClient {
     return "FAIL";
   }
 
-  Future<String> unblockProfile(String userId, Block currentLike) async {
+  Future<String> unblockProfile(Block currentBlock) async {
     var message =
-        "Unblock Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
+        "Unblock Profile by ${FirebaseAuth.instance.currentUser?.uid}";
     if (kDebugMode) {
       print(message);
     }
@@ -505,7 +505,7 @@ class ChatClient {
     if (token != null) {
       final response = await http.post(
           Uri.parse("$authBaseUrl/unblock-profile"),
-          body: {"blockId": currentLike.id},
+          body: {"blockId": currentBlock.id},
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/app_user.dart';
 import '../../sanity/image_url_builder.dart';
@@ -15,18 +16,24 @@ class ProfileSolo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      key: super.key,
       onPressed: () {
-          Navigator.pushNamed(context, '/profile',arguments: {"id":profile.userId} );
+        print("Going to profile ${profile.userId}");
+        Navigator.pushNamed(context, '/profile', arguments: {"id": profile.userId});
       },
       child: Stack(
         children: [
-          profile.profileImage != null ?Image.network(MyImageBuilder()
-            .urlFor(profile.profileImage)
-            ?.height(200)
-            .width(200)
-            .url() ??
-            ""):Image.asset(height: 200,width: 200,'assets/blankProfileImage.png'),
-          Text("${profile.displayName}")],
+          profile.profileImage != null
+              ? Image.network(MyImageBuilder()
+                      .urlFor(profile.profileImage)
+                      ?.height(200)
+                      .width(200)
+                      .url() ??
+                  "")
+              : Image.asset(
+                  height: 200, width: 200, 'assets/blankProfileImage.png'),
+          Text("${profile.displayName}"),
+        ],
       ),
     );
   }

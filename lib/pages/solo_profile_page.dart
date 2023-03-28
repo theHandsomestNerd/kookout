@@ -16,11 +16,11 @@ import '../models/comment.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
+import '../shared_components/menus/app_menu.dart';
 
 class SoloProfilePage extends StatefulWidget {
-  const SoloProfilePage({super.key, required this.drawer, required this.id});
+  const SoloProfilePage({super.key,  required this.id});
 
-  final Widget drawer;
   final String id;
 
   @override
@@ -54,6 +54,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   @override
   initState() {
     super.initState();
+    print("the widget id in solo ${widget.id}");
   }
 
   @override
@@ -61,8 +62,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     var theAuthController = AuthInherited.of(context)?.authController;
-    var theFollows = await theChatController?.profileClient
-        .getProfileFollows(widget.id) as ChatApiGetProfileFollowsResponse;
+    var theFollows = await theChatController?.profileClient.getProfileFollows(widget.id) as ChatApiGetProfileFollowsResponse;
     var theLikes = await theChatController?.profileClient
         .getProfileLikes(widget.id) as ChatApiGetProfileLikesResponse;
     var theComments =
@@ -78,7 +78,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     var theProfile = await theAuthController?.getAppUser(widget.id);
     _thisProfile = theProfile;
 
-    print("the profile retrieved in this page $theProfile");
+    print("the profile retrieved in this page $theProfile ");
 
     profileClient = theChatController?.profileClient;
     authController = theAuthController;
@@ -284,7 +284,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: widget.drawer,
+      floatingActionButton: AppMenu(updateMenu: _onItemTapped),
       appBar: AppBar(
         // Here we take the value from the Logout object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -294,43 +294,11 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
       body: Center(
         key: Key(_selectedIndex.toString()),
         child: Flex(
-            key: ObjectKey(widget.id),
-            direction: Axis.vertical,
-            children: [
-              Expanded(
-                  child: widget.id != null
-                      ? _widgetOptions(_selectedIndex)
-                      : const Text("No Profile ID"))
-            ]),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Bio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.comment),
-            label: 'Comments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Follows',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
-            label: 'Likes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.photo_album),
-            label: 'Photos',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red[800],
-        unselectedItemColor: Colors.black,
-        onTap:
-            _onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
+          direction: Axis.vertical,
+          children: [
+            Expanded(child: _widgetOptions(_selectedIndex)),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:chat_line/shared_components/menus/login_menu.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
+      floatingActionButton: const LoginMenu(),
       drawer: widget.drawer,
       appBar: AppBar(
         // Here we take the value from the LoginPage object that was created by

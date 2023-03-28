@@ -19,6 +19,7 @@ import '../sanity/image_url_builder.dart';
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
+import '../shared_components/menus/login_menu.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, this.drawer, required this.extProfile});
@@ -268,6 +269,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: LoginMenu(),
+
       drawer: widget.drawer,
       appBar: AppBar(
         title: const Text("Chat Line - Edit Profile"),

@@ -4,6 +4,7 @@ import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/shared_components/tool_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
@@ -15,24 +16,23 @@ import '../../sanity/image_url_builder.dart';
 const PROFILE_IMAGE_SQUARE_SIZE = 200;
 
 class BioTab extends StatefulWidget {
-  const BioTab({
-    super.key,
-    required this.id,
-    required this.thisProfile,
-    required this.profileLikes,
-    required this.updateLikes,
-    required this.updateBlocks,
-    required this.isThisMe,
-    required this.profileComments,
-    required this.updateComments,
-    required this.updateFollows,
-    required this.profileLikedByMe,
-    required this.profileFollowedByMe,
-    required this.profileFollows,
-    required this.goToCommentsTab
-  });
+  const BioTab(
+      {super.key,
+      required this.id,
+      required this.thisProfile,
+      required this.profileLikes,
+      required this.updateLikes,
+      required this.updateBlocks,
+      required this.isThisMe,
+      required this.profileComments,
+      required this.updateComments,
+      required this.updateFollows,
+      required this.profileLikedByMe,
+      required this.profileFollowedByMe,
+      required this.profileFollows,
+      required this.goToCommentsTab});
 
-  final String? id;
+  final String id;
   final updateBlocks;
   final goToCommentsTab;
   final updateLikes;
@@ -62,7 +62,7 @@ class _BioTabState extends State<BioTab> {
   @override
   initState() {
     super.initState();
-    if (widget.id == null) {
+    if (widget.id == null || widget.id == "") {
       Navigator.popAndPushNamed(context, '/profilesPage');
     }
     // if (widget.id != null) {
@@ -79,7 +79,10 @@ class _BioTabState extends State<BioTab> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
-    extProfile = await theChatController?.profileClient.getExtendedProfile(widget.id??"");
+    if(widget.id != null){
+      extProfile = await theChatController?.profileClient
+          .getExtendedProfile(widget.id ?? "");
+    }
     profileClient = theChatController?.profileClient;
     chatController = theChatController;
     setState(() {});
@@ -101,8 +104,8 @@ class _BioTabState extends State<BioTab> {
       }
       if (widget.profileLikedByMe != null) {
         isUnlike = true;
-        likeResponse = await profileClient
-            ?.unlikeProfile(widget.id!, widget.profileLikedByMe!);
+        likeResponse = await profileClient?.unlikeProfile(
+            widget.id!, widget.profileLikedByMe!);
       }
     }
 
@@ -127,7 +130,8 @@ class _BioTabState extends State<BioTab> {
       }
       if (widget.profileFollowedByMe != null) {
         isUnfollow = true;
-        followResponse = await profileClient?.unfollowProfile(widget.id!, widget.profileFollowedByMe!);
+        followResponse = await profileClient?.unfollowProfile(
+            widget.id!, widget.profileFollowedByMe!);
       }
     }
 
@@ -155,7 +159,7 @@ class _BioTabState extends State<BioTab> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      key: ObjectKey(widget.key.toString()),
+      key: ObjectKey(widget.key),
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
       child: Flex(direction: Axis.vertical, children: [
@@ -222,7 +226,7 @@ class _BioTabState extends State<BioTab> {
                             ),
                             ListTile(
                               // key:
-                                  // ObjectKey("${widget.profileFollows}-follows"),
+                              // ObjectKey("${widget.profileFollows}-follows"),
                               title: ToolButton(
                                   isDisabled: (widget.isThisMe == true),
                                   action: _followThisProfile,
@@ -267,7 +271,8 @@ class _BioTabState extends State<BioTab> {
                                 isLoading: _isBlocking,
                                 text: "Block",
                                 label: 'Block',
-                                isActive: chatController?.isProfileBlockedByMe(widget.id!),
+                                isActive: chatController
+                                    ?.isProfileBlockedByMe(widget.id!),
                               ),
                             ),
                             const Divider(

@@ -222,8 +222,12 @@ class AuthController {
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
+      AppUser? responseModel=null;
+      if(processedResponse['appProfile'] != null) {
+         responseModel =
+            AppUser.fromJson(processedResponse['appProfile']);
+      }
 
-      AppUser responseModel = AppUser.fromJson(processedResponse['appProfile']);
       if (kDebugMode) {
         print("get app user Auth api response $responseModel");
       }

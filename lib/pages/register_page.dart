@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/app_drawer.dart';
+import '../shared_components/menus/login_menu.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
@@ -85,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
+      floatingActionButton: LoginMenu(),
       drawer: widget.drawer,
       appBar: AppBar(
         // Here we take the value from the RegisterPage object that was created by

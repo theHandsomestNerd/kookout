@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
 import 'pages/login_page.dart';
+
 // import '../../platform_dependent/image_uploader.dart'
 //     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
@@ -35,9 +36,10 @@ Future<void> main() async {
   AppDrawer globalDrawer = const AppDrawer();
 
   runApp(MyApp(
-      // authController: manager,
-      drawer: globalDrawer,
-      chatController: chatController,));
+    // authController: manager,
+    drawer: globalDrawer,
+    chatController: chatController,
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -69,6 +71,17 @@ class _MyAppState extends State<MyApp> {
     print("authcontroller myAppUser $myAppUser");
     print("authcontroller loggedinUSer $myLoggedInUser");
   }
+
+  String id = "";
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -81,10 +94,8 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Chat Line',
         routes: {
-          '/': (context) => HomePage(
-              drawer: widget.drawer),
-          '/register': (context) => RegisterPage(
-              drawer: widget.drawer),
+          '/': (context) => HomePage(drawer: widget.drawer),
+          '/register': (context) => RegisterPage(drawer: widget.drawer),
           '/login': (context) => LoginPage(drawer: widget.drawer),
           '/editProfile': (context) => EditProfilePage(
                 extProfile: chatController.myExtProfile,
@@ -93,22 +104,35 @@ class _MyAppState extends State<MyApp> {
                 drawer: widget.drawer,
               ),
           '/logout': (context) => LogoutPage(drawer: widget.drawer),
-          '/profilesPage': (context) => ProfilesPage(
-              drawer: widget.drawer),
+          '/profilesPage': (context) => ProfilesPage(drawer: widget.drawer),
           '/profile': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
 
+            var theId;
+            if (arguments['id'] != null) {
+              theId = arguments['id'];
+            } else {
+              theId = authController?.myAppUser?.userId.toString() ?? "";
+            }
+            print("The ID $theId");
+
             return SoloProfilePage(
               key: ObjectKey(arguments["id"]),
-              drawer: widget.drawer,
-              id: arguments["id"] ?? "",
+              id: theId,
             );
           },
           '/myProfile': (context) {
+            var arguments = (ModalRoute.of(context)?.settings.arguments ??
+                <String, dynamic>{}) as Map;
+            var theId;
+            if (arguments['id'] != null) {
+              theId = arguments['id'];
+            } else {
+              theId = authController?.myAppUser?.userId.toString() ?? "";
+            }
             return SoloProfilePage(
-              drawer: widget.drawer,
-              id: AuthInherited.of(context)?.authController?.myAppUser?.userId.toString() ?? "",
+              id: theId,
             );
           },
           '/postsPage': (context) {
@@ -128,8 +152,10 @@ class _MyAppState extends State<MyApp> {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           textTheme: const TextTheme(
-            displayLarge: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            displayLarge:
+                TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
             titleLarge: TextStyle(fontSize: 36.0),
+            titleSmall: TextStyle(fontSize: 24.0),
             bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),
           primarySwatch: Colors.blue,
