@@ -45,40 +45,6 @@ class ChatClient {
     return <AppUser>[];
   }
 
-  Future<List<Block>> getProfileBlocks(String userId) async {
-    if (kDebugMode) {
-      print("Retrieving Profile Blocks $userId");
-    }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.get(
-          Uri.parse("$authBaseUrl/get-profile-blocks/$userId"),
-          headers: {"Authorization": ("Bearer $token")});
-
-      var processedResponse = jsonDecode(response.body);
-
-      if (processedResponse['profileBlocks'] != null) {
-        ChatApiGetProfileBlocksResponse responseModel =
-            ChatApiGetProfileBlocksResponse.fromJson(
-                processedResponse['profileBlocks']);
-        if (kDebugMode) {
-          print("get profile block api response ${responseModel.list}");
-        }
-
-        // for (var element in responseModel.list) {
-        //   if (kDebugMode) {
-        //     print(element);
-        //   }
-        // }
-
-        return responseModel.list;
-      } else {
-        return [];
-      }
-    }
-    return [];
-  }
-
   Future<List<TimelineEvent>> retrieveTimelineEvents() async {
     if (kDebugMode) {
       print("Retrieving Timeline Events");

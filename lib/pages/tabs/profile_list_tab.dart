@@ -23,14 +23,6 @@ class _ProfileListTabState extends State<ProfileListTab> {
   late ChatController? chatController = null;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-
-  }
-
-  @override
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
