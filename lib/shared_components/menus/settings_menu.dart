@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_menu.dart';
-
+enum SettingsMenuOptions {
+  EDIT_PROFILE,
+  BLOCKS,
+  TIMELINE,
+  PEOPLE,
+}
 class SettingsPageMenu extends StatefulWidget {
   const SettingsPageMenu({Key? key, required this.updateMenu})
       : super(key: key);
@@ -23,19 +28,19 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
 
         ActionButton(
           onPressed: () {
-            widget.updateMenu(0);
+            widget.updateMenu(SettingsMenuOptions.EDIT_PROFILE.index);
           },
           icon: const Icon(Icons.edit),
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(2);
+            widget.updateMenu(SettingsMenuOptions.BLOCKS.index);
           },
           icon: const Icon(Icons.block),
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(1);
+            widget.updateMenu(SettingsMenuOptions.TIMELINE.index);
           },
           icon: const Icon(Icons.timeline),
         ),

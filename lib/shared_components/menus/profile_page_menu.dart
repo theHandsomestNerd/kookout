@@ -11,6 +11,14 @@ final updateMenu;
   @override
   State<ProfilePageMenu> createState() => _ProfilePageMenuState();
 }
+enum ProfileMenuOptions {
+  PROFILELIST,
+  TIMELINE,
+  LIKES_AND_FOLLOWS,
+  BLOCKS,
+  ALBUMS,
+  POSTS
+}
 
 class _ProfilePageMenuState extends State<ProfilePageMenu> {
   @override
@@ -26,32 +34,32 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(5);
+            widget.updateMenu(ProfileMenuOptions.POSTS.index);
           },
           icon: const Icon(Icons.post_add),
         ),
 
       ActionButton(
           onPressed: () {
-            widget.updateMenu(4);
+            widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
           },
           icon: const Icon(Icons.photo_album),
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(2);
+            widget.updateMenu(ProfileMenuOptions.LIKES_AND_FOLLOWS.index);
           },
           icon: const Icon(Icons.emoji_emotions),
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(1);
+            widget.updateMenu(ProfileMenuOptions.TIMELINE.index);
           },
           icon: const Icon(Icons.timeline),
         ),
         ActionButton(
           onPressed: () {
-            widget.updateMenu(0);
+            widget.updateMenu(ProfileMenuOptions.PROFILELIST.index);
           },
           icon: const Icon(Icons.people),
         ),
