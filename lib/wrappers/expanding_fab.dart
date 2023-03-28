@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 import '../models/controllers/auth_inherited.dart';
 import '../sanity/image_url_builder.dart';
@@ -111,6 +112,17 @@ class _ExpandableFabState extends State<ExpandableFab>
     );
   }
 
+  SanityImage? profileImage;
+
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    var theAuthController = AuthInherited.of(context)?.authController;
+    profileImage = theAuthController?.myAppUser?.profileImage;
+    setState(() {});
+    print("expanding fab dependencies changed $profileImage");
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -204,19 +216,13 @@ class _ExpandableFabState extends State<ExpandableFab>
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
             onPressed: _toggle,
-            child: AuthInherited.of(context)
-                        ?.authController
-                        ?.myAppUser
-                        ?.profileImage !=
+            child: profileImage !=
                     null
                 ? CircleAvatar(
 
                     backgroundImage: NetworkImage(
                       MyImageBuilder()
-                              .urlFor(AuthInherited.of(context)
-                                  ?.authController
-                                  ?.myAppUser
-                                  ?.profileImage)
+                              .urlFor(profileImage)
                               ?.height(100)
                               .width(100)
                               .url() ??
@@ -275,12 +281,14 @@ class _ExpandingActionButton extends StatelessWidget {
 class ActionButton extends StatelessWidget {
   const ActionButton({
     super.key,
+    this.tooltip,
     this.onPressed,
     required this.icon,
   });
 
   final VoidCallback? onPressed;
   final Widget icon;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -291,6 +299,7 @@ class ActionButton extends StatelessWidget {
       color: theme.colorScheme.secondary,
       elevation: 4.0,
       child: IconButton(
+        tooltip: tooltip,
         onPressed: onPressed,
         icon: icon,
         color: theme.colorScheme.onSecondary,

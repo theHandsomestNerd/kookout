@@ -142,25 +142,33 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          // style: ButtonStyle(
-                          //     backgroundColor: _isMenuItemsOnly
-                          //         ? MaterialStateProperty.all(Colors.red)
-                          //         : MaterialStateProperty.all(Colors.white)),
-                          onPressed: () {
-                            _loginUser(context);
-                          },
-                          child: const Text("Login"),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                      ],
+                    MaterialButton(
+                      color: Colors.red,
+                      textColor: Colors.white,
+                      // style: ButtonStyle(
+                      //     backgroundColor: _isMenuItemsOnly
+                      //         ? MaterialStateProperty.all(Colors.red)
+                      //         : MaterialStateProperty.all(Colors.white)),
+                      onPressed: () {
+                        _loginUser(context);
+                      },
+                      child: const Text("Login"),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Text("If you do not have an account..."),
+                    MaterialButton(
+                      color: Colors.red,
+                      textColor: Colors.white,
+                      // style: ButtonStyle(
+                      //     backgroundColor: _isMenuItemsOnly
+                      //         ? MaterialStateProperty.all(Colors.red)
+                      //         : MaterialStateProperty.all(Colors.white)),
+                      onPressed: () {
+                        Navigator.popAndPushNamed(context, '/register');
+                      },
+                      child: const Text("Register"),
                     ),
                   ],
                 ),

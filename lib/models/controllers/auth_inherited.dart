@@ -1,5 +1,5 @@
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 import '../app_user.dart';
@@ -9,7 +9,6 @@ import 'auth_controller.dart';
 class AuthInherited extends InheritedWidget {
   final AuthController? authController;
   final ChatController? chatController;
-  final AppUser? myAppUser;
   final AuthUser? myLoggedInUser;
   final SanityImage? profileImage;
 
@@ -17,7 +16,6 @@ class AuthInherited extends InheritedWidget {
       {super.key, this.profileImage,
       this.authController,
       this.chatController,
-      this.myAppUser,
       this.myLoggedInUser,
       required Widget child})
       : super(child: child);

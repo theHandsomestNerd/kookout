@@ -81,7 +81,7 @@ class UserBlockMini extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, '/editProfile');
+                            Navigator.popAndPushNamed(context, '/settings');
                           },
                           icon: const Icon(
                             Icons.settings,

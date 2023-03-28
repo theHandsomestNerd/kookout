@@ -18,7 +18,6 @@ class _HeightInputState extends State<HeightInput> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _inches = widget.initialValue?.inches;

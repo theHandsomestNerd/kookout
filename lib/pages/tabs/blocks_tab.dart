@@ -17,12 +17,6 @@ class BlocksTab extends StatefulWidget {
 
 class _BlocksTabState extends State<BlocksTab> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
 
   // @override
   // didChangeDependencies() async {

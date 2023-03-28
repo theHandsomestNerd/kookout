@@ -1,9 +1,9 @@
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/pages/edit_profile_page.dart';
+import 'package:chat_line/pages/create_post_page.dart';
 import 'package:chat_line/pages/home_page.dart';
 import 'package:chat_line/pages/logout_page.dart';
-import 'package:chat_line/pages/posts_thread_page.dart';
+import 'package:chat_line/pages/posts_page.dart';
 import 'package:chat_line/pages/profiles_page.dart';
 import 'package:chat_line/pages/register_page.dart';
 import 'package:chat_line/pages/settings_page.dart';
@@ -72,12 +72,13 @@ class _MyAppState extends State<MyApp> {
   var chatController = ChatController.init();
   var myAppUser = null;
   var myLoggedInUser = null;
+  var myExtProfile = null;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
+    myExtProfile = chatController.myExtProfile;
     print("authcontroller myAppUser $myAppUser");
     print("authcontroller loggedinUSer $myLoggedInUser");
   }
@@ -88,7 +89,9 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    var theChatController = AuthInherited.of(context)?.chatController;
 
+    myExtProfile = theChatController?.updateExtProfile(authController.myAppUser?.userId??"");
 
   }
 
@@ -98,20 +101,17 @@ class _MyAppState extends State<MyApp> {
     return AuthInherited(
       authController: authController,
       chatController: chatController,
-      myAppUser: authController.myAppUser,
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
       child: MaterialApp(
         title: 'Chat Line',
         routes: {
-          '/': (context) => HomePage(drawer: widget.drawer),
+          '/': (context) => HomePage(),
+          '/postsPage':(context) => const PostsPage(),
+          '/createPostsPage':(context) => const CreatePostPage(),
           '/register': (context) => RegisterPage(drawer: widget.drawer),
           '/login': (context) => LoginPage(drawer: widget.drawer),
-          '/editProfile': (context) => EditProfilePage(
-                extProfile: chatController.myExtProfile,
-                // key: ObjectKey(widget.imageUploader.file?.name),
-                // imageUploader: widget.imageUploader,
-              ),
+          // '/editProfile': (context) => const EditProfilePage(),
           '/logout': (context) => LogoutPage(drawer: widget.drawer),
           '/profilesPage': (context) => ProfilesPage(drawer: widget.drawer),
           '/profile': (context) {
@@ -126,21 +126,37 @@ class _MyAppState extends State<MyApp> {
             }
             print("The ID $theId");
 
+            var thisProfile =null;
+            chatController.profileList.forEach((element) {
+                if(element.userId == theId) {
+                  thisProfile = element;
+                }
+            });
+
             return SoloProfilePage(
+              thisProfile: thisProfile,
               key: ObjectKey(arguments["id"]),
               id: theId,
             );
           },
           '/myProfile': (context) {
+            var theId = authController?.myAppUser?.userId.toString() ?? "";
+            var thisProfile =null;
+            chatController.profileList.forEach((element) {
+              if(element.userId == theId) {
+                thisProfile = element;
+              }
+            });
             return SoloProfilePage(
-              id: authController?.myAppUser?.userId.toString() ?? "",
+              thisProfile: thisProfile,
+              id: theId,
             );
           },
-          '/postsPage': (context) {
-            return PostsThreadPage(
-              drawer: widget.drawer,
-            );
-          },
+          // '/postsPage': (context) {
+          //   return PostsThreadPage(
+          //     drawer: widget.drawer,
+          //   );
+          // },
         '/settings': (context) {
             return SettingsPage();
           },

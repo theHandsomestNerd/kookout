@@ -41,7 +41,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     chatController = theChatController;
-    myUserId = AuthInherited.of(context)?.myAppUser?.userId ?? "";
+    myUserId = AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();
     setState(() {});
     print("dependencies changed $myUserId");

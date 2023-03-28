@@ -15,8 +15,10 @@ import '../../platform_dependent/image_uploader.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 import '../../platform_dependent/image_uploader_abstract.dart';
 import '../../sanity/image_url_builder.dart';
+import '../../shared_components/app_image_uploader.dart';
 import '../../shared_components/height_input.dart';
 import '../../wrappers/alerts_snackbar.dart';
+import '../../wrappers/card_with_background.dart';
 import '../../wrappers/loading_button.dart';
 
 class EditProfileTab extends StatefulWidget {
@@ -35,7 +37,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
 
   String _loginUsername = "";
   String _displayName = "";
-  ImageUploader? imageUploader;
+  late ImageUploader imageUploader;
 
   String _shortBio = "";
   String _longBio = "";
@@ -74,7 +76,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
     super.didChangeDependencies();
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
-    var theUser = AuthInherited.of(context)?.myAppUser;
+    var theUser = AuthInherited.of(context)?.authController?.myAppUser;
 
     chatController = theChatController;
     authController = theAuthController;
@@ -98,10 +100,8 @@ class _EditProfileTabState extends State<EditProfileTab> {
       if (kDebugMode) {
         print("profile image is froom memory");
       }
-      return Image.memory(
+      return MemoryImage(
         theFile.bytes ?? [] as Uint8List,
-        height: 350,
-        width: 350,
       );
     }
     print("profile image $profileImage");
@@ -110,15 +110,18 @@ class _EditProfileTabState extends State<EditProfileTab> {
       if (kDebugMode) {
         print("profile image is froom db");
       }
-      return Image.network(
-          MyImageBuilder().urlFor(profileImage)?.height(350).width(350).url() ??
-              "");
+      return NetworkImage(MyImageBuilder()
+                .urlFor(profileImage)
+                // ?.height(350)
+                // .width(350)
+                ?.url() ?? ""
+      );
     }
 
     if (kDebugMode) {
       print("profile image is default");
     }
-    return Image.asset(height: 350, width: 350, 'assets/blankProfileImage.png');
+    return AssetImage( 'assets/blankProfileImage.png');
   }
 
   void _setUsername(String newUsername) {
@@ -282,44 +285,14 @@ class _EditProfileTabState extends State<EditProfileTab> {
             child: ListView(
               children: [
                 ListTile(
-                  title: Column(
-                    // key:ObjectKey(profileImage),
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          imageToBeUploaded != null
-                              ? Column(
-                                  key: ObjectKey(imageToBeUploaded),
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    imageToBeUploaded!,
-                                    Text(imageUploader?.file?.name ?? ""),
-                                    const SizedBox(
-                                      width: 16,
-                                    ),
-                                    Text(
-                                        "${imageUploader?.file?.size.toString() ?? ''} bytes"),
-                                  ],
-                                )
-                              : const Text("no image"),
-                        ],
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          await imageUploader
-                              ?.uploadImage()
-                              .then((theImage) async {
-                            setState(() {
-                              // print("the image from uploadImage befoe comprssion $theImage");
-                              imageToBeUploaded = _getMyProfileImage(theImage);
-                            });
-                            setState(() {});
-                          });
-                        },
-                        child: const Text("Change Profile Photo"),
-                      ),
-                    ],
+                  title: AppImageUploader(
+                    text: "Change Profile Photo",
+                    image: _getMyProfileImage(imageUploader.file),
+                    imageUploader: imageUploader,
+                    uploadImage: (theImageUploader) {
+                      imageUploader = theImageUploader;
+                      setState(() {});
+                    },
                   ),
                 ),
                 ListTile(

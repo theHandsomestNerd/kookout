@@ -54,7 +54,9 @@ class AuthController {
       }
       loggedInUser = await _getLoggedInUser();
       // get sanity user
-      myAppUser = await _getMyAppUser();
+      if(loggedInUser?.uid != myAppUser?.userId || myAppUser == null) {
+        myAppUser = await _getMyAppUser();
+      }
     });
   }
 
@@ -78,6 +80,8 @@ class AuthController {
         }
 
         AppUser myAppProfile = AppUser.fromJson(processedResponse['profile']);
+
+        myAppUser = myAppProfile;
 
         if (kDebugMode) {
           print("Auth api response $myAppProfile");

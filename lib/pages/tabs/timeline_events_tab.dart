@@ -25,7 +25,6 @@ class _TimelineEventsTabState extends State<TimelineEventsTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     timelineEvents = widget.timelineEvents;

@@ -4,23 +4,24 @@ import '../../models/controllers/auth_inherited.dart';
 import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_fab.dart';
 
-class ProfilePageMenu extends StatefulWidget {
-  const ProfilePageMenu({Key? key, required this.updateMenu, this.selected}) : super(key: key);
-final updateMenu;
-final selected;
+class HomePageMenu extends StatefulWidget {
+  const HomePageMenu({Key? key, required this.updateMenu, this.selected})
+      : super(key: key);
+  final updateMenu;
+  final selected;
+
   @override
-  State<ProfilePageMenu> createState() => _ProfilePageMenuState();
-}
-enum ProfileMenuOptions {
-  PROFILELIST,
-  TIMELINE,
-  INBOX,
-  BLOCKS,
-  ALBUMS,
-  POSTS
+  State<HomePageMenu> createState() => _HomePageMenuState();
 }
 
-class _ProfilePageMenuState extends State<ProfilePageMenu> {
+enum ProfileMenuOptions {
+  TIMELINE,
+  LIKES_AND_FOLLOWS,
+  BLOCKS,
+  ALBUMS,
+}
+
+class _HomePageMenuState extends State<HomePageMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
@@ -33,16 +34,8 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           },
           icon: const Icon(Icons.settings),
         ),
-        // ActionButton(
-        //   tooltip: "Posts",
-        //   onPressed: () {
-        //     widget.updateMenu(ProfileMenuOptions.POSTS.index);
-        //   },
-        //   icon: const Icon(Icons.post_add),
-        // ),
-
-      ActionButton(
-        tooltip: "Album",
+        ActionButton(
+          tooltip: "Album",
           onPressed: () {
             widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
           },
@@ -51,7 +44,7 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         ActionButton(
           tooltip: "Inbox",
           onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.INBOX.index);
+            widget.updateMenu(ProfileMenuOptions.LIKES_AND_FOLLOWS.index);
           },
           icon: const Icon(Icons.inbox),
         ),
@@ -62,13 +55,6 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           },
           icon: const Icon(Icons.timeline),
         ),
-        // ActionButton(
-        //   tooltip: "Profiles",
-        //   onPressed: () {
-        //     widget.updateMenu(ProfileMenuOptions.PROFILELIST.index);
-        //   },
-        //   icon: const Icon(Icons.people),
-        // ),
         ActionButton(
           tooltip: "My Profile",
           onPressed: () {
@@ -77,13 +63,13 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           icon: CircleAvatar(
             backgroundImage: NetworkImage(
               MyImageBuilder()
-                  .urlFor(AuthInherited.of(context)
-                  ?.authController
-                  ?.myAppUser
-                  ?.profileImage)
-                  ?.height(100)
-                  .width(100)
-                  .url() ??
+                      .urlFor(AuthInherited.of(context)
+                          ?.authController
+                          ?.myAppUser
+                          ?.profileImage)
+                      ?.height(100)
+                      .width(100)
+                      .url() ??
                   "",
             ),
           ),

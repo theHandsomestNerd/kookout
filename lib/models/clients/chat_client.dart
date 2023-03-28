@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -260,8 +261,7 @@ class ChatClient {
 
       if (processedResponse['profileLikes'] != null) {
         ChatApiGetProfileLikesResponse responseModel =
-            ChatApiGetProfileLikesResponse.fromJson(
-                processedResponse);
+            ChatApiGetProfileLikesResponse.fromJson(processedResponse);
         if (kDebugMode) {
           print("get profile likes api response ${responseModel.list}");
         }
@@ -379,7 +379,7 @@ class ChatClient {
       print("Retrieving Ext Profile $userId");
     }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null && userId != null) {
+    if (token != null && userId != null && userId != "") {
       final response = await http.get(
           Uri.parse("$authBaseUrl/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
@@ -492,7 +492,8 @@ class ChatClient {
     return "FAIL";
   }
 
-  Future<ChatApiGetProfileFollowsResponse> getProfileFollows(String userId) async {
+  Future<ChatApiGetProfileFollowsResponse> getProfileFollows(
+      String userId) async {
     if (kDebugMode) {
       print("Retrieving Profile Follows $userId");
     }
@@ -506,8 +507,7 @@ class ChatClient {
 
       if (processedResponse['profileFollows'] != null) {
         ChatApiGetProfileFollowsResponse responseModel =
-            ChatApiGetProfileFollowsResponse.fromJson(
-                processedResponse);
+            ChatApiGetProfileFollowsResponse.fromJson(processedResponse);
         if (kDebugMode) {
           print("get profile follows api response ${responseModel.list}");
         }

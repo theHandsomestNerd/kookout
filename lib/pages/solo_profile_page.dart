@@ -19,9 +19,10 @@ import '../models/like.dart';
 import '../shared_components/menus/app_menu.dart';
 
 class SoloProfilePage extends StatefulWidget {
-  const SoloProfilePage({super.key,  required this.id});
+  const SoloProfilePage({super.key,  required this.id, required this.thisProfile});
 
   final String id;
+  final thisProfile;
 
   @override
   State<SoloProfilePage> createState() => _SoloProfilePageState();
@@ -29,7 +30,6 @@ class SoloProfilePage extends StatefulWidget {
 
 class _SoloProfilePageState extends State<SoloProfilePage> {
   late bool _isThisMe = false;
-  late AppUser? _thisProfile = null;
 
   late List<Comment>? _profileComments = [];
 
@@ -76,7 +76,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
     _profileLikedByMe = theLikes.amIInThisList;
     var theProfile = await theAuthController?.getAppUser(widget.id);
-    _thisProfile = theProfile;
 
     print("the profile retrieved in this page $theProfile ");
 
@@ -86,14 +85,14 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     _isThisMe = widget.id == theAuthController?.myAppUser?.userId;
 
     setState(() {});
-    print("timeline events dependencies changed ${_thisProfile}");
+    print("profile  dependencies changed is this me ${_isThisMe}");
   }
 
   _getTagLine() {
     if (_isThisMe == true) {
       return "This is you ${authController?.myAppUser?.displayName ?? ""}";
     }
-    return _thisProfile?.displayName;
+    return widget.thisProfile?.displayName;
   }
 
   Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
@@ -150,7 +149,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             _selectedIndex = 1;
           });
         },
-        thisProfile: _thisProfile,
+        thisProfile: widget.thisProfile,
         profileLikes: _profileLikes,
         id: widget.id,
         updateBlocks: (innercontext, String blockResponse) async {
@@ -235,7 +234,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         key: ObjectKey(_profileComments),
         id: widget.id,
         profileComments: _profileComments,
-        thisProfile: _thisProfile,
+        thisProfile: widget.thisProfile,
         updateComments: (innerContext, String updateCommentResponse) async {
           List<Comment> theComments =
               await profileClient?.getProfileComments(widget.id) ?? [];
@@ -253,14 +252,14 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         isThisMe: _isThisMe,
       ),
       FollowsTab(
-        thisProfile: _thisProfile,
+        thisProfile: widget.thisProfile,
         isThisMe: _isThisMe,
         profileFollowedByMe: _profileFollowedByMe,
         profileFollows: _profileFollows,
         id: widget.id,
       ),
       LikesTab(
-        thisProfile: _thisProfile,
+        thisProfile: widget.thisProfile,
         isThisMe: _isThisMe,
         profileLikedByMe: _profileLikedByMe,
         profileLikes: _profileLikes,

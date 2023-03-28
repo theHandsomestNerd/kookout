@@ -1,90 +1,33 @@
+import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
+import 'package:chat_line/models/post.dart';
+import 'package:chat_line/shared_components/menus/app_menu.dart';
+import 'package:chat_line/shared_components/menus/home_page_menu.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
+import 'package:chat_line/shared_components/menus/profile_page_menu.dart';
+import 'package:chat_line/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.drawer});
+import '../models/app_user.dart';
+import '../models/controllers/chat_controller.dart';
 
-  final drawer;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  _getMenu() {
-    List<Widget> widgets = [];
+  late AppUser? highlightedProfile = null;
+  late Post? highlightedPost = null;
 
-    if (AuthInherited.of(context)?.authController?.isLoggedIn == true) {
-      widgets.add(
-        MaterialButton(
-          color: Colors.red,
-          textColor: Colors.white,
-          // style: ButtonStyle(
-          //     backgroundColor: _isMenuItemsOnly
-          //         ? MaterialStateProperty.all(Colors.red)
-          //         : MaterialStateProperty.all(Colors.white)),
-          onPressed: () {
-            Navigator.popAndPushNamed(context, '/profilesPage');
-          },
-          child: const Text("Go to Logged in"),
-        ),
-      );
-    } else {
-      widgets.addAll([
-        MaterialButton(
-          color: Colors.red,
-          textColor: Colors.white,
-          // style: ButtonStyle(
-          //     backgroundColor: _isMenuItemsOnly
-          //         ? MaterialStateProperty.all(Colors.red)
-          //         : MaterialStateProperty.all(Colors.white)),
-          onPressed: () {
-            Navigator.popAndPushNamed(context, '/login');
-          },
-          child: const Text("Login"),
-        ),
-        MaterialButton(
-          color: Colors.red,
-          textColor: Colors.white,
-          // style: ButtonStyle(
-          //     backgroundColor: _isMenuItemsOnly
-          //         ? MaterialStateProperty.all(Colors.red)
-          //         : MaterialStateProperty.all(Colors.white)),
-          onPressed: () {
-            Navigator.popAndPushNamed(context, '/register');
-          },
-          child: const Text("New Account"),
-        ),
-      ]);
-    }
 
-    return SizedBox(
-      width: 300,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: widgets,
-      ),
-    );
-  }
-
-  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
-
-  void _showAction(BuildContext context, int index) {
-    showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text(_actionTitles[index]),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    );
+  bool isUserLoggedIn = false;
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    isUserLoggedIn = AuthInherited.of(context)?.authController?.myAppUser != null;
   }
 
   @override
@@ -97,56 +40,54 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: LoginMenu(),
-      drawer: widget.drawer,
+      floatingActionButton:
+          !isUserLoggedIn
+              ? LoginMenu()
+              : HomePageMenu(
+                  updateMenu: () => {},
+                ),
       appBar: AppBar(
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: const Text("Chat Line - Home"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          key: Key(AuthInherited.of(context)
-                  ?.authController
-                  ?.isLoggedIn
-                  .toString() ??
-              ""),
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Home Page',
-            ),
-            SizedBox(
-              width: 350,
-              child: Column(
-                children: [
-                  Text(AuthInherited.of(context)?.authController?.isLoggedIn ==
-                          true
-                      ? "You are logged in as ${AuthInherited.of(context)?.authController?.loggedInUser?.email}"
-                      : "you are logged out"),
-                ],
+      body: FullPageLayout(
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            Expanded(
+              child: CardWithActions(
+                action1Text: "This Profile Name",
+                action2Text: 'All Profiles',
+                action1OnPressed: () {
+                  if (highlightedProfile?.userId != null) {
+                    Navigator.pushNamed(context, '/profile',
+                        arguments: {"id": highlightedProfile?.userId});
+                  }
+                },
+                action2OnPressed: () {
+                  Navigator.pushNamed(context, '/profilesPage');
+                },
               ),
             ),
-            _getMenu()
+            Expanded(
+              child: CardWithActions(
+                action1Text: "This Post",
+                action2Text: 'All Posts',
+                action1OnPressed: () {
+                  if (highlightedPost?.id != null) {
+                    Navigator.pushNamed(context, '/post',
+                        arguments: {"id": highlightedPost?.id});
+                  }
+                },
+                action2OnPressed: () {
+                  Navigator.pushNamed(context, '/postsPage');
+                },
+              ),
+            ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

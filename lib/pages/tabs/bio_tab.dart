@@ -2,6 +2,7 @@ import 'package:chat_line/models/clients/chat_client.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/shared_components/tool_button.dart';
+import 'package:chat_line/wrappers/card_with_background.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -79,7 +80,7 @@ class _BioTabState extends State<BioTab> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
-    if(widget.id != null){
+    if (widget.id != null) {
       extProfile = await theChatController?.profileClient
           .getExtendedProfile(widget.id ?? "");
     }
@@ -159,7 +160,6 @@ class _BioTabState extends State<BioTab> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      key: ObjectKey(widget.key),
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
       child: Flex(direction: Axis.vertical, children: [
@@ -178,24 +178,21 @@ class _BioTabState extends State<BioTab> {
                           ? Expanded(
                               child: FittedBox(
                                 fit: BoxFit.fill,
-                                child: Image.network(
-                                  MyImageBuilder()
-                                          .urlFor(widget
-                                                  .thisProfile?.profileImage ??
-                                              "")
-                                          ?.height(PROFILE_IMAGE_SQUARE_SIZE)
-                                          .width(PROFILE_IMAGE_SQUARE_SIZE)
-                                          .url() ??
-                                      "",
-                                  height: PROFILE_IMAGE_SQUARE_SIZE as double,
-                                  width: PROFILE_IMAGE_SQUARE_SIZE as double,
+                                child: CardWithBackground(
+                                  image: NetworkImage(MyImageBuilder().urlFor(
+                                          widget.thisProfile?.profileImage ??
+                                              "")?.url() ??
+                                      ""),
+                                  child: Text(""),
                                 ),
                               ),
                             )
                           : SizedBox(
                               height: PROFILE_IMAGE_SQUARE_SIZE as double,
                               width: PROFILE_IMAGE_SQUARE_SIZE as double,
-                        child: Text(widget.thisProfile?.profileImage.toString()??""),
+                              child: Text(
+                                  widget.thisProfile?.profileImage.toString() ??
+                                      ""),
                             ),
                       SizedBox(
                         width: 150,

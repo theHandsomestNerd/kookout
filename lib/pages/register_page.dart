@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (kDebugMode) {
         print(myAppUser);
       }
-      Navigator.popAndPushNamed(context, '/editProfile');
+      Navigator.popAndPushNamed(context, '/settings');
     } catch (e) {
       if (kDebugMode) {
         print(e);

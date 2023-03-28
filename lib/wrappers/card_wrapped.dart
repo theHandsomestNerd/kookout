@@ -11,7 +11,7 @@ class CardWrapped extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: height ?? 300.0,
+        height: height ?? 400.0,
         child: Card(
           clipBehavior: Clip.hardEdge,
           child: Padding(
