@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
+
   ImageUploaderImpl() {
     file = null;
     fileExtension = null;

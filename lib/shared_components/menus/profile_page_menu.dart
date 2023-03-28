@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/auth_inherited.dart';
+import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_menu.dart';
 
 class ProfilePageMenu extends StatefulWidget {
@@ -19,9 +20,9 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
       children: [
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/editProfile');
+            Navigator.popAndPushNamed(context, '/settings');
           },
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.settings),
         ),
         ActionButton(
           onPressed: () {
@@ -30,19 +31,11 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           icon: const Icon(Icons.post_add),
         ),
 
-
-
       ActionButton(
           onPressed: () {
             widget.updateMenu(4);
           },
           icon: const Icon(Icons.photo_album),
-        ),
-        ActionButton(
-          onPressed: () {
-            widget.updateMenu(3);
-          },
-          icon: const Icon(Icons.block),
         ),
         ActionButton(
           onPressed: () {
@@ -61,6 +54,24 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
             widget.updateMenu(0);
           },
           icon: const Icon(Icons.people),
+        ),
+        ActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/myProfile');
+          },
+          icon: CircleAvatar(
+            backgroundImage: NetworkImage(
+              MyImageBuilder()
+                  .urlFor(AuthInherited.of(context)
+                  ?.authController
+                  ?.myAppUser
+                  ?.profileImage)
+                  ?.height(100)
+                  .width(100)
+                  .url() ??
+                  "",
+            ),
+          ),
         ),
       ],
     );

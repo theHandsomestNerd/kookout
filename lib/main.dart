@@ -6,10 +6,12 @@ import 'package:chat_line/pages/logout_page.dart';
 import 'package:chat_line/pages/posts_thread_page.dart';
 import 'package:chat_line/pages/profiles_page.dart';
 import 'package:chat_line/pages/register_page.dart';
+import 'package:chat_line/pages/settings_page.dart';
 import 'package:chat_line/pages/solo_profile_page.dart';
 import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'config/firebase_options.dart';
@@ -29,7 +31,15 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  if (kDebugMode) {
+    //Emulator setup
+    await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);  //Error is thrown here
+    // FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
+    // FirebaseDatabase.instance.useDatabaseEmulator('127.0.0.1', 9000);
+    // await FirebaseStorage.instance.useStorageEmulator('127.0.0.1', 9199);
+  }
+
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   // AuthController manager = AuthController.init();
   ChatController chatController = ChatController.init();
@@ -101,7 +111,6 @@ class _MyAppState extends State<MyApp> {
                 extProfile: chatController.myExtProfile,
                 // key: ObjectKey(widget.imageUploader.file?.name),
                 // imageUploader: widget.imageUploader,
-                drawer: widget.drawer,
               ),
           '/logout': (context) => LogoutPage(drawer: widget.drawer),
           '/profilesPage': (context) => ProfilesPage(drawer: widget.drawer),
@@ -123,22 +132,17 @@ class _MyAppState extends State<MyApp> {
             );
           },
           '/myProfile': (context) {
-            var arguments = (ModalRoute.of(context)?.settings.arguments ??
-                <String, dynamic>{}) as Map;
-            var theId;
-            if (arguments['id'] != null) {
-              theId = arguments['id'];
-            } else {
-              theId = authController?.myAppUser?.userId.toString() ?? "";
-            }
             return SoloProfilePage(
-              id: theId,
+              id: authController?.myAppUser?.userId.toString() ?? "",
             );
           },
           '/postsPage': (context) {
             return PostsThreadPage(
               drawer: widget.drawer,
             );
+          },
+        '/settings': (context) {
+            return SettingsPage();
           },
         },
         theme: ThemeData(

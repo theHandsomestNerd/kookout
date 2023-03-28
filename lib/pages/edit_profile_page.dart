@@ -3,7 +3,6 @@ import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/platform_dependent/image_uploader_abstract.dart';
-import 'package:chat_line/shared_components/app_drawer.dart';
 import 'package:chat_line/shared_components/height_input.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/loading_button.dart';
@@ -12,19 +11,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../models/controllers/auth_inherited.dart';
-import '../models/submodels/height.dart';
-import '../sanity/image_url_builder.dart';
-
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
+import '../models/controllers/auth_inherited.dart';
+import '../models/submodels/height.dart';
+import '../sanity/image_url_builder.dart';
 import '../shared_components/menus/login_menu.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key, this.drawer, required this.extProfile});
+  const EditProfilePage({super.key, required this.extProfile});
 
-  final AppDrawer? drawer;
   final ExtendedProfile? extProfile;
 
   @override
@@ -45,7 +42,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _displayName = "";
   ImageUploader? imageUploader;
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-
 
   String _shortBio = "";
   String _longBio = "";
@@ -84,7 +80,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     profileImage = theUser?.profileImage;
     // _loggedInUser = AuthInherited.of(context)?.myLoggedInUser;
     imageToBeUploaded = await _getMyProfileImage(null);
-    extProfile = await theChatController?.updateExtProfile(theUser?.userId ??"");
+    extProfile =
+        await theChatController?.updateExtProfile(theUser?.userId ?? "");
     setState(() {});
     print("dependencies changed ${_myAppUser}");
   }
@@ -175,8 +172,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _updateProfile(context) async {
     setState(() {
-
-    isUpdating = true;
+      isUpdating = true;
     });
     try {
       var authUser = await authController?.updateUser(
@@ -219,7 +215,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       extProfile = aUser;
       setState(() {
-
         isUpdating = false;
       });
     } catch (e) {
@@ -270,8 +265,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: LoginMenu(),
-
-      drawer: widget.drawer,
       appBar: AppBar(
         title: const Text("Chat Line - Edit Profile"),
       ),
@@ -362,9 +355,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           child: TextFormField(
                             key: ObjectKey(
                                 "${extProfile?.age.toString() ?? ""}-age"),
-                            initialValue: extProfile?.age
-                                    .toString() ??
-                                "",
+                            initialValue: extProfile?.age.toString() ?? "",
                             onChanged: (e) {
                               _setAge(int.parse(e));
                             },
@@ -390,8 +381,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         Flexible(
                             child: HeightInput(
-                          initialValue:
-                              extProfile?.height,
+                          initialValue: extProfile?.height,
                           updateHeight: _updateHeight,
                         )),
                       ],
@@ -399,10 +389,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.shortBio}-short-bio"),
-                      initialValue:
-                          extProfile?.shortBio,
+                      key: ObjectKey("${extProfile?.shortBio}-short-bio"),
+                      initialValue: extProfile?.shortBio,
                       onChanged: (e) {
                         _setShortBio(e);
                       },
@@ -416,10 +404,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.longBio}-long-bio"),
-                      initialValue:
-                          extProfile?.longBio ?? "",
+                      key: ObjectKey("${extProfile?.longBio}-long-bio"),
+                      initialValue: extProfile?.longBio ?? "",
                       onChanged: (e) {
                         _setLongBio(e);
                       },
@@ -433,10 +419,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.iAm}-i-am"),
-                      initialValue:
-                          extProfile?.iAm ?? "",
+                      key: ObjectKey("${extProfile?.iAm}-i-am"),
+                      initialValue: extProfile?.iAm ?? "",
                       onChanged: (e) {
                         _setIAm(e);
                       },
@@ -450,10 +434,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.imInto}-im-into"),
-                      initialValue:
-                          extProfile?.imInto ?? "",
+                      key: ObjectKey("${extProfile?.imInto}-im-into"),
+                      initialValue: extProfile?.imInto ?? "",
                       onChanged: (e) {
                         _setImInto(e);
                       },
@@ -467,10 +449,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.imOpenTo}-im-open-to"),
-                      initialValue:
-                          extProfile?.imOpenTo ?? "",
+                      key: ObjectKey("${extProfile?.imOpenTo}-im-open-to"),
+                      initialValue: extProfile?.imOpenTo ?? "",
                       onChanged: (e) {
                         _setImOpenTo(e);
                       },
@@ -484,10 +464,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.whatIDo}-what-i-do"),
-                      initialValue:
-                          extProfile?.whatIDo ?? "",
+                      key: ObjectKey("${extProfile?.whatIDo}-what-i-do"),
+                      initialValue: extProfile?.whatIDo ?? "",
                       onChanged: (e) {
                         _setWhatIDo(e);
                       },
@@ -504,9 +482,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       key: ObjectKey(
                           "${extProfile?.whatImLookingFor}-what-im-looking-for"),
                       // controller: _longBioController,
-                      initialValue:
-                          extProfile?.whatImLookingFor ??
-                              "",
+                      initialValue: extProfile?.whatImLookingFor ?? "",
                       onChanged: (e) {
                         _setWhatImLookingFor(e);
                       },
@@ -523,9 +499,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       key: ObjectKey(
                           "${extProfile?.whatInterestsMe}-what-interests-me"),
                       // controller: _longBioController,
-                      initialValue:
-                          extProfile?.whatInterestsMe ??
-                              "",
+                      initialValue: extProfile?.whatInterestsMe ?? "",
                       onChanged: (e) {
                         _setWhatInterestsMe(e);
                       },
@@ -539,11 +513,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                   ListTile(
                     title: TextFormField(
-                      key: ObjectKey(
-                          "${extProfile?.whereILive}-where-i-live"),
+                      key: ObjectKey("${extProfile?.whereILive}-where-i-live"),
                       // controller: _longBioController,
-                      initialValue:
-                          extProfile?.whereILive ?? "",
+                      initialValue: extProfile?.whereILive ?? "",
                       onChanged: (e) {
                         _setWhereILive(e);
                       },
@@ -559,9 +531,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     title: TextFormField(
                       key: ObjectKey(
                           "${extProfile?.sexPreferences}-sex-preferences"),
-                      initialValue:
-                          extProfile?.sexPreferences ??
-                              "",
+                      initialValue: extProfile?.sexPreferences ?? "",
                       onChanged: (e) {
                         _setSexPreferences(e);
                       },

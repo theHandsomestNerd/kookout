@@ -13,7 +13,7 @@ class CmsDocument {
   CmsDocument.fromJson(Map<String, dynamic> json) {
     if (json['_type'] != null && json['_type'] != "null") {
       if (kDebugMode) {
-        print("processing type of this thing ${json['_type']}");
+        // print("processing type of this thing ${json['_type']}");
       }
       type = json["_type"];
     }

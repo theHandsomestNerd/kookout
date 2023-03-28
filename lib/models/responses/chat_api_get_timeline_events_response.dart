@@ -11,9 +11,9 @@ class ChatApiGetTimelineEventsResponse {
   factory ChatApiGetTimelineEventsResponse.fromJson(List<dynamic> parsedJson) {
     List<TimelineEvent> list = <TimelineEvent>[];
 
-    if (kDebugMode) {
-      print("get-timeline-events-response $parsedJson");
-    }
+    // if (kDebugMode) {
+    //   print("get-timeline-events-response $parsedJson");
+    // }
 
     list = parsedJson.map((i) => TimelineEvent.fromJson(i)).toList();
 

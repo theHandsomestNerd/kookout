@@ -47,6 +47,12 @@ class _AppMenuState extends State<AppMenu> {
           },
           icon: const Icon(Icons.photo_album),
         ),
+        ActionButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/profilesPage');
+          },
+          icon: const Icon(Icons.people),
+        ),
       ],
     );
   }
