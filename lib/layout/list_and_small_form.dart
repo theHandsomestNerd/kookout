@@ -5,9 +5,11 @@ class ListAndSmallFormLayout extends StatefulWidget {
     super.key,
     required this.listChild,
     required this.formChild,
+    this.height,
   });
 
   final Widget listChild;
+  final height;
   final Widget formChild;
 
   @override
@@ -22,7 +24,9 @@ class _ListAndSmallFormLayoutState extends State<ListAndSmallFormLayout> {
         direction: Axis.vertical,
         children: [
           Expanded(child: widget.listChild),
-          SizedBox(height: 120, child: widget.formChild),
+          SizedBox(
+              height: widget.height != null ? widget.height : 150,
+              child: widget.formChild),
         ],
       ),
     );

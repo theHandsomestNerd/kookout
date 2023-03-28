@@ -1,4 +1,5 @@
 import 'package:chat_line/models/sanity/document_slug.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 import 'app_user.dart';
@@ -35,6 +36,15 @@ class Post {
     }
     if (json['slug'] != null && json['slug'] != "null") {
       slug = DocumentSlug.fromJson(json["slug"]);
+    }
+    if (json['mainImage'] != null) {
+      try {
+        mainImage = SanityImage.fromJson(json['mainImage']);
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
     }
   }
 

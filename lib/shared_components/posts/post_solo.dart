@@ -6,6 +6,7 @@ import '../../models/post.dart';
 import '../../sanity/image_url_builder.dart';
 
 const POST_IMAGE_SQUARE_SIZE = 250;
+
 class PostSolo extends StatelessWidget {
   const PostSolo({
     super.key,
@@ -32,21 +33,19 @@ class PostSolo extends StatelessWidget {
                     children: [
                       post.mainImage != null
                           ? Image.network(
-                        MyImageBuilder()
-                            .urlFor(
-                            post.mainImage ?? "")
-                            ?.height(POST_IMAGE_SQUARE_SIZE)
-                            .width(POST_IMAGE_SQUARE_SIZE)
-                            .url() ??
-                            "",
-                        height: POST_IMAGE_SQUARE_SIZE as double
-                        ,
-                        width: POST_IMAGE_SQUARE_SIZE as double,
-                      )
+                              MyImageBuilder()
+                                      .urlFor(post.mainImage ?? "")
+                                      ?.height(POST_IMAGE_SQUARE_SIZE)
+                                      .width(POST_IMAGE_SQUARE_SIZE)
+                                      .url() ??
+                                  "",
+                              height: POST_IMAGE_SQUARE_SIZE as double,
+                              width: POST_IMAGE_SQUARE_SIZE as double,
+                            )
                           : SizedBox(
-                        height: POST_IMAGE_SQUARE_SIZE as double,
-                        width: POST_IMAGE_SQUARE_SIZE as double,
-                      ),
+                              height: POST_IMAGE_SQUARE_SIZE as double,
+                              width: POST_IMAGE_SQUARE_SIZE as double,
+                            ),
                       Text("${post.body}"),
                       Text((post.publishedAt != null
                           ? timeago.format(post.publishedAt!)

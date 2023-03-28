@@ -14,7 +14,7 @@ class ChatApiGetProfilePostsResponse {
     List<Post> list = <Post>[];
 
     if (kDebugMode) {
-      print("get-posts-response ${parsedJson[0]}");
+      print("get-posts-response ${parsedJson}");
     }
 
     list = parsedJson.map((i) => Post.fromJson(i)).toList();

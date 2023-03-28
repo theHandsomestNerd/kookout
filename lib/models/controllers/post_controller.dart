@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:chat_line/config/api_options.dart';
 import 'package:chat_line/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../post.dart';
 
@@ -28,7 +30,7 @@ class PostController {
           ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
       if (kDebugMode) {
         print(
-          "retrieve posts Auth api response ${responseModelList.list.length}");
+            "retrieve posts Auth api response ${responseModelList.list.length}");
       }
       postsFuture = responseModelList.list;
       return responseModelList.list;
@@ -41,7 +43,7 @@ class PostController {
   }
 
   PostController.init() {
-    getPosts(FirebaseAuth.instance.currentUser?.uid ?? "").then((thePosts) {
+    getPosts().then((thePosts) {
       postsFuture = thePosts;
     });
 
@@ -59,10 +61,10 @@ class PostController {
     });
   }
 
-  Future<List<Post>> getPosts(String userId) async {
-    if (kDebugMode) {
-      print("Retrieving Posts $userId");
-    }
+  Future<List<Post>> getPosts() async {
+    // if (kDebugMode) {
+    //   print("Retrieving Posts $userId");
+    // }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
       final response = await http.get(Uri.parse("$authBaseUrl/get-all-posts"),
@@ -70,10 +72,10 @@ class PostController {
 
       var processedResponse = jsonDecode(response.body);
 
+      print(processedResponse);
       if (processedResponse['posts'] != null) {
         ChatApiGetProfilePostsResponse responseModel =
-            ChatApiGetProfilePostsResponse.fromJson(
-                processedResponse['posts']);
+            ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
         if (kDebugMode) {
           print("get posts api response ${responseModel.list}");
         }
@@ -92,39 +94,37 @@ class PostController {
     return [];
   }
 
-  Future<String> createPost(String? postToPost) async {
+  Future<String> createPost(
+      String postBody, String filename, fileBytes, BuildContext context) async {
     var message = "Post request by ${FirebaseAuth.instance.currentUser?.uid}";
-
-    if (kDebugMode) {
-      print(message);
-      print(postToPost);
-    }
-
+    print(message);
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/post"), body: {
-        // "title": postToPost?.title,
-        // "body": postToPost?.body,
-        // "publishedAt": postToPost?.publishedAt,
-        // "slug": postToPost?.slug,
-        // "mainImage": postToPost?.mainImage,
-      }, headers: {
-        "Authorization": ("Bearer $token")
-      });
+      var request = http.MultipartRequest(
+          'POST', Uri.parse("$authBaseUrl/create-post"));
 
-      var processedResponse = jsonDecode(response.body);
+      request.headers.addAll({"authorization": "Bearer $token"});
 
-      if (processedResponse['postStatus'] != null) {
-        if (kDebugMode) {
-          print(processedResponse['postStatus']);
-        }
-        String responseModel = processedResponse['postStatus'];
-        if (kDebugMode) {
-          print("$message status: $responseModel");
-        }
-        return responseModel;
-      } else {
-        return "FAIL";
+      if (filename != "") {
+        request.files.add(http.MultipartFile.fromBytes('file', fileBytes,
+            contentType: MediaType('application', 'octet-stream'),
+            filename: filename));
+      }
+
+      // if (loggedInUser?.email != username) {
+      request.fields['postBody'] = postBody;
+      // }
+
+      final response = await request.send();
+      if (kDebugMode) {
+        print("post controller api response$response");
+      }
+
+
+      return "SUCCCESS";
+    } else {
+      if (kDebugMode) {
+        print("Cannot update user no token present...");
       }
     }
     return "FAIL";
