@@ -1,3 +1,4 @@
+import 'package:chat_line/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,25 +16,46 @@ class ProfileSolo extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
+    return InkWell(
       key: super.key,
-      onPressed: () {
+      onTap: () {
         print("Going to profile ${profile.userId}");
-        Navigator.pushNamed(context, '/profile', arguments: {"id": profile.userId});
+        // Navigator.of(context).push(MaterialPageRoute<void>(
+        //
+        // ));
+        Navigator.pushNamed(context, '/profile',
+            arguments: {"id": profile.userId});
       },
-      child: Stack(
-        children: [
-          profile.profileImage != null
-              ? Image.network(MyImageBuilder()
-                      .urlFor(profile.profileImage)
-                      ?.height(200)
-                      .width(200)
-                      .url() ??
-                  "")
-              : Image.asset(
-                  height: 200, width: 200, 'assets/blankProfileImage.png'),
-          Text("${profile.displayName}"),
-        ],
+      child: Hero(
+        tag: profile.userId??"whatever",
+        child: Stack(
+          children: [
+            profile.profileImage != null
+                ?  CardWithBackground(
+                      height: 200,
+                      width: 200,
+                      image: NetworkImage(MyImageBuilder()
+                              .urlFor(profile.profileImage)
+                      ?.width(200)
+                      .height(200)
+                              .url() ??
+                          ""),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("${profile.displayName}"),
+                      ),
+                    )
+                : CardWithBackground(
+                    height: 200,
+                    width: 200,
+                    image: const AssetImage('assets/blankProfileImage.png'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("${profile.displayName}"),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

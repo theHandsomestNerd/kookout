@@ -176,14 +176,22 @@ class _BioTabState extends State<BioTab> {
                     children: [
                       widget.thisProfile?.profileImage != null
                           ? Expanded(
-                              child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: CardWithBackground(
-                                  image: NetworkImage(MyImageBuilder().urlFor(
-                                          widget.thisProfile?.profileImage ??
-                                              "")?.url() ??
-                                      ""),
-                                  child: Text(""),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Hero(
+                                    tag: widget.thisProfile?.userId ?? "default-image",
+                                    child: CardWithBackground(
+                                      image: NetworkImage(MyImageBuilder().urlFor(
+                                              widget.thisProfile?.profileImage ??
+                                                  "")?.url() ??
+                                          ""),
+                                      child: Text(""),
+                                    ),
+                                  ),
                                 ),
                               ),
                             )

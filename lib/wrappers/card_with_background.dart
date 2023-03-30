@@ -21,24 +21,26 @@ class CardWithBackground extends StatelessWidget {
     return Card(
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         //set border radius more than 50% of height and width to make circle
       ),
       child: Container(
+        decoration: BoxDecoration(
+          image: image != null
+              ? DecorationImage(
+                  image: image,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                )
+              : null,
+        ),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: width ?? 250.0,
             minWidth: height ?? 250.0,
           ),
           child: child,
-        ),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: image,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-          ),
         ),
       ),
     );
