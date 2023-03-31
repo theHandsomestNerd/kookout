@@ -1,6 +1,7 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
 import 'package:chat_line/models/controllers/post_controller.dart';
+import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/sanity/image_url_builder.dart';
 import 'package:chat_line/shared_components/menus/app_menu.dart';
@@ -24,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AppUser? highlightedProfile = null;
+  ExtendedProfile? highlightedExtProfile = null;
   Post? highlightedPost = null;
   late ChatController? chatController = null;
 
@@ -54,6 +56,14 @@ class _HomePageState extends State<HomePage> {
       var theHighlightedProfile =
           await theChatController?.fetchHighlightedProfile();
       highlightedProfile = theHighlightedProfile;
+      if (theHighlightedProfile?.userId != null) {
+        print("Getting extended profile ${theHighlightedProfile?.userId}");
+        var theExtProfile = await theChatController?.profileClient
+            .getExtendedProfile(theHighlightedProfile?.userId ?? "");
+        highlightedExtProfile = theExtProfile;
+
+        print("Got extended profile $theExtProfile");
+      }
     }
     setState(() {});
   }
@@ -84,6 +94,52 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: CardWithActions(
+                locationRow: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text("${highlightedExtProfile?.age ?? "99"} yrs",
+                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),),),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                            "${highlightedExtProfile?.height?.feet ?? "9"}' ${highlightedExtProfile?.height?.inches ?? "9"}\"",
+                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),)),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text("${highlightedExtProfile?.weight?? "999"} lbs",
+                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),),),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.pin_drop,
+                            size: 30.0,
+                            color: Colors.white.withOpacity(.8),
+                            semanticLabel: "Location",
+                          ),
+                          Text(
+                            '300 mi.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 image: highlightedProfile?.profileImage != null
                     ? NetworkImage(MyImageBuilder()
                         .urlFor(highlightedProfile?.profileImage!)!
@@ -105,7 +161,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CardWithActions(
-                caption: "${highlightedPost?.author?.displayName}: ${highlightedPost?.body}",
+                locationRow: null,
+                caption:
+                    "${highlightedPost?.author?.displayName}: ${highlightedPost?.body}",
                 image: highlightedPost?.mainImage != null
                     ? NetworkImage(MyImageBuilder()
                         .urlFor(highlightedPost?.mainImage!)!

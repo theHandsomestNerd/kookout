@@ -7,7 +7,8 @@ class CardWithBackground extends StatelessWidget {
       required this.child,
       this.width,
       required this.image,
-      this.height})
+      this.height,
+      })
       : super(key: key);
 
   final Widget child;

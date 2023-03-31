@@ -62,13 +62,7 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           },
           icon: const Icon(Icons.timeline),
         ),
-        // ActionButton(
-        //   tooltip: "Profiles",
-        //   onPressed: () {
-        //     widget.updateMenu(ProfileMenuOptions.PROFILELIST.index);
-        //   },
-        //   icon: const Icon(Icons.people),
-        // ),
+
         ActionButton(
           tooltip: "My Profile",
           onPressed: () {
@@ -87,6 +81,12 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
                   "",
             ),
           ),
+        ),
+        ActionButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
+          icon: const Icon(Icons.home),
         ),
       ],
     );

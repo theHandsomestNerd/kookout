@@ -176,7 +176,8 @@ class _MyAppState extends State<MyApp> {
             displayLarge:
                 TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
             titleLarge: TextStyle(fontSize: 36.0),
-            titleSmall: TextStyle(fontSize: 24.0),
+            titleSmall: TextStyle(fontSize: 22.0),
+            bodyLarge: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
             bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),
           primarySwatch: Colors.grey,

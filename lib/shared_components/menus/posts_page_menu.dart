@@ -14,11 +14,7 @@ class PostsPageMenu extends StatefulWidget {
   State<PostsPageMenu> createState() => _PostsPageMenuState();
 }
 
-enum ProfileMenuOptions {
-  MY_POSTS,
-  POSTS,
-  ADD_POST,
-}
+enum ProfileMenuOptions { MY_POSTS, POSTS, ADD_POST, HOME }
 
 class _PostsPageMenuState extends State<PostsPageMenu> {
   @override
@@ -63,7 +59,6 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           tooltip: "Posts",
           onPressed: () {
             Navigator.pushNamed(context, '/postsPage');
-
           },
           icon: const Icon(Icons.timeline),
         ),
@@ -73,6 +68,12 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
             Navigator.popAndPushNamed(context, '/createPostsPage');
           },
           icon: const Icon(Icons.post_add),
+        ),
+        ActionButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
+          icon: const Icon(Icons.home),
         ),
       ],
     );

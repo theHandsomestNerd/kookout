@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CardWithActions extends StatelessWidget {
   final String? action1Text;
   final String? caption;
+  final locationRow;
 
   final action1OnPressed;
   final ImageProvider image;
@@ -11,6 +12,7 @@ class CardWithActions extends StatelessWidget {
   final String? action2Text;
 
   final action2OnPressed;
+  final infoCard;
 
   const CardWithActions(
       {super.key,
@@ -19,6 +21,8 @@ class CardWithActions extends StatelessWidget {
       this.action1OnPressed,
       this.action2Text,
       this.action2OnPressed,
+      this.locationRow,
+      this.infoCard,
       required this.image});
 
   @override
@@ -33,9 +37,25 @@ class CardWithActions extends StatelessWidget {
         title: CardWithBackground(
           image: image,
           child: Column(
-            mainAxisAlignment: caption == null ? MainAxisAlignment.end:MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
+              if (locationRow != null)
+                Padding(
+                    padding: const EdgeInsets.all(8.0), child: locationRow!),
+              if (infoCard != null)
+                Row(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: 150,
+                      ),
+                      child: Column(
+                        children: [infoCard!],
+                      ),
+                    )
+                  ],
+                ),
               if (caption != null)
                 Container(
                   margin: const EdgeInsets.symmetric(
@@ -66,7 +86,12 @@ class CardWithActions extends StatelessWidget {
                           padding: const EdgeInsets.all(20.0),
                           child: Text(
                             action1Text!,
-                            style: TextStyle(color: Colors.white),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.merge(
+                                      TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                           ),
                         ),
                       ),
@@ -87,7 +112,12 @@ class CardWithActions extends StatelessWidget {
                             padding: const EdgeInsets.all(20.0),
                             child: Text(
                               action2Text!,
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  Theme.of(context).textTheme.bodyLarge?.merge(
+                                        TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
                             ),
                           ),
                         ),
