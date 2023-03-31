@@ -7,7 +7,7 @@ import 'package:chat_line/sanity/image_url_builder.dart';
 import 'package:chat_line/shared_components/menus/app_menu.dart';
 import 'package:chat_line/shared_components/menus/home_page_menu.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
-import 'package:chat_line/shared_components/menus/profile_page_menu.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:chat_line/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
 
@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: CardWithActions(
+                key: ObjectKey(highlightedProfile),
                 locationRow: Flex(
                   direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,6 +162,8 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CardWithActions(
+                key: ObjectKey(highlightedPost),
+                when:highlightedPost?.publishedAt,
                 locationRow: null,
                 caption:
                     "${highlightedPost?.author?.displayName}: ${highlightedPost?.body}",
