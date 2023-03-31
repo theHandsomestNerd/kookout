@@ -2,20 +2,20 @@ import 'package:flutter/foundation.dart';
 
 import '../Profile.dart';
 
-class AuthApiRegisterAppUserResponse {
+class ApiAppUserResponse {
   final Profile profile;
 
-  AuthApiRegisterAppUserResponse({
+  ApiAppUserResponse({
     required this.profile,
   });
 
-  factory AuthApiRegisterAppUserResponse.fromJson(Map<String, dynamic> json) {
+  factory ApiAppUserResponse.fromJson(Map<String, dynamic> json) {
     if (kDebugMode) {
       print("authregisterAppUserresponse ${json["profile"]}");
     }
 
     Profile profile = json["profile"];
 
-    return AuthApiRegisterAppUserResponse(profile: profile);
+    return ApiAppUserResponse(profile: profile);
   }
 }

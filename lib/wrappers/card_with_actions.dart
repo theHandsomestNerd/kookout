@@ -5,6 +5,7 @@ class CardWithActions extends StatelessWidget {
   final String? action1Text;
 
   final action1OnPressed;
+  final ImageProvider image;
 
   final String? action2Text;
 
@@ -16,17 +17,19 @@ class CardWithActions extends StatelessWidget {
     this.action1OnPressed,
     this.action2Text,
     this.action2OnPressed,
+    required this.image
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: super.key,
       margin: EdgeInsets.symmetric(
         vertical: 4.0,
         horizontal: 24.0,
       ),
       child: CardWithBackground(
-        image: NetworkImage("https://placeimg.com/640/480/any"),
+        image: image,
         child: ListTile(
           title: Padding(
             padding: const EdgeInsets.all(16),

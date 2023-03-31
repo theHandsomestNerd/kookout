@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_line/models/block.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/models/clients/chat_client.dart';
@@ -17,8 +19,8 @@ class ChatController {
   ChatClient profileClient = ChatClient();
 
   updateChatController() async {
-    myExtProfile =
-        await profileClient.getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
+    myExtProfile = await profileClient
+        .getExtendedProfile(FirebaseAuth.instance.currentUser?.uid ?? "");
     profileList = await profileClient.fetchProfiles();
     myBlockedProfiles = await profileClient.getMyBlockedProfiles();
     timelineOfEvents = await profileClient.retrieveTimelineEvents();
@@ -48,8 +50,7 @@ class ChatController {
   }
 
   updateExtProfile(String userId) async {
-    var theExtProfile =
-        await profileClient.getExtendedProfile(userId);
+    var theExtProfile = await profileClient.getExtendedProfile(userId);
 
     myExtProfile = theExtProfile;
     profileList = await profileClient.fetchProfiles();
@@ -78,6 +79,27 @@ class ChatController {
     return theNewBlocks;
   }
 
+  Future<AppUser?> fetchHighlightedProfile() async {
+    var theProfiles = await profileClient.fetchProfiles();
+    profileList = [...theProfiles];
+
+    theProfiles.removeWhere((element){
+      if(element.profileImage == null){
+        return true;
+      }
+      return false;
+    });
+
+    var rng = Random();
+    rng.nextInt(theProfiles.length - 1);
+
+    if (theProfiles.isNotEmpty) {
+      return theProfiles[rng.nextInt(theProfiles.length - 1)];
+    }
+
+    return null;
+  }
+
   bool isProfileBlockedByMe(String userId) {
     bool foundBlock = false;
 
@@ -89,16 +111,16 @@ class ChatController {
 
     return foundBlock;
   }
-  unblockProfile(Block block)async{
+
+  unblockProfile(Block block) async {
     String? unblockResponse = await profileClient.unblockProfile(block);
-    if(unblockResponse == "SUCCESS") {
+    if (unblockResponse == "SUCCESS") {
       await updateMyBlocks();
     }
-      return unblockResponse;
+    return unblockResponse;
   }
 
-
-  bool isProfileLikedByMe(String userId, List<Like> theLikesPassed)  {
+  bool isProfileLikedByMe(String userId, List<Like> theLikesPassed) {
     bool foundLike = false;
 
     for (var element in theLikesPassed) {

@@ -1,6 +1,7 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
 import 'package:chat_line/models/post.dart';
+import 'package:chat_line/sanity/image_url_builder.dart';
 import 'package:chat_line/shared_components/menus/app_menu.dart';
 import 'package:chat_line/shared_components/menus/home_page_menu.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
@@ -19,15 +20,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late AppUser? highlightedProfile = null;
+  AppUser? highlightedProfile = null;
   late Post? highlightedPost = null;
+  late ChatController? chatController = null;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // highlightedProfile = chatController?.profileList[0];
+  }
 
   bool isUserLoggedIn = false;
+
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
-    isUserLoggedIn = AuthInherited.of(context)?.authController?.myAppUser != null;
+    var theAuthController = AuthInherited.of(context)?.authController;
+    var theChatController = AuthInherited.of(context)?.chatController;
+    isUserLoggedIn = theAuthController?.myAppUser != null;
+    chatController = theChatController;
+    // var profiles = await theChatController?.profileClient.fetchProfiles();
+    var theHighlightedProfile =
+        await theChatController?.fetchHighlightedProfile();
+    print("highlighted profile ${theHighlightedProfile?.profileImage}");
+    highlightedProfile = theHighlightedProfile;
+    setState(() {});
   }
 
   @override
@@ -40,12 +58,11 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton:
-          !isUserLoggedIn
-              ? LoginMenu()
-              : HomePageMenu(
-                  updateMenu: () => {},
-                ),
+      floatingActionButton: !isUserLoggedIn
+          ? LoginMenu()
+          : HomePageMenu(
+              updateMenu: () => {},
+            ),
       appBar: AppBar(
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -57,7 +74,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: CardWithActions(
-                action1Text: "This Profile Name",
+                image: highlightedProfile?.profileImage != null
+                    ? NetworkImage(MyImageBuilder()
+                        .urlFor(highlightedProfile?.profileImage!)!
+                        .url())
+                    : NetworkImage("https://placeimg.com/640/480/any"),
+                action1Text: "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}'s Profile",
                 action2Text: 'All Profiles',
                 action1OnPressed: () {
                   if (highlightedProfile?.userId != null) {
@@ -72,6 +94,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CardWithActions(
+                image: NetworkImage("https://placeimg.com/640/480/any"),
                 action1Text: "This Post",
                 action2Text: 'All Posts',
                 action1OnPressed: () {

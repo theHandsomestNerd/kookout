@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart';
 
 import '../post.dart';
 
-class ChatApiGetProfilePostResponse {
+class ApiPostResponse {
   final Post? post;
 
-  ChatApiGetProfilePostResponse({
+  ApiPostResponse({
     required this.post,
   });
 
-  factory ChatApiGetProfilePostResponse.fromJson(Map<String,dynamic> parsedJson) {
+  factory ApiPostResponse.fromJson(Map<String,dynamic> parsedJson) {
     Post? thePost = null;
 
     if (kDebugMode) {
@@ -21,6 +21,6 @@ class ChatApiGetProfilePostResponse {
       thePost = Post.fromJson(parsedJson['createdPost']);
     }
 
-    return ChatApiGetProfilePostResponse(post: thePost);
+    return ApiPostResponse(post: thePost);
   }
 }

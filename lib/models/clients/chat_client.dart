@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:chat_line/models/post.dart';
+import 'package:chat_line/models/responses/api_app_user_response.dart';
+import 'package:chat_line/models/responses/api_post_response.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/api_options.dart';
+import '../Profile.dart';
 import '../app_user.dart';
 import '../block.dart';
 import '../comment.dart';
@@ -44,6 +48,29 @@ class ChatClient {
       return responseModelList.list;
     }
     return <AppUser>[];
+  }
+
+
+  Future<Post?> fetchHighlightedPost() async {
+    if (kDebugMode) {
+      print("Retrieving Hightlighted post");
+    }
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      final response = await http.get(
+          Uri.parse("$authBaseUrl/get-highlighted-post"),
+          headers: {"Authorization": ("Bearer $token")});
+
+      var processedResponse = jsonDecode(response.body);
+
+      ApiPostResponse responseModelList =
+          ApiPostResponse.fromJson(processedResponse['highlightedPost']);
+      if (kDebugMode) {
+        print("retrieve highlighted post response ${responseModelList.post}");
+      }
+      return responseModelList.post;
+    }
+    return null;
   }
 
   Future<List<TimelineEvent>> retrieveTimelineEvents() async {
