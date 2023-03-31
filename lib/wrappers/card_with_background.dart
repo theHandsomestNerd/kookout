@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CardWithBackground extends StatelessWidget {
-  const CardWithBackground(
-      {Key? key,
-      required this.child,
-      this.width,
-      required this.image,
-      this.height,
-      })
-      : super(key: key);
+  const CardWithBackground({
+    Key? key,
+    required this.child,
+    this.width,
+    required this.image,
+    this.height,
+    this.shape,
+  }) : super(key: key);
 
   final Widget child;
+  final shape;
   final double? width;
   final double? height;
   final ImageProvider image;
@@ -22,10 +23,12 @@ class CardWithBackground extends StatelessWidget {
     return Card(
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        //set border radius more than 50% of height and width to make circle
-      ),
+      shape: shape != null
+          ? shape
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              //set border radius more than 50% of height and width to make circle
+            ),
       child: Row(
         children: [
           Expanded(
@@ -40,7 +43,9 @@ class CardWithBackground extends StatelessWidget {
                       )
                     : null,
               ),
-              child: Flex(direction: Axis.horizontal, children: [Expanded( flex: 1, child: child)]),
+              child: Flex(
+                  direction: Axis.horizontal,
+                  children: [Expanded(flex: 1, child: child)]),
             ),
           ),
         ],

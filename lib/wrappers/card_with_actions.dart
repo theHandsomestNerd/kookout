@@ -9,6 +9,7 @@ class CardWithActions extends StatelessWidget {
 
   final action1OnPressed;
   final ImageProvider image;
+  final ImageProvider? authorImage;
 
   final String? action2Text;
 
@@ -16,17 +17,19 @@ class CardWithActions extends StatelessWidget {
   final infoCard;
   final DateTime? when;
 
-  const CardWithActions(
-      {super.key,
-      this.when,
-      this.caption,
-      this.action1Text,
-      this.action1OnPressed,
-      this.action2Text,
-      this.action2OnPressed,
-      this.locationRow,
-      this.infoCard,
-      required this.image});
+  const CardWithActions({
+    super.key,
+    this.when,
+    this.caption,
+    this.action1Text,
+    this.action1OnPressed,
+    this.action2Text,
+    this.action2OnPressed,
+    this.locationRow,
+    this.infoCard,
+    required this.image,
+    this.authorImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,37 +132,74 @@ class CardWithActions extends StatelessWidget {
                       direction: Axis.horizontal,
                       children: [
                         Expanded(
-                          child: Card(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              //set border radius more than 50% of height and width to make circle
-                            ),
-                            color: Colors.white.withOpacity(.8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  if (when != null)
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(timeago.format(when!)),
-                                      ],
-                                    ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        caption!,
-                                      ),
-                                    ],
+                          child: Stack(
+                            children: [
+                              Card(
+                                elevation: 0,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
                                   ),
-                                ],
+                                  //set border radius more than 50% of height and width to make circle
+                                ),
+                                color: Colors.white.withOpacity(.8),
+                                child: Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    if (authorImage != null)
+                                      Expanded(
+                                        flex: 2,
+                                        child: SizedBox(
+                                          height: 70,
+                                        ),
+                                      ),
+                                    Flexible(
+                                      flex: 8,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            if (when != null)
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(timeago.format(when!)),
+                                                ],
+                                              ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  caption!,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                              if (authorImage != null)
+                                Flex(direction: Axis.horizontal, children: [
+                                  Flexible(
+                                    flex: 2,
+                                    child: CardWithBackground(
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20)),
+                                          //set border radius more than 50% of height and width to make circle
+                                        ),
+                                        child: SizedBox(height: 70, width: 70),
+                                        image: authorImage!),
+                                  ),
+                                  Expanded(flex: 8, child: SizedBox(width: 48))
+                                ]),
+                            ],
                           ),
                         ),
                       ],

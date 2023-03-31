@@ -162,6 +162,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CardWithActions(
+                authorImage: NetworkImage(MyImageBuilder().urlFor(highlightedPost?.author?.profileImage)?.url() ?? ""),
                 key: ObjectKey(highlightedPost),
                 when:highlightedPost?.publishedAt,
                 locationRow: null,
