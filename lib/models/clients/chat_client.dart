@@ -50,29 +50,6 @@ class ChatClient {
     return <AppUser>[];
   }
 
-
-  Future<Post?> fetchHighlightedPost() async {
-    if (kDebugMode) {
-      print("Retrieving Hightlighted post");
-    }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.get(
-          Uri.parse("$authBaseUrl/get-highlighted-post"),
-          headers: {"Authorization": ("Bearer $token")});
-
-      var processedResponse = jsonDecode(response.body);
-
-      ApiPostResponse responseModelList =
-          ApiPostResponse.fromJson(processedResponse['highlightedPost']);
-      if (kDebugMode) {
-        print("retrieve highlighted post response ${responseModelList.post}");
-      }
-      return responseModelList.post;
-    }
-    return null;
-  }
-
   Future<List<TimelineEvent>> retrieveTimelineEvents() async {
     if (kDebugMode) {
       print("Retrieving Timeline Events");

@@ -1,5 +1,6 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
+import 'package:chat_line/models/controllers/post_controller.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/sanity/image_url_builder.dart';
 import 'package:chat_line/shared_components/menus/app_menu.dart';
@@ -13,7 +14,9 @@ import '../models/app_user.dart';
 import '../models/controllers/chat_controller.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.postController});
+
+  final PostController postController;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,13 +24,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AppUser? highlightedProfile = null;
-  late Post? highlightedPost = null;
+  Post? highlightedPost = null;
   late ChatController? chatController = null;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    widget.postController.fetchHighlightedPost().then((value) {
+      print("highlighted post ${value?.mainImage}");
+      highlightedPost = value;
+    });
+
     // highlightedProfile = chatController?.profileList[0];
   }
 
@@ -39,12 +48,13 @@ class _HomePageState extends State<HomePage> {
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
     isUserLoggedIn = theAuthController?.myAppUser != null;
-    chatController = theChatController;
     // var profiles = await theChatController?.profileClient.fetchProfiles();
-    var theHighlightedProfile =
-        await theChatController?.fetchHighlightedProfile();
-    print("highlighted profile ${theHighlightedProfile?.profileImage}");
-    highlightedProfile = theHighlightedProfile;
+    chatController = theChatController;
+    if (theAuthController?.myAppUser != null) {
+      var theHighlightedProfile =
+          await theChatController?.fetchHighlightedProfile();
+      highlightedProfile = theHighlightedProfile;
+    }
     setState(() {});
   }
 
@@ -79,7 +89,8 @@ class _HomePageState extends State<HomePage> {
                         .urlFor(highlightedProfile?.profileImage!)!
                         .url())
                     : NetworkImage("https://placeimg.com/640/480/any"),
-                action1Text: "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}'s Profile",
+                action1Text:
+                    "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
                 action2Text: 'All Profiles',
                 action1OnPressed: () {
                   if (highlightedProfile?.userId != null) {
@@ -94,8 +105,13 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: CardWithActions(
-                image: NetworkImage("https://placeimg.com/640/480/any"),
-                action1Text: "This Post",
+                caption: "${highlightedPost?.author?.displayName}: ${highlightedPost?.body}",
+                image: highlightedPost?.mainImage != null
+                    ? NetworkImage(MyImageBuilder()
+                        .urlFor(highlightedPost?.mainImage!)!
+                        .url())
+                    : NetworkImage("https://placeimg.com/640/480/any"),
+                action1Text: highlightedPost?.author?.displayName,
                 action2Text: 'All Posts',
                 action1OnPressed: () {
                   if (highlightedPost?.id != null) {

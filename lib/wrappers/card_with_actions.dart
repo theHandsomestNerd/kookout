@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class CardWithActions extends StatelessWidget {
   final String? action1Text;
+  final String? caption;
 
   final action1OnPressed;
   final ImageProvider image;
@@ -11,14 +12,14 @@ class CardWithActions extends StatelessWidget {
 
   final action2OnPressed;
 
-  const CardWithActions({
-    super.key,
-    this.action1Text,
-    this.action1OnPressed,
-    this.action2Text,
-    this.action2OnPressed,
-    required this.image
-  });
+  const CardWithActions(
+      {super.key,
+      this.caption,
+      this.action1Text,
+      this.action1OnPressed,
+      this.action2Text,
+      this.action2OnPressed,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -28,47 +29,73 @@ class CardWithActions extends StatelessWidget {
         vertical: 4.0,
         horizontal: 24.0,
       ),
-      child: CardWithBackground(
-        image: image,
-        child: ListTile(
-          title: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (action1Text != null)
-                      TextButton(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(action1Text!),
-                        ),
-                        onPressed: action1OnPressed,
+      child: ListTile(
+        title: CardWithBackground(
+          image: image,
+          child: Column(
+            mainAxisAlignment: caption == null ? MainAxisAlignment.end:MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (caption != null)
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 32.0, horizontal: 96.0),
+                  child: Card(
+                    color: Colors.white.withOpacity(.8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        caption!,
                       ),
-                    if (action2Text != null) const SizedBox(width: 8),
-                    if (action2Text != null)
-                      TextButton(
+                    ),
+                  ),
+                ),
+              Flex(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  if (action1Text != null)
+                    Expanded(
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20.0)),
+                        ),
+                        color: Colors.black.withOpacity(.5),
+                        onPressed: action1OnPressed,
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            children: [
-                              Text(action2Text!),
-                              Icon(
-                                Icons.chevron_right,
-                              ),
-                            ],
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            action1Text!,
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        onPressed: action2OnPressed,
                       ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-              ],
-            ),
+                    ),
+                  // if (action2Text != null) const SizedBox(width: 8),
+                  const SizedBox(width: 1),
+                  if (action2Text != null)
+                    Expanded(
+                      child: Container(
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(20.0)),
+                          ),
+                          color: Colors.black.withOpacity(.5),
+                          onPressed: action2OnPressed,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              action2Text!,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

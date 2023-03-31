@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:chat_line/config/api_options.dart';
 import 'package:chat_line/models/responses/chat_api_get_profile_posts_response.dart';
@@ -20,11 +21,18 @@ class PostController {
       print("Retrieving Posts");
     }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.get(Uri.parse("$authBaseUrl/get-posts"),
+    if (token != null && token != "") {
+      var response;
+      response = await http.get(Uri.parse("$authBaseUrl/get-all-posts"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      var processedResponse;
+      try {
+        processedResponse = jsonDecode(response.body);
+      } catch (err) {
+        print("err $token ${response.body}");
+        return [];
+      }
 
       ChatApiGetProfilePostsResponse responseModelList =
           ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
@@ -36,6 +44,29 @@ class PostController {
       return responseModelList.list;
     }
     return <Post>[];
+  }
+
+  Future<Post?> fetchHighlightedPost() async {
+    var thePosts = await retrievePosts();
+    postsFuture = thePosts;
+    print("what did i get back from retreive posts $thePosts");
+    if (thePosts != null && thePosts.length > 0) {
+      thePosts.removeWhere((element) {
+        if (element.mainImage == null) {
+          return true;
+        }
+        return false;
+      });
+
+      var rng = Random();
+      rng.nextInt(thePosts.length);
+        print("THe posts are not empty ${thePosts.length}");
+      if (thePosts.isNotEmpty) {
+        return thePosts[rng.nextInt(thePosts.length - 1)];
+      }
+    }
+
+    return null;
   }
 
   refetchPosts() async {
@@ -100,8 +131,8 @@ class PostController {
     print(message);
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
-      var request = http.MultipartRequest(
-          'POST', Uri.parse("$authBaseUrl/create-post"));
+      var request =
+          http.MultipartRequest('POST', Uri.parse("$authBaseUrl/create-post"));
 
       request.headers.addAll({"authorization": "Bearer $token"});
 
@@ -119,7 +150,6 @@ class PostController {
       if (kDebugMode) {
         print("post controller api response$response");
       }
-
 
       return "SUCCCESS";
     } else {

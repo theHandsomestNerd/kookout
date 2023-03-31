@@ -1,5 +1,6 @@
 import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
+import 'package:chat_line/models/controllers/post_controller.dart';
 import 'package:chat_line/pages/create_post_page.dart';
 import 'package:chat_line/pages/home_page.dart';
 import 'package:chat_line/pages/logout_page.dart';
@@ -106,7 +107,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Chat Line',
         routes: {
-          '/': (context) => HomePage(),
+          '/': (context) => HomePage( postController: PostController.init(),),
           '/postsPage':(context) => const PostsPage(),
           '/createPostsPage':(context) => const CreatePostPage(),
           '/register': (context) => RegisterPage(drawer: widget.drawer),
@@ -178,7 +179,7 @@ class _MyAppState extends State<MyApp> {
             titleSmall: TextStyle(fontSize: 24.0),
             bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.grey,
         ),
       ),
     );
