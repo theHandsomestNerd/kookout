@@ -1,16 +1,11 @@
 import 'dart:convert';
 
-import 'package:chat_line/models/post.dart';
-import 'package:chat_line/models/responses/api_app_user_response.dart';
-import 'package:chat_line/models/responses/api_post_response.dart';
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/api_options.dart';
-import '../Profile.dart';
 import '../app_user.dart';
 import '../block.dart';
 import '../comment.dart';
@@ -42,9 +37,8 @@ class ChatClient {
 
       AuthApiProfileListResponse responseModelList =
           AuthApiProfileListResponse.fromJson(processedResponse['profiles']);
-      if (kDebugMode) {
-        print("retrieve profiles response ${responseModelList.list.length}");
-      }
+
+
       return responseModelList.list;
     }
     return <AppUser>[];
@@ -352,7 +346,9 @@ class ChatClient {
         body = {...body, "sexPreferences": newProfile.sexPreferences};
       }
 
-      print("the update ext profile request $body");
+      if (kDebugMode) {
+        print("the update ext profile request $body");
+      }
 
       final response = await http.post(
           Uri.parse("$authBaseUrl/update-create-ext-profile"),

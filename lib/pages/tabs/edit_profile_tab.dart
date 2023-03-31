@@ -9,7 +9,6 @@ import '../../models/controllers/auth_inherited.dart';
 import '../../models/controllers/chat_controller.dart';
 import '../../models/extended_profile.dart';
 import '../../models/submodels/height.dart';
-
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
@@ -18,7 +17,6 @@ import '../../sanity/image_url_builder.dart';
 import '../../shared_components/app_image_uploader.dart';
 import '../../shared_components/height_input.dart';
 import '../../wrappers/alerts_snackbar.dart';
-import '../../wrappers/card_with_background.dart';
 import '../../wrappers/loading_button.dart';
 
 class EditProfileTab extends StatefulWidget {
@@ -85,14 +83,12 @@ class _EditProfileTabState extends State<EditProfileTab> {
     imageToBeUploaded = await _getMyProfileImage(null);
 
     if (theAuthController?.myAppUser?.userId != null) {
-      AuthInherited.of(context)
-          ?.chatController
-          ?.updateExtProfile((theAuthController?.myAppUser?.userId)!);
+      theChatController?.updateExtProfile((theAuthController?.myAppUser?.userId)!);
       extProfile = await theChatController?.profileClient
           .getExtendedProfile((theAuthController?.myAppUser?.userId)!);
     }
     setState(() {});
-    print("tab edit profile dependencies changed $extProfile");
+
   }
 
   _getMyProfileImage(PlatformFile? theFile) {
@@ -104,24 +100,26 @@ class _EditProfileTabState extends State<EditProfileTab> {
         theFile.bytes ?? [] as Uint8List,
       );
     }
-    print("profile image $profileImage");
+    if (kDebugMode) {
+      print("profile image $profileImage");
+    }
 
     if (profileImage != null) {
       if (kDebugMode) {
         print("profile image is froom db");
       }
       return NetworkImage(MyImageBuilder()
-                .urlFor(profileImage)
-                // ?.height(350)
-                // .width(350)
-                ?.url() ?? ""
-      );
+              .urlFor(profileImage)
+              // ?.height(350)
+              // .width(350)
+              ?.url() ??
+          "");
     }
 
     if (kDebugMode) {
       print("profile image is default");
     }
-    return AssetImage( 'assets/blankProfileImage.png');
+    return const AssetImage('assets/blankProfileImage.png');
   }
 
   void _setUsername(String newUsername) {
@@ -216,8 +214,8 @@ class _EditProfileTabState extends State<EditProfileTab> {
       var authUser = await authController?.updateUser(
           _loginUsername,
           _displayName,
-          imageUploader?.file?.name ?? "",
-          imageUploader?.file?.bytes,
+          imageUploader.file?.name ?? "",
+          imageUploader.file?.bytes,
           context);
       if (kDebugMode) {
         print("updated fields in authuser result: $authUser");

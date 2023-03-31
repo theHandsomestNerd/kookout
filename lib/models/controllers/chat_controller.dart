@@ -5,7 +5,6 @@ import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/models/clients/chat_client.dart';
 import 'package:chat_line/models/timeline_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 import '../app_user.dart';
 import '../like.dart';
@@ -35,14 +34,8 @@ class ChatController {
     }
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user == null) {
-        if (kDebugMode) {
-          print('chatController: User is currently signed out!');
-        }
-      } else {
-        if (kDebugMode) {
-          print('chatController: User is signed in!');
-        }
+      if (user != null) {
+        print('chatController: User is signed in!');
 
         await updateChatController();
       }
@@ -83,8 +76,8 @@ class ChatController {
     var theProfiles = await profileClient.fetchProfiles();
     profileList = [...theProfiles];
 
-    theProfiles.removeWhere((element){
-      if(element.profileImage == null){
+    theProfiles.removeWhere((element) {
+      if (element.profileImage == null) {
         return true;
       }
       return false;

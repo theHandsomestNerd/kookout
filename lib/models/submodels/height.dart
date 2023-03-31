@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 class Height {
   int? feet;
@@ -17,15 +16,9 @@ class Height {
 
   Height.fromJson(Map<String, dynamic> json) {
     if(json['feet'] != null && json['feet'] != "null") {
-      if (kDebugMode) {
-        print("processing Feet ${json['feet']}");
-      }
         feet = json["feet"];
     }
     if(json['inches'] != null && json['inches'] != "null") {
-      if (kDebugMode) {
-        print("processing inches ${json['inches']}");
-      }
         inches = json["inches"];
     }
   }

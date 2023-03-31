@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _loginUsername = "";
   String _loginPassword = "";
-  AlertSnackbar _alertSnackbar = AlertSnackbar();
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
   @override
   void initState() {
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       width: 16,
                     ),
-                    Text("If you do not have an account..."),
+                    const Text("If you do not have an account..."),
                     MaterialButton(
                       color: Colors.red,
                       textColor: Colors.white,

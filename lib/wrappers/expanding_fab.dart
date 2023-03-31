@@ -120,7 +120,6 @@ class _ExpandableFabState extends State<ExpandableFab>
     var theAuthController = AuthInherited.of(context)?.authController;
     profileImage = theAuthController?.myAppUser?.profileImage;
     setState(() {});
-    print("expanding fab dependencies changed $profileImage");
   }
 
   @override

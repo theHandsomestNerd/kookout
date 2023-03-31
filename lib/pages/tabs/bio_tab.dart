@@ -3,9 +3,7 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/shared_components/tool_button.dart';
 import 'package:chat_line/wrappers/card_with_background.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
@@ -63,7 +61,7 @@ class _BioTabState extends State<BioTab> {
   @override
   initState() {
     super.initState();
-    if (widget.id == null || widget.id == "") {
+    if (widget.id == "") {
       Navigator.popAndPushNamed(context, '/profilesPage');
     }
     // if (widget.id != null) {
@@ -80,14 +78,11 @@ class _BioTabState extends State<BioTab> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
-    if (widget.id != null) {
-      extProfile = await theChatController?.profileClient
-          .getExtendedProfile(widget.id ?? "");
-    }
+    extProfile = await theChatController?.profileClient
+        .getExtendedProfile(widget.id);
     profileClient = theChatController?.profileClient;
     chatController = theChatController;
     setState(() {});
-    print("tab bio dependencies changed $extProfile");
   }
 
   _likeThisProfile(context) async {
@@ -98,15 +93,13 @@ class _BioTabState extends State<BioTab> {
     bool isUnlike = false;
 
     if (widget.profileLikedByMe == null) {
-      likeResponse = await profileClient?.likeProfile(widget.id!);
+      likeResponse = await profileClient?.likeProfile(widget.id);
     } else {
-      if (kDebugMode) {
-        print("sending to server to unlike ${widget.profileLikedByMe}");
-      }
+
       if (widget.profileLikedByMe != null) {
         isUnlike = true;
         likeResponse = await profileClient?.unlikeProfile(
-            widget.id!, widget.profileLikedByMe!);
+            widget.id, widget.profileLikedByMe!);
       }
     }
 
@@ -124,15 +117,13 @@ class _BioTabState extends State<BioTab> {
     bool isUnfollow = false;
 
     if (widget.profileFollowedByMe == null) {
-      followResponse = await profileClient?.followProfile(widget.id!);
+      followResponse = await profileClient?.followProfile(widget.id);
     } else {
-      if (kDebugMode) {
-        print("sending to server to unfollow ${widget.profileFollowedByMe}");
-      }
+
       if (widget.profileFollowedByMe != null) {
         isUnfollow = true;
         followResponse = await profileClient?.unfollowProfile(
-            widget.id!, widget.profileFollowedByMe!);
+            widget.id, widget.profileFollowedByMe!);
       }
     }
 
@@ -149,7 +140,7 @@ class _BioTabState extends State<BioTab> {
     });
     String? blockResponse;
 
-    blockResponse = await profileClient?.blockProfile(widget.id!);
+    blockResponse = await profileClient?.blockProfile(widget.id);
     setState(() {
       _isBlocking = false;
     });
@@ -183,13 +174,25 @@ class _BioTabState extends State<BioTab> {
                                 child: FittedBox(
                                   fit: BoxFit.fill,
                                   child: Hero(
-                                    tag: widget.thisProfile?.userId ?? "default-image",
-                                    child: CardWithBackground(
-                                      image: NetworkImage(MyImageBuilder().urlFor(
-                                              widget.thisProfile?.profileImage ??
-                                                  "")?.url() ??
-                                          ""),
-                                      child: Text(""),
+                                    tag: widget.thisProfile?.userId ??
+                                        "default-image",
+                                    child: SizedBox(
+                                        height: 350.0,
+                                        width: 350.0,
+                                      child: CardWithBackground(
+                                        width: 350,
+                                        height: 350,
+                                        image: NetworkImage(MyImageBuilder()
+                                                .urlFor(widget.thisProfile
+                                                        ?.profileImage ??
+                                                    "")
+                                                ?.url() ??
+                                            ""),
+                                        child: const SizedBox(
+                                          height: 350.0,
+                                          width: 350.0,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -277,7 +280,7 @@ class _BioTabState extends State<BioTab> {
                                 text: "Block",
                                 label: 'Block',
                                 isActive: chatController
-                                    ?.isProfileBlockedByMe(widget.id!),
+                                    ?.isProfileBlockedByMe(widget.id),
                               ),
                             ),
                             const Divider(

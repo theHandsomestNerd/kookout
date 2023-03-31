@@ -1,7 +1,6 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
 import 'package:chat_line/shared_components/menus/posts_page_menu.dart';
-import 'package:chat_line/wrappers/card_with_background.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +75,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     if (kDebugMode) {
       print("profile image is default");
     }
-    return AssetImage('assets/blankProfileImage.png');
+    return const AssetImage('assets/blankProfileImage.png');
   }
 
   @override

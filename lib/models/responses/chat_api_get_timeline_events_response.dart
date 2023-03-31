@@ -1,5 +1,4 @@
 import 'package:chat_line/models/timeline_event.dart';
-import 'package:flutter/foundation.dart';
 
 class ChatApiGetTimelineEventsResponse {
   final List<TimelineEvent> list;

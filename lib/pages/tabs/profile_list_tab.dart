@@ -1,11 +1,11 @@
 import 'package:chat_line/layout/search_and_list.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../shared_components/profile/profile_grid.dart';
-import '../../shared_components/search_box.dart';
 
 class ProfileListTab extends StatefulWidget {
   const ProfileListTab({
@@ -29,7 +29,9 @@ class _ProfileListTabState extends State<ProfileListTab> {
     chatController = theChatController;
     profileList = await chatController?.updateProfiles();
     setState(() {});
-    print("dependencies changed profile list ${profileList.length}");
+    if (kDebugMode) {
+      print("dependencies changed profile list ${profileList.length}");
+    }
   }
 
   @override

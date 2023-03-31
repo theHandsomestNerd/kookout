@@ -35,7 +35,7 @@ class CardWithActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: super.key,
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         vertical: 4.0,
         // horizontal: 24.0,
       ),
@@ -68,7 +68,7 @@ class CardWithActions extends StatelessWidget {
                       if (action1Text != null)
                         Expanded(
                           child: MaterialButton(
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(20.0)),
                             ),
@@ -82,7 +82,7 @@ class CardWithActions extends StatelessWidget {
                                     .textTheme
                                     .bodyLarge
                                     ?.merge(
-                                      TextStyle(
+                                      const TextStyle(
                                         color: Colors.white,
                                       ),
                                     ),
@@ -94,27 +94,25 @@ class CardWithActions extends StatelessWidget {
                       const SizedBox(width: 1),
                       if (action2Text != null)
                         Expanded(
-                          child: Container(
-                            child: MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(20.0)),
-                              ),
-                              color: Colors.black.withOpacity(.5),
-                              onPressed: action2OnPressed,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  action2Text!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.merge(
-                                        TextStyle(
-                                          color: Colors.white,
-                                        ),
+                          child: MaterialButton(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(20.0)),
+                            ),
+                            color: Colors.black.withOpacity(.5),
+                            onPressed: action2OnPressed,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                action2Text!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.merge(
+                                      const TextStyle(
+                                        color: Colors.white,
                                       ),
-                                ),
+                                    ),
                               ),
                             ),
                           ),
@@ -127,83 +125,80 @@ class CardWithActions extends StatelessWidget {
             if (caption != null)
               Column(
                 children: [
-                  Container(
-                    child: Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Card(
-                                elevation: 0,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                  ),
-                                  //set border radius more than 50% of height and width to make circle
+                  Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Card(
+                              elevation: 0,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
                                 ),
-                                color: Colors.white.withOpacity(.8),
-                                child: Flex(
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    if (authorImage != null)
-                                      Expanded(
-                                        flex: 2,
-                                        child: SizedBox(
-                                          height: 70,
-                                        ),
-                                      ),
-                                    Flexible(
-                                      flex: 8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: [
-                                            if (when != null)
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Text(timeago.format(when!)),
-                                                ],
-                                              ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  caption!,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                //set border radius more than 50% of height and width to make circle
+                              ),
+                              color: Colors.white.withOpacity(.8),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  if (authorImage != null)
+                                    const Expanded(
+                                      flex: 2,
+                                      child: SizedBox(
+                                        height: 70,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              if (authorImage != null)
-                                Flex(direction: Axis.horizontal, children: [
                                   Flexible(
-                                    flex: 2,
-                                    child: CardWithBackground(
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20)),
-                                          //set border radius more than 50% of height and width to make circle
-                                        ),
-                                        child: SizedBox(height: 70, width: 70),
-                                        image: authorImage!),
+                                    flex: 8,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          if (when != null)
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(timeago.format(when!)),
+                                              ],
+                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                caption!,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Expanded(flex: 8, child: SizedBox(width: 48))
-                                ]),
-                            ],
-                          ),
+                                ],
+                              ),
+                            ),
+                            if (authorImage != null)
+                              Flex(direction: Axis.horizontal, children: [
+                                Flexible(
+                                  child: CardWithBackground(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20)),
+                                        //set border radius more than 50% of height and width to make circle
+                                      ),
+                                      image: authorImage!,
+                                      child: const SizedBox(height: 70, width: 70)),
+                                ),
+                                const Expanded(flex: 8, child: SizedBox(width: 48))
+                              ]),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),

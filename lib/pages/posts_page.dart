@@ -1,9 +1,6 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
-import 'package:chat_line/pages/tabs/posts_tab.dart';
-import 'package:chat_line/shared_components/menus/login_menu.dart';
 import 'package:chat_line/shared_components/menus/posts_page_menu.dart';
-import 'package:chat_line/wrappers/card_with_actions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +45,9 @@ class _PostsPageState extends State<PostsPage> {
     authController = theAuthController;
     _postsList = await _getPosts();
     setState(() {});
-    print("dependencies changed profile list");
+    // if (kDebugMode) {
+    //   print("dependencies changed profile list");
+    // }
   }
 
   Future<List<Post>> _getPosts() async {

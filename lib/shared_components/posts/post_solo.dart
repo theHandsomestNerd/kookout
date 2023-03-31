@@ -33,17 +33,19 @@ class PostSolo extends StatelessWidget {
                 child: Column(
                   children: [
                     if (post.mainImage != null)
-                      CardWithBackground(
+                      SizedBox(
                         height: POST_IMAGE_SQUARE_SIZE as double,
                         width: POST_IMAGE_SQUARE_SIZE as double,
-                        child: Text(""),
-                        image: NetworkImage(
-                          MyImageBuilder()
-                                  .urlFor(post.mainImage ?? "")
-                                  ?.height(POST_IMAGE_SQUARE_SIZE)
-                                  .width(POST_IMAGE_SQUARE_SIZE)
-                                  .url() ??
-                              "",
+                        child: CardWithBackground(
+                          image: NetworkImage(
+                            MyImageBuilder()
+                                    .urlFor(post.mainImage ?? "")
+                                    ?.height(POST_IMAGE_SQUARE_SIZE)
+                                    .width(POST_IMAGE_SQUARE_SIZE)
+                                    .url() ??
+                                "",
+                          ),
+                          child: const Text(""),
                         ),
                       ),
                     Text("${post.body}"),

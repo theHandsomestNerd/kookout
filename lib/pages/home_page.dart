@@ -4,11 +4,10 @@ import 'package:chat_line/models/controllers/post_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/sanity/image_url_builder.dart';
-import 'package:chat_line/shared_components/menus/app_menu.dart';
 import 'package:chat_line/shared_components/menus/home_page_menu.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:chat_line/wrappers/card_with_actions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
@@ -35,7 +34,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     widget.postController.fetchHighlightedPost().then((value) {
-      print("highlighted post ${value?.mainImage}");
+      if (kDebugMode) {
+        print("highlighted post ${value?.mainImage}");
+      }
       highlightedPost = value;
     });
 
@@ -57,12 +58,16 @@ class _HomePageState extends State<HomePage> {
           await theChatController?.fetchHighlightedProfile();
       highlightedProfile = theHighlightedProfile;
       if (theHighlightedProfile?.userId != null) {
-        print("Getting extended profile ${theHighlightedProfile?.userId}");
+        if (kDebugMode) {
+          print("Getting extended profile ${theHighlightedProfile?.userId}");
+        }
         var theExtProfile = await theChatController?.profileClient
             .getExtendedProfile(theHighlightedProfile?.userId ?? "");
         highlightedExtProfile = theExtProfile;
 
-        print("Got extended profile $theExtProfile");
+        if (kDebugMode) {
+          print("Got extended profile $theExtProfile");
+        }
       }
     }
     setState(() {});
@@ -79,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       floatingActionButton: !isUserLoggedIn
-          ? LoginMenu()
+          ? const LoginMenu()
           : HomePageMenu(
               updateMenu: () => {},
             ),
@@ -132,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                             color: Colors.white.withOpacity(.8),
                             semanticLabel: "Location",
                           ),
-                          Text(
+                          const Text(
                             '300 mi.',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -145,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                     ? NetworkImage(MyImageBuilder()
                         .urlFor(highlightedProfile?.profileImage!)!
                         .url())
-                    : NetworkImage("https://placeimg.com/640/480/any"),
+                    : const NetworkImage(""),
                 action1Text:
                     "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
                 action2Text: 'All Profiles',
@@ -172,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                     ? NetworkImage(MyImageBuilder()
                         .urlFor(highlightedPost?.mainImage!)!
                         .url())
-                    : NetworkImage("https://placeimg.com/640/480/any"),
+                    : const NetworkImage(""),
                 action1Text: highlightedPost?.author?.displayName,
                 action2Text: 'All Posts',
                 action1OnPressed: () {

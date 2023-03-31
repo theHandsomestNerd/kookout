@@ -50,9 +50,9 @@ class AppDrawer extends StatelessWidget {
                         onPressed: () {
                           Navigator.popAndPushNamed(context, '/login');
                         },
-                        child: Icon(Icons.login),
+                        child: const Icon(Icons.login),
                       ),
-                      Text("Login"),
+                      const Text("Login"),
                     ],
                   ),
           ),

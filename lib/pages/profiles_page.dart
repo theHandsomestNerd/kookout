@@ -1,4 +1,3 @@
-import 'package:chat_line/models/app_user.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/tabs/blocks_tab.dart';
 import 'package:chat_line/pages/tabs/posts_tab.dart';
@@ -44,7 +43,9 @@ class _ProfilesPageState extends State<ProfilesPage> {
     myUserId = AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();
     setState(() {});
-    print("dependencies changed $myUserId");
+    // if (kDebugMode) {
+    //   print("dependencies changed $myUserId");
+    // }
   }
 
   static const TextStyle optionStyle =

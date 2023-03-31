@@ -2,7 +2,6 @@ import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../app_user.dart';
 import '../auth/auth_user.dart';
 import 'auth_controller.dart';
 
@@ -12,7 +11,7 @@ class AuthInherited extends InheritedWidget {
   final AuthUser? myLoggedInUser;
   final SanityImage? profileImage;
 
-  AuthInherited(
+  const AuthInherited(
       {super.key, this.profileImage,
       this.authController,
       this.chatController,

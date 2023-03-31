@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../models/controllers/auth_inherited.dart';
-import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_fab.dart';
 enum SettingsMenuOptions {
   EDIT_PROFILE,

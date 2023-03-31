@@ -25,7 +25,7 @@ class _ListAndSmallFormLayoutState extends State<ListAndSmallFormLayout> {
         children: [
           Expanded(child: widget.listChild),
           SizedBox(
-              height: widget.height != null ? widget.height : 150,
+              height: widget.height ?? 150,
               child: widget.formChild),
         ],
       ),

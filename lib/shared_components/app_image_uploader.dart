@@ -1,19 +1,13 @@
-import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
-import 'package:chat_line/shared_components/menus/posts_page_menu.dart';
 import 'package:chat_line/wrappers/card_with_background.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../../platform_dependent/image_uploader.dart'
-    if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
-    if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
-import '../wrappers/loading_button.dart';
 
 class AppImageUploader extends StatefulWidget {
   final uploadImage;
@@ -66,9 +60,7 @@ class _AppImageUploaderState extends State<AppImageUploader> {
     if (kDebugMode) {
       print("profile image is default");
     }
-    return widget.image != null
-        ? widget.image
-        : AssetImage('assets/blankProfileImage.png');
+    return widget.image ?? const AssetImage('assets/blankProfileImage.png');
   }
 
   @override
@@ -92,27 +84,31 @@ class _AppImageUploaderState extends State<AppImageUploader> {
                         key: ObjectKey(imageToBeUploaded),
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CardWithBackground(
-                            height: 350,
-                            width: 350,
-                            image:
-                                _getMyProfileImage(widget.imageUploader.file),
-                            child: OutlinedButton(
-                              onPressed: () async {
-                                await widget.imageUploader.uploadImage().then(
-                                  (theImage) async {
-                                    setState(
-                                      () {
-                                        // print("the image from uploadImage befoe comprssion $theImage");
-                                        imageToBeUploaded =
-                                            _getMyProfileImage(theImage);
-                                      },
-                                    );
-                                    widget.uploadImage(widget.imageUploader);
-                                  },
-                                );
-                              },
-                              child: Text(widget.text ?? "Change Photo"),
+                          SizedBox(
+                              height: 350.0,
+                              width: 350.0,
+                            child: CardWithBackground(
+                              height: 350,
+                              width: 350,
+                              image:
+                                  _getMyProfileImage(widget.imageUploader.file),
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  await widget.imageUploader.uploadImage().then(
+                                    (theImage) async {
+                                      setState(
+                                        () {
+                                          // print("the image from uploadImage befoe comprssion $theImage");
+                                          imageToBeUploaded =
+                                              _getMyProfileImage(theImage);
+                                        },
+                                      );
+                                      widget.uploadImage(widget.imageUploader);
+                                    },
+                                  );
+                                },
+                                child: Text(widget.text ?? "Change Photo"),
+                              ),
                             ),
                           ),
                           Text(widget.imageUploader.file?.name ?? ""),
@@ -122,11 +118,11 @@ class _AppImageUploaderState extends State<AppImageUploader> {
                           widget.imageUploader.file?.size != null
                               ? Text(
                                   "${widget.imageUploader.file?.size.toString() ?? ''} bytes")
-                              : Text(""),
+                              : const Text(""),
                         ],
                       )
                     : Column(
-                        children: [],
+                        children: const [],
                       ),
               ],
             ),

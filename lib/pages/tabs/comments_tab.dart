@@ -1,5 +1,4 @@
 import 'package:chat_line/layout/list_and_small_form.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/shared_components/comments/comment_thread.dart';
 import 'package:chat_line/wrappers/loading_button.dart';
@@ -51,7 +50,7 @@ class _CommentsTabState extends State<CommentsTab> {
     chatController = theChatController;
 
     setState(() {});
-    print("timeline events dependencies changed ${_comments}");
+
   }
 
   void _setCommentBody(String newCommentBody) {

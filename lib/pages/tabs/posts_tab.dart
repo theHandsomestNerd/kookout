@@ -10,7 +10,6 @@ import '../../models/controllers/auth_controller.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../models/controllers/post_controller.dart';
 import '../../platform_dependent/image_uploader_abstract.dart';
-import '../../sanity/image_url_builder.dart';
 import '../../wrappers/loading_button.dart';
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
@@ -49,14 +48,14 @@ class _PostsTabState extends State<PostsTab> {
     authController = theAuthController;
     _postsList = await _getPosts();
     setState(() {});
-    print("dependencies changed profile list");
+    if (kDebugMode) {
+      print("dependencies changed profile list");
+    }
   }
 
   Future<List<Post>> _getPosts() async {
     var thePosts = await postController.getPosts();
-    if (kDebugMode) {
-      print("posts $thePosts");
-    }
+
     return thePosts;
   }
 

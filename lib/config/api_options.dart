@@ -53,6 +53,7 @@ class DefaultAppOptions {
   );
 
   static const AppOptions web = AppOptions(
+    // authBaseUrl: 'https://us-central1-the-handsomest-nerd-auth.cloudfunctions.net/app',
     authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 

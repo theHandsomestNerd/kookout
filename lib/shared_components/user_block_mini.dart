@@ -24,7 +24,7 @@ class UserBlockMini extends StatelessWidget {
         children: [
           Expanded(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 48),
+              constraints: const BoxConstraints(maxHeight: 48),
               child: Flex(
                 direction: Axis.horizontal,
                 children: [

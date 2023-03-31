@@ -1,11 +1,7 @@
-import 'package:chat_line/models/app_user.dart';
 import 'package:chat_line/models/controllers/chat_controller.dart';
 import 'package:chat_line/pages/tabs/blocks_tab.dart';
 import 'package:chat_line/pages/tabs/edit_profile_tab.dart';
-import 'package:chat_line/pages/tabs/posts_tab.dart';
-import 'package:chat_line/pages/tabs/profile_list_tab.dart';
 import 'package:chat_line/pages/tabs/timeline_events_tab.dart';
-import 'package:chat_line/shared_components/menus/profile_page_menu.dart';
 import 'package:chat_line/shared_components/menus/settings_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -43,15 +39,15 @@ class _SettingsPageState extends State<SettingsPage> {
     myUserId = AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();
     setState(() {});
-    print("dependencies changed $myUserId");
+    // if (kDebugMode) {
+    //   print("dependencies changed $myUserId");
+    // }
   }
 
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      EditProfileTab(),
+      const EditProfileTab(),
       TimelineEventsTab(
           timelineEvents: chatController?.timelineOfEvents,
           id: AuthInherited.of(context)?.authController?.myAppUser?.userId ??

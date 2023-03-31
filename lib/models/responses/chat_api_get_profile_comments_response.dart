@@ -1,5 +1,4 @@
 
-import 'package:flutter/foundation.dart';
 
 import '../comment.dart';
 
@@ -13,9 +12,9 @@ class ChatApiGetProfileCommentsResponse {
   factory ChatApiGetProfileCommentsResponse.fromJson(List<dynamic> parsedJson) {
     List<Comment> list = <Comment>[];
 
-    if (kDebugMode) {
-      print("get-comments-response $parsedJson");
-    }
+    // if (kDebugMode) {
+    //   print("get-comments-response $parsedJson");
+    // }
 
     list = parsedJson.map((i) => Comment.fromJson(i)).toList();
 

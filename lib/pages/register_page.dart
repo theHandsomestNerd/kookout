@@ -1,4 +1,3 @@
-import 'package:chat_line/models/app_user.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
 import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:flutter/foundation.dart';
@@ -59,11 +58,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _registerUser(context) async {
     try {
-      print("authcontroller ${AuthInherited.of(context)?.authController}");
-      AppUser myAppUser = await AuthInherited.of(context)?.authController?.registerUser(_loginUsername, _loginPassword, context);
-      if (kDebugMode) {
-        print(myAppUser);
-      }
+      // if (kDebugMode) {
+      //   print("authcontroller ${AuthInherited.of(context)?.authController}");
+      // }
+      await AuthInherited.of(context)?.authController?.registerUser(_loginUsername, _loginPassword, context);
+      // if (kDebugMode) {
+      //   print(myAppUser);
+      // }
       Navigator.popAndPushNamed(context, '/settings');
     } catch (e) {
       if (kDebugMode) {
@@ -86,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: LoginMenu(),
+      floatingActionButton: const LoginMenu(),
       drawer: widget.drawer,
       appBar: AppBar(
         // Here we take the value from the RegisterPage object that was created by

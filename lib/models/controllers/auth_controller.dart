@@ -66,7 +66,9 @@ class AuthController {
         email: username,
         password: password,
       );
-      print("Registering user $username");
+      if (kDebugMode) {
+        print("Registering user $username");
+      }
 
       String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
       if (token != null) {
@@ -99,26 +101,9 @@ class AuthController {
         _alertSnackbar.showErrorAlert("The Password is too weak.", context);
       } else if (e.code == 'email-already-in-use') {
         _alertSnackbar.showErrorAlert("Email Address already in use", context);
-
-        // return showDialog<void>(
-        //     context: context,
-        //     builder: (BuildContext context) {
-        //       return const AlertMessagePopup(
-        //           title: "Error",
-        //           message: "Email Address already in use",
-        //           isError: true);
-        //     });
       } else if (e.code == 'invalid-email') {
         _alertSnackbar.showErrorAlert(
             "The email aadress is badly formatted.", context);
-        // return showDialog<void>(
-        //     context: context,
-        //     builder: (BuildContext context) {
-        //       return const AlertMessagePopup(
-        //           title: "Error",
-        //           message: "The email aadress is badly formatted.",
-        //           isError: true);
-        //     });
       }
     }
   }
@@ -147,9 +132,9 @@ class AuthController {
       }
 
       final response = await request.send();
-      if (kDebugMode) {
-        print("Auth api response$response");
-      }
+      // if (kDebugMode) {
+      //   print("Auth api response$response");
+      // }
       var myUser = await _getMyAppUser();
       var authUser = await _getLoggedInUser();
       myAppUser = myUser;
@@ -178,9 +163,9 @@ class AuthController {
       if (processedResponse['myAppProfile'] != null) {
         AppUser responseModel =
             AppUser.fromJson(processedResponse['myAppProfile']);
-        if (kDebugMode) {
-          print("gey app user Auth api response ${responseModel}");
-        }
+        // if (kDebugMode) {
+        //   print("gey app user Auth api response $responseModel");
+        // }
 
         myAppUser = responseModel;
 
@@ -204,9 +189,9 @@ class AuthController {
 
       AuthUser responseModel =
           AuthUser.fromJson(processedResponse['myAuthProfile']);
-      if (kDebugMode) {
-        print("get logged in user api response $responseModel");
-      }
+      // if (kDebugMode) {
+      //   print("get logged in user api response $responseModel");
+      // }
 
       loggedInUser = responseModel;
 
@@ -232,9 +217,9 @@ class AuthController {
             AppUser.fromJson(processedResponse['appProfile']);
       }
 
-      if (kDebugMode) {
-        print("get app user Auth api response $responseModel");
-      }
+      // if (kDebugMode) {
+      //   print("get app user Auth api response $responseModel");
+      // }
       return responseModel;
     }
     return null;

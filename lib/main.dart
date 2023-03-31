@@ -80,8 +80,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     myExtProfile = chatController.myExtProfile;
-    print("authcontroller myAppUser $myAppUser");
-    print("authcontroller loggedinUSer $myLoggedInUser");
+    if (kDebugMode) {
+      print("authcontroller myAppUser $myAppUser");
+
+      print("authcontroller loggedinUSer $myLoggedInUser");
+    }
   }
 
   String id = "";
@@ -123,16 +126,15 @@ class _MyAppState extends State<MyApp> {
             if (arguments['id'] != null) {
               theId = arguments['id'];
             } else {
-              theId = authController?.myAppUser?.userId.toString() ?? "";
+              theId = authController.myAppUser?.userId.toString() ?? "";
             }
-            print("The ID $theId");
 
             var thisProfile =null;
-            chatController.profileList.forEach((element) {
+            for (var element in chatController.profileList) {
                 if(element.userId == theId) {
                   thisProfile = element;
                 }
-            });
+            }
 
             return SoloProfilePage(
               thisProfile: thisProfile,
@@ -141,7 +143,7 @@ class _MyAppState extends State<MyApp> {
             );
           },
           '/myProfile': (context) {
-            var theId = authController?.myAppUser?.userId.toString() ?? "";
+            var theId = authController.myAppUser?.userId.toString() ?? "";
             var thisProfile =null;
             chatController.profileList.forEach((element) {
               if(element.userId == theId) {
@@ -159,7 +161,7 @@ class _MyAppState extends State<MyApp> {
           //   );
           // },
         '/settings': (context) {
-            return SettingsPage();
+            return const SettingsPage();
           },
         },
         theme: ThemeData(

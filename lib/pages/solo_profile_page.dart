@@ -8,10 +8,8 @@ import 'package:chat_line/pages/tabs/comments_tab.dart';
 import 'package:chat_line/pages/tabs/follows_tab.dart';
 import 'package:chat_line/pages/tabs/likes_tab.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../models/app_user.dart';
 import '../models/comment.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
@@ -46,15 +44,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   ChatController? chatController = null;
 
   SoloProfilePage() {
-    if (widget == null || widget.id == "") {
+    if (widget.id == "") {
       Navigator.popAndPushNamed(context, '/profilesPage');
     }
-  }
-
-  @override
-  initState() {
-    super.initState();
-    print("the widget id in solo ${widget.id}");
   }
 
   @override
@@ -75,9 +67,11 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     _profileFollowedByMe = theFollows.amIInThisList;
 
     _profileLikedByMe = theLikes.amIInThisList;
-    var theProfile = await theAuthController?.getAppUser(widget.id);
+    // var theProfile = await theAuthController?.getAppUser(widget.id);
 
-    print("the profile retrieved in this page $theProfile ");
+    // if (kDebugMode) {
+    //   print("the profile retrieved in this page $theProfile ");
+    // }
 
     profileClient = theChatController?.profileClient;
     authController = theAuthController;
@@ -85,7 +79,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     _isThisMe = widget.id == theAuthController?.myAppUser?.userId;
 
     setState(() {});
-    print("profile  dependencies changed is this me ${_isThisMe}");
+    // if (kDebugMode) {
+    //   print("profile  dependencies changed is this me $_isThisMe");
+    // }
   }
 
   _getTagLine() {
@@ -127,9 +123,6 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     Follow? profileFollowedByMe;
     for (var follow in theFollows) {
       if (follow.follower?.userId == authController?.loggedInUser?.uid) {
-        if (kDebugMode) {
-          print("I'm ${authController?.loggedInUser?.uid} in the follows?");
-        }
         profileFollowedByMe = follow;
       }
     }

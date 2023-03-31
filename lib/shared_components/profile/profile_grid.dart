@@ -1,18 +1,13 @@
 import 'package:chat_line/shared_components/profile/profile_solo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
 
 class ProfileGrid extends StatelessWidget {
-  ProfileGrid({
+  const ProfileGrid({
     super.key,
     required this.profiles,
-  }){
-    if (kDebugMode) {
-      print(profiles);
-    }
-  }
+  });
 
   final List<AppUser>? profiles;
 

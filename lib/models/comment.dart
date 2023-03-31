@@ -25,9 +25,6 @@ class Comment {
     }
 
     if (json['publishedAt'] != null && json['publishedAt'] != "null") {
-      if (kDebugMode) {
-        print("processing publishedAt ${DateTime.parse(json["publishedAt"].toString())}");
-      }
       publishedAt = DateTime.parse(json["publishedAt"].toString());
     }
   }

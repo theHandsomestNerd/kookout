@@ -36,7 +36,6 @@ class _TimelineEventsTabState extends State<TimelineEventsTab> {
     var theChatController = AuthInherited.of(context)?.chatController;
     timelineEvents = await theChatController?.updateTimelineEvents();
     setState(() {});
-    print("timeline events dependencies changed $timelineEvents");
   }
 
   @override

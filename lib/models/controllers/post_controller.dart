@@ -30,7 +30,9 @@ class PostController {
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
-        print("err $token ${response.body}");
+        if (kDebugMode) {
+          print("err $token ${response.body}");
+        }
         return [];
       }
 
@@ -49,7 +51,8 @@ class PostController {
   Future<Post?> fetchHighlightedPost() async {
     var thePosts = await retrievePosts();
     postsFuture = thePosts;
-    print("what did i get back from retreive posts $thePosts");
+
+
     if (thePosts != null && thePosts.length > 0) {
       thePosts.removeWhere((element) {
         if (element.mainImage == null) {
@@ -60,7 +63,9 @@ class PostController {
 
       var rng = Random();
       rng.nextInt(thePosts.length);
-        print("THe posts are not empty ${thePosts.length}");
+        if (kDebugMode) {
+          print("THe posts are not empty ${thePosts.length}");
+        }
       if (thePosts.isNotEmpty) {
         return thePosts[rng.nextInt(thePosts.length - 1)];
       }
@@ -103,19 +108,21 @@ class PostController {
 
       var processedResponse = jsonDecode(response.body);
 
-      print(processedResponse);
+      // if (kDebugMode) {
+      //   print(processedResponse);
+      // }
       if (processedResponse['posts'] != null) {
         ChatApiGetProfilePostsResponse responseModel =
             ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
-        if (kDebugMode) {
-          print("get posts api response ${responseModel.list}");
-        }
+        // if (kDebugMode) {
+        //   print("get posts api response ${responseModel.list}");
+        // }
 
-        for (var element in responseModel.list) {
-          if (kDebugMode) {
-            print(element);
-          }
-        }
+        // for (var element in responseModel.list) {
+        //   if (kDebugMode) {
+        //     print(element);
+        //   }
+        // }
 
         return responseModel.list;
       } else {
@@ -128,7 +135,9 @@ class PostController {
   Future<String> createPost(
       String postBody, String filename, fileBytes, BuildContext context) async {
     var message = "Post request by ${FirebaseAuth.instance.currentUser?.uid}";
-    print(message);
+    if (kDebugMode) {
+      print(message);
+    }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
       var request =
@@ -147,9 +156,9 @@ class PostController {
       // }
 
       final response = await request.send();
-      if (kDebugMode) {
-        print("post controller api response$response");
-      }
+      // if (kDebugMode) {
+      //   print("post controller api response$response");
+      // }
 
       return "SUCCCESS";
     } else {
