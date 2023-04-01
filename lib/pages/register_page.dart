@@ -1,5 +1,4 @@
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
-import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +10,7 @@ import '../wrappers/loading_button.dart';
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
     super.key,
-
-    // required this.authController,
-    required,
-    this.drawer,
   });
-
-// final AuthController authController;
-  final AppDrawer? drawer;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -58,7 +50,12 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  bool isLoading = false;
+
   Future<void> _registerUser(context) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       // if (kDebugMode) {
       //   print("authcontroller ${AuthInherited.of(context)?.authController}");
@@ -69,11 +66,17 @@ class _RegisterPageState extends State<RegisterPage> {
       // if (kDebugMode) {
       //   print(myAppUser);
       // }
+      setState(() {
+        isLoading = true;
+      });
       Navigator.popAndPushNamed(context, '/settings');
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
+      setState(() {
+        isLoading = true;
+      });
     }
 
     AlertSnackbar().showSuccessAlert(
@@ -93,7 +96,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       floatingActionButton: const LoginMenu(),
-      drawer: widget.drawer,
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.5),
         // Here we take the value from the LoginPage object that was created by
@@ -134,8 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Column(
                                 children: [
                                   TextFormField(
-                                    key: ObjectKey(
-                                        "$_loginUsername$_loginPassword-user"),
+                                    autocorrect: false,
                                     initialValue: _loginUsername,
                                     onChanged: (e) {
                                       _setUsername(e);
@@ -156,8 +157,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 16,
                                   ),
                                   TextFormField(
-                                    key: ObjectKey(
-                                        "$_loginPassword$_loginUsername-pass"),
+                                    obscureText: true,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
                                     initialValue: _loginPassword,
                                     onChanged: (e) {
                                       _setPassword(e);
@@ -178,6 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 16,
                                   ),
                                   LoadingButton(
+                                    isLoading: isLoading,
                                     action: () {
                                       _registerUser(context);
                                     },

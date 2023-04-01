@@ -54,7 +54,7 @@ class _AppMenuState extends State<AppMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/');
+            Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

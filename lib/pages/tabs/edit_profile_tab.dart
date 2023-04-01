@@ -254,7 +254,8 @@ class _EditProfileTabState extends State<EditProfileTab> {
         print(e);
       }
     }
-    _alertSnackbar.showSuccessAlert("Profile Updated Success", context);
+    _alertSnackbar.showSuccessAlert("Profile Updated. Now get out there in crowd.", context);
+    Navigator.pushNamed(context, '/home',);
   }
 
   Height? _height;
@@ -517,6 +518,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
                     isDisabled: isUpdating,
                     action: () async {
                       await _updateProfile(context);
+
                     },
                     text: "Save Profile",
                   ),

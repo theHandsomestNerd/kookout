@@ -16,10 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'config/firebase_options.dart';
-import 'models/app_user.dart';
 import 'models/controllers/auth_inherited.dart';
-import 'models/extended_profile.dart';
-import 'models/post.dart';
 import 'pages/login_page.dart';
 
 // import '../../platform_dependent/image_uploader.dart'
@@ -47,26 +44,19 @@ Future<void> main() async {
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   // AuthController manager = AuthController.init();
-  ChatController chatController = ChatController.init();
-  AppDrawer globalDrawer = const AppDrawer();
 
-  runApp(MyApp(
-    // authController: manager,
-    drawer: globalDrawer,
-    chatController: chatController,
-  ));
+  runApp(const MyApp(
+      // authController: manager,
+      ));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp(
-      {super.key,
-      // required this.authController,
-      required this.drawer,
-      required this.chatController});
+  const MyApp({
+    super.key,
+    // required this.authController,
+  });
 
   // final AuthController authController;
-  final ChatController chatController;
-  final AppDrawer drawer;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -78,15 +68,15 @@ class _MyAppState extends State<MyApp> {
   var postController = PostController.init();
   var myAppUser = null;
   var myLoggedInUser = null;
+
   // var myExtProfile = null;
 
   bool isUserLoggedIn = false;
 
-
   @override
   void initState() {
     super.initState();
-    isUserLoggedIn = authController.isLoggedIn;
+    // isUserLoggedIn = authController.isLoggedIn;
 
     // myExtProfile = chatController.myExtProfile;
     if (kDebugMode) {
@@ -99,22 +89,26 @@ class _MyAppState extends State<MyApp> {
   String id = "";
 
   @override
-  void didChangeDependencies()  {
+  void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    isUserLoggedIn = authController.isLoggedIn;
+
+    var intermediate =
+        AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
+
+    isUserLoggedIn = intermediate;
     // var profiles = await theChatController?.profileClient.fetchProfiles();
     // if (authController.myAppUser != null) {
-      // myExtProfile = chatController
-      //     .updateExtProfile(authController.myAppUser?.userId ?? "");
-      // var theHighlightedProfile =
-      //     await chatController.fetchHighlightedProfile();
-      // highlightedProfile = theHighlightedProfile;
-      // if (theHighlightedProfile?.userId != null) {
-      //   var theExtProfile = await chatController.profileClient
-      //       .getExtendedProfile(theHighlightedProfile?.userId ?? "");
-      //   highlightedExtProfile = theExtProfile;
-      // }
+    // myExtProfile = chatController
+    //     .updateExtProfile(authController.myAppUser?.userId ?? "");
+    // var theHighlightedProfile =
+    //     await chatController.fetchHighlightedProfile();
+    // highlightedProfile = theHighlightedProfile;
+    // if (theHighlightedProfile?.userId != null) {
+    //   var theExtProfile = await chatController.profileClient
+    //       .getExtendedProfile(theHighlightedProfile?.userId ?? "");
+    //   highlightedExtProfile = theExtProfile;
+    // }
     // }
     setState(() {});
   }
@@ -129,23 +123,19 @@ class _MyAppState extends State<MyApp> {
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
       child: MaterialApp(
+        key: ObjectKey(isUserLoggedIn),
         title: 'Chat Line',
         routes: {
-          '/': (context) {
-            if (authController.isLoggedIn != true) {
-              return LoginPage();
-            }
-
-            return const HomePage(
-            );
+          '/home': (context) {
+            return const HomePage();
           },
           '/postsPage': (context) => const PostsPage(),
           '/createPostsPage': (context) => const CreatePostPage(),
-          '/register': (context) => RegisterPage(drawer: widget.drawer),
-          '/login': (context) => LoginPage(drawer: widget.drawer),
+          '/register': (context) => RegisterPage(),
+          '/': (context) => LoginPage(),
           // '/editProfile': (context) => const EditProfilePage(),
-          '/logout': (context) => LogoutPage(drawer: widget.drawer),
-          '/profilesPage': (context) => ProfilesPage(drawer: widget.drawer),
+          '/logout': (context) => LogoutPage(),
+          '/profilesPage': (context) => ProfilesPage(),
           '/profile': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
@@ -193,8 +183,12 @@ class _MyAppState extends State<MyApp> {
           },
         },
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red, brightness: Brightness.light, accentColor: Colors.black,),
-        primaryColor: Colors.red,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.red,
+            brightness: Brightness.light,
+            accentColor: Colors.black,
+          ),
+          primaryColor: Colors.red,
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the

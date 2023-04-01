@@ -1,5 +1,6 @@
 import 'package:chat_line/layout/full_page_layout.dart';
 import 'package:chat_line/models/controllers/auth_inherited.dart';
+import 'package:chat_line/shared_components/logo.dart';
 import 'package:chat_line/shared_components/menus/posts_page_menu.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,9 +76,10 @@ class _PostsPageState extends State<PostsPage> {
         updateMenu: () {},
       ),
       appBar: AppBar(
+        backgroundColor: Colors.white.withOpacity(0.5),
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Posts"),
+        title: Logo(),
       ),
       body: FullPageLayout(
         child: PostThread(

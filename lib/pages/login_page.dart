@@ -1,6 +1,6 @@
+import 'package:chat_line/shared_components/logo.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
 import 'package:chat_line/wrappers/alerts_snackbar.dart';
-import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:chat_line/wrappers/loading_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -10,9 +10,10 @@ import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required, this.drawer});
-
-  final drawer;
+  const LoginPage({
+    super.key,
+    required,
+  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     _loginPassword = '';
     _loginUsername = '';
   }
+
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
@@ -42,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
       print("dependencies changed profile list");
     }
   }
-
 
   void _setUsername(String newUsername) {
     setState(() {
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
 
       _alertSnackbar.showSuccessAlert(
           "${credential.user?.email ?? ""}Logged In", context);
-      Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         if (kDebugMode) {
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         _alertSnackbar.showSuccessAlert(
             "No user found for that email.", context);
 
-        Navigator.pushNamed(context, '/');
+        // Navigator.pushNamed(context, '/');
       } else if (e.code == 'wrong-password') {
         if (kDebugMode) {
           print('Wrong password provided for that user.');
@@ -96,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
         _alertSnackbar.showSuccessAlert(
             "Wrong password provided for that user.", context);
 
-        Navigator.pushNamed(context, '/');
+        // Navigator.pushNamed(context, '/');
       }
     }
   }
@@ -112,16 +113,11 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       floatingActionButton: const LoginMenu(),
-      drawer: widget.drawer,
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.5),
         // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: SizedBox(
-          height: 100,
-          width: 100,
-          child: Image.asset('assets/logo.png'),
-        ),
+        title: Logo(),
       ),
       body: Flex(
         direction: Axis.horizontal,

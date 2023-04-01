@@ -61,13 +61,13 @@ class DefaultAppOptions {
   );
 
   static const AppOptions web = AppOptions(
-    sanityDB: "production",
+    sanityDB: "development",
     imageAssetPrefix: "assets/",
-    blankUrl: "",
-    // blankUrl: "https://placeimg.com/640/480/any",
-    authBaseUrl: 'https://us-central1-the-handsomest-nerd-auth.cloudfunctions.net/app',
-    // authBaseUrl:
-    //     'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    // blankUrl: "",
+    blankUrl: "https://placeimg.com/640/480/any",
+    // authBaseUrl: 'https://us-central1-the-handsomest-nerd-auth.cloudfunctions.net/app',
+    authBaseUrl:
+        'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
   static const AppOptions android = AppOptions(

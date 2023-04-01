@@ -16,42 +16,9 @@ class PostController {
 
   List<Post> postsFuture = [];
 
-  Future<List<Post>> retrievePosts() async {
-    if (kDebugMode) {
-      print("Retrieving Posts");
-    }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null && token != "") {
-      var response;
-      response = await http.get(Uri.parse("$authBaseUrl/get-all-posts"),
-          headers: {"Authorization": ("Bearer $token")});
-
-      var processedResponse;
-      try {
-        processedResponse = jsonDecode(response.body);
-      } catch (err) {
-        if (kDebugMode) {
-          print("err $token ${response.body}");
-        }
-        return [];
-      }
-
-      ChatApiGetProfilePostsResponse responseModelList =
-          ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
-      if (kDebugMode) {
-        print(
-            "retrieve posts Auth api response ${responseModelList.list.length}");
-      }
-      postsFuture = responseModelList.list;
-      return responseModelList.list;
-    }
-    return <Post>[];
-  }
-
   Future<Post?> fetchHighlightedPost() async {
-    var thePosts = await retrievePosts();
+    var thePosts = await getPosts();
     postsFuture = thePosts;
-
 
     if (thePosts != null && thePosts.length > 0) {
       thePosts.removeWhere((element) {
@@ -63,9 +30,9 @@ class PostController {
 
       var rng = Random();
       rng.nextInt(thePosts.length);
-        if (kDebugMode) {
-          print("THe posts are not empty ${thePosts.length}");
-        }
+      if (kDebugMode) {
+        print("THe posts are not empty ${thePosts.length}");
+      }
       if (thePosts.isNotEmpty) {
         return thePosts[rng.nextInt(thePosts.length - 1)];
       }
@@ -75,7 +42,7 @@ class PostController {
   }
 
   refetchPosts() async {
-    return retrievePosts();
+    return getPosts();
   }
 
   PostController.init() {
@@ -92,7 +59,7 @@ class PostController {
         if (kDebugMode) {
           print('postController: User is signed in!');
         }
-        postsFuture = await retrievePosts();
+        postsFuture = await getPosts();
       }
     });
   }

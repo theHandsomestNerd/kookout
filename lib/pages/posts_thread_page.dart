@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 
 
 class PostsThreadPage extends StatefulWidget {
-  const PostsThreadPage({super.key, required this.drawer,
+  const PostsThreadPage({super.key,
     });
-
-  final Widget drawer;
 
   @override
   State<PostsThreadPage> createState() => _PostsThreadPageState();
@@ -65,7 +63,6 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-        drawer: widget.drawer,
         appBar: AppBar(
           // Here we take the value from the LoggedInHomePage object that was created by
           // the App.build method, and use it to set our appbar title.

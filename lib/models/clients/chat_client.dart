@@ -34,12 +34,13 @@ class ChatClient {
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
+      if (processedResponse['profiles'] != null &&
+          processedResponse['profiles'] != "null") {
+        AuthApiProfileListResponse responseModelList =
+            AuthApiProfileListResponse.fromJson(processedResponse['profiles']);
 
-      AuthApiProfileListResponse responseModelList =
-          AuthApiProfileListResponse.fromJson(processedResponse['profiles']);
-
-
-      return responseModelList.list;
+        return responseModelList.list;
+      }
     }
     return <AppUser>[];
   }

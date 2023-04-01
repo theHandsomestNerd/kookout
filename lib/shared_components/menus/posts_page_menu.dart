@@ -79,7 +79,7 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/');
+            Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

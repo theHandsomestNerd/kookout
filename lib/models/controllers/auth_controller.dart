@@ -40,6 +40,7 @@ class AuthController {
     });
 
     if(FirebaseAuth.instance.currentUser != null) {
+      isLoggedIn = true;
       _getMyAppUser().then((user) {
         myAppUser = user;
       });
@@ -99,11 +100,14 @@ class AuthController {
           print('authController: The password provided is too weak.');
         }
         _alertSnackbar.showErrorAlert("The Password is too weak.", context);
+        return Exception("Password is too weak");
       } else if (e.code == 'email-already-in-use') {
         _alertSnackbar.showErrorAlert("Email Address already in use", context);
+        return Exception("Email Address already in use");
       } else if (e.code == 'invalid-email') {
         _alertSnackbar.showErrorAlert(
             "The email aadress is badly formatted.", context);
+        return Exception('invalid-email');
       }
     }
   }

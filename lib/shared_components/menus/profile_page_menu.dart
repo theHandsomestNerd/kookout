@@ -84,7 +84,7 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/');
+            Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

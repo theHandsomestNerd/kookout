@@ -16,7 +16,7 @@ class _LoginMenuState extends State<LoginMenu> {
 
   @override
   didChangeDependencies() async {
-    // super.didChangeDependencies();
+    super.didChangeDependencies();
     myAppUser = AuthInherited.of(context)?.authController?.myAppUser;
     setState(() {});
   }
@@ -42,6 +42,14 @@ class _LoginMenuState extends State<LoginMenu> {
             },
             icon: const Icon(Icons.people),
           ),
+        if (myAppUser != null)
+          ActionButton(
+            tooltip: "Posts",
+            onPressed: () {
+              Navigator.popAndPushNamed(context, '/postsPage');
+            },
+            icon: const Icon(Icons.post_add),
+          ),
         if (myAppUser == null)
           ActionButton(
             tooltip: "Login",
@@ -49,6 +57,14 @@ class _LoginMenuState extends State<LoginMenu> {
               Navigator.popAndPushNamed(context, '/login');
             },
             icon: const Icon(Icons.logout),
+          ),
+        if (myAppUser != null)
+          ActionButton(
+            tooltip: "Home",
+            onPressed: () {
+              Navigator.popAndPushNamed(context, '/home');
+            },
+            icon: const Icon(Icons.home),
           ),
         if (myAppUser == null)
           ActionButton(

@@ -49,7 +49,7 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/');
+            Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LogoutPage extends StatefulWidget {
-  const LogoutPage({super.key, required this.drawer});
+  const LogoutPage({super.key,});
 
-  final Widget drawer;
 
   @override
   State<LogoutPage> createState() => _LogoutPageState();
@@ -22,7 +21,6 @@ class _LogoutPageState extends State<LogoutPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      drawer: widget.drawer,
       appBar: AppBar(
         // Here we take the value from the Logout object that was created by
         // the App.build method, and use it to set our appbar title.

@@ -12,11 +12,9 @@ import '../models/controllers/auth_inherited.dart';
 class ProfilesPage extends StatefulWidget {
   const ProfilesPage(
       {super.key,
-      // required this.authController,
-      required this.drawer});
+      });
 
   // final AuthController authController;
-  final Widget drawer;
 
   @override
   State<ProfilesPage> createState() => _ProfilesPageState();
