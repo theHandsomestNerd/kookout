@@ -83,12 +83,12 @@ class _EditProfileTabState extends State<EditProfileTab> {
     imageToBeUploaded = await _getMyProfileImage(null);
 
     if (theAuthController?.myAppUser?.userId != null) {
-      theChatController?.updateExtProfile((theAuthController?.myAppUser?.userId)!);
+      theChatController
+          ?.updateExtProfile((theAuthController?.myAppUser?.userId)!);
       extProfile = await theChatController?.profileClient
           .getExtendedProfile((theAuthController?.myAppUser?.userId)!);
     }
     setState(() {});
-
   }
 
   _getMyProfileImage(PlatformFile? theFile) {
@@ -108,12 +108,8 @@ class _EditProfileTabState extends State<EditProfileTab> {
       if (kDebugMode) {
         print("profile image is froom db");
       }
-      return NetworkImage(MyImageBuilder()
-              .urlFor(profileImage)
-              // ?.height(350)
-              // .width(350)
-              ?.url() ??
-          "");
+      return NetworkImage(
+          MyImageBuilder().urlFor(profileImage)!.height(350).width(350).url());
     }
 
     if (kDebugMode) {

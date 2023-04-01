@@ -214,6 +214,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            backgroundColor: Colors.red.shade900,
             onPressed: _toggle,
             child: profileImage !=
                     null
@@ -228,7 +229,7 @@ class _ExpandableFabState extends State<ExpandableFab>
                           "",
                     ),
                   )
-                : const Icon(Icons.create),
+                : const Icon(Icons.add),
           ),
         ),
       ),
@@ -295,13 +296,13 @@ class ActionButton extends StatelessWidget {
     return Material(
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
-      color: theme.colorScheme.secondary,
+      color: Colors.red.shade900,
       elevation: 4.0,
       child: IconButton(
         tooltip: tooltip,
         onPressed: onPressed,
         icon: icon,
-        color: theme.colorScheme.onSecondary,
+        color: theme.colorScheme.onPrimary,
       ),
     );
   }
@@ -323,7 +324,7 @@ class FakeItem extends StatelessWidget {
       height: isBig ? 128.0 : 36.0,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        color: Colors.grey.shade300,
+        color: Colors.red.shade900,
       ),
     );
   }

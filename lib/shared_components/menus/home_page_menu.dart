@@ -22,6 +22,16 @@ enum ProfileMenuOptions {
 }
 
 class _HomePageMenuState extends State<HomePageMenu> {
+  var profileImage = null;
+
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    profileImage =
+        AuthInherited.of(context)?.authController?.myAppUser?.profileImage;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
@@ -60,19 +70,17 @@ class _HomePageMenuState extends State<HomePageMenu> {
           onPressed: () {
             Navigator.pushNamed(context, '/myProfile');
           },
-          icon: CircleAvatar(
-            backgroundImage: NetworkImage(
-              MyImageBuilder()
-                      .urlFor(AuthInherited.of(context)
-                          ?.authController
-                          ?.myAppUser
-                          ?.profileImage)
-                      ?.height(100)
-                      .width(100)
-                      .url() ??
-                  "",
-            ),
-          ),
+          icon: profileImage != null
+              ? CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    MyImageBuilder()
+                        .urlFor(profileImage)!
+                        .height(100)
+                        .width(100)
+                        .url(),
+                  ),
+                )
+              : CircleAvatar(),
         ),
       ],
     );

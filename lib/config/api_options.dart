@@ -45,52 +45,72 @@ class DefaultAppOptions {
   }
 
   static const AppOptions local = AppOptions(
-    authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    blankUrl: "https://placeimg.com/640/480/any",
+    sanityDB: "production",
+    imageAssetPrefix: "assets/",
+    authBaseUrl:
+        'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
   static const AppOptions macos = AppOptions(
-    authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    sanityDB: "production",
+    blankUrl: "https://placeimg.com/640/480/any",
+    imageAssetPrefix: "assets/",
+    authBaseUrl:
+        'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
   static const AppOptions web = AppOptions(
-    // authBaseUrl: 'https://us-central1-the-handsomest-nerd-auth.cloudfunctions.net/app',
-    authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    sanityDB: "production",
+    imageAssetPrefix: "assets/",
+    blankUrl: "",
+    // blankUrl: "https://placeimg.com/640/480/any",
+    authBaseUrl: 'https://us-central1-the-handsomest-nerd-auth.cloudfunctions.net/app',
+    // authBaseUrl:
+    //     'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
   static const AppOptions android = AppOptions(
-    authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    imageAssetPrefix: "assets/",
+    sanityDB: "production",
+    blankUrl: "https://placeimg.com/640/480/any",
+    authBaseUrl:
+        'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
   static const AppOptions ios = AppOptions(
-    authBaseUrl: 'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
+    imageAssetPrefix: "assets/",
+    sanityDB: "production",
+    blankUrl: "https://placeimg.com/640/480/any",
+    authBaseUrl:
+        'http://127.0.0.1:5001/the-handsomest-nerd-auth/us-central1/app',
   );
 
-  // static const FirebaseOptions android = FirebaseOptions(
-  //   apiKey: 'AIzaSyC5FkJAr9E4EmbMjKZNuTmG7eFWQJk8Y-8',
-  //   appId: '1:853598734701:android:c6f4eac320608c54177264',
-  //   messagingSenderId: '853598734701',
-  //   projectId: 'the-handsomest-nerd-auth',
-  //   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-  // );
-  //
-  // static const FirebaseOptions ios = FirebaseOptions(
-  //   apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
-  //   appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
-  //   messagingSenderId: '853598734701',
-  //   projectId: 'the-handsomest-nerd-auth',
-  //   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-  //   iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
-  //   iosBundleId: 'com.thehandsomestnerd.chatLine',
-  // );
-  //
-  // static const FirebaseOptions macos = FirebaseOptions(
-  //   apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
-  //   appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
-  //   messagingSenderId: '853598734701',
-  //   projectId: 'the-handsomest-nerd-auth',
-  //   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-  //   iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
-  //   iosBundleId: 'com.thehandsomestnerd.chatLine',
-  // );
+// static const FirebaseOptions android = FirebaseOptions(
+//   apiKey: 'AIzaSyC5FkJAr9E4EmbMjKZNuTmG7eFWQJk8Y-8',
+//   appId: '1:853598734701:android:c6f4eac320608c54177264',
+//   messagingSenderId: '853598734701',
+//   projectId: 'the-handsomest-nerd-auth',
+//   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
+// );
+//
+// static const FirebaseOptions ios = FirebaseOptions(
+//   apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
+//   appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
+//   messagingSenderId: '853598734701',
+//   projectId: 'the-handsomest-nerd-auth',
+//   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
+//   iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
+//   iosBundleId: 'com.thehandsomestnerd.chatLine',
+// );
+//
+// static const FirebaseOptions macos = FirebaseOptions(
+//   apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
+//   appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
+//   messagingSenderId: '853598734701',
+//   projectId: 'the-handsomest-nerd-auth',
+//   storageBucket: 'the-handsomest-nerd-auth.appspot.com',
+//   iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
+//   iosBundleId: 'com.thehandsomestnerd.chatLine',
+// );
 }
-

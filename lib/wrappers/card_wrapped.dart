@@ -13,6 +13,11 @@ class CardWrapped extends StatelessWidget {
       child: SizedBox(
         height: height ?? 400.0,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
           clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: const EdgeInsets.all(32.0),

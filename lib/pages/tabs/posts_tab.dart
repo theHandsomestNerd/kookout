@@ -28,16 +28,15 @@ class _PostsTabState extends State<PostsTab> {
   List<Post> _postsList = [];
   ImageUploader? imageUploader;
   AuthController? authController;
-  final PostController postController = PostController.init();
+  PostController? postController;
 
   @override
   initState() {
     super.initState();
     imageUploader = ImageUploaderImpl();
-
-    _getPosts().then((listOfPosts) {
-      _postsList = listOfPosts;
-    });
+    // _getPosts().then((listOfPosts) {
+    //   _postsList = listOfPosts;
+    // });
   }
 
   @override
@@ -46,6 +45,7 @@ class _PostsTabState extends State<PostsTab> {
     AuthController? theAuthController =
         AuthInherited.of(context)?.authController;
     authController = theAuthController;
+    postController = AuthInherited.of(context)?.postController;
     _postsList = await _getPosts();
     setState(() {});
     if (kDebugMode) {
@@ -54,9 +54,9 @@ class _PostsTabState extends State<PostsTab> {
   }
 
   Future<List<Post>> _getPosts() async {
-    var thePosts = await postController.getPosts();
+    var thePosts = await postController?.getPosts();
 
-    return thePosts;
+    return thePosts ?? <Post>[];
   }
 
   String? _postBody;
@@ -71,7 +71,7 @@ class _PostsTabState extends State<PostsTab> {
   _makePost(context) async {
     String? postResponse;
 
-    postResponse = await postController.createPost(_postBody ?? "",
+    postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
 
     return postResponse;

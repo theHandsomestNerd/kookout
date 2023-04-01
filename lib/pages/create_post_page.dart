@@ -25,7 +25,7 @@ class CreatePostPage extends StatefulWidget {
 class _CreatePostPageState extends State<CreatePostPage> {
   late ImageUploader? imageUploader;
   AuthController? authController;
-  final PostController postController = PostController.init();
+  PostController? postController;
 
   String? _postBody;
   bool? _isPosting;
@@ -45,6 +45,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
     AuthController? theAuthController =
         AuthInherited.of(context)?.authController;
     authController = theAuthController;
+    PostController? thePostController =
+        AuthInherited.of(context)?.postController;
+    postController = thePostController;
+
     setState(() {});
   }
 
@@ -57,10 +61,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
   _makePost(context) async {
     String? postResponse;
 
-    postResponse = await postController.createPost(_postBody ?? "",
+    postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
 
-    return postResponse;
+    return postResponse ?? "FAIL";
   }
 
   _getMyProfileImage(PlatformFile? theFile) {
@@ -102,7 +106,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             AppImageUploader(
               text: "Change Main Post Photo",
               imageUploader: imageUploader!,
-              uploadImage: (uploader){
+              uploadImage: (uploader) {
                 imageUploader = uploader;
               },
             ),

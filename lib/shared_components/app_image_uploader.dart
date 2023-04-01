@@ -28,7 +28,7 @@ class AppImageUploader extends StatefulWidget {
 
 class _AppImageUploaderState extends State<AppImageUploader> {
   AuthController? authController;
-  final PostController postController = PostController.init();
+  PostController? postController;
 
   var imageToBeUploaded = null;
   late SanityImage? profileImage = null;

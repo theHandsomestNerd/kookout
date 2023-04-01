@@ -25,7 +25,7 @@ class _PostsPageState extends State<PostsPage> {
   List<Post> _postsList = [];
   ImageUploader? imageUploader;
   AuthController? authController;
-  final PostController postController = PostController.init();
+  PostController? postController;
 
   @override
   initState() {
@@ -42,7 +42,10 @@ class _PostsPageState extends State<PostsPage> {
     super.didChangeDependencies();
     AuthController? theAuthController =
         AuthInherited.of(context)?.authController;
+    PostController? thePostController =
+        AuthInherited.of(context)?.postController;
     authController = theAuthController;
+    postController = thePostController;
     _postsList = await _getPosts();
     setState(() {});
     // if (kDebugMode) {
@@ -51,13 +54,12 @@ class _PostsPageState extends State<PostsPage> {
   }
 
   Future<List<Post>> _getPosts() async {
-    var thePosts = await postController.getPosts();
+    var thePosts = await postController?.getPosts();
     if (kDebugMode) {
       print("posts $thePosts");
     }
-    return thePosts;
+    return thePosts ?? [];
   }
-
 
   @override
   Widget build(BuildContext context) {

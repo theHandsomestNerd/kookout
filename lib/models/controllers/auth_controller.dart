@@ -21,43 +21,43 @@ class AuthController {
   AppUser? myAppUser = null;
 
   AuthController.init() {
-    if(FirebaseAuth.instance.currentUser != null) {
-      _getMyAppUser().then((user) {
-        myAppUser = user;
-      });
-
-      _getLoggedInUser().then((user) {
-        loggedInUser = user;
-        if(user != null){
-          isLoggedIn = true;
-        } else {
-          isLoggedIn = false;
-        }
-      });
-    } else {
-      isLoggedIn = false;
-      myAppUser = null;
-      loggedInUser = null;
-    }
-
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
           print('authController: User is currently signed out!');
         }
         isLoggedIn = false;
+        loggedInUser = null;
+        myAppUser = null;
       } else {
         if (kDebugMode) {
           print('authController: User is signed in!');
         }
         isLoggedIn = true;
-      }
-      loggedInUser = await _getLoggedInUser();
-      // get sanity user
-      if(loggedInUser?.uid != myAppUser?.userId || myAppUser == null) {
+        loggedInUser = await _getLoggedInUser();
         myAppUser = await _getMyAppUser();
       }
     });
+
+    if(FirebaseAuth.instance.currentUser != null) {
+      _getMyAppUser().then((user) {
+        myAppUser = user;
+      });
+
+      _getLoggedInUser().then((user) {
+        if(user != null){
+          isLoggedIn = true;
+        } else {
+          isLoggedIn = false;
+          myAppUser = null;
+        }
+        loggedInUser = user;
+      });
+    } else {
+      isLoggedIn = false;
+      myAppUser = null;
+      loggedInUser = null;
+    }
   }
 
   registerUser(String username, String password, BuildContext context) async {

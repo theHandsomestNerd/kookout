@@ -16,7 +16,7 @@ class _LoginMenuState extends State<LoginMenu> {
 
   @override
   didChangeDependencies() async {
-    super.didChangeDependencies();
+    // super.didChangeDependencies();
     myAppUser = AuthInherited.of(context)?.authController?.myAppUser;
     setState(() {});
   }

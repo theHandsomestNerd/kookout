@@ -66,7 +66,7 @@ class _LogoutPageState extends State<LogoutPage> {
                       //         : MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
                         FirebaseAuth.instance.signOut();
-                        Navigator.popAndPushNamed(context, '/');
+                        Navigator.popAndPushNamed(context, '/login');
                       },
                       child: const Text("Logout"),
                     ),

@@ -16,7 +16,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'config/firebase_options.dart';
+import 'models/app_user.dart';
 import 'models/controllers/auth_inherited.dart';
+import 'models/extended_profile.dart';
+import 'models/post.dart';
 import 'pages/login_page.dart';
 
 // import '../../platform_dependent/image_uploader.dart'
@@ -34,7 +37,8 @@ Future<void> main() async {
 
   if (kDebugMode) {
     //Emulator setup
-    await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);  //Error is thrown here
+    await FirebaseAuth.instance
+        .useAuthEmulator('127.0.0.1', 9099); //Error is thrown here
     // FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
     // FirebaseDatabase.instance.useDatabaseEmulator('127.0.0.1', 9000);
     // await FirebaseStorage.instance.useStorageEmulator('127.0.0.1', 9199);
@@ -71,15 +75,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var authController = AuthController.init();
   var chatController = ChatController.init();
+  var postController = PostController.init();
   var myAppUser = null;
   var myLoggedInUser = null;
-  var myExtProfile = null;
+  // var myExtProfile = null;
+
+  bool isUserLoggedIn = false;
+
 
   @override
   void initState() {
     super.initState();
+    isUserLoggedIn = authController.isLoggedIn;
 
-    myExtProfile = chatController.myExtProfile;
+    // myExtProfile = chatController.myExtProfile;
     if (kDebugMode) {
       print("authcontroller myAppUser $myAppUser");
 
@@ -90,13 +99,24 @@ class _MyAppState extends State<MyApp> {
   String id = "";
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies()  {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    var theChatController = AuthInherited.of(context)?.chatController;
-
-    myExtProfile = theChatController?.updateExtProfile(authController.myAppUser?.userId??"");
-
+    isUserLoggedIn = authController.isLoggedIn;
+    // var profiles = await theChatController?.profileClient.fetchProfiles();
+    // if (authController.myAppUser != null) {
+      // myExtProfile = chatController
+      //     .updateExtProfile(authController.myAppUser?.userId ?? "");
+      // var theHighlightedProfile =
+      //     await chatController.fetchHighlightedProfile();
+      // highlightedProfile = theHighlightedProfile;
+      // if (theHighlightedProfile?.userId != null) {
+      //   var theExtProfile = await chatController.profileClient
+      //       .getExtendedProfile(theHighlightedProfile?.userId ?? "");
+      //   highlightedExtProfile = theExtProfile;
+      // }
+    // }
+    setState(() {});
   }
 
   // This widget is the root of your application.
@@ -105,14 +125,22 @@ class _MyAppState extends State<MyApp> {
     return AuthInherited(
       authController: authController,
       chatController: chatController,
+      postController: postController,
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
       child: MaterialApp(
         title: 'Chat Line',
         routes: {
-          '/': (context) => HomePage( postController: PostController.init(),),
-          '/postsPage':(context) => const PostsPage(),
-          '/createPostsPage':(context) => const CreatePostPage(),
+          '/': (context) {
+            if (authController.isLoggedIn != true) {
+              return LoginPage();
+            }
+
+            return const HomePage(
+            );
+          },
+          '/postsPage': (context) => const PostsPage(),
+          '/createPostsPage': (context) => const CreatePostPage(),
           '/register': (context) => RegisterPage(drawer: widget.drawer),
           '/login': (context) => LoginPage(drawer: widget.drawer),
           // '/editProfile': (context) => const EditProfilePage(),
@@ -129,11 +157,11 @@ class _MyAppState extends State<MyApp> {
               theId = authController.myAppUser?.userId.toString() ?? "";
             }
 
-            var thisProfile =null;
+            var thisProfile = null;
             for (var element in chatController.profileList) {
-                if(element.userId == theId) {
-                  thisProfile = element;
-                }
+              if (element.userId == theId) {
+                thisProfile = element;
+              }
             }
 
             return SoloProfilePage(
@@ -144,9 +172,9 @@ class _MyAppState extends State<MyApp> {
           },
           '/myProfile': (context) {
             var theId = authController.myAppUser?.userId.toString() ?? "";
-            var thisProfile =null;
+            var thisProfile = null;
             chatController.profileList.forEach((element) {
-              if(element.userId == theId) {
+              if (element.userId == theId) {
                 thisProfile = element;
               }
             });
@@ -160,11 +188,13 @@ class _MyAppState extends State<MyApp> {
           //     drawer: widget.drawer,
           //   );
           // },
-        '/settings': (context) {
+          '/settings': (context) {
             return const SettingsPage();
           },
         },
         theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red, brightness: Brightness.light, accentColor: Colors.black,),
+        primaryColor: Colors.red,
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -182,7 +212,7 @@ class _MyAppState extends State<MyApp> {
             bodyLarge: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
             bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),
-          primarySwatch: Colors.grey,
+          // primarySwatch: Colors.grey,
         ),
       ),
     );

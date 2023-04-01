@@ -13,7 +13,12 @@ class LoadingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: Colors.red,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      color: Theme.of(context).colorScheme.secondary,
       disabledColor: Colors.black12,
       textColor: Colors.white,
       onPressed: isDisabled == true ? null : action,
@@ -22,17 +27,18 @@ class LoadingButton extends StatelessWidget {
         width: 200,
         child: isLoading == true
             ? Flex(
-          direction: Axis.vertical,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),]
-            )
+                direction: Axis.vertical,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                    SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ])
             : Flex(
                 direction: Axis.vertical,
                 mainAxisAlignment: MainAxisAlignment.center,

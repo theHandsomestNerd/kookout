@@ -86,11 +86,11 @@ class PostController {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
-          print('chatController: User is currently signed out!');
+          print('postController: User is currently signed out!');
         }
       } else {
         if (kDebugMode) {
-          print('chatController: User is signed in!');
+          print('postController: User is signed in!');
         }
         postsFuture = await retrievePosts();
       }

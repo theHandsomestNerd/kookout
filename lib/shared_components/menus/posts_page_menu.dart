@@ -17,6 +17,16 @@ class PostsPageMenu extends StatefulWidget {
 enum ProfileMenuOptions { MY_POSTS, POSTS, ADD_POST, HOME }
 
 class _PostsPageMenuState extends State<PostsPageMenu> {
+  var profileImage = null;
+
+  @override
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    profileImage =
+        AuthInherited.of(context)?.authController?.myAppUser?.profileImage;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
@@ -41,19 +51,17 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           onPressed: () {
             Navigator.pushNamed(context, '/myProfile');
           },
-          icon: CircleAvatar(
-            backgroundImage: NetworkImage(
-              MyImageBuilder()
-                      .urlFor(AuthInherited.of(context)
-                          ?.authController
-                          ?.myAppUser
-                          ?.profileImage)
-                      ?.height(100)
-                      .width(100)
-                      .url() ??
-                  "",
-            ),
-          ),
+          icon: profileImage != null
+              ? CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    MyImageBuilder()
+                        .urlFor(profileImage)!
+                        .height(100)
+                        .width(100)
+                        .url(),
+                  ),
+                )
+              : Icon(Icons.add),
         ),
         ActionButton(
           tooltip: "Posts",

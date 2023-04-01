@@ -1,48 +1,35 @@
+import 'package:chat_line/config/api_options.dart';
 import 'package:chat_line/layout/full_page_layout.dart';
-import 'package:chat_line/models/controllers/auth_inherited.dart';
-import 'package:chat_line/models/controllers/post_controller.dart';
 import 'package:chat_line/models/extended_profile.dart';
 import 'package:chat_line/models/post.dart';
 import 'package:chat_line/sanity/image_url_builder.dart';
 import 'package:chat_line/shared_components/menus/home_page_menu.dart';
 import 'package:chat_line/shared_components/menus/login_menu.dart';
 import 'package:chat_line/wrappers/card_with_actions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
-import '../models/controllers/chat_controller.dart';
+import '../models/controllers/auth_inherited.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.postController});
+  const HomePage({
+    super.key,
+    this.isUserLoggedIn,
+  });
 
-  final PostController postController;
+  final bool? isUserLoggedIn;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  AppUser? highlightedProfile = null;
-  ExtendedProfile? highlightedExtProfile = null;
-  Post? highlightedPost = null;
-  late ChatController? chatController = null;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    widget.postController.fetchHighlightedPost().then((value) {
-      if (kDebugMode) {
-        print("highlighted post ${value?.mainImage}");
-      }
-      highlightedPost = value;
-    });
-
-    // highlightedProfile = chatController?.profileList[0];
-  }
-
+  Post? highlightedPost;
+  AppUser? highlightedProfile;
+  ExtendedProfile? highlightedExtProfile;
+  bool isPostLoading = false;
+  bool isProfileLoading = false;
+  bool isExtProfileLoading = false;
   bool isUserLoggedIn = false;
 
   @override
@@ -50,25 +37,44 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
-    isUserLoggedIn = theAuthController?.myAppUser != null;
-    // var profiles = await theChatController?.profileClient.fetchProfiles();
-    chatController = theChatController;
-    if (theAuthController?.myAppUser != null) {
-      var theHighlightedProfile =
-          await theChatController?.fetchHighlightedProfile();
-      highlightedProfile = theHighlightedProfile;
-      if (theHighlightedProfile?.userId != null) {
-        if (kDebugMode) {
-          print("Getting extended profile ${theHighlightedProfile?.userId}");
-        }
-        var theExtProfile = await theChatController?.profileClient
-            .getExtendedProfile(theHighlightedProfile?.userId ?? "");
-        highlightedExtProfile = theExtProfile;
+    var thePostController = AuthInherited.of(context)?.postController;
 
-        if (kDebugMode) {
-          print("Got extended profile $theExtProfile");
-        }
-      }
+      isUserLoggedIn = theAuthController?.isLoggedIn ?? false;
+    if (isPostLoading != true && highlightedPost == null) {
+      setState(() {
+        isPostLoading = true;
+      });
+      thePostController?.fetchHighlightedPost().then((thePost) {
+        setState(() {
+          highlightedPost = thePost;
+          isPostLoading = false;
+        });
+      });
+    }
+    if (isProfileLoading != true && highlightedProfile == null) {
+      setState(() {
+        isProfileLoading = true;
+      });
+      theChatController?.fetchHighlightedProfile().then((theProfile) {
+        setState(() {
+          highlightedProfile = theProfile;
+          isProfileLoading = false;
+        });
+      });
+    }
+
+    if (isExtProfileLoading != true && highlightedExtProfile == null) {
+      setState(() {
+        isExtProfileLoading = true;
+      });
+      theChatController?.profileClient
+          .getExtendedProfile(highlightedProfile?.userId ?? "")
+          .then((theProfile) {
+        setState(() {
+          highlightedExtProfile = theProfile;
+          isExtProfileLoading = false;
+        });
+      });
     }
     setState(() {});
   }
@@ -83,11 +89,11 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: !isUserLoggedIn
-          ? const LoginMenu()
-          : HomePageMenu(
+      floatingActionButton: isUserLoggedIn == true
+          ? HomePageMenu(
               updateMenu: () => {},
-            ),
+            )
+          : const LoginMenu(),
       appBar: AppBar(
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -97,100 +103,131 @@ class _HomePageState extends State<HomePage> {
         child: Flex(
           direction: Axis.vertical,
           children: [
-            Expanded(
-              child: CardWithActions(
-                key: ObjectKey(highlightedProfile),
-                locationRow: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text("${highlightedExtProfile?.age ?? "99"} yrs",
-                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),),),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text(
-                            "${highlightedExtProfile?.height?.feet ?? "9"}' ${highlightedExtProfile?.height?.inches ?? "9"}\"",
-                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),)),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text("${highlightedExtProfile?.weight?? "999"} lbs",
-                            style: Theme.of(context).textTheme.titleSmall?.merge(TextStyle(color: Colors.white.withOpacity(.85)),),),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+            highlightedProfile != null
+                ? Expanded(
+                    child: CardWithActions(
+                      locationRow: Flex(
+                        direction: Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.pin_drop,
-                            size: 30.0,
-                            color: Colors.white.withOpacity(.8),
-                            semanticLabel: "Location",
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: Text(
+                                "${highlightedExtProfile?.age ?? "99"} yrs",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.merge(
+                                      TextStyle(
+                                          color: Colors.white.withOpacity(.85)),
+                                    ),
+                              ),
+                            ),
                           ),
-                          const Text(
-                            '300 mi.',
-                            style: TextStyle(color: Colors.white),
+                          Expanded(
+                            flex: 1,
+                            child: Center(
+                              child: Text(
+                                  "${highlightedExtProfile?.height?.feet ?? "9"}' ${highlightedExtProfile?.height?.inches ?? "9"}\"",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.merge(
+                                        TextStyle(
+                                            color:
+                                                Colors.white.withOpacity(.85)),
+                                      )),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: Text(
+                                "${highlightedExtProfile?.weight ?? "999"} lbs",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.merge(
+                                      TextStyle(
+                                          color: Colors.white.withOpacity(.85)),
+                                    ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(
+                                  Icons.pin_drop,
+                                  size: 30.0,
+                                  color: Colors.white.withOpacity(.8),
+                                  semanticLabel: "Location",
+                                ),
+                                const Text(
+                                  '300 mi.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
+                      image: highlightedProfile?.profileImage != null
+                          ? NetworkImage(MyImageBuilder()
+                              .urlFor(highlightedProfile?.profileImage!)!
+                              .url())
+                          : NetworkImage(
+                              DefaultAppOptions.currentPlatform.blankUrl),
+                      action1Text:
+                          "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
+                      action2Text: 'All Profiles',
+                      action1OnPressed: () {
+                        if (highlightedProfile?.userId != null) {
+                          Navigator.pushNamed(context, '/profile',
+                              arguments: {"id": highlightedProfile?.userId});
+                        }
+                      },
+                      action2OnPressed: () {
+                        Navigator.pushNamed(context, '/profilesPage');
+                      },
                     ),
-                  ],
-                ),
-                image: highlightedProfile?.profileImage != null
-                    ? NetworkImage(MyImageBuilder()
-                        .urlFor(highlightedProfile?.profileImage!)!
-                        .url())
-                    : const NetworkImage(""),
-                action1Text:
-                    "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
-                action2Text: 'All Profiles',
-                action1OnPressed: () {
-                  if (highlightedProfile?.userId != null) {
-                    Navigator.pushNamed(context, '/profile',
-                        arguments: {"id": highlightedProfile?.userId});
-                  }
-                },
-                action2OnPressed: () {
-                  Navigator.pushNamed(context, '/profilesPage');
-                },
-              ),
-            ),
-            Expanded(
-              child: CardWithActions(
-                authorImage: NetworkImage(MyImageBuilder().urlFor(highlightedPost?.author?.profileImage)?.url() ?? ""),
-                key: ObjectKey(highlightedPost),
-                when:highlightedPost?.publishedAt,
-                locationRow: null,
-                caption:
-                    "${highlightedPost?.author?.displayName}: ${highlightedPost?.body}",
-                image: highlightedPost?.mainImage != null
-                    ? NetworkImage(MyImageBuilder()
-                        .urlFor(highlightedPost?.mainImage!)!
-                        .url())
-                    : const NetworkImage(""),
-                action1Text: highlightedPost?.author?.displayName,
-                action2Text: 'All Posts',
-                action1OnPressed: () {
-                  if (highlightedPost?.id != null) {
-                    Navigator.pushNamed(context, '/post',
-                        arguments: {"id": highlightedPost?.id});
-                  }
-                },
-                action2OnPressed: () {
-                  Navigator.pushNamed(context, '/postsPage');
-                },
-              ),
-            ),
+                  )
+                : Expanded(child: Center(child: CircularProgressIndicator())),
+            highlightedPost != null
+                ? Expanded(
+                    child: CardWithActions(
+                      author: highlightedPost?.author,
+                      authorImageUrl: MyImageBuilder()
+                              .urlFor(highlightedPost?.author?.profileImage)
+                              ?.url() ??
+                          "",
+                      when: highlightedPost?.publishedAt,
+                      locationRow: null,
+                      caption:
+                          "${highlightedPost?.body}",
+                      image: highlightedPost?.mainImage != null
+                          ? NetworkImage(MyImageBuilder()
+                              .urlFor(highlightedPost?.mainImage!)!
+                              .url())
+                          : NetworkImage(
+                              DefaultAppOptions.currentPlatform.blankUrl),
+                      action1Text: highlightedPost?.author?.displayName,
+                      action2Text: 'All Posts',
+                      action1OnPressed: () {
+                        if (highlightedPost?.id != null) {
+                          Navigator.pushNamed(context, '/post',
+                              arguments: {"id": highlightedPost?.id});
+                        }
+                      },
+                      action2OnPressed: () {
+                        Navigator.pushNamed(context, '/postsPage');
+                      },
+                    ),
+                  )
+                : Expanded(child: Center(child: CircularProgressIndicator())),
           ],
         ),
       ),

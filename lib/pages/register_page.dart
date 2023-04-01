@@ -6,16 +6,18 @@ import 'package:flutter/material.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/app_drawer.dart';
 import '../shared_components/menus/login_menu.dart';
+import '../wrappers/loading_button.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
     super.key,
+
     // required this.authController,
     required,
     this.drawer,
   });
 
-  // final AuthController authController;
+// final AuthController authController;
   final AppDrawer? drawer;
 
   @override
@@ -61,7 +63,9 @@ class _RegisterPageState extends State<RegisterPage> {
       // if (kDebugMode) {
       //   print("authcontroller ${AuthInherited.of(context)?.authController}");
       // }
-      await AuthInherited.of(context)?.authController?.registerUser(_loginUsername, _loginPassword, context);
+      await AuthInherited.of(context)
+          ?.authController
+          ?.registerUser(_loginUsername, _loginPassword, context);
       // if (kDebugMode) {
       //   print(myAppUser);
       // }
@@ -72,7 +76,8 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
 
-    AlertSnackbar().showSuccessAlert('Account Created...Take a second to Fill in your profile.', context);
+    AlertSnackbar().showSuccessAlert(
+        'Account Created...Take a second to Fill in your profile.', context);
 
     return;
   }
@@ -90,93 +95,107 @@ class _RegisterPageState extends State<RegisterPage> {
       floatingActionButton: const LoginMenu(),
       drawer: widget.drawer,
       appBar: AppBar(
-        // Here we take the value from the RegisterPage object that was created by
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Register"),
+        title: SizedBox(
+          height: 100,
+          width: 100,
+          child: Image.asset('assets/logo.png'),
+        ),
       ),
-      body: CardWrapped(
-        height: 450,
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Register',
-              ),
-              SizedBox(
-                width: 450,
-                child: Column(
+      body: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/221.jpg',
+                    repeat: ImageRepeat.repeat,
+                  ),
+                ),
+                Flex(
+                  direction: Axis.horizontal,
                   children: [
-                    TextFormField(
-                      key: ObjectKey("$_loginUsername$_loginPassword-user"),
-                      autofocus:
-                          _loginPassword.isEmpty && _loginUsername.isNotEmpty,
-                      initialValue: _loginUsername,
-                      onChanged: (e) {
-                        _setUsername(e);
-                      },
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Username',
-                      ),
-                    ),
-                    TextFormField(
-                      key: ObjectKey("$_loginPassword$_loginUsername-pass"),
-                      autofocus: _loginPassword.isNotEmpty &&
-                          _loginUsername.isNotEmpty,
-                      initialValue: _loginPassword,
-                      onChanged: (e) {
-                        _setPassword(e);
-                      },
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Password',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 16,
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 150,
+                              width: 300,
+                              child: Image.asset('assets/logo.png'),
+                            ),
+                            SizedBox(
+                              width: 350,
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    key: ObjectKey(
+                                        "$_loginUsername$_loginPassword-user"),
+                                    initialValue: _loginUsername,
+                                    onChanged: (e) {
+                                      _setUsername(e);
+                                    },
+                                    decoration: const InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white70,
+                                      prefixIcon: Icon(Icons.person),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0),
+                                        ),
+                                      ),
+                                      labelText: 'Username',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  TextFormField(
+                                    key: ObjectKey(
+                                        "$_loginPassword$_loginUsername-pass"),
+                                    initialValue: _loginPassword,
+                                    onChanged: (e) {
+                                      _setPassword(e);
+                                    },
+                                    decoration: const InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white70,
+                                      prefixIcon: Icon(Icons.password),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0),
+                                        ),
+                                      ),
+                                      labelText: 'Password',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  LoadingButton(
+                                    action: () {
+                                      _registerUser(context);
+                                    },
+                                    text: "Register",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        MaterialButton(
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          // style: ButtonStyle(
-                          //     backgroundColor: _isMenuItemsOnly
-                          //         ? MaterialStateProperty.all(Colors.red)
-                          //         : MaterialStateProperty.all(Colors.white)),
-                          onPressed: () {
-                            _registerUser(context);
-                          },
-                          child: const Text("Register"),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

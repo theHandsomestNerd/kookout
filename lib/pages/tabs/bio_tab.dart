@@ -78,8 +78,8 @@ class _BioTabState extends State<BioTab> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
-    extProfile = await theChatController?.profileClient
-        .getExtendedProfile(widget.id);
+    extProfile =
+        await theChatController?.profileClient.getExtendedProfile(widget.id);
     profileClient = theChatController?.profileClient;
     chatController = theChatController;
     setState(() {});
@@ -95,7 +95,6 @@ class _BioTabState extends State<BioTab> {
     if (widget.profileLikedByMe == null) {
       likeResponse = await profileClient?.likeProfile(widget.id);
     } else {
-
       if (widget.profileLikedByMe != null) {
         isUnlike = true;
         likeResponse = await profileClient?.unlikeProfile(
@@ -119,7 +118,6 @@ class _BioTabState extends State<BioTab> {
     if (widget.profileFollowedByMe == null) {
       followResponse = await profileClient?.followProfile(widget.id);
     } else {
-
       if (widget.profileFollowedByMe != null) {
         isUnfollow = true;
         followResponse = await profileClient?.unfollowProfile(
@@ -177,17 +175,15 @@ class _BioTabState extends State<BioTab> {
                                     tag: widget.thisProfile?.userId ??
                                         "default-image",
                                     child: SizedBox(
-                                        height: 350.0,
-                                        width: 350.0,
+                                      height: 350.0,
+                                      width: 350.0,
                                       child: CardWithBackground(
                                         width: 350,
                                         height: 350,
                                         image: NetworkImage(MyImageBuilder()
-                                                .urlFor(widget.thisProfile
-                                                        ?.profileImage ??
-                                                    "")
-                                                ?.url() ??
-                                            ""),
+                                            .urlFor(widget
+                                                .thisProfile?.profileImage!)!
+                                            .url()),
                                         child: const SizedBox(
                                           height: 350.0,
                                           width: 350.0,

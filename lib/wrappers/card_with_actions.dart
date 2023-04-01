@@ -1,3 +1,5 @@
+import 'package:chat_line/models/app_user.dart';
+import 'package:chat_line/shared_components/user_block_text.dart';
 import 'package:chat_line/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -9,27 +11,30 @@ class CardWithActions extends StatelessWidget {
 
   final action1OnPressed;
   final ImageProvider image;
-  final ImageProvider? authorImage;
+  final String? authorImageUrl;
 
   final String? action2Text;
 
   final action2OnPressed;
   final infoCard;
   final DateTime? when;
+  final authorId;
+  final AppUser? author;
 
-  const CardWithActions({
-    super.key,
-    this.when,
-    this.caption,
-    this.action1Text,
-    this.action1OnPressed,
-    this.action2Text,
-    this.action2OnPressed,
-    this.locationRow,
-    this.infoCard,
-    required this.image,
-    this.authorImage,
-  });
+  const CardWithActions(
+      {super.key,
+      this.when,
+      this.caption,
+      this.action1Text,
+      this.action1OnPressed,
+      this.action2Text,
+      this.action2OnPressed,
+      this.locationRow,
+      this.infoCard,
+      required this.image,
+      this.authorImageUrl,
+      this.authorId,
+      this.author});
 
   @override
   Widget build(BuildContext context) {
@@ -144,57 +149,80 @@ class CardWithActions extends StatelessWidget {
                               child: Flex(
                                 direction: Axis.horizontal,
                                 children: [
-                                  if (authorImage != null)
-                                    const Expanded(
-                                      flex: 2,
+                                  if (authorImageUrl != null)
+                                    Flexible(
                                       child: SizedBox(
-                                        height: 70,
-                                      ),
-                                    ),
-                                  Flexible(
-                                    flex: 8,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          if (when != null)
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text(timeago.format(when!)),
-                                              ],
-                                            ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                        // height: 80,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              78.0, 8.0, 8.0, 8.0),
+                                          child: Column(
                                             children: [
-                                              Text(
-                                                caption!,
+                                              if (when != null)
+                                                Flex(
+                                                  direction: Axis.horizontal,
+                                                  children: [
+                                                    Expanded(
+                                                        child: author != null
+                                                            ? UserBlockText(
+                                                                hideImage: true,
+                                                                user: author)
+                                                            : Text("")),
+                                                    Expanded(
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          children: [
+                                                            Text(timeago
+                                                                .format(when!)),
+                                                          ],
+                                                        )),
+                                                  ],
+                                                ),
+                                              Flex(
+                                                direction: Axis.horizontal,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+
+                                                      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                                      child: Text(
+                                                        caption!,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
+                                        ),
                                       ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            if (authorImageUrl != null &&
+                                (authorImageUrl?.length ?? -1) > 0)
+                              Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Flexible(
+                                    flex: 2,
+                                    child: SizedBox(
+                                      height: 70,
+                                      width: 70,
+                                      child: CardWithBackground(
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20)),
+                                            //set border radius more than 50% of height and width to make circle
+                                          ),
+                                          image: NetworkImage(authorImageUrl!),
+                                          child: const SizedBox(
+                                              height: 70, width: 70)),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            if (authorImage != null)
-                              Flex(direction: Axis.horizontal, children: [
-                                Flexible(
-                                  child: CardWithBackground(
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20)),
-                                        //set border radius more than 50% of height and width to make circle
-                                      ),
-                                      image: authorImage!,
-                                      child: const SizedBox(height: 70, width: 70)),
-                                ),
-                                const Expanded(flex: 8, child: SizedBox(width: 48))
-                              ]),
                           ],
                         ),
                       ),
