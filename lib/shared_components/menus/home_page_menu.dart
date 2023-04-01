@@ -66,6 +66,20 @@ class _HomePageMenuState extends State<HomePageMenu> {
           icon: const Icon(Icons.timeline),
         ),
         ActionButton(
+          tooltip: "Profiles",
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/profilesPage');
+          },
+          icon: const Icon(Icons.people),
+        ),
+        ActionButton(
+          tooltip: "Posts",
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/postsPage');
+          },
+          icon: const Icon(Icons.post_add),
+        ),
+        ActionButton(
           tooltip: "My Profile",
           onPressed: () {
             Navigator.pushNamed(context, '/myProfile');

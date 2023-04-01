@@ -14,6 +14,7 @@ import '../models/comment.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
+import '../shared_components/logo.dart';
 import '../shared_components/menus/app_menu.dart';
 
 class SoloProfilePage extends StatefulWidget {
@@ -278,9 +279,10 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     return Scaffold(
       floatingActionButton: AppMenu(updateMenu: _onItemTapped),
       appBar: AppBar(
-        // Here we take the value from the Logout object that was created by
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Chat Line - ${_getTagLine()}"),
+        title: Logo(),
       ),
       // body: Center(child: Text("just text")),
       body: Center(

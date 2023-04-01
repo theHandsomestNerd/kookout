@@ -13,6 +13,7 @@ import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
 import '../shared_components/app_image_uploader.dart';
+import '../shared_components/logo.dart';
 import '../wrappers/loading_button.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -96,9 +97,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
         updateMenu: () {},
       ),
       appBar: AppBar(
-        // Here we take the value from the HomePage object that was created by
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Create Post"),
+        title: Logo(),
       ),
       body: FullPageLayout(
         child: Column(

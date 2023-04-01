@@ -2,6 +2,8 @@ import 'package:chat_line/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../shared_components/logo.dart';
+
 class LogoutPage extends StatefulWidget {
   const LogoutPage({super.key,});
 
@@ -22,9 +24,10 @@ class _LogoutPageState extends State<LogoutPage> {
 
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the Logout object that was created by
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Logout"),
+        title: Logo(),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -62,8 +65,8 @@ class _LogoutPageState extends State<LogoutPage> {
                       //     backgroundColor: _isMenuItemsOnly
                       //         ? MaterialStateProperty.all(Colors.red)
                       //         : MaterialStateProperty.all(Colors.white)),
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
                         Navigator.popAndPushNamed(context, '/login');
                       },
                       child: const Text("Logout"),

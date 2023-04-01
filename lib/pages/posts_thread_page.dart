@@ -1,6 +1,8 @@
 import 'package:chat_line/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
+import '../shared_components/logo.dart';
+
 
 class PostsThreadPage extends StatefulWidget {
   const PostsThreadPage({super.key,
@@ -64,9 +66,10 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
 
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the LoggedInHomePage object that was created by
+          backgroundColor: Colors.white.withOpacity(0.5),
+          // Here we take the value from the LoginPage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: const Text("Chat Line - Login"),
+          title: Logo(),
         ),
         body: ConstrainedBox(
             key: Key(_selectedIndex.toString()),

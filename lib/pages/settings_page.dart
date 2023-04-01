@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../models/block.dart';
 import '../models/controllers/auth_inherited.dart';
+import '../shared_components/logo.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
@@ -84,9 +85,10 @@ class _SettingsPageState extends State<SettingsPage> {
         updateMenu: _onItemTapped,
       ),
       appBar: AppBar(
-        // Here we take the value from the LoggedInHomePage object that was created by
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // Here we take the value from the LoginPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Settings"),
+        title: Logo(),
       ),
       body: ConstrainedBox(
           key: Key(_selectedIndex.toString()),

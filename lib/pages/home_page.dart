@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
 import '../models/controllers/auth_inherited.dart';
+import '../shared_components/logo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -39,14 +40,17 @@ class _HomePageState extends State<HomePage> {
     var theChatController = AuthInherited.of(context)?.chatController;
     var thePostController = AuthInherited.of(context)?.postController;
 
-      isUserLoggedIn = theAuthController?.isLoggedIn ?? false;
+    isUserLoggedIn = theAuthController?.isLoggedIn ?? false;
     if (isPostLoading != true && highlightedPost == null) {
       setState(() {
         isPostLoading = true;
       });
+
       thePostController?.fetchHighlightedPost().then((thePost) {
-        setState(() {
+        if (thePost != null) {
           highlightedPost = thePost;
+        }
+        setState(() {
           isPostLoading = false;
         });
       });
@@ -89,15 +93,15 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: isUserLoggedIn == true
-          ? HomePageMenu(
-              updateMenu: () => {},
-            )
-          : const LoginMenu(),
+      floatingActionButton: HomePageMenu(
+        updateMenu: () => {},
+      ),
       appBar: AppBar(
+        backgroundColor: Colors.white.withOpacity(0.5),
+
         // Here we take the value from the HomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Chat Line - Home"),
+        title: const Logo(),
       ),
       body: FullPageLayout(
         child: Flex(
@@ -195,8 +199,12 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   )
-                : Expanded(child: Center(child: CircularProgressIndicator())),
-            highlightedPost != null
+                : const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+            highlightedPost != null && !isPostLoading
                 ? Expanded(
                     child: CardWithActions(
                       author: highlightedPost?.author,
@@ -206,8 +214,7 @@ class _HomePageState extends State<HomePage> {
                           "",
                       when: highlightedPost?.publishedAt,
                       locationRow: null,
-                      caption:
-                          "${highlightedPost?.body}",
+                      caption: "${highlightedPost?.body}",
                       image: highlightedPost?.mainImage != null
                           ? NetworkImage(MyImageBuilder()
                               .urlFor(highlightedPost?.mainImage!)!
@@ -227,7 +234,18 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   )
-                : Expanded(child: Center(child: CircularProgressIndicator())),
+                : Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (isPostLoading) CircularProgressIndicator(),
+                          if (!isPostLoading)
+                            const Text("No Posts with images"),
+                        ],
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

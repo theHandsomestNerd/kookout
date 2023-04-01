@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   String _loginPassword = "";
   AuthController? authController;
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-
+bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -68,6 +68,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginUser(context) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _loginUsername,
@@ -100,6 +103,9 @@ class _LoginPageState extends State<LoginPage> {
         // Navigator.pushNamed(context, '/');
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -193,6 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                                     height: 16,
                                   ),
                                   LoadingButton(
+                                    isDisabled: _loginUsername.isEmpty || _loginPassword.isEmpty,
                                     action: () {
                                       _loginUser(context);
                                     },
@@ -204,6 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                                   const Text(
                                       "If you do not have an account..."),
                                   LoadingButton(
+                                    isLoading: isLoading,
                                     action: () {
                                       Navigator.popAndPushNamed(
                                           context, '/register');

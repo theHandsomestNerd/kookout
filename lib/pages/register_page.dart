@@ -180,6 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 16,
                                   ),
                                   LoadingButton(
+                                    isDisabled: _loginUsername.isEmpty || _loginPassword.isEmpty,
                                     isLoading: isLoading,
                                     action: () {
                                       _registerUser(context);
