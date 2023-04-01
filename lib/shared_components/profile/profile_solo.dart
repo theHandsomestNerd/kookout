@@ -1,4 +1,4 @@
-import 'package:chat_line/wrappers/card_with_background.dart';
+import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';

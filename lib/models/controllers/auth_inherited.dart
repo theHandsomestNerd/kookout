@@ -1,5 +1,5 @@
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/models/controllers/post_controller.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/models/controllers/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
@@ -13,12 +13,22 @@ class AuthInherited extends InheritedWidget {
   final AuthUser? myLoggedInUser;
   final SanityImage? profileImage;
 
+  final String appName;
+  final String packageName;
+  final String version;
+  final String buildNumber;
+
   const AuthInherited(
-      {super.key, this.profileImage,
+      {super.key,
+      this.profileImage,
       this.authController,
       this.chatController,
-        this.postController,
+      this.postController,
       this.myLoggedInUser,
+      required this.appName,
+      required this.packageName,
+      required this.version,
+      required this.buildNumber,
       required Widget child})
       : super(child: child);
 

@@ -1,4 +1,4 @@
-import 'package:chat_line/wrappers/card_wrapped.dart';
+import 'package:cookout/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

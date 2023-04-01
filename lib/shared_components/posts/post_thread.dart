@@ -1,6 +1,6 @@
-import 'package:chat_line/models/post.dart';
-import 'package:chat_line/shared_components/posts/post_solo.dart';
-import 'package:chat_line/wrappers/loading_button.dart';
+import 'package:cookout/models/post.dart';
+import 'package:cookout/shared_components/posts/post_solo.dart';
+import 'package:cookout/wrappers/loading_button.dart';
 import 'package:flutter/material.dart';
 
 class PostThread extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:chat_line/pages/tabs/profile_list_tab.dart';
+import 'package:cookout/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../shared_components/logo.dart';

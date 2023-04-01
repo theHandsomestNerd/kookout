@@ -1,7 +1,7 @@
-import 'package:chat_line/shared_components/logo.dart';
-import 'package:chat_line/shared_components/menus/login_menu.dart';
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
-import 'package:chat_line/wrappers/loading_button.dart';
+import 'package:cookout/shared_components/logo.dart';
+import 'package:cookout/shared_components/menus/login_menu.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
+import 'package:cookout/wrappers/loading_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +20,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String appName = "";
+  String packageName = "";
+  String version = "";
+  String buildNumber = "";
   String _loginUsername = "";
   String _loginPassword = "";
   AuthController? authController;
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-bool isLoading = false;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,9 +44,13 @@ bool isLoading = false;
     AuthController? theAuthController =
         AuthInherited.of(context)?.authController;
     authController = theAuthController;
+    version = AuthInherited.of(context)?.version ?? "no version";
+    appName = AuthInherited.of(context)?.appName ?? "no appName";
+    buildNumber = AuthInherited.of(context)?.buildNumber ?? "no build number";
+    packageName = AuthInherited.of(context)?.packageName ?? "no Package Name";
     setState(() {});
     if (kDebugMode) {
-      print("dependencies changed profile list");
+      print("dependencies changed login page");
     }
   }
 
@@ -129,105 +138,122 @@ bool isLoading = false;
         direction: Axis.horizontal,
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/221.jpg',
-                    repeat: ImageRepeat.repeat,
+            child: Center(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.asset(
+                      'assets/221.jpg',
+                      repeat: ImageRepeat.repeat,
+                    ),
                   ),
-                ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 150,
-                              width: 300,
-                              child: Image.asset('assets/logo.png'),
-                            ),
-                            SizedBox(
-                              width: 350,
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    autocorrect: false,
-                                    initialValue: _loginUsername,
-                                    onChanged: (e) {
-                                      _setUsername(e);
-                                    },
-                                    decoration: const InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white70,
-                                      prefixIcon: Icon(Icons.person),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      labelText: 'Username',
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  TextFormField(
-                                    obscureText: true,
-                                    enableSuggestions: false,
-                                    autocorrect: false,
-                                    initialValue: _loginPassword,
-                                    onChanged: (e) {
-                                      _setPassword(e);
-                                    },
-                                    decoration: const InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white70,
-                                      prefixIcon: Icon(Icons.password),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      labelText: 'Password',
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  LoadingButton(
-                                    isDisabled: _loginUsername.isEmpty || _loginPassword.isEmpty,
-                                    action: () {
-                                      _loginUser(context);
-                                    },
-                                    text: "Login",
-                                  ),
-                                  const SizedBox(
-                                    height: 32,
-                                  ),
-                                  const Text(
-                                      "If you do not have an account..."),
-                                  LoadingButton(
-                                    isLoading: isLoading,
-                                    action: () {
-                                      Navigator.popAndPushNamed(
-                                          context, '/register');
-                                    },
-                                    text: "Register",
-                                  ),
-                                ],
+                  Flex(
+                    direction: Axis.vertical,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 150,
+                                width: 300,
+                                child: Image.asset('assets/logo.png'),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 350,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      autocorrect: false,
+                                      initialValue: _loginUsername,
+                                      onChanged: (e) {
+                                        _setUsername(e);
+                                      },
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white70,
+                                        prefixIcon: Icon(Icons.person),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0),
+                                          ),
+                                        ),
+                                        labelText: 'Username',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    TextFormField(
+                                      obscureText: true,
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      initialValue: _loginPassword,
+                                      onChanged: (e) {
+                                        _setPassword(e);
+                                      },
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white70,
+                                        prefixIcon: Icon(Icons.password),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0),
+                                          ),
+                                        ),
+                                        labelText: 'Password',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    LoadingButton(
+                                      isDisabled: _loginUsername.isEmpty ||
+                                          _loginPassword.isEmpty,
+                                      action: () {
+                                        _loginUser(context);
+                                      },
+                                      text: "Login",
+                                    ),
+                                    const SizedBox(
+                                      height: 32,
+                                    ),
+                                    const Text(
+                                        "If you do not have an account..."),
+                                    LoadingButton(
+                                      isLoading: isLoading,
+                                      action: () {
+                                        Navigator.popAndPushNamed(
+                                            context, '/register');
+                                      },
+                                      text: "Register",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Flexible(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 32.0),
+                          child: Column(
+                            children: [
+                              Text("v$version-$buildNumber"),
+                              Text("$appName"),
+                              Text("$packageName"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

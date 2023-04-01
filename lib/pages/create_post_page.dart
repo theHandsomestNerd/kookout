@@ -1,6 +1,6 @@
-import 'package:chat_line/layout/full_page_layout.dart';
-import 'package:chat_line/models/controllers/auth_inherited.dart';
-import 'package:chat_line/shared_components/menus/posts_page_menu.dart';
+import 'package:cookout/layout/full_page_layout.dart';
+import 'package:cookout/models/controllers/auth_inherited.dart';
+import 'package:cookout/shared_components/menus/posts_page_menu.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

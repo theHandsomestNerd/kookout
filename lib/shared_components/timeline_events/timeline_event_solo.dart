@@ -1,5 +1,5 @@
-import 'package:chat_line/models/timeline_event.dart';
-import 'package:chat_line/shared_components/user_block_text.dart';
+import 'package:cookout/models/timeline_event.dart';
+import 'package:cookout/shared_components/user_block_text.dart';
 import 'package:flutter/material.dart';
 
 class TimelineEventSolo extends StatelessWidget {

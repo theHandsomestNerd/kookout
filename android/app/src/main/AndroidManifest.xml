@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thehandsomestnerd.chat_line">
+    package="com.thehandsomestnerd.cookout">
    <application
-        android:label="chat_line"
+        android:label="cookout"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

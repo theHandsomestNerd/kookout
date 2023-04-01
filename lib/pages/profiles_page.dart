@@ -1,9 +1,9 @@
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/pages/tabs/blocks_tab.dart';
-import 'package:chat_line/pages/tabs/posts_tab.dart';
-import 'package:chat_line/pages/tabs/profile_list_tab.dart';
-import 'package:chat_line/pages/tabs/timeline_events_tab.dart';
-import 'package:chat_line/shared_components/menus/profile_page_menu.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/pages/tabs/blocks_tab.dart';
+import 'package:cookout/pages/tabs/posts_tab.dart';
+import 'package:cookout/pages/tabs/profile_list_tab.dart';
+import 'package:cookout/pages/tabs/timeline_events_tab.dart';
+import 'package:cookout/shared_components/menus/profile_page_menu.dart';
 import 'package:flutter/material.dart';
 
 import '../models/block.dart';

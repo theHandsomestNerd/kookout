@@ -1,7 +1,7 @@
-import 'package:chat_line/layout/list_and_small_form.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/comments/comment_thread.dart';
-import 'package:chat_line/wrappers/loading_button.dart';
+import 'package:cookout/layout/list_and_small_form.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/shared_components/comments/comment_thread.dart';
+import 'package:cookout/wrappers/loading_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';

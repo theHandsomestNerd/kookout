@@ -1,11 +1,11 @@
-import 'package:chat_line/config/api_options.dart';
-import 'package:chat_line/layout/full_page_layout.dart';
-import 'package:chat_line/models/extended_profile.dart';
-import 'package:chat_line/models/post.dart';
-import 'package:chat_line/sanity/image_url_builder.dart';
-import 'package:chat_line/shared_components/menus/home_page_menu.dart';
-import 'package:chat_line/shared_components/menus/login_menu.dart';
-import 'package:chat_line/wrappers/card_with_actions.dart';
+import 'package:cookout/config/api_options.dart';
+import 'package:cookout/layout/full_page_layout.dart';
+import 'package:cookout/models/extended_profile.dart';
+import 'package:cookout/models/post.dart';
+import 'package:cookout/sanity/image_url_builder.dart';
+import 'package:cookout/shared_components/menus/home_page_menu.dart';
+import 'package:cookout/shared_components/menus/login_menu.dart';
+import 'package:cookout/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';

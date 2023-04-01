@@ -1,4 +1,4 @@
-import 'package:chat_line/models/sanity/document_slug.dart';
+import 'package:cookout/models/sanity/document_slug.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 

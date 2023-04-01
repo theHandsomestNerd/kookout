@@ -1,5 +1,5 @@
-import 'package:chat_line/layout/search_and_list.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
+import 'package:cookout/layout/search_and_list.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

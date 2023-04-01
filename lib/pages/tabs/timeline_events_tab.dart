@@ -1,4 +1,4 @@
-import 'package:chat_line/layout/search_and_list.dart';
+import 'package:cookout/layout/search_and_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/auth_inherited.dart';

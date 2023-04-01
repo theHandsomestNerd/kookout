@@ -1,7 +1,7 @@
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/shared_components/tool_button.dart';
-import 'package:chat_line/shared_components/user_block_text.dart';
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/shared_components/tool_button.dart';
+import 'package:cookout/shared_components/user_block_text.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/block.dart';

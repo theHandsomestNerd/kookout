@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:chat_line/config/api_options.dart';
-import 'package:chat_line/models/auth/auth_user.dart';
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
+import 'package:cookout/config/api_options.dart';
+import 'package:cookout/models/auth/auth_user.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

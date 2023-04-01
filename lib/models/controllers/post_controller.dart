@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:chat_line/config/api_options.dart';
-import 'package:chat_line/models/responses/chat_api_get_profile_posts_response.dart';
+import 'package:cookout/config/api_options.dart';
+import 'package:cookout/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

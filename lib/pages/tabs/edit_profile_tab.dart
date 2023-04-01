@@ -1,4 +1,4 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
+import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

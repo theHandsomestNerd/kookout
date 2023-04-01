@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:chat_line/models/block.dart';
-import 'package:chat_line/models/extended_profile.dart';
-import 'package:chat_line/models/clients/chat_client.dart';
-import 'package:chat_line/models/timeline_event.dart';
+import 'package:cookout/models/block.dart';
+import 'package:cookout/models/extended_profile.dart';
+import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/timeline_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../app_user.dart';

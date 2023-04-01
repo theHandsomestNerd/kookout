@@ -1,4 +1,4 @@
-import 'package:chat_line/models/like.dart';
+import 'package:cookout/models/like.dart';
 
 class ChatApiGetProfileLikesResponse {
   final List<Like> list;

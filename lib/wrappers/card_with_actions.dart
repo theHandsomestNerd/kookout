@@ -1,6 +1,6 @@
-import 'package:chat_line/models/app_user.dart';
-import 'package:chat_line/shared_components/user_block_text.dart';
-import 'package:chat_line/wrappers/card_with_background.dart';
+import 'package:cookout/models/app_user.dart';
+import 'package:cookout/shared_components/user_block_text.dart';
+import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

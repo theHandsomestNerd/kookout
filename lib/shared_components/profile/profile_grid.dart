@@ -1,4 +1,4 @@
-import 'package:chat_line/shared_components/profile/profile_solo.dart';
+import 'package:cookout/shared_components/profile/profile_solo.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';

@@ -1,8 +1,8 @@
-import 'package:chat_line/models/clients/chat_client.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/models/extended_profile.dart';
-import 'package:chat_line/shared_components/tool_button.dart';
-import 'package:chat_line/wrappers/card_with_background.dart';
+import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/models/extended_profile.dart';
+import 'package:cookout/shared_components/tool_button.dart';
+import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';

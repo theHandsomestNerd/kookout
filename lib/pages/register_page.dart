@@ -1,4 +1,4 @@
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:chat_line/models/app_user.dart';
+import 'package:cookout/models/app_user.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthApiProfileListResponse {

@@ -1,4 +1,4 @@
-import 'package:chat_line/models/comment.dart';
+import 'package:cookout/models/comment.dart';
 import 'package:flutter/material.dart';
 
 import 'comment_solo.dart';

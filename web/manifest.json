@@ -1,6 +1,6 @@
 {
-    "name": "chat_line",
-    "short_name": "chat_line",
+    "name": "cookout",
+    "short_name": "cookout",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

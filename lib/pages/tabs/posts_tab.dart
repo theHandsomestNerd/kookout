@@ -1,6 +1,6 @@
-import 'package:chat_line/layout/list_and_small_form.dart';
-import 'package:chat_line/models/post.dart';
-import 'package:chat_line/shared_components/posts/post_thread.dart';
+import 'package:cookout/layout/list_and_small_form.dart';
+import 'package:cookout/models/post.dart';
+import 'package:cookout/shared_components/posts/post_thread.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

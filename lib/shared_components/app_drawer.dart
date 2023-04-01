@@ -1,4 +1,4 @@
-import 'package:chat_line/shared_components/user_block_mini.dart';
+import 'package:cookout/shared_components/user_block_mini.dart';
 import 'package:flutter/material.dart';
 
 import '../models/controllers/auth_inherited.dart';

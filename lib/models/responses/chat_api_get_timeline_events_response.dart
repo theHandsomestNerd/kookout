@@ -1,4 +1,4 @@
-import 'package:chat_line/models/timeline_event.dart';
+import 'package:cookout/models/timeline_event.dart';
 
 class ChatApiGetTimelineEventsResponse {
   final List<TimelineEvent> list;

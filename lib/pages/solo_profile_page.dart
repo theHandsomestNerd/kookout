@@ -1,13 +1,13 @@
-import 'package:chat_line/models/clients/chat_client.dart';
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/models/responses/chat_api_get_profile_follows_response.dart';
-import 'package:chat_line/models/responses/chat_api_get_profile_likes_response.dart';
-import 'package:chat_line/pages/tabs/bio_tab.dart';
-import 'package:chat_line/pages/tabs/comments_tab.dart';
-import 'package:chat_line/pages/tabs/follows_tab.dart';
-import 'package:chat_line/pages/tabs/likes_tab.dart';
-import 'package:chat_line/wrappers/alerts_snackbar.dart';
+import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/controllers/auth_controller.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/models/responses/chat_api_get_profile_follows_response.dart';
+import 'package:cookout/models/responses/chat_api_get_profile_likes_response.dart';
+import 'package:cookout/pages/tabs/bio_tab.dart';
+import 'package:cookout/pages/tabs/comments_tab.dart';
+import 'package:cookout/pages/tabs/follows_tab.dart';
+import 'package:cookout/pages/tabs/likes_tab.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/material.dart';
 
 import '../models/comment.dart';

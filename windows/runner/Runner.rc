@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.thehandsomestnerd" "\0"
-            VALUE "FileDescription", "chat_line" "\0"
+            VALUE "FileDescription", "cookout" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "chat_line" "\0"
+            VALUE "InternalName", "cookout" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.thehandsomestnerd. All rights reserved." "\0"
-            VALUE "OriginalFilename", "chat_line.exe" "\0"
-            VALUE "ProductName", "chat_line" "\0"
+            VALUE "OriginalFilename", "cookout.exe" "\0"
+            VALUE "ProductName", "cookout" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

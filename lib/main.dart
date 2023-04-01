@@ -1,19 +1,20 @@
-import 'package:chat_line/models/controllers/auth_controller.dart';
-import 'package:chat_line/models/controllers/chat_controller.dart';
-import 'package:chat_line/models/controllers/post_controller.dart';
-import 'package:chat_line/pages/create_post_page.dart';
-import 'package:chat_line/pages/home_page.dart';
-import 'package:chat_line/pages/logout_page.dart';
-import 'package:chat_line/pages/posts_page.dart';
-import 'package:chat_line/pages/profiles_page.dart';
-import 'package:chat_line/pages/register_page.dart';
-import 'package:chat_line/pages/settings_page.dart';
-import 'package:chat_line/pages/solo_profile_page.dart';
-import 'package:chat_line/shared_components/app_drawer.dart';
+import 'package:cookout/models/controllers/auth_controller.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
+import 'package:cookout/models/controllers/post_controller.dart';
+import 'package:cookout/pages/create_post_page.dart';
+import 'package:cookout/pages/home_page.dart';
+import 'package:cookout/pages/logout_page.dart';
+import 'package:cookout/pages/posts_page.dart';
+import 'package:cookout/pages/profiles_page.dart';
+import 'package:cookout/pages/register_page.dart';
+import 'package:cookout/pages/settings_page.dart';
+import 'package:cookout/pages/solo_profile_page.dart';
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus_web/package_info_plus_web.dart';
 
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
@@ -73,6 +74,11 @@ class _MyAppState extends State<MyApp> {
 
   bool isUserLoggedIn = false;
 
+  String appName = "";
+  String packageName = "";
+  String version = "";
+  String buildNumber = "";
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +90,13 @@ class _MyAppState extends State<MyApp> {
 
       print("authcontroller loggedinUSer $myLoggedInUser");
     }
+
+    PackageInfoPlugin().getAll().then((packageInfo) {
+      appName = packageInfo.appName;
+      packageName = packageInfo.packageName;
+      version = packageInfo.version;
+      buildNumber = packageInfo.buildNumber;
+    });
   }
 
   String id = "";
@@ -117,6 +130,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return AuthInherited(
+      appName: appName,
+      packageName: packageName,
+      version: version,
+      buildNumber: buildNumber,
       authController: authController,
       chatController: chatController,
       postController: postController,

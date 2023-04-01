@@ -1,4 +1,4 @@
-import 'package:chat_line/shared_components/timeline_events/timeline_event_solo.dart';
+import 'package:cookout/shared_components/timeline_events/timeline_event_solo.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/timeline_event.dart';

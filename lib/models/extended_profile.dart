@@ -1,5 +1,5 @@
 
-import 'package:chat_line/models/app_user.dart';
+import 'package:cookout/models/app_user.dart';
 
 import 'submodels/height.dart';
 
