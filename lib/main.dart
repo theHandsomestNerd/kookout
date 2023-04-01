@@ -90,21 +90,20 @@ class _MyAppState extends State<MyApp> {
 
       print("authcontroller loggedinUSer $myLoggedInUser");
     }
-
-    PackageInfoPlugin().getAll().then((packageInfo) {
-      appName = packageInfo.appName;
-      packageName = packageInfo.packageName;
-      version = packageInfo.version;
-      buildNumber = packageInfo.buildNumber;
-    });
   }
 
   String id = "";
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    var packageInfo = await PackageInfoPlugin().getAll();
+
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
 
     var intermediate =
         AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
