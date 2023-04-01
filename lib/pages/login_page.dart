@@ -135,9 +135,9 @@ class _LoginPageState extends State<LoginPage> {
         title: Logo(),
       ),
       body: Flex(
-        direction: Axis.horizontal,
+        direction: Axis.vertical,
         children: [
-          Expanded(
+          Flexible(
             child: Center(
               child: Stack(
                 children: [
@@ -152,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
+                        flex: 8,
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -244,8 +245,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: [
                               Text("v$version-$buildNumber"),
-                              Text("$appName"),
-                              Text("$packageName"),
                             ],
                           ),
                         ),
