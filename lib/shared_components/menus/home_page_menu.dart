@@ -95,9 +95,7 @@ class _HomePageMenuState extends State<HomePageMenu> {
               ? CircleAvatar(
                   backgroundImage: NetworkImage(
                     MyImageBuilder()
-                        .urlFor(profileImage)!
-                        .height(100)
-                        .width(100)
+                        .urlFor(profileImage,100,100)!
                         .url(),
                   ),
                 )

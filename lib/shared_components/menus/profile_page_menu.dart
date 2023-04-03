@@ -10,10 +10,8 @@ class ProfilePageMenu extends StatefulWidget {
     Key? key,
     required this.updateMenu,
     this.selected,
-    
   }) : super(key: key);
   final updateMenu;
-  
 
   final selected;
 
@@ -27,7 +25,6 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
-     
       distance: 158.0,
       children: [
         ActionButton(
@@ -75,13 +72,14 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           icon: CircleAvatar(
             backgroundImage: NetworkImage(
               MyImageBuilder()
-                      .urlFor(AuthInherited.of(context)
-                          ?.authController
-                          ?.myAppUser
-                          ?.profileImage)
-                      ?.height(100)
-                      .width(100)
-                      .url() ??
+                      .urlFor(
+                          AuthInherited.of(context)
+                              ?.authController
+                              ?.myAppUser
+                              ?.profileImage,
+                          100,
+                          100)
+                      ?.url() ??
                   "",
             ),
           ),

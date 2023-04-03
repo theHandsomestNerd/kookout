@@ -167,11 +167,8 @@ class _ExpandableFabState extends State<ExpandableFab>
                 ? CircleAvatar(
                     backgroundImage: NetworkImage(
                       MyImageBuilder()
-                              .urlFor(profileImage)
-                              ?.height(100)
-                              .width(100)
-                              .url() ??
-                          "",
+                              .urlFor(profileImage,100,100)!
+                              .url(),
                     ),
                   )
                 : const Icon(Icons.add),

@@ -9,12 +9,9 @@ class UserBlockText extends StatelessWidget {
     super.key,
     this.user,
     this.hideImage,
-    
-
   });
 
   final AppUser? user;
-  
 
   final bool? hideImage;
 
@@ -28,18 +25,24 @@ class UserBlockText extends StatelessWidget {
       child: Flex(
         direction: Axis.horizontal,
         children: [
-          if(hideImage != true)Flexible(
-            child: SizedBox(
-              height: 30,
-              width: 30,
-              child: user?.profileImage!=null?Image.network(MyImageBuilder()
-                  .urlFor(user!.profileImage)
-                  ?.height(50)
-                  .width(50)
-                  .url() ??
-                  "",height: 30, width: 30,):Image.asset(height:30, width: 30, 'assets/blankProfileImage.png'),
+          if (hideImage != true)
+            Flexible(
+              child: SizedBox(
+                height: 30,
+                width: 30,
+                child: user?.profileImage != null
+                    ? Image.network(
+                        MyImageBuilder()
+                                .urlFor(user!.profileImage, 50, 50)!
+                                .url() ??
+                            "",
+                        height: 30,
+                        width: 30,
+                      )
+                    : Image.asset(
+                        height: 30, width: 30, 'assets/blankProfileImage.png'),
+              ),
             ),
-          ),
           Flexible(
             child: MaterialButton(
               onPressed: () {

@@ -10,10 +10,8 @@ class PostsPageMenu extends StatefulWidget {
     Key? key,
     required this.updateMenu,
     this.selected,
-    
   }) : super(key: key);
   final updateMenu;
-  
 
   final selected;
 
@@ -37,7 +35,6 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
-     
       distance: 158.0,
       children: [
         ActionButton(
@@ -62,11 +59,7 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           icon: profileImage != null
               ? CircleAvatar(
                   backgroundImage: NetworkImage(
-                    MyImageBuilder()
-                        .urlFor(profileImage)!
-                        .height(100)
-                        .width(100)
-                        .url(),
+                    MyImageBuilder().urlFor(profileImage, 100, 100)!.url(),
                   ),
                 )
               : Icon(Icons.add),

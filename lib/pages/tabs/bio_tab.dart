@@ -186,7 +186,7 @@ class _BioTabState extends State<BioTab> {
                                         height: 350,
                                         image: NetworkImage(MyImageBuilder()
                                             .urlFor(widget
-                                                .thisProfile?.profileImage!)!
+                                                .thisProfile?.profileImage!, 350,350)!
                                             .url()),
                                         child: const SizedBox(
                                           height: 350.0,

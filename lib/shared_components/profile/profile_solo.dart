@@ -32,11 +32,8 @@ class ProfileSolo extends StatelessWidget {
                   width: 110,
                   child: CardWithBackground(
                     image: NetworkImage(MyImageBuilder()
-                            .urlFor(profile.profileImage)
-                            ?.width(110)
-                            .height(110)
-                            .url() ??
-                        ""),
+                            .urlFor(profile.profileImage, 110,110)
+                            !.url()),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text("${profile.displayName}"),

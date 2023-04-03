@@ -47,11 +47,8 @@ class UserBlockMini extends StatelessWidget {
                             child: user?.profileImage != null
                                 ? Image.network(
                                     MyImageBuilder()
-                                            .urlFor(user?.profileImage ?? "")
-                                            ?.height(60)
-                                            .width(60)
-                                            .url() ??
-                                        "",
+                                            .urlFor(user?.profileImage, 60,60)!
+                                            .url(),
                                     height: 80,
                                     width: 80,
                                   )

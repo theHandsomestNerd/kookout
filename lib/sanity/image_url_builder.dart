@@ -9,10 +9,19 @@ class MyImageBuilder {
     builder = ImageUrlBuilder(theSanityClient);
   }
 
-  ImageUrlBuilder? urlFor(asset) {
+  ImageUrlBuilder? urlFor(SanityImage? asset, int? height,int? width) {
     if(asset == null) {
       return null;
     }
-    return builder.image(asset);
+
+    var theBuilder = builder.image(asset);
+    if(height != null) {
+      theBuilder.height(height);
+    }
+    if(width != null) {
+      theBuilder.width(width);
+    }
+
+    return theBuilder;
   }
 }

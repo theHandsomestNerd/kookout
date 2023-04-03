@@ -3,6 +3,7 @@ import 'package:cookout/shared_components/logo.dart';
 import 'package:cookout/shared_components/menus/login_menu.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/loading_button.dart';
+import 'package:cookout/wrappers/text_field_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -178,9 +179,9 @@ class _LoginPageState extends State<LoginPage> {
                                     children: [
                                       Flexible(
                                         flex: 1,
-                                        child: TextFormField(
+                                        child: TextFieldWrapped(
+                                          icon: Icons.person,
                                           autofocus: _loginPassword.isEmpty,
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           validator: (String? value) {
                                             const pattern =
                                                 r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
@@ -199,21 +200,10 @@ class _LoginPageState extends State<LoginPage> {
                                           },
                                           autocorrect: false,
                                           initialValue: _loginUsername,
-                                          onChanged: (e) {
+                                          setField: (e) {
                                             _setUsername(e);
                                           },
-                                          decoration: InputDecoration(
-                                            helperText: errorText,
-                                            filled: true,
-                                            fillColor: Colors.white70,
-                                            prefixIcon: const Icon(Icons.person),
-                                            border: const OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(30.0),
-                                              ),
-                                            ),
-                                            labelText: 'Username',
-                                          ),
+                                          labelText: "Username/Email",
                                         ),
                                       ),
                                       const SizedBox(
@@ -221,27 +211,15 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       Flexible(
                                         flex: 1,
-                                        child: TextFormField(
+                                        child: TextFieldWrapped(
+                                          icon: Icons.password,
                                           obscureText: true,
                                           enableSuggestions: false,
                                           autocorrect: false,
                                           initialValue: _loginPassword,
-                                          onChanged: (e) {
-                                            _setPassword(e);
-                                          },
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: Colors.white70,
-                                            prefixIcon: Icon(Icons.password),
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(30.0),
-                                              ),
-                                            ),
-                                            labelText: 'Password',
+                                          labelText: "Password",
                                           ),
                                         ),
-                                      ),
                                       const SizedBox(
                                         height: 16,
                                       ),

@@ -39,9 +39,7 @@ class PostSolo extends StatelessWidget {
                         child: CardWithBackground(
                           image: NetworkImage(
                             MyImageBuilder()
-                                .urlFor(post.mainImage)!
-                                .height(POST_IMAGE_SQUARE_SIZE)
-                                .width(POST_IMAGE_SQUARE_SIZE)
+                                .urlFor(post.mainImage, POST_IMAGE_SQUARE_SIZE, POST_IMAGE_SQUARE_SIZE)!
                                 .url(),
                           ),
                           child: const Text(""),

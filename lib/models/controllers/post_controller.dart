@@ -49,13 +49,15 @@ class PostController {
         return false;
       });
 
-      var rng = Random();
-      rng.nextInt(thePosts.length);
-      if (kDebugMode) {
-        print("THe posts are not empty ${thePosts.length}");
-      }
-      if (thePosts.isNotEmpty) {
-        return thePosts[rng.nextInt(thePosts.length - 1)];
+      if(thePosts.isNotEmpty) {
+        var rng = Random();
+        rng.nextInt(thePosts.length);
+        if (kDebugMode) {
+          print("Te posts are not empty ${thePosts.length}");
+        }
+
+          return thePosts[rng.nextInt(thePosts.length)];
+
       }
     }
 

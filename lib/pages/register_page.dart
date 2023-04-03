@@ -1,4 +1,5 @@
 import 'package:cookout/wrappers/alerts_snackbar.dart';
+import 'package:cookout/wrappers/text_field_wrapped.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -135,8 +136,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               width: 350,
                               child: Column(
                                 children: [
-                                  TextFormField(
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  TextFieldWrapped(
+                                    labelText: "Username/Email",
+                                    icon: Icons.person,
                                     validator: (String? value) {
                                       const pattern =
                                           r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
@@ -153,46 +155,26 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ? 'Enter a valid email address'
                                           : null;
                                     },
+                                    setField: (e) {
+                                      _setUsername(e);
+                                    },
                                     autofocus: _loginPassword.isEmpty,
                                     autocorrect: false,
                                     initialValue: _loginUsername,
-                                    onChanged: (e) {
-                                      _setUsername(e);
-                                    },
-                                    decoration: const InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white70,
-                                      prefixIcon: Icon(Icons.person),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      labelText: 'Email Address',
-                                    ),
                                   ),
                                   const SizedBox(
                                     height: 16,
                                   ),
-                                  TextFormField(
+                                  TextFieldWrapped(
                                     obscureText: true,
                                     enableSuggestions: false,
                                     autocorrect: false,
                                     initialValue: _loginPassword,
-                                    onChanged: (e) {
+                                    icon: Icons.password,
+                                    labelText: "Password",
+                                    setField: (e) {
                                       _setPassword(e);
                                     },
-                                    decoration: const InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white70,
-                                      prefixIcon: Icon(Icons.password),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      labelText: 'Password',
-                                    ),
                                   ),
                                   const SizedBox(
                                     height: 16,

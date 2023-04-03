@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cookout/config/default_config.dart';
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/models/extended_profile.dart';
@@ -34,6 +36,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // Timer.periodic(Duration(seconds: 3), (timer) {
+    //   print(DateTime.now());
+    // });
   }
 
   @override
@@ -185,10 +191,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                       image: highlightedProfile?.profileImage != null
                           ? NetworkImage(MyImageBuilder()
-                                  .urlFor(highlightedProfile?.profileImage!)
-                                  ?.url() ??
-                              "")
-                          : NetworkImage(""),
+                              .urlFor(highlightedProfile?.profileImage!, null,
+                                  null)!
+                              .url())
+                          : Image(
+                              image: AssetImage('assets/blankProfileImage.png'),
+                            ).image,
                       action1Text:
                           "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
                       action2Text: 'All Profiles',
@@ -220,7 +228,8 @@ class _HomePageState extends State<HomePage> {
                     child: CardWithActions(
                       author: highlightedPost?.author,
                       authorImageUrl: MyImageBuilder()
-                              .urlFor(highlightedPost?.author?.profileImage)
+                              .urlFor(highlightedPost?.author?.profileImage,
+                                  null, null)
                               ?.url() ??
                           "",
                       when: highlightedPost?.publishedAt,
@@ -228,9 +237,8 @@ class _HomePageState extends State<HomePage> {
                       caption: "${highlightedPost?.body}",
                       image: highlightedPost?.mainImage != null
                           ? NetworkImage(MyImageBuilder()
-                                  .urlFor(highlightedPost?.mainImage!)
-                                  ?.url() ??
-                              "")
+                              .urlFor(highlightedPost?.mainImage!, null, null)!
+                              .url())
                           : Image(
                               image: AssetImage('assets/blankProfileImage.png'),
                             ).image,

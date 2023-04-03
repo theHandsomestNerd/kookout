@@ -112,7 +112,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
         print("profile image is froom db");
       }
       return NetworkImage(
-          MyImageBuilder().urlFor(profileImage)!.height(350).width(350).url());
+          MyImageBuilder().urlFor(profileImage, 350, 350)!.url());
     }
 
     if (kDebugMode) {
@@ -303,6 +303,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
                   title: TextFormField(
                     key: ObjectKey(_myAppUser?.email ?? "-mail"),
                     initialValue: _myAppUser?.email,
+                    enabled: false,
                     onChanged: (e) {
                       _setUsername(e);
                     },
