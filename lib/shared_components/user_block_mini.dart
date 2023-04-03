@@ -2,15 +2,20 @@ import 'package:cookout/models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../sanity/image_url_builder.dart';
 
 class UserBlockMini extends StatelessWidget {
   const UserBlockMini({
     super.key,
     this.user,
+    
+
   });
 
   final AppUser? user;
+  
+
 
   @override
   Widget build(BuildContext context) {

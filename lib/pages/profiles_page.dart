@@ -11,11 +11,9 @@ import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
 class ProfilesPage extends StatefulWidget {
-  const ProfilesPage(
-      {super.key,
-      });
-
-  // final AuthController authController;
+  const ProfilesPage({
+    super.key,
+  });
 
   @override
   State<ProfilesPage> createState() => _ProfilesPageState();
@@ -30,8 +28,6 @@ class _ProfilesPageState extends State<ProfilesPage> {
   @override
   void initState() {
     super.initState();
-    // chatController?.updateProfiles();
-    // chatController?.updateTimelineEvents();
   }
 
   @override
@@ -39,12 +35,10 @@ class _ProfilesPageState extends State<ProfilesPage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     chatController = theChatController;
-    myUserId = AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
+    myUserId =
+        AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();
     setState(() {});
-    // if (kDebugMode) {
-    //   print("dependencies changed $myUserId");
-    // }
   }
 
   static const TextStyle optionStyle =
@@ -52,7 +46,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      const ProfileListTab(),
+      ProfileListTab(),
       TimelineEventsTab(
           timelineEvents: chatController?.timelineOfEvents,
           id: AuthInherited.of(context)?.authController?.myAppUser?.userId ??

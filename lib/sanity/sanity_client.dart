@@ -1,7 +1,9 @@
-import 'package:cookout/config/api_options.dart';
+import 'package:cookout/config/default_config.dart';
 import 'package:flutter_sanity/flutter_sanity.dart';
 
-final sanityClient = SanityClient(
-  dataset: DefaultAppOptions.currentPlatform.sanityDB,
-  projectId: 'dhhk6mar',
-);
+sanityClient() {
+  return SanityClient(
+    dataset: DefaultConfig.theSanityDB,
+    projectId: DefaultConfig.theSanityProjectID,
+  );
+}

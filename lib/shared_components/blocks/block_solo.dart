@@ -4,6 +4,7 @@ import 'package:cookout/shared_components/user_block_text.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/block.dart';
 import '../../models/controllers/auth_inherited.dart';
 
@@ -60,18 +61,19 @@ class _BlockSoloState extends State<BlockSolo> {
             flex: 1,
             child: ToolButton(
               action: (innerContext) async {
-                 var response = await chatController?.unblockProfile(widget.block);
+                var response =
+                    await chatController?.unblockProfile(widget.block);
 
-                 if(response == "SUCCESS") {
-                   AlertSnackbar().showSuccessAlert("Unblock succeeded", innerContext);
-                 } else {
-                   AlertSnackbar().showErrorAlert("Unblock failed. Try again.", innerContext);
-                 }
+                if (response == "SUCCESS") {
+                  AlertSnackbar()
+                      .showSuccessAlert("Unblock succeeded", innerContext);
+                } else {
+                  AlertSnackbar().showErrorAlert(
+                      "Unblock failed. Try again.", innerContext);
+                }
 
-                 setState(() {
-
-                 });
-                 await widget.unblockProfile(innerContext);
+                setState(() {});
+                await widget.unblockProfile(innerContext);
               },
               iconData: Icons.close,
               color: Colors.grey,

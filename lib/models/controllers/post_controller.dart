@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:cookout/config/api_options.dart';
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,9 +12,30 @@ import 'package:http_parser/http_parser.dart';
 import '../post.dart';
 
 class PostController {
-  String authBaseUrl = DefaultAppOptions.currentPlatform.authBaseUrl;
+  String authBaseUrl = "";
 
   List<Post> postsFuture = [];
+
+  PostController.init() {
+    authBaseUrl = DefaultConfig.theAuthBaseUrl;
+
+    getPosts().then((thePosts) {
+      postsFuture = thePosts;
+    });
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user == null) {
+        if (kDebugMode) {
+          print('postController: User is currently signed out!');
+        }
+      } else {
+        if (kDebugMode) {
+          print('postController: User is signed in!');
+        }
+        postsFuture = await getPosts();
+      }
+    });
+  }
 
   Future<Post?> fetchHighlightedPost() async {
     var thePosts = await getPosts();
@@ -41,39 +62,21 @@ class PostController {
     return null;
   }
 
-  refetchPosts() async {
-    return getPosts();
-  }
-
-  PostController.init() {
-    getPosts().then((thePosts) {
-      postsFuture = thePosts;
-    });
-
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user == null) {
-        if (kDebugMode) {
-          print('postController: User is currently signed out!');
-        }
-      } else {
-        if (kDebugMode) {
-          print('postController: User is signed in!');
-        }
-        postsFuture = await getPosts();
-      }
-    });
-  }
-
   Future<List<Post>> getPosts() async {
     // if (kDebugMode) {
     //   print("Retrieving Posts $userId");
     // }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    if (token != null && authBaseUrl != "" && authBaseUrl != "") {
       final response = await http.get(Uri.parse("$authBaseUrl/get-all-posts"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      var processedResponse;
+      try {
+        processedResponse = jsonDecode(response.body);
+      } catch (err) {
+        print(err);
+      }
 
       // if (kDebugMode) {
       //   print(processedResponse);

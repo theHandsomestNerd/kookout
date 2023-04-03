@@ -1,11 +1,15 @@
 import 'package:cookout/models/app_user.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../wrappers/expanding_fab.dart';
 
 class LoginMenu extends StatefulWidget {
-  const LoginMenu({Key? key}) : super(key: key);
+  const LoginMenu({Key? key   
+  }) : super(key: key);
+
+  
 
   @override
   State<LoginMenu> createState() => _LoginMenuState();
@@ -24,6 +28,7 @@ class _LoginMenuState extends State<LoginMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
+     
       distance: 62.0,
       children: [
         if (myAppUser != null)

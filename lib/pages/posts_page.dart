@@ -5,6 +5,7 @@ import 'package:cookout/shared_components/menus/posts_page_menu.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../models/app_user.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
@@ -14,7 +15,12 @@ import '../platform_dependent/image_uploader_abstract.dart';
 import '../shared_components/posts/post_thread.dart';
 
 class PostsPage extends StatefulWidget {
-  const PostsPage({super.key});
+  const PostsPage({
+    super.key,
+    
+  });
+
+
 
   @override
   State<PostsPage> createState() => _PostsPageState();

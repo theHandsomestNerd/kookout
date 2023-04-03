@@ -4,6 +4,8 @@ import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../config/default_config.dart';
+
 class CardWithActions extends StatelessWidget {
   final String? action1Text;
   final String? caption;
@@ -20,6 +22,8 @@ class CardWithActions extends StatelessWidget {
   final DateTime? when;
   final authorId;
   final AppUser? author;
+  
+
 
   const CardWithActions(
       {super.key,
@@ -31,7 +35,9 @@ class CardWithActions extends StatelessWidget {
       this.action2OnPressed,
       this.locationRow,
       this.infoCard,
-      required this.image,
+        
+
+        required this.image,
       this.authorImageUrl,
       this.authorId,
       this.author});
@@ -170,12 +176,13 @@ class CardWithActions extends StatelessWidget {
                                                             : Text("")),
                                                     Expanded(
                                                         child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            Text(timeago
-                                                                .format(when!)),
-                                                          ],
-                                                        )),
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Text(timeago
+                                                            .format(when!)),
+                                                      ],
+                                                    )),
                                                   ],
                                                 ),
                                               Flex(
@@ -183,8 +190,9 @@ class CardWithActions extends StatelessWidget {
                                                 children: [
                                                   Expanded(
                                                     child: Padding(
-
-                                                      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              8, 0, 0, 0),
                                                       child: Text(
                                                         caption!,
                                                       ),

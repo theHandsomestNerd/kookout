@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/controllers/post_controller.dart';
@@ -9,9 +13,9 @@ import 'package:cookout/pages/profiles_page.dart';
 import 'package:cookout/pages/register_page.dart';
 import 'package:cookout/pages/settings_page.dart';
 import 'package:cookout/pages/solo_profile_page.dart';
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus_web/package_info_plus_web.dart';
@@ -33,42 +37,33 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+   DefaultConfig();
+   await DefaultConfig.initializingConfig;
+
+print("main auth url ${DefaultConfig.theAuthBaseUrl}");
+
   if (kDebugMode) {
     //Emulator setup
     await FirebaseAuth.instance
         .useAuthEmulator('127.0.0.1', 9099); //Error is thrown here
-    // FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
-    // FirebaseDatabase.instance.useDatabaseEmulator('127.0.0.1', 9000);
-    // await FirebaseStorage.instance.useStorageEmulator('127.0.0.1', 9199);
   }
 
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-
-  // AuthController manager = AuthController.init();
-
-  runApp(const MyApp(
-      // authController: manager,
-      ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
-    // required this.authController,
   });
-
-  // final AuthController authController;
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  var authController = AuthController.init();
-  var chatController = ChatController.init();
-  var postController = PostController.init();
-  var myAppUser = null;
-  var myLoggedInUser = null;
+  late AuthController authController = AuthController.init();
+  late ChatController chatController = ChatController.init();
+  late PostController postController = PostController.init();
 
   // var myExtProfile = null;
 
@@ -77,19 +72,14 @@ class _MyAppState extends State<MyApp> {
   String appName = "";
   String packageName = "";
   String version = "";
+  String apiVersion = "";
   String buildNumber = "";
 
   @override
   void initState() {
     super.initState();
-    // isUserLoggedIn = authController.isLoggedIn;
 
-    // myExtProfile = chatController.myExtProfile;
-    if (kDebugMode) {
-      print("authcontroller myAppUser $myAppUser");
 
-      print("authcontroller loggedinUSer $myLoggedInUser");
-    }
   }
 
   String id = "";
@@ -98,29 +88,24 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    var packageInfo = await PackageInfoPlugin().getAll();
-
-    appName = packageInfo.appName;
-    packageName = packageInfo.packageName;
-    version = packageInfo.version;
-    buildNumber = packageInfo.buildNumber;
 
     var intermediate =
         AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
 
     isUserLoggedIn = intermediate;
-    // var profiles = await theChatController?.profileClient.fetchProfiles();
-    // if (authController.myAppUser != null) {
-    // myExtProfile = chatController
-    //     .updateExtProfile(authController.myAppUser?.userId ?? "");
-    // var theHighlightedProfile =
-    //     await chatController.fetchHighlightedProfile();
-    // highlightedProfile = theHighlightedProfile;
-    // if (theHighlightedProfile?.userId != null) {
-    //   var theExtProfile = await chatController.profileClient
-    //       .getExtendedProfile(theHighlightedProfile?.userId ?? "");
-    //   highlightedExtProfile = theExtProfile;
-    // }
+
+    var theAppVersion = DefaultConfig.version;
+
+    appName = DefaultConfig.appName;
+    packageName = DefaultConfig.packageName;
+    version = theAppVersion;
+    apiVersion = DefaultConfig.apiVersion;
+    buildNumber = DefaultConfig.buildNumber;
+    // if (kDebugMode) {
+    //   print(
+    //       "UI Version: ${DefaultConfig.version}.${DefaultConfig.buildNumber}");
+    //   print("appName: ${DefaultConfig.appName}");
+    //   print("packageName: ${DefaultConfig.packageName}");
     // }
     setState(() {});
   }
@@ -129,6 +114,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return AuthInherited(
+      apiVersion: apiVersion,
       appName: appName,
       packageName: packageName,
       version: version,
@@ -140,13 +126,13 @@ class _MyAppState extends State<MyApp> {
       profileImage: authController.myAppUser?.profileImage,
       child: MaterialApp(
         key: ObjectKey(isUserLoggedIn),
-        title: 'Chat Line',
+        title: 'Cookout',
         routes: {
           '/home': (context) {
-            return const HomePage();
+            return HomePage();
           },
-          '/postsPage': (context) => const PostsPage(),
-          '/createPostsPage': (context) => const CreatePostPage(),
+          '/postsPage': (context) => PostsPage(),
+          '/createPostsPage': (context) => CreatePostPage(),
           '/register': (context) => RegisterPage(),
           '/': (context) => LoginPage(),
           // '/editProfile': (context) => const EditProfilePage(),
@@ -195,7 +181,7 @@ class _MyAppState extends State<MyApp> {
           //   );
           // },
           '/settings': (context) {
-            return const SettingsPage();
+            return SettingsPage();
           },
         },
         theme: ThemeData(

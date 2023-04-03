@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_fab.dart';
 
 class ProfilePageMenu extends StatefulWidget {
-  const ProfilePageMenu({Key? key, required this.updateMenu, this.selected}) : super(key: key);
-final updateMenu;
-final selected;
+  const ProfilePageMenu({
+    Key? key,
+    required this.updateMenu,
+    this.selected,
+    
+  }) : super(key: key);
+  final updateMenu;
+  
+
+  final selected;
+
   @override
   State<ProfilePageMenu> createState() => _ProfilePageMenuState();
 }
-enum ProfileMenuOptions {
-  PROFILELIST,
-  TIMELINE,
-  INBOX,
-  BLOCKS,
-  ALBUMS,
-  POSTS
-}
+
+enum ProfileMenuOptions { PROFILELIST, TIMELINE, INBOX, BLOCKS, ALBUMS, POSTS }
 
 class _ProfilePageMenuState extends State<ProfilePageMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
+     
       distance: 158.0,
       children: [
         ActionButton(
@@ -41,8 +45,8 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         //   icon: const Icon(Icons.post_add),
         // ),
 
-      ActionButton(
-        tooltip: "Album",
+        ActionButton(
+          tooltip: "Album",
           onPressed: () {
             widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
           },
@@ -71,13 +75,13 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           icon: CircleAvatar(
             backgroundImage: NetworkImage(
               MyImageBuilder()
-                  .urlFor(AuthInherited.of(context)
-                  ?.authController
-                  ?.myAppUser
-                  ?.profileImage)
-                  ?.height(100)
-                  .width(100)
-                  .url() ??
+                      .urlFor(AuthInherited.of(context)
+                          ?.authController
+                          ?.myAppUser
+                          ?.profileImage)
+                      ?.height(100)
+                      .width(100)
+                      .url() ??
                   "",
             ),
           ),

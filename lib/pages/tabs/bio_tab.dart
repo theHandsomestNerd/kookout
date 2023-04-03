@@ -1,10 +1,11 @@
-import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/extended_profile.dart';
 import 'package:cookout/shared_components/tool_button.dart';
 import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
 import '../../models/controllers/auth_inherited.dart';
@@ -29,7 +30,10 @@ class BioTab extends StatefulWidget {
       required this.profileLikedByMe,
       required this.profileFollowedByMe,
       required this.profileFollows,
-      required this.goToCommentsTab});
+        
+
+        required this.goToCommentsTab});
+  
 
   final String id;
   final updateBlocks;
@@ -55,7 +59,7 @@ class _BioTabState extends State<BioTab> {
   late bool _isFollowing = false;
   late bool _isBlocking = false;
 
-  late ChatClient? profileClient = null;
+  late ApiClient? profileClient = null;
   late ChatController? chatController = null;
 
   @override

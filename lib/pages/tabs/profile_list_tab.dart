@@ -3,6 +3,7 @@ import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/app_user.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../shared_components/profile/profile_grid.dart';
@@ -10,8 +11,10 @@ import '../../shared_components/profile/profile_grid.dart';
 class ProfileListTab extends StatefulWidget {
   const ProfileListTab({
     super.key,
-  });
+    
 
+  });
+  
 
   @override
   State<ProfileListTab> createState() => _ProfileListTabState();
@@ -21,6 +24,7 @@ class _ProfileListTabState extends State<ProfileListTab> {
 
   late List<AppUser> profileList=[];
   late ChatController? chatController = null;
+
 
   @override
   didChangeDependencies() async {

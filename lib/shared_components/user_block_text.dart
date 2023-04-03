@@ -1,16 +1,21 @@
 import 'package:cookout/models/app_user.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../sanity/image_url_builder.dart';
 
 class UserBlockText extends StatelessWidget {
   const UserBlockText({
     super.key,
     this.user,
-    this.hideImage
+    this.hideImage,
+    
+
   });
 
   final AppUser? user;
+  
+
   final bool? hideImage;
 
   @override

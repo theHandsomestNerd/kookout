@@ -16,6 +16,7 @@ class AuthInherited extends InheritedWidget {
   final String appName;
   final String packageName;
   final String version;
+  final String apiVersion;
   final String buildNumber;
 
   const AuthInherited(
@@ -28,6 +29,7 @@ class AuthInherited extends InheritedWidget {
       required this.appName,
       required this.packageName,
       required this.version,
+      required this.apiVersion,
       required this.buildNumber,
       required Widget child})
       : super(child: child);

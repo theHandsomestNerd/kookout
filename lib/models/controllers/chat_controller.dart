@@ -1,8 +1,9 @@
 import 'dart:math';
 
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/block.dart';
 import 'package:cookout/models/extended_profile.dart';
-import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/timeline_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,7 +16,7 @@ class ChatController {
   List<Block> myBlockedProfiles = [];
   List<TimelineEvent> timelineOfEvents = [];
 
-  ChatClient profileClient = ChatClient();
+  late ApiClient profileClient;
 
   updateChatController() async {
     myExtProfile = await profileClient
@@ -27,6 +28,8 @@ class ChatController {
   }
 
   ChatController.init() {
+    profileClient = ApiClient(DefaultConfig.theAuthBaseUrl);
+
     if (FirebaseAuth.instance.currentUser != null) {
       // updateChatController().then(() {
       //   print("Done init chat controll");
@@ -83,11 +86,11 @@ class ChatController {
       return false;
     });
 
-    var rng = Random();
-    rng.nextInt(theProfiles.length - 1);
 
     if (theProfiles.isNotEmpty) {
-      return theProfiles[rng.nextInt(theProfiles.length - 1)];
+      var rng = Random();
+      rng.nextInt(theProfiles.length);
+      return theProfiles[rng.nextInt(theProfiles.length)];
     }
 
     return null;

@@ -1,3 +1,4 @@
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/shared_components/logo.dart';
 import 'package:cookout/shared_components/menus/login_menu.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
@@ -12,7 +13,6 @@ import '../models/controllers/auth_inherited.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({
     super.key,
-    required,
   });
 
   @override
@@ -20,15 +20,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String appName = "";
-  String packageName = "";
-  String version = "";
-  String buildNumber = "";
+  late String appName;
+  late String packageName;
+  late String version;
+  late String buildNumber;
   String _loginUsername = "";
   String _loginPassword = "";
-  AuthController? authController;
+  late AuthController authController;
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
   bool isLoading = false;
+  late String sanityDB;
+  late String apiVersion;
+  late String sanityApiDB;
 
   @override
   void initState() {
@@ -42,12 +45,15 @@ class _LoginPageState extends State<LoginPage> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     AuthController? theAuthController =
-        AuthInherited.of(context)?.authController;
-    authController = theAuthController;
-    version = AuthInherited.of(context)?.version ?? "no version";
-    appName = AuthInherited.of(context)?.appName ?? "no appName";
-    buildNumber = AuthInherited.of(context)?.buildNumber ?? "no build number";
-    packageName = AuthInherited.of(context)?.packageName ?? "no Package Name";
+        AuthInherited
+            .of(context)
+            ?.authController;
+    if (theAuthController != null) {
+      authController = theAuthController;
+    }
+
+    apiVersion = DefaultConfig.apiVersion ?? "no version";
+    sanityApiDB = DefaultConfig.apiSanityDB ?? "no api env";
     setState(() {});
     if (kDebugMode) {
       print("dependencies changed login page");
@@ -117,6 +123,8 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  String? errorText = null;
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -127,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: const LoginMenu(),
+      floatingActionButton: LoginMenu(),
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.5),
         // Here we take the value from the LoginPage object that was created by
@@ -167,16 +175,29 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Column(
                                   children: [
                                     TextFormField(
+                                      autofocus: _loginPassword.isEmpty,
+                                      validator: (text) {
+                                        if (text == null || text.isEmpty) {
+                                          errorText = "Cant be empty.";
+                                          return 'Can\'t be empty';
+                                        }
+                                        if (text.length < 4) {
+                                          errorText = "Too short.";
+                                          return 'Too short';
+                                        }
+                                        return null;
+                                      },
                                       autocorrect: false,
                                       initialValue: _loginUsername,
                                       onChanged: (e) {
                                         _setUsername(e);
                                       },
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
+                                        helperText: errorText,
                                         filled: true,
                                         fillColor: Colors.white70,
-                                        prefixIcon: Icon(Icons.person),
-                                        border: OutlineInputBorder(
+                                        prefixIcon: const Icon(Icons.person),
+                                        border: const OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(30.0),
                                           ),
@@ -244,7 +265,10 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 32.0),
                           child: Column(
                             children: [
-                              Text("v$version-$buildNumber"),
+                              Text(
+                                  "${DefaultConfig.appName} v${DefaultConfig.version}.${DefaultConfig
+                                      .buildNumber} - ${DefaultConfig.sanityDB}"),
+                              Text("api v${apiVersion} -${sanityApiDB}"),
                             ],
                           ),
                         ),

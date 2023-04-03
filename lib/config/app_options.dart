@@ -31,11 +31,12 @@ class AppOptions {
   ///   )
   /// );
   /// ```
-  const AppOptions(
-      {required this.sanityDB,
-      required this.authBaseUrl,
-      required this.blankUrl,
-      required this.imageAssetPrefix});
+  const AppOptions({
+    required this.sanityDB,
+    required this.authBaseUrl,
+    required this.blankUrl,
+    required this.sanityProjectID,
+  });
 
   /// Named constructor to create [AppOptions
   ///] from a the response of Pigeon channel.
@@ -45,23 +46,25 @@ class AppOptions {
   ///] instance, for example when data is sent back from a
   /// [MethodChannel].
   AppOptions.fromPigeon(PigeonAppOptionsoptions)
-      : imageAssetPrefix = PigeonAppOptionsoptions.imageAssetPrefix,
-        authBaseUrl = PigeonAppOptionsoptions.authBaseUrl,
+      : authBaseUrl = PigeonAppOptionsoptions.authBaseUrl,
         blankUrl = PigeonAppOptionsoptions.blankUrl,
-        sanityDB = PigeonAppOptionsoptions.sanityDB;
+        sanityDB = PigeonAppOptionsoptions.sanityDB,
+        sanityProjectID = PigeonAppOptionsoptions.sanityProjectID;
 
   /// An API key used for authenticating requests from your app to Google
   /// servers.
   final String authBaseUrl;
   final String blankUrl;
   final String sanityDB;
-  final String imageAssetPrefix;
+  final String sanityProjectID;
 
   /// The current instance as a [Map].
   Map<String, String?> get asMap {
     return <String, String?>{
       'authBaseUrl': authBaseUrl,
       'blankUrl': blankUrl,
+      'sanityDB': sanityDB,
+      'sanityProjectID': sanityProjectID,
     };
   }
 

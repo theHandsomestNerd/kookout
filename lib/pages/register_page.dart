@@ -2,8 +2,8 @@ import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/app_drawer.dart';
 import '../shared_components/menus/login_menu.dart';
 import '../wrappers/loading_button.dart';
 
@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      floatingActionButton: const LoginMenu(),
+      floatingActionButton: LoginMenu(),
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.5),
         // Here we take the value from the LoginPage object that was created by
@@ -136,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Column(
                                 children: [
                                   TextFormField(
+                                    autofocus: _loginPassword.isEmpty,
                                     autocorrect: false,
                                     initialValue: _loginUsername,
                                     onChanged: (e) {
@@ -150,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           Radius.circular(30.0),
                                         ),
                                       ),
-                                      labelText: 'Username',
+                                      labelText: 'Email Address',
                                     ),
                                   ),
                                   const SizedBox(
@@ -180,7 +181,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 16,
                                   ),
                                   LoadingButton(
-                                    isDisabled: _loginUsername.isEmpty || _loginPassword.isEmpty,
+                                    isDisabled: _loginUsername.isEmpty ||
+                                        _loginPassword.isEmpty,
                                     isLoading: isLoading,
                                     action: () {
                                       _registerUser(context);

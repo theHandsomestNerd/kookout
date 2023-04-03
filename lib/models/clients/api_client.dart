@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../config/api_options.dart';
+import '../../config/default_config.dart';
 import '../app_user.dart';
 import '../block.dart';
 import '../comment.dart';
@@ -20,20 +20,78 @@ import '../responses/chat_api_get_profile_likes_response.dart';
 import '../responses/chat_api_get_timeline_events_response.dart';
 import '../timeline_event.dart';
 
-class ChatClient {
-  String authBaseUrl = DefaultAppOptions.currentPlatform.authBaseUrl;
+class ApiClient {
+  String token = "";
+  String apiVersion = "";
+  String sanityDB = "";
+
+  ApiClient(String endpointUrl) {
+    FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
+      token = theToken;
+    });
+  }
+
+  Future<String?> getIdToken() async {
+    if (token != "") {
+      print("Using cached Id Token");
+      return token;
+    } else {
+      print("Retrieving Id Token");
+      String? theToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+      if (theToken != null) {
+        token = theToken;
+        return theToken;
+      }
+    }
+  }
+
+  Future<dynamic> healthCheck() async {
+    if (kDebugMode) {
+      print("Api Health Check ${DefaultConfig.theAuthBaseUrl}");
+    }
+    final response = await http.get(
+      Uri.parse("${DefaultConfig.theAuthBaseUrl}/health-endpoint"),
+    );
+    if (kDebugMode) {
+      print("Api raw status ${response.body}");
+    }
+    var processedResponse = jsonDecode(response.body);
+    var theVersion;
+    if (processedResponse['apiVersion'] != null &&
+        processedResponse['apiVersion'] != "null") {
+      theVersion = processedResponse['apiVersion'];
+      apiVersion = theVersion;
+    }
+      var theSanityDB;
+   if (processedResponse['sanityDB'] != null &&
+        processedResponse['sanityDB'] != "null") {
+       theSanityDB = processedResponse['sanityDB'];
+      sanityDB = theSanityDB;
+    }
+
+   return {
+     "apiVersion": theVersion,
+     "sanityDB": theSanityDB
+   };
+  }
 
   Future<List<AppUser>> fetchProfiles() async {
     if (kDebugMode) {
       print("Retrieving Profiles");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if(DefaultConfig.theAuthBaseUrl == "") {
+      print("Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      return <AppUser>[];
+    }
+
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-all-profiles"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-all-profiles"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
+      print("Profiles retrieved ${processedResponse}");
       if (processedResponse['profiles'] != null &&
           processedResponse['profiles'] != "null") {
         AuthApiProfileListResponse responseModelList =
@@ -49,10 +107,10 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving Timeline Events");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-timeline-events"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-timeline-events"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -83,10 +141,10 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving My Profile Blocks(blocked profiles)");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-my-profile-blocks"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-my-profile-blocks"),
           headers: {"Authorization": ("Bearer $token")});
 
       if (kDebugMode) {
@@ -124,9 +182,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/block-profile"),
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/block-profile"),
           body: {"userId": userId},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -155,9 +214,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/follow-profile"),
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/follow-profile"),
           body: {"userId": userId},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -186,10 +246,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.post(
-          Uri.parse("$authBaseUrl/unfollow-profile"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/unfollow-profile"),
           body: {"followId": currentFollow.id},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -221,10 +281,10 @@ class ChatClient {
       print(commentBody);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.post(
-          Uri.parse("$authBaseUrl/comment-profile"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/comment-profile"),
           body: {"userId": userId, "commentBody": commentBody},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -250,10 +310,10 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving Profile Likes $userId");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-profile-likes/$userId"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-profile-likes/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -278,7 +338,7 @@ class ChatClient {
     if (kDebugMode) {
       print("in updATE CREATE");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    String? token = await getIdToken();
     if (kDebugMode) {
       print("token $token");
     }
@@ -352,7 +412,7 @@ class ChatClient {
       }
 
       final response = await http.post(
-          Uri.parse("$authBaseUrl/update-create-ext-profile"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/update-create-ext-profile"),
           headers: {"Authorization": ("Bearer $token")},
           body: {...body});
 
@@ -379,10 +439,10 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving Ext Profile $userId");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null && userId != null && userId != "") {
+    String? token = await getIdToken();
+    if (token != null && userId != null && userId != "" && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-ext-profile/$userId"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -406,10 +466,11 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving Profile Comments $userId");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-profile-comments/$userId"),
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-profile-comments/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -437,9 +498,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/unlike-profile"),
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/unlike-profile"),
           body: {"likeId": currentLike.id},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -468,10 +530,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.post(
-          Uri.parse("$authBaseUrl/unblock-profile"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/unblock-profile"),
           body: {"blockId": currentBlock.id},
           headers: {"Authorization": ("Bearer $token")});
 
@@ -498,10 +560,10 @@ class ChatClient {
     if (kDebugMode) {
       print("Retrieving Profile Follows $userId");
     }
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("$authBaseUrl/get-profile-follows/$userId"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-profile-follows/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -534,9 +596,10 @@ class ChatClient {
       print(message);
     }
 
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
-      final response = await http.post(Uri.parse("$authBaseUrl/like-profile"),
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/like-profile"),
           body: {"userId": userId},
           headers: {"Authorization": ("Bearer $token")});
 

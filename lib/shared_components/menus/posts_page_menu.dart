@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../sanity/image_url_builder.dart';
 import '../../wrappers/expanding_fab.dart';
 
 class PostsPageMenu extends StatefulWidget {
-  const PostsPageMenu({Key? key, required this.updateMenu, this.selected})
-      : super(key: key);
+  const PostsPageMenu({
+    Key? key,
+    required this.updateMenu,
+    this.selected,
+    
+  }) : super(key: key);
   final updateMenu;
+  
+
   final selected;
 
   @override
@@ -30,6 +37,7 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
+     
       distance: 158.0,
       children: [
         ActionButton(

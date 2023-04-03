@@ -1,3 +1,4 @@
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +21,9 @@ import '../../wrappers/alerts_snackbar.dart';
 import '../../wrappers/loading_button.dart';
 
 class EditProfileTab extends StatefulWidget {
-  const EditProfileTab({Key? key}) : super(key: key);
+  const EditProfileTab({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<EditProfileTab> createState() => _EditProfileTabState();
@@ -31,7 +34,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
   late AppUser? _myAppUser = null;
   late ChatController? chatController = null;
   late AuthController? authController = null;
-  Widget? imageToBeUploaded;
+  var imageToBeUploaded;
 
   String _loginUsername = "";
   String _displayName = "";
@@ -115,7 +118,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
     if (kDebugMode) {
       print("profile image is default");
     }
-    return const AssetImage('assets/blankProfileImage.png');
+    return NetworkImage('assets/blankProfileImage.png');
   }
 
   void _setUsername(String newUsername) {
@@ -254,8 +257,12 @@ class _EditProfileTabState extends State<EditProfileTab> {
         print(e);
       }
     }
-    _alertSnackbar.showSuccessAlert("Profile Updated. Now get out there in crowd.", context);
-    Navigator.pushNamed(context, '/home',);
+    _alertSnackbar.showSuccessAlert(
+        "Profile Updated. Now get out there in crowd.", context);
+    Navigator.pushNamed(
+      context,
+      '/home',
+    );
   }
 
   Height? _height;
@@ -518,7 +525,6 @@ class _EditProfileTabState extends State<EditProfileTab> {
                     isDisabled: isUpdating,
                     action: () async {
                       await _updateProfile(context);
-
                     },
                     text: "Save Profile",
                   ),

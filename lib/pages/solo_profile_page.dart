@@ -1,4 +1,4 @@
-import 'package:cookout/models/clients/chat_client.dart';
+import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/responses/chat_api_get_profile_follows_response.dart';
@@ -10,6 +10,7 @@ import 'package:cookout/pages/tabs/likes_tab.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../models/comment.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
@@ -18,10 +19,12 @@ import '../shared_components/logo.dart';
 import '../shared_components/menus/app_menu.dart';
 
 class SoloProfilePage extends StatefulWidget {
-  const SoloProfilePage({super.key,  required this.id, required this.thisProfile});
+  const SoloProfilePage({super.key,  required this.id, required this.thisProfile,    
+  });
 
   final String id;
   final thisProfile;
+  
 
   @override
   State<SoloProfilePage> createState() => _SoloProfilePageState();
@@ -40,7 +43,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
-  ChatClient? profileClient = null;
+  ApiClient? profileClient = null;
   AuthController? authController = null;
   ChatController? chatController = null;
 

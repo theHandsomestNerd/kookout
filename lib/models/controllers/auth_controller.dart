@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cookout/config/api_options.dart';
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/auth/auth_user.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,13 +14,14 @@ import '../app_user.dart';
 class AuthController {
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
-  String authBaseUrl = DefaultAppOptions.currentPlatform.authBaseUrl;
+  String authBaseUrl = "";
 
   late bool isLoggedIn = false;
   AuthUser? loggedInUser = null;
   AppUser? myAppUser = null;
 
   AuthController.init() {
+    authBaseUrl = DefaultConfig.theAuthBaseUrl;
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
@@ -34,19 +35,21 @@ class AuthController {
           print('authController: User is signed in!');
         }
         isLoggedIn = true;
-        loggedInUser = await _getLoggedInUser();
-        myAppUser = await _getMyAppUser();
+
+        loggedInUser ??= await _getLoggedInUser();
+
+        myAppUser ??= await _getMyAppUser();
       }
     });
 
-    if(FirebaseAuth.instance.currentUser != null) {
+    if (FirebaseAuth.instance.currentUser != null) {
       isLoggedIn = true;
       _getMyAppUser().then((user) {
         myAppUser = user;
       });
 
       _getLoggedInUser().then((user) {
-        if(user != null){
+        if (user != null) {
           isLoggedIn = true;
         } else {
           isLoggedIn = false;
@@ -72,9 +75,9 @@ class AuthController {
       }
 
       String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-      if (token != null) {
+      if (token != null && DefaultConfig.theAuthBaseUrl != "") {
         final response = await http.post(
-            Uri.parse("$authBaseUrl/register-app-user"),
+            Uri.parse("${DefaultConfig.theAuthBaseUrl}/register-app-user"),
             headers: {"Authorization": ("Bearer $token")});
 
         var processedResponse = jsonDecode(response.body);
@@ -115,9 +118,9 @@ class AuthController {
   Future<AuthUser?> updateUser(String username, String displayName,
       String filename, fileBytes, BuildContext context) async {
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token != null) {
+    if (token != null && DefaultConfig.theAuthBaseUrl != null) {
       var request = http.MultipartRequest(
-          'POST', Uri.parse("$authBaseUrl/update-user-profile"));
+          'POST', Uri.parse("${DefaultConfig.theAuthBaseUrl}/update-user-profile"));
 
       request.headers.addAll({"authorization": "Bearer $token"});
 
@@ -158,13 +161,18 @@ class AuthController {
           "Retrieving My App Profile ${loggedInUser?.uid} ${FirebaseAuth.instance.currentUser?.email ?? ""}");
     }
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (FirebaseAuth.instance.currentUser != null && token != null) {
-      final response = await http.get(Uri.parse("$authBaseUrl/get-my-profile"),
+    if (FirebaseAuth.instance.currentUser != null && token != null && DefaultConfig.theAuthBaseUrl != null) {
+      final response = await http.get(Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-my-profile"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
-
-      if (processedResponse['myAppProfile'] != null) {
+      var processedResponse;
+      try {
+        processedResponse = jsonDecode(response.body);
+      } catch (err) {
+        print(err);
+        print("Processed response $processedResponse");
+      }
+      if ( processedResponse!= null && processedResponse['myAppProfile'] != null) {
         AppUser responseModel =
             AppUser.fromJson(processedResponse['myAppProfile']);
         // if (kDebugMode) {
@@ -176,17 +184,18 @@ class AuthController {
         return responseModel;
       }
     }
+
     return null;
   }
 
   Future<AuthUser?> _getLoggedInUser() async {
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (FirebaseAuth.instance.currentUser == null && token != null) {
+    if (FirebaseAuth.instance.currentUser == null && token != null && DefaultConfig.theAuthBaseUrl != "") {
       if (kDebugMode) {
         print(
             "Retrieving My Auth Profile ${FirebaseAuth.instance.currentUser?.uid ?? ""}");
       }
-      final response = await http.get(Uri.parse("$authBaseUrl/get-auth-user"),
+      final response = await http.get(Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-auth-user"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -206,7 +215,9 @@ class AuthController {
 
   Future<AppUser?> getAppUser(String userId) async {
     String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (FirebaseAuth.instance.currentUser != null && userId != "" && token != null) {
+    if (FirebaseAuth.instance.currentUser != null &&
+        userId != "" &&
+        token != null) {
       if (kDebugMode) {
         print("Retrieving App Profile $userId");
       }
@@ -215,10 +226,9 @@ class AuthController {
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
-      AppUser? responseModel=null;
-      if(processedResponse['appProfile'] != null) {
-         responseModel =
-            AppUser.fromJson(processedResponse['appProfile']);
+      AppUser? responseModel = null;
+      if (processedResponse['appProfile'] != null) {
+        responseModel = AppUser.fromJson(processedResponse['appProfile']);
       }
 
       // if (kDebugMode) {

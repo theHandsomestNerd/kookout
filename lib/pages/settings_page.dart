@@ -5,13 +5,16 @@ import 'package:cookout/pages/tabs/timeline_events_tab.dart';
 import 'package:cookout/shared_components/menus/settings_menu.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../models/block.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
-      {super.key,});
+      {super.key,    
+      });
+  
 
   // final AuthController authController;
 
@@ -48,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      const EditProfileTab(),
+       EditProfileTab(),
       TimelineEventsTab(
           timelineEvents: chatController?.timelineOfEvents,
           id: AuthInherited.of(context)?.authController?.myAppUser?.userId ??

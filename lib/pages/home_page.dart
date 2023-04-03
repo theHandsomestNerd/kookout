@@ -1,4 +1,4 @@
-import 'package:cookout/config/api_options.dart';
+import 'package:cookout/config/default_config.dart';
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/models/extended_profile.dart';
 import 'package:cookout/models/post.dart';
@@ -13,10 +13,7 @@ import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    this.isUserLoggedIn,
-  });
+  const HomePage({super.key, this.isUserLoggedIn});
 
   final bool? isUserLoggedIn;
 
@@ -34,8 +31,15 @@ class _HomePageState extends State<HomePage> {
   bool isUserLoggedIn = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   didChangeDependencies() async {
     super.didChangeDependencies();
+
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
     var thePostController = AuthInherited.of(context)?.postController;
@@ -107,7 +111,7 @@ class _HomePageState extends State<HomePage> {
         child: Flex(
           direction: Axis.vertical,
           children: [
-            highlightedProfile != null
+            highlightedProfile != null && !isProfileLoading
                 ? Expanded(
                     child: CardWithActions(
                       locationRow: Flex(
@@ -181,10 +185,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       image: highlightedProfile?.profileImage != null
                           ? NetworkImage(MyImageBuilder()
-                              .urlFor(highlightedProfile?.profileImage!)!
-                              .url())
-                          : NetworkImage(
-                              DefaultAppOptions.currentPlatform.blankUrl),
+                                  .urlFor(highlightedProfile?.profileImage!)
+                                  ?.url() ??
+                              "")
+                          : NetworkImage(""),
                       action1Text:
                           "${highlightedProfile?.displayName?.toUpperCase()[0]}${highlightedProfile?.displayName?.substring(1).toLowerCase()}",
                       action2Text: 'All Profiles',
@@ -199,9 +203,16 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   )
-                : const Expanded(
+                : Expanded(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (isPostLoading) CircularProgressIndicator(),
+                          if (!isPostLoading)
+                            const Text("No Profiles with images"),
+                        ],
+                      ),
                     ),
                   ),
             highlightedPost != null && !isPostLoading
@@ -217,10 +228,12 @@ class _HomePageState extends State<HomePage> {
                       caption: "${highlightedPost?.body}",
                       image: highlightedPost?.mainImage != null
                           ? NetworkImage(MyImageBuilder()
-                              .urlFor(highlightedPost?.mainImage!)!
-                              .url())
-                          : NetworkImage(
-                              DefaultAppOptions.currentPlatform.blankUrl),
+                                  .urlFor(highlightedPost?.mainImage!)
+                                  ?.url() ??
+                              "")
+                          : Image(
+                              image: AssetImage('assets/blankProfileImage.png'),
+                            ).image,
                       action1Text: highlightedPost?.author?.displayName,
                       action2Text: 'All Posts',
                       action1OnPressed: () {

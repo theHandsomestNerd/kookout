@@ -1,12 +1,15 @@
 import 'package:cookout/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
+import '../config/default_config.dart';
 import '../shared_components/logo.dart';
 
 
 class PostsThreadPage extends StatefulWidget {
-  const PostsThreadPage({super.key,
-    });
+  const PostsThreadPage({super.key,    
+
+  });
+  
 
   @override
   State<PostsThreadPage> createState() => _PostsThreadPageState();
@@ -27,7 +30,7 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      const ProfileListTab(),
+       ProfileListTab(),
       const Text(
         'Index 2: Timeline',
         style: optionStyle,
