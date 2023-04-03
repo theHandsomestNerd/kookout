@@ -118,7 +118,9 @@ class _EditProfileTabState extends State<EditProfileTab> {
     if (kDebugMode) {
       print("profile image is default");
     }
-    return NetworkImage('assets/blankProfileImage.png');
+    return Image(
+      image: AssetImage('assets/blankProfileImage.png'),
+    ).image;
   }
 
   void _setUsername(String newUsername) {
