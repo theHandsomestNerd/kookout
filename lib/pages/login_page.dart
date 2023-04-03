@@ -45,9 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     AuthController? theAuthController =
-        AuthInherited
-            .of(context)
-            ?.authController;
+        AuthInherited.of(context)?.authController;
     if (theAuthController != null) {
       authController = theAuthController;
     }
@@ -155,125 +153,150 @@ class _LoginPageState extends State<LoginPage> {
                       repeat: ImageRepeat.repeat,
                     ),
                   ),
-                  Flex(
-                    direction: Axis.vertical,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 8,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 150,
-                                width: 300,
-                                child: Image.asset('assets/logo.png'),
-                              ),
-                              SizedBox(
-                                width: 350,
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      autofocus: _loginPassword.isEmpty,
-                                      validator: (text) {
-                                        if (text == null || text.isEmpty) {
-                                          errorText = "Cant be empty.";
-                                          return 'Can\'t be empty';
-                                        }
-                                        if (text.length < 4) {
-                                          errorText = "Too short.";
-                                          return 'Too short';
-                                        }
-                                        return null;
-                                      },
-                                      autocorrect: false,
-                                      initialValue: _loginUsername,
-                                      onChanged: (e) {
-                                        _setUsername(e);
-                                      },
-                                      decoration: InputDecoration(
-                                        helperText: errorText,
-                                        filled: true,
-                                        fillColor: Colors.white70,
-                                        prefixIcon: const Icon(Icons.person),
-                                        border: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30.0),
-                                          ),
-                                        ),
-                                        labelText: 'Username',
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    TextFormField(
-                                      obscureText: true,
-                                      enableSuggestions: false,
-                                      autocorrect: false,
-                                      initialValue: _loginPassword,
-                                      onChanged: (e) {
-                                        _setPassword(e);
-                                      },
-                                      decoration: const InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white70,
-                                        prefixIcon: Icon(Icons.password),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30.0),
-                                          ),
-                                        ),
-                                        labelText: 'Password',
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 16,
-                                    ),
-                                    LoadingButton(
-                                      isDisabled: _loginUsername.isEmpty ||
-                                          _loginPassword.isEmpty,
-                                      action: () {
-                                        _loginUser(context);
-                                      },
-                                      text: "Login",
-                                    ),
-                                    const SizedBox(
-                                      height: 32,
-                                    ),
-                                    const Text(
-                                        "If you do not have an account..."),
-                                    LoadingButton(
-                                      isLoading: isLoading,
-                                      action: () {
-                                        Navigator.popAndPushNamed(
-                                            context, '/register');
-                                      },
-                                      text: "Register",
-                                    ),
-                                  ],
+                  Center(
+                    child: Flex(
+                      direction: Axis.vertical,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
+                          flex: 8,
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 150,
+                                  width: 300,
+                                  child: Image.asset('assets/logo.png'),
                                 ),
-                              ),
-                            ],
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 350, maxHeight: 450),
+                                  child: Flex(
+                                    direction: Axis.vertical,
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        child: TextFormField(
+                                          autofocus: _loginPassword.isEmpty,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          validator: (String? value) {
+                                            const pattern =
+                                                r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
+                                                r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
+                                                r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
+                                                r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
+                                                r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
+                                                r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
+                                                r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
+                                            final regex = RegExp(pattern);
+
+                                            return value!.isNotEmpty &&
+                                                    !regex.hasMatch(value)
+                                                ? 'Enter a valid email address'
+                                                : null;
+                                          },
+                                          autocorrect: false,
+                                          initialValue: _loginUsername,
+                                          onChanged: (e) {
+                                            _setUsername(e);
+                                          },
+                                          decoration: InputDecoration(
+                                            helperText: errorText,
+                                            filled: true,
+                                            fillColor: Colors.white70,
+                                            prefixIcon: const Icon(Icons.person),
+                                            border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(30.0),
+                                              ),
+                                            ),
+                                            labelText: 'Username',
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: TextFormField(
+                                          obscureText: true,
+                                          enableSuggestions: false,
+                                          autocorrect: false,
+                                          initialValue: _loginPassword,
+                                          onChanged: (e) {
+                                            _setPassword(e);
+                                          },
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white70,
+                                            prefixIcon: Icon(Icons.password),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(30.0),
+                                              ),
+                                            ),
+                                            labelText: 'Password',
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: LoadingButton(
+                                          isDisabled: _loginUsername.isEmpty ||
+                                              _loginPassword.isEmpty,
+                                          action: () {
+                                            _loginUser(context);
+                                          },
+                                          text: "Login",
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 32,
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: const Text(
+                                            "If you do not have an account..."),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: LoadingButton(
+                                          isLoading: isLoading,
+                                          action: () {
+                                            Navigator.popAndPushNamed(
+                                                context, '/register');
+                                          },
+                                          text: "Register",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 32.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                  "${DefaultConfig.appName} v${DefaultConfig.version}.${DefaultConfig
-                                      .buildNumber} - ${DefaultConfig.sanityDB}"),
-                              Text("api v${apiVersion} -${sanityApiDB}"),
-                            ],
+                        Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 32.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                    "${DefaultConfig.appName} v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
+                                Text("api v${apiVersion} -${sanityApiDB}"),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
