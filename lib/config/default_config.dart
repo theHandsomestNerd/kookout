@@ -19,6 +19,10 @@ class DefaultConfig {
   static late String apiVersion = "";
   static late String apiSanityDB = "";
   static late String buildNumber = "";
+  static late String apiStatus = "";
+
+  static late int homepagePostDurationSecs = 5;
+  static late int homepageProfileDurationSecs = 5;
 
   static late String blankUrl = "";
 
@@ -31,18 +35,26 @@ class DefaultConfig {
   static Future<void>? initializingConfig;
 
   static get theAuthBaseUrl {
-    print("What's the AuthBase Url $authBaseUrl");
     return authBaseUrl;
+  }
+static get theApiStatus {
+    return apiStatus;
   }
 
   static get theSanityDB {
-    print("What's the sanitydb $sanityDB");
     return sanityDB;
   }
 
   static get theSanityProjectID {
-    print("What's the sanity proj id $sanityProjectID");
     return sanityProjectID;
+  }
+
+  static get theHomePagePostDurationSecs {
+    return homepagePostDurationSecs;
+  }
+
+  static get theHomePageProfileDurationSecs {
+    return homepageProfileDurationSecs;
   }
 
   _initializeConfig() async {
@@ -70,6 +82,8 @@ class DefaultConfig {
               "sanityDB": "x",
               "blankUrl": "x",
               "authBaseUrl": "x",
+              "homepageProfileDurationSecs": "x",
+              "homepagePostDurationSecs": "x",
             },
           ),
           "production": jsonEncode(
@@ -78,6 +92,8 @@ class DefaultConfig {
               "sanityDB": "x",
               "blankUrl": "x",
               "authBaseUrl": "x",
+              "homepageProfileDurationSecs": "x",
+              "homepagePostDurationSecs": "x",
             },
           )
         },
@@ -106,14 +122,23 @@ class DefaultConfig {
             if (rawData['sanityProjectId'] != null) {
               sanityProjectID = rawData['sanityProjectId'];
             }
+            if (rawData['homepageProfileDurationSecs'] != null) {
+              homepageProfileDurationSecs =
+                  int.parse(rawData['homepageProfileDurationSecs']);
+            }
+            if (rawData['homepagePostDurationSecs'] != null) {
+              homepagePostDurationSecs =  int.parse(rawData['homepagePostDurationSecs']);
+            }
 
             print("Config from remote: $authBaseUrl");
             var theClient = ApiClient(rawData['authBaseUrl']);
             _apiClient = theClient;
-            var theVersion = await theClient.healthCheck();
-            print("THe health response $theVersion");
-            apiVersion = theVersion['apiVersion'];
-            apiSanityDB = theVersion['sanityDB'];
+            var healthResponse = await theClient.healthCheck();
+            print("THe health response $healthResponse");
+            apiVersion = healthResponse['apiVersion'];
+            apiSanityDB = healthResponse['sanityDB'];
+            apiStatus = healthResponse['status'];
+
             return PackageInfoPlugin().getAll().then((packageInfo) {
               print("retrieved Package Info $packageInfo");
               appName = packageInfo.appName;

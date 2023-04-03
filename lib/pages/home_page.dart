@@ -37,9 +37,61 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
 
-    // Timer.periodic(Duration(seconds: 3), (timer) {
-    //   print(DateTime.now());
-    // });
+    Timer.periodic(Duration(seconds: 6), (timer) async {
+      print("Timer went off $timer");
+      var theChatController = AuthInherited.of(context)?.chatController;
+
+      if (isProfileLoading != true) {
+        setState(() {
+          isProfileLoading = true;
+        });
+        await theChatController?.fetchHighlightedProfile().then((theProfile) {
+          setState(() {
+            highlightedProfile = theProfile;
+            isProfileLoading = false;
+          });
+        }).catchError((error) {
+          setState(() {
+            isProfileLoading = false;
+          });
+        });
+      }
+
+      if (isExtProfileLoading != true) {
+        setState(() {
+          isExtProfileLoading = true;
+        });
+        await theChatController?.profileClient
+            .getExtendedProfile(highlightedProfile?.userId ?? "")
+            .then((theProfile) {
+          setState(() {
+            highlightedExtProfile = theProfile;
+            isExtProfileLoading = false;
+          });
+        }).catchError((onError) {
+          setState(() {
+            isExtProfileLoading = false;
+          });
+        });
+      }
+    });
+    Timer.periodic(Duration(seconds: 18), (timer) async {
+      print("Timer went off $timer");
+      var thePostController = AuthInherited.of(context)?.postController;
+      if (isPostLoading != true) {
+        setState(() {
+          isPostLoading = true;
+        });
+
+        await thePostController?.fetchHighlightedPost().then((thePost) {
+          if (thePost != null) {
+            highlightedPost = thePost;
+          }
+          isPostLoading = false;
+          setState(() {});
+        });
+      }
+    });
   }
 
   @override

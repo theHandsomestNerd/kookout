@@ -56,23 +56,34 @@ class ApiClient {
       print("Api raw status ${response.body}");
     }
     var processedResponse = jsonDecode(response.body);
-    var theVersion;
+    String theVersion = "";
     if (processedResponse['apiVersion'] != null &&
         processedResponse['apiVersion'] != "null") {
       theVersion = processedResponse['apiVersion'];
       apiVersion = theVersion;
     }
-      var theSanityDB;
-   if (processedResponse['sanityDB'] != null &&
+    String theSanityDB = "";
+    if (processedResponse['sanityDB'] != null &&
         processedResponse['sanityDB'] != "null") {
-       theSanityDB = processedResponse['sanityDB'];
+      theSanityDB = processedResponse['sanityDB'];
       sanityDB = theSanityDB;
     }
 
-   return {
-     "apiVersion": theVersion,
-     "sanityDB": theSanityDB
-   };
+    String theApiStatus = "";
+    if (processedResponse['status'] != null &&
+        processedResponse['status'] != "null") {
+      if(processedResponse['status'] == "200"){
+        theApiStatus = "UP";
+      } else {
+        theApiStatus = "DOWN";
+      }
+    }
+
+    return {
+      "apiVersion": theVersion,
+      "sanityDB": theSanityDB,
+      "status": theApiStatus
+    };
   }
 
   Future<List<AppUser>> fetchProfiles() async {
@@ -80,8 +91,9 @@ class ApiClient {
       print("Retrieving Profiles");
     }
     String? token = await getIdToken();
-    if(DefaultConfig.theAuthBaseUrl == "") {
-      print("Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+    if (DefaultConfig.theAuthBaseUrl == "") {
+      print(
+          "Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
       return <AppUser>[];
     }
 
@@ -313,7 +325,8 @@ class ApiClient {
     String? token = await getIdToken();
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-profile-likes/$userId"),
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-profile-likes/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);
@@ -412,7 +425,8 @@ class ApiClient {
       }
 
       final response = await http.post(
-          Uri.parse("${DefaultConfig.theAuthBaseUrl}/update-create-ext-profile"),
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/update-create-ext-profile"),
           headers: {"Authorization": ("Bearer $token")},
           body: {...body});
 
@@ -440,7 +454,10 @@ class ApiClient {
       print("Retrieving Ext Profile $userId");
     }
     String? token = await getIdToken();
-    if (token != null && userId != null && userId != "" && DefaultConfig.theAuthBaseUrl != "") {
+    if (token != null &&
+        userId != null &&
+        userId != "" &&
+        DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
@@ -563,7 +580,8 @@ class ApiClient {
     String? token = await getIdToken();
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
-          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-profile-follows/$userId"),
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-profile-follows/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
       var processedResponse = jsonDecode(response.body);

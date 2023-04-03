@@ -216,6 +216,9 @@ class _LoginPageState extends State<LoginPage> {
                                           obscureText: true,
                                           enableSuggestions: false,
                                           autocorrect: false,
+                                          setField: (e){
+                                            _setPassword(e);
+                                          },
                                           initialValue: _loginPassword,
                                           labelText: "Password",
                                           ),
@@ -267,8 +270,10 @@ class _LoginPageState extends State<LoginPage> {
                             child: Column(
                               children: [
                                 Text(
-                                    "${DefaultConfig.appName} v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
-                                Text("api v${apiVersion} -${sanityApiDB}"),
+                                    "${DefaultConfig.appName}"),Text(
+                                    "ui v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
+                                Text("api - ${DefaultConfig.apiStatus}"),
+                                Text("v${apiVersion} -${sanityApiDB}"),
                               ],
                             ),
                           ),
