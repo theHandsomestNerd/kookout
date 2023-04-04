@@ -37,7 +37,8 @@ class DefaultConfig {
   static get theAuthBaseUrl {
     return authBaseUrl;
   }
-static get theApiStatus {
+
+  static get theApiStatus {
     return apiStatus;
   }
 
@@ -82,8 +83,10 @@ static get theApiStatus {
               "sanityDB": "x",
               "blankUrl": "x",
               "authBaseUrl": "x",
-              "homepageProfileDurationSecs": "x",
-              "homepagePostDurationSecs": "x",
+              "homepageProfileDurationSecs":
+              "x",
+              "homepagePostDurationSecs":
+              "x",
             },
           ),
           "production": jsonEncode(
@@ -94,6 +97,18 @@ static get theApiStatus {
               "authBaseUrl": "x",
               "homepageProfileDurationSecs": "x",
               "homepagePostDurationSecs": "x",
+            },
+          ),
+          "deployment": jsonEncode(
+            {
+              "sanityProjectId": "x",
+              "sanityDB": "x",
+              "blankUrl": "x",
+              "authBaseUrl": "x",
+              "homepageProfileDurationSecs":
+                  "x",
+              "homepagePostDurationSecs":
+                  "x",
             },
           )
         },
@@ -106,10 +121,13 @@ static get theApiStatus {
             final FirebaseRemoteConfig remoteConfig =
                 FirebaseRemoteConfig.instance;
 
-            var rawData = jsonDecode(remoteConfig
-                    .getAll()[kDebugMode ? 'development' : 'production']
-                    ?.asString() ??
-                "");
+            getMode() {
+              print(" mode: $kDebugMode");
+              return kDebugMode ? 'development' : 'production';
+            }
+
+            var rawData =
+                jsonDecode(remoteConfig.getAll()[getMode()]?.asString() ?? "");
 
             if (rawData['authBaseUrl'] != null) {
               authBaseUrl = rawData['authBaseUrl'];
@@ -127,7 +145,8 @@ static get theApiStatus {
                   int.parse(rawData['homepageProfileDurationSecs']);
             }
             if (rawData['homepagePostDurationSecs'] != null) {
-              homepagePostDurationSecs =  int.parse(rawData['homepagePostDurationSecs']);
+              homepagePostDurationSecs =
+                  int.parse(rawData['homepagePostDurationSecs']);
             }
 
             print("Config from remote: $authBaseUrl");
