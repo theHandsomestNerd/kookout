@@ -11,17 +11,17 @@ on:
 
 jobs:
   export_upload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v3
       - name: Export dataset
-        uses: sanity-io/github-action-sanity@v0.1-alpha
+        uses: sanity-io/github-action-sanity@v0.2-alpha
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
         with:
           args: dataset export production backups/backup.tar.gz
       - name: Upload backup.tar.gz
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: backup-tarball
           path: backups/backup.tar.gz
