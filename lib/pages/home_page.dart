@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cookout/config/default_config.dart';
 import 'package:cookout/layout/full_page_layout.dart';
+import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/extended_profile.dart';
 import 'package:cookout/models/post.dart';
 import 'package:cookout/sanity/image_url_builder.dart';
@@ -11,6 +12,7 @@ import 'package:cookout/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
+import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
@@ -94,6 +96,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  late ChatController chatController;
+
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
@@ -101,14 +105,16 @@ class _HomePageState extends State<HomePage> {
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
     var thePostController = AuthInherited.of(context)?.postController;
-
+    if (theChatController != null) {
+      chatController = theChatController;
+    }
     isUserLoggedIn = theAuthController?.isLoggedIn ?? false;
     if (isPostLoading != true && highlightedPost == null) {
       setState(() {
         isPostLoading = true;
       });
 
-      thePostController?.fetchHighlightedPost().then((thePost) {
+      await thePostController?.fetchHighlightedPost().then((thePost) {
         if (thePost != null) {
           highlightedPost = thePost;
         }
@@ -121,7 +127,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isProfileLoading = true;
       });
-      theChatController?.fetchHighlightedProfile().then((theProfile) {
+      await theChatController?.fetchHighlightedProfile().then((theProfile) {
         setState(() {
           highlightedProfile = theProfile;
           isProfileLoading = false;
@@ -133,7 +139,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isExtProfileLoading = true;
       });
-      theChatController?.profileClient
+      await theChatController?.profileClient
           .getExtendedProfile(highlightedProfile?.userId ?? "")
           .then((theProfile) {
         setState(() {
@@ -268,9 +274,9 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (isPostLoading) CircularProgressIndicator(),
-                          if (!isPostLoading)
-                            const Text("No Profiles with images"),
+                          !isPostLoading && chatController.profileList.isEmpty ?
+                            const Text("No Profiles with images"):
+                          CircularProgressIndicator(),
                         ],
                       ),
                     ),
@@ -312,7 +318,8 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (isPostLoading) CircularProgressIndicator(),
+                          if (isPostLoading)
+                            CircularProgressIndicator(),
                           if (!isPostLoading)
                             const Text("No Posts with images"),
                         ],
