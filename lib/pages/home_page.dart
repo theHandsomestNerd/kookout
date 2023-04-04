@@ -1,20 +1,20 @@
 import 'dart:async';
 
-import 'package:cookout/config/default_config.dart';
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/extended_profile.dart';
 import 'package:cookout/models/post.dart';
 import 'package:cookout/sanity/image_url_builder.dart';
 import 'package:cookout/shared_components/menus/home_page_menu.dart';
-import 'package:cookout/shared_components/menus/login_menu.dart';
 import 'package:cookout/wrappers/card_with_actions.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
-import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
+
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.isUserLoggedIn});
@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with RouteAware {
   Post? highlightedPost;
   AppUser? highlightedProfile;
   ExtendedProfile? highlightedExtProfile;
@@ -34,12 +34,11 @@ class _HomePageState extends State<HomePage> {
   bool isExtProfileLoading = false;
   bool isUserLoggedIn = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Timer? profileTimer;
+  Timer? postTimer;
 
-    Timer.periodic(Duration(seconds: 6), (timer) async {
+  startHomeScreenTimers() async {
+    profileTimer ??= Timer.periodic(Duration(seconds: 6), (timer) async {
       print("Timer went off $timer");
       var theChatController = AuthInherited.of(context)?.chatController;
 
@@ -56,6 +55,9 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isProfileLoading = false;
           });
+        });
+        setState(() {
+
         });
       }
 
@@ -77,7 +79,7 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
-    Timer.periodic(Duration(seconds: 18), (timer) async {
+    postTimer ??= Timer.periodic(Duration(seconds: 18), (timer) async {
       print("Timer went off $timer");
       var thePostController = AuthInherited.of(context)?.postController;
       if (isPostLoading != true) {
@@ -96,11 +98,66 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    startHomeScreenTimers();
+  }
+
+  @override
+  void didPushNext() {
+    print("router status: didPushnext");
+    cancelHomeScreenTimers();
+    super.didPushNext();
+  }
+
+  @override
+  void didPush() {
+    print("router status: didPush");
+    super.didPush();
+
+    startHomeScreenTimers();
+  }
+
+  cancelHomeScreenTimers() {
+    postTimer?.cancel();
+    profileTimer?.cancel();
+    setState(() {
+
+    });
+  }
+
+  @override
+  void didPopNext() {
+    print("router status: didPopnext");
+    super.didPopNext();
+    startHomeScreenTimers();
+  }
+
+  @override
+  void didPop() async {
+    print("router status: didPop");
+    cancelHomeScreenTimers();
+    super.didPop();
+  }
+
+  @override
+  void dispose() async {
+    routeObserver.unsubscribe(this);
+    cancelHomeScreenTimers();
+    super.dispose();
+  }
+
   late ChatController chatController;
 
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
+      startHomeScreenTimers();
+
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
 
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
@@ -260,11 +317,15 @@ class _HomePageState extends State<HomePage> {
                       action2Text: 'All Profiles',
                       action1OnPressed: () {
                         if (highlightedProfile?.userId != null) {
+                          cancelHomeScreenTimers();
+
                           Navigator.pushNamed(context, '/profile',
                               arguments: {"id": highlightedProfile?.userId});
                         }
                       },
                       action2OnPressed: () {
+                        cancelHomeScreenTimers();
+
                         Navigator.pushNamed(context, '/profilesPage');
                       },
                     ),
@@ -274,9 +335,9 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          !isPostLoading && chatController.profileList.isEmpty ?
-                            const Text("No Profiles with images"):
-                          CircularProgressIndicator(),
+                          !isPostLoading && chatController.profileList.isEmpty
+                              ? const Text("No Profiles with images")
+                              : CircularProgressIndicator(),
                         ],
                       ),
                     ),
@@ -304,11 +365,13 @@ class _HomePageState extends State<HomePage> {
                       action2Text: 'All Posts',
                       action1OnPressed: () {
                         if (highlightedPost?.id != null) {
+                          cancelHomeScreenTimers();
                           Navigator.pushNamed(context, '/post',
                               arguments: {"id": highlightedPost?.id});
                         }
                       },
                       action2OnPressed: () {
+                        cancelHomeScreenTimers();
                         Navigator.pushNamed(context, '/postsPage');
                       },
                     ),
@@ -318,8 +381,7 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (isPostLoading)
-                            CircularProgressIndicator(),
+                          if (isPostLoading) CircularProgressIndicator(),
                           if (!isPostLoading)
                             const Text("No Posts with images"),
                         ],

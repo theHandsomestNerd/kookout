@@ -1,3 +1,4 @@
+import 'package:cookout/models/controllers/analytics_controller.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/controllers/post_controller.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class AuthInherited extends InheritedWidget {
   final AuthController? authController;
   final ChatController? chatController;
   final PostController? postController;
+  final AnalyticsController? analyticsController;
   final AuthUser? myLoggedInUser;
   final SanityImage? profileImage;
 
@@ -25,6 +27,7 @@ class AuthInherited extends InheritedWidget {
       this.authController,
       this.chatController,
       this.postController,
+      this.analyticsController,
       this.myLoggedInUser,
       required this.appName,
       required this.packageName,

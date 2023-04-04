@@ -1,6 +1,7 @@
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/models/controllers/auth_inherited.dart';
 import 'package:cookout/shared_components/menus/posts_page_menu.dart';
+import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,7 @@ import '../wrappers/loading_button.dart';
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({
     super.key,
-    
   });
-
-  
 
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
@@ -66,11 +64,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   _makePost(context) async {
+    setState(() {
+      _isPosting = true;
+    });
     String? postResponse;
 
     postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
+    setState(() {
+      _isPosting = false;
+    });
 
+    if (postResponse == "SUCCESS") {
+      AlertSnackbar().showSuccessAlert("Post created:", context);
+    } else if (postResponse == "FAIL") {
+      AlertSnackbar().showErrorAlert("Post creation failed. Try again.", context);
+    }
     return postResponse ?? "FAIL";
   }
 
@@ -100,7 +109,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     return Scaffold(
       floatingActionButton: PostsPageMenu(
-
         updateMenu: () {},
       ),
       appBar: AppBar(

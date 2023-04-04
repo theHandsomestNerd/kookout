@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cookout/config/default_config.dart';
+import 'package:cookout/models/controllers/analytics_controller.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/controllers/post_controller.dart';
@@ -13,6 +14,7 @@ import 'package:cookout/pages/profiles_page.dart';
 import 'package:cookout/pages/register_page.dart';
 import 'package:cookout/pages/settings_page.dart';
 import 'package:cookout/pages/solo_profile_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -28,6 +30,8 @@ import 'pages/login_page.dart';
 //     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
@@ -39,6 +43,8 @@ Future<void> main() async {
 
    DefaultConfig();
    await DefaultConfig.initializingConfig;
+
+
 
 print("main auth url ${DefaultConfig.theAuthBaseUrl}");
 
@@ -64,6 +70,7 @@ class _MyAppState extends State<MyApp> {
   late AuthController authController = AuthController.init();
   late ChatController chatController = ChatController.init();
   late PostController postController = PostController.init();
+  late AnalyticsController analyticsController = AnalyticsController.init();
 
   // var myExtProfile = null;
 
@@ -119,6 +126,7 @@ class _MyAppState extends State<MyApp> {
       packageName: packageName,
       version: version,
       buildNumber: buildNumber,
+      analyticsController: analyticsController,
       authController: authController,
       chatController: chatController,
       postController: postController,

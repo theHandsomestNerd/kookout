@@ -34,10 +34,12 @@ class _PostsPageState extends State<PostsPage> {
   AuthController? authController;
   PostController? postController;
 
+
   @override
   initState() {
     super.initState();
     imageUploader = ImageUploaderImpl();
+
 
     _getPosts().then((listOfPosts) {
       _postsList = listOfPosts;

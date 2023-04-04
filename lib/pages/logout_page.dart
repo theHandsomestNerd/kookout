@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import '../shared_components/logo.dart';
 
 class LogoutPage extends StatefulWidget {
-  const LogoutPage({super.key,});
-
+  const LogoutPage({
+    super.key,
+  });
 
   @override
   State<LogoutPage> createState() => _LogoutPageState();
@@ -66,8 +67,9 @@ class _LogoutPageState extends State<LogoutPage> {
                       //         ? MaterialStateProperty.all(Colors.red)
                       //         : MaterialStateProperty.all(Colors.white)),
                       onPressed: () async {
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.popAndPushNamed(context, '/login');
+                        await FirebaseAuth.instance.signOut().then((x) {
+                          Navigator.popUntil(context, ModalRoute.withName('/'));
+                        });
                       },
                       child: const Text("Logout"),
                     ),
