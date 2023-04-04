@@ -28,6 +28,8 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
+
   late ImageUploader? imageUploader;
   AuthController? authController;
   PostController? postController;
@@ -69,17 +71,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
     });
     String? postResponse;
 
+    print(" make post");
     postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
+
     setState(() {
       _isPosting = false;
     });
 
-    if (postResponse == "SUCCESS") {
-      AlertSnackbar().showSuccessAlert("Post created:", context);
-    } else if (postResponse == "FAIL") {
-      AlertSnackbar().showErrorAlert("Post creation failed. Try again.", context);
-    }
+    print(" post response $postResponse");
     return postResponse ?? "FAIL";
   }
 
@@ -106,6 +106,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    _sendSuccess() async {
+      await _alertSnackbar.showSuccessAlert("Post created:", context);
+    }
+
+    _sendError() async {
+      await _alertSnackbar.showErrorAlert(
+          "Post creation failed. Try again.", context);
+    }
 
     return Scaffold(
       floatingActionButton: PostsPageMenu(
@@ -140,8 +149,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             LoadingButton(
-              action: () {
-                _makePost(context);
+              action: () async {
+                var status = await _makePost(context);
+                print("statusssssssssss $status");
+                if (status == "SUCCESS") {
+                  await _sendSuccess();
+                } else if (status == "FAIL") {
+                  await _sendError();
+                }
               },
               isLoading: _isPosting,
               text: "Post",

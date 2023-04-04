@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   void dispose() async {
     routeObserver.unsubscribe(this);
     cancelHomeScreenTimers();
-    super.dispose();
+    // super.dispose();
   }
 
   late ChatController chatController;

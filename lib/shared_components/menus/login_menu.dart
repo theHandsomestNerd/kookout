@@ -59,7 +59,7 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Login",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/login');
+              Navigator.popAndPushNamed(context, '/');
             },
             icon: const Icon(Icons.logout),
           ),

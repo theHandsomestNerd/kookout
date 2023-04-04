@@ -132,7 +132,7 @@ class PostController {
       //   print("post controller api response$response");
       // }
 
-      return "SUCCCESS";
+      return "SUCCESS";
     } else {
       if (kDebugMode) {
         print("Cannot update user no token present...");
