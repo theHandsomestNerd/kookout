@@ -45,25 +45,35 @@ class _BugReporterContentState extends State<BugReporterContent> {
       backgroundColor: Colors.green,
       title: const Text('Report a Bug'),
       actions: [
-        LoadingButton(
-          isLoading: isSubmitting,
-          isDisabled: _title.isEmpty &&
-              _description == INITIAL_DESCRIPTION &&
-              imageUploader?.file?.name == null,
-          width: 180,
-          action: () async {
-            await submitBug();
-            setState(() {});
-            // Navigator.of(context).pop();
-          },
-          text: "Submit Bug",
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            LoadingButton(
+              isLoading: isSubmitting,
+              isDisabled: _title.isEmpty &&
+                  _description == INITIAL_DESCRIPTION &&
+                  imageUploader?.file?.name == null,
+              width: 110,
+              action: () async {
+                await submitBug();
+                setState(() {});
+                // Navigator.of(context).pop();
+              },
+              text: "Submit Bug",
+            ),
+          ],
         ),
-        LoadingButton(
-          width: 180,
-          action: () {
-            Navigator.of(context).pop();
-          },
-          text: 'Cancel',
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            LoadingButton(
+              width: 110,
+              action: () {
+                Navigator.of(context).pop();
+              },
+              text: 'Cancel',
+            ),
+          ],
         ),
       ],
       content: ConstrainedBox(
