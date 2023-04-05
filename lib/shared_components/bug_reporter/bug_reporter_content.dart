@@ -83,12 +83,10 @@ class _BugReporterContentState extends State<BugReporterContent> {
         ),
         child: Stack(
           children: [
-            Flex(
-              direction: Axis.vertical,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: TextFieldWrapped(
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFieldWrapped(
                     borderColor: Colors.black,
                     initialValue: _title,
                     setField: (value) {
@@ -97,11 +95,8 @@ class _BugReporterContentState extends State<BugReporterContent> {
                     },
                     labelText: "Title",
                   ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: TextFieldWrapped(
-                    maxLines: 20,
+                  TextFieldWrapped(
+                    maxLines: 10,
                     initialValue: _description,
                     setField: (value) {
                       _description = value;
@@ -109,11 +104,8 @@ class _BugReporterContentState extends State<BugReporterContent> {
                     },
                     labelText: "Description",
                   ),
-                ),
-                if (imageUploader != null)
-                  Expanded(
-                    flex: 3,
-                    child: SizedBox(
+                  if (imageUploader != null)
+                    SizedBox(
                       height: 200,
                       width: 200,
                       child: AppImageUploader(
@@ -127,8 +119,8 @@ class _BugReporterContentState extends State<BugReporterContent> {
                         },
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
             if (isSubmitting)
               Center(
