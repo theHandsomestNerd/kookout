@@ -7,6 +7,7 @@ import 'package:cookout/shared_components/menus/profile_page_menu.dart';
 import 'package:flutter/material.dart';
 
 import '../models/block.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
@@ -34,6 +35,11 @@ class _ProfilesPageState extends State<ProfilesPage> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Profiles');
+
     chatController = theChatController;
     myUserId =
         AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";

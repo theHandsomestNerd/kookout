@@ -1,4 +1,5 @@
 import 'package:cookout/config/default_config.dart';
+import 'package:cookout/models/controllers/analytics_controller.dart';
 import 'package:cookout/shared_components/logo.dart';
 import 'package:cookout/shared_components/menus/login_menu.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
@@ -40,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
 
     _loginPassword = '';
     _loginUsername = '';
+
+
   }
 
   @override
@@ -50,7 +53,10 @@ class _LoginPageState extends State<LoginPage> {
     if (theAuthController != null) {
       authController = theAuthController;
     }
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
 
+    theAnalyticsController?.logScreenView('Login');
     apiVersion = DefaultConfig.apiVersion ?? "no version";
     sanityApiDB = DefaultConfig.apiSanityDB ?? "no api env";
     setState(() {});

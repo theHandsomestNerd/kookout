@@ -11,6 +11,7 @@ import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 import '../config/default_config.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
@@ -55,6 +56,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
     PostController? thePostController =
         AuthInherited.of(context)?.postController;
     postController = thePostController;
+
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Create Post');
 
     setState(() {});
   }

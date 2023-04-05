@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
 import '../models/block.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
@@ -39,6 +40,11 @@ class _SettingsPageState extends State<SettingsPage> {
   didChangeDependencies() async {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Settings');
+
     chatController = theChatController;
     myUserId = AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();

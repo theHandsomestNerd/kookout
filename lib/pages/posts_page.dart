@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
 import '../models/app_user.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../models/post.dart';
@@ -53,6 +54,12 @@ class _PostsPageState extends State<PostsPage> {
         AuthInherited.of(context)?.authController;
     PostController? thePostController =
         AuthInherited.of(context)?.postController;
+
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Posts Page');
+
     authController = theAuthController;
     postController = thePostController;
     _postsList = await _getPosts();

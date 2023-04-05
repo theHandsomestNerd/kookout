@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
@@ -159,6 +160,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
     var thePostController = AuthInherited.of(context)?.postController;
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Home');
+
     if (theChatController != null) {
       chatController = theChatController;
     }

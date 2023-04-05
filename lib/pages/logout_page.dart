@@ -2,6 +2,8 @@ import 'package:cookout/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../models/controllers/analytics_controller.dart';
+import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
 class LogoutPage extends StatefulWidget {
@@ -14,6 +16,15 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
+
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Logout');
+  }
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done

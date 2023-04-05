@@ -5,7 +5,9 @@ class AnalyticsController {
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
-  AnalyticsController.init() {}
+  AnalyticsController.init() {
+
+  }
 
   // Future<void> _setDefaultEventParameters() async {
   //   if (kIsWeb) {

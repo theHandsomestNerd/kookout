@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
 import '../models/comment.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
@@ -58,6 +59,12 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     var theAuthController = AuthInherited.of(context)?.authController;
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+
+    theAnalyticsController?.logScreenView(_isThisMe ? 'My Profile Page': 'Profile Page');
+
     var theFollows = await theChatController?.profileClient.getProfileFollows(widget.id) as ChatApiGetProfileFollowsResponse;
     var theLikes = await theChatController?.profileClient
         .getProfileLikes(widget.id) as ChatApiGetProfileLikesResponse;

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
+import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 import '../shared_components/menus/login_menu.dart';
@@ -28,6 +29,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
     _loginPassword = '';
     _loginUsername = '';
+  }
+
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Register');
   }
 
   void _setUsername(String newUsername) {

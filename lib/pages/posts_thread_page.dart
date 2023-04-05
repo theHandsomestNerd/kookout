@@ -2,6 +2,8 @@ import 'package:cookout/pages/tabs/profile_list_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
+import '../models/controllers/analytics_controller.dart';
+import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 
 
@@ -22,6 +24,14 @@ class _PostsThreadPageState extends State<PostsThreadPage> {
   void initState() {
     super.initState();
     // widget.chatController.updateProfiles();
+  }
+
+  didChangeDependencies() async {
+    super.didChangeDependencies();
+    AnalyticsController? theAnalyticsController =
+        AuthInherited.of(context)?.analyticsController;
+
+    theAnalyticsController?.logScreenView('Posts Thread');
   }
 
 

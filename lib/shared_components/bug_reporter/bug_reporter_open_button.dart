@@ -25,17 +25,26 @@ class _BugReporterOpenButtonState extends State<BugReporterOpenButton> {
   Widget build(BuildContext context) {
     return Tooltip(
       message: "Report a Bug",
-      child: MaterialButton(
-          color: Colors.green.withOpacity(.8),
-          child: SizedBox(
-            height: 48,
-            width: 48,
-            child: Icon(Icons.bug_report_outlined),
-          ),
-          onPressed: () async {
-            //open dialog
-            _openDialog();
-          }),
+      child: Container(
+        transform: Matrix4.translationValues(
+            -32, 0, .0),
+        child: MaterialButton(
+            color: Colors.green.withOpacity(.8),
+            child: SizedBox(
+              height: 48,
+              width: 48,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(Icons.bug_report_outlined),
+                ],
+              ),
+            ),
+            onPressed: () async {
+              //open dialog
+              _openDialog();
+            }),
+      ),
     );
   }
 }
