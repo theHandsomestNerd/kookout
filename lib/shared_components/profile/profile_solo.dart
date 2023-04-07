@@ -54,13 +54,16 @@ class _ProfileSoloState extends State<ProfileSolo> {
               ? SizedBox(
                   height: 110,
                   width: 110,
-                  child: CardWithBackground(
-                    image: NetworkImage(MyImageBuilder()
-                        .urlFor(widget.profile.profileImage, 110, 110)!
-                        .url()),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("${widget.profile.displayName}"),
+                  child: Hero(
+                    tag: widget.profile.userId ?? "",
+                    child: CardWithBackground(
+                      image: NetworkImage(MyImageBuilder()
+                          .urlFor(widget.profile.profileImage, 110, 110)!
+                          .url()),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("${widget.profile.displayName}"),
+                      ),
                     ),
                   ),
                 )
