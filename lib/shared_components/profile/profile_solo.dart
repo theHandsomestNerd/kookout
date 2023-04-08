@@ -42,7 +42,6 @@ class _ProfileSoloState extends State<ProfileSolo> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      key: widget.key,
       onTap: () async {
         await analyticsController?.sendAnalyticsEvent('profile-clicked', {"clicker": myUserId, "clicked": widget.profile.userId});
         Navigator.pushNamed(context, '/profile',
@@ -51,25 +50,24 @@ class _ProfileSoloState extends State<ProfileSolo> {
       child: Stack(
         children: [
           widget.profile.profileImage != null
-              ? SizedBox(
-                  height: 110,
-                  width: 110,
-                  child: Hero(
-                    tag: widget.profile.userId ?? "",
-                    child: CardWithBackground(
-                      image: NetworkImage(MyImageBuilder()
-                          .urlFor(widget.profile.profileImage, 110, 110)!
-                          .url()),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("${widget.profile.displayName}"),
-                      ),
+              ? ConstrainedBox(
+            constraints: BoxConstraints(minHeight: 120, minWidth: 120),
+                child: Hero(
+                  tag: widget.profile.userId ?? "",
+                  child: CardWithBackground(
+                    image: NetworkImage(MyImageBuilder()
+                        .urlFor(widget.profile.profileImage, 110, 110)!
+                        .url()),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Text("${widget.profile.displayName}"),
                     ),
                   ),
                 )
+              )
               : SizedBox(
-                  height: 110,
-                  width: 110,
+                  height: 100,
+                  width: 100,
                   child: CardWithBackground(
                     image: Image(
                             image: const AssetImage(

@@ -28,8 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with RouteAware {
-  bool isPostLoading = false;
-  bool isProfileLoading = false;
+  bool isPostLoading = true;
+  bool isProfileLoading = true;
   bool isExtProfileLoading = false;
   bool isUserLoggedIn = false;
   List<ExtendedProfile> extProfiles = [];
@@ -125,6 +125,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
     });
 
     _profilePageController.addListener(() {
+      if(_profilePagingController.itemList != null){
+        isProfileLoading = false;
+        setState(() {
+
+        });
+      }
       var profileIndex = _profilePageController.page?.round() ?? 0;
       if (_profilePagingController.itemList != null &&
           _profilePageController.page?.round() == profileIndex) {
@@ -141,10 +147,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
             foundExtProfile = element;
           }
         }
-        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) && foundExtProfile == null && !isExtProfileLoading ) {
+        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+            foundExtProfile == null &&
+            !isExtProfileLoading) {
           setState(() {
-
-          isExtProfileLoading = true;
+            isExtProfileLoading = true;
           });
           client
               ?.getExtendedProfile(
@@ -163,8 +170,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
       }
     });
 
-    _profilePagingController.notifyPageRequestListeners("");
-    _postPagingController.notifyPageRequestListeners("");
+    // _profilePagingController.notifyPageRequestListeners("");
+    // _postPagingController.notifyPageRequestListeners("");
 
     startHomeScreenTimers();
   }
@@ -260,6 +267,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
     //   });
     // }
 
+
     // if (isExtProfileLoading != true && highlightedExtProfile == null) {
     //   setState(() {
     //     isExtProfileLoading = true;
@@ -273,6 +281,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
     //     });
     //   });
     // }
+    // _postPageController.nextPage(
+    //     duration: Duration(milliseconds: 500), curve: ElasticInCurve());
+    // _profilePageController.nextPage(
+    //     duration: Duration(milliseconds: 500), curve: ElasticInCurve());
     setState(() {});
   }
 
@@ -301,154 +313,158 @@ class _HomePageState extends State<HomePage> with RouteAware {
         children: [
           Expanded(
             child: PageView.custom(
-              controller: _profilePageController,
-              // pagingController: _pagingController,
-              // shrinkWrap: true,
-              // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //   mainAxisExtent: 450,
-              //   crossAxisCount: 1,
-              //   childAspectRatio: 1,
-              // ),
-              childrenDelegate:
-                  SliverChildBuilderDelegate((build, thePageIndex) {
-                var theItem =
-                    _profilePagingController.itemList?.isNotEmpty ?? false
-                        ? _profilePagingController.itemList![thePageIndex]
-                        : null;
+                    controller: _profilePageController,
+                    // pagingController: _pagingController,
+                    // shrinkWrap: true,
+                    // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    //   mainAxisExtent: 450,
+                    //   crossAxisCount: 1,
+                    //   childAspectRatio: 1,
+                    // ),
+                    childrenDelegate: SliverChildBuilderDelegate(
+                      (build, thePageIndex) {
+                        var theItem = _profilePagingController
+                                    .itemList?.isNotEmpty ??
+                                false
+                            ? _profilePagingController.itemList![thePageIndex]
+                            : null;
 
-                if (thePageIndex >=
-                    (_profilePagingController.itemList?.length ?? 0) - 3) {
-                  _profilePagingController.notifyPageRequestListeners(
-                      _profilePagingController.nextPageKey ?? "");
-                }
+                        if (thePageIndex >=
+                            (_profilePagingController.itemList?.length ?? 0) -
+                                3) {
+                          _profilePagingController.notifyPageRequestListeners(
+                              _profilePagingController.nextPageKey ?? "");
+                        }
 
-                var thisExtProfile;
-                extProfiles.forEach((element) {
-                  if (element.userId ==
-                      _profilePagingController
-                          .itemList![thePageIndex].userId) {
-                    thisExtProfile = element;
-                  }
-                });
+                        var thisExtProfile;
+                        extProfiles.forEach((element) {
+                          if (element.userId ==
+                              _profilePagingController
+                                  .itemList![thePageIndex].userId) {
+                            thisExtProfile = element;
+                          }
+                        });
 
-                //get the extended profile for this user
-                return CardWithActions(
-                  locationRow: Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            "${thisExtProfile?.age ?? "99"} yrs",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.merge(
-                                  TextStyle(
-                                      color: Colors.white.withOpacity(.85)),
+                        //get the extended profile for this user
+                        return CardWithActions(
+                          locationRow: Flex(
+                            direction: Axis.horizontal,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Center(
+                                  child: Text(
+                                    "${thisExtProfile?.age ?? "99"} yrs",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.merge(
+                                          TextStyle(
+                                              color: Colors.white
+                                                  .withOpacity(.85)),
+                                        ),
+                                  ),
                                 ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: Text(
-                              "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.merge(
-                                    TextStyle(
-                                        color: Colors.white.withOpacity(.85)),
-                                  )),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            "${thisExtProfile?.weight ?? "999"} lbs",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.merge(
-                                  TextStyle(
-                                      color: Colors.white.withOpacity(.85)),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: Text(
+                                      "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.merge(
+                                            TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(.85)),
+                                          )),
                                 ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Center(
+                                  child: Text(
+                                    "${thisExtProfile?.weight ?? "999"} lbs",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.merge(
+                                          TextStyle(
+                                              color: Colors.white
+                                                  .withOpacity(.85)),
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      Icons.pin_drop,
+                                      size: 30.0,
+                                      color: Colors.white.withOpacity(.8),
+                                      semanticLabel: "Location",
+                                    ),
+                                    const Text(
+                                      '300 mi.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(
-                              Icons.pin_drop,
-                              size: 30.0,
-                              color: Colors.white.withOpacity(.8),
-                              semanticLabel: "Location",
-                            ),
-                            const Text(
-                              '300 mi.',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  image: theItem?.profileImage != null
-                      ? NetworkImage(MyImageBuilder()
-                          .urlFor(theItem?.profileImage!, null, null)!
-                          .url())
-                      : Image(
-                          image: AssetImage('assets/blankProfileImage.png'),
-                        ).image,
-                  action1Text:
-                      "${theItem?.displayName?.toUpperCase()[0]}${theItem?.displayName?.substring(1).toLowerCase()}",
-                  action2Text: 'All Profiles',
-                  action1OnPressed: () async {
-                    if (theItem?.userId != null) {
-                      await analyticsController?.sendAnalyticsEvent(
-                          'view-profile-while-highlighted-pressed',
-                          {"highlightedUserId": theItem?.userId});
-                      cancelHomeScreenTimers();
+                          image: theItem?.profileImage != null
+                              ? NetworkImage(MyImageBuilder()
+                                  .urlFor(theItem?.profileImage!, null, null)!
+                                  .url())
+                              : Image(
+                                  image: AssetImage(
+                                      'assets/blankProfileImage.png'),
+                                ).image,
+                          action1Text:
+                              "${theItem?.displayName?.toUpperCase()[0]}${theItem?.displayName?.substring(1).toLowerCase()}",
+                          action2Text: 'All Profiles',
+                          action1OnPressed: () async {
+                            if (theItem?.userId != null) {
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-profile-while-highlighted-pressed',
+                                  {"highlightedUserId": theItem?.userId});
+                              cancelHomeScreenTimers();
 
-                      Navigator.pushNamed(context, '/profile',
-                          arguments: {"id": theItem?.userId});
-                    }
-                  },
-                  action2OnPressed: () async {
-                    await analyticsController?.sendAnalyticsEvent(
-                        'view-all-profiles-pressed',
-                        {"highlightedUserId": theItem?.userId});
+                              Navigator.pushNamed(context, '/profile',
+                                  arguments: {"id": theItem?.userId});
+                            }
+                          },
+                          action2OnPressed: () async {
+                            await analyticsController?.sendAnalyticsEvent(
+                                'view-all-profiles-pressed',
+                                {"highlightedUserId": theItem?.userId});
 
-                    cancelHomeScreenTimers();
+                            cancelHomeScreenTimers();
 
-                    Navigator.pushNamed(context, '/profilesPage');
-                  },
-                );
-              }),
-            ),
-          )
-          // : Expanded(
-          //     child: Center(
-          //       child: Column(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           !isPostLoading &&
-          //                   (chatController?.profileList.isEmpty ?? false)
-          //               ? const Text("No Profiles with images")
-          //               : CircularProgressIndicator(),
-          //         ],
-          //       ),
-          //     ),
-          //   )
-          ,
+                            Navigator.pushNamed(context, '/profilesPage');
+                          },
+                        );
+                      },
+                    ),
+                  )
+                // : Center(
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       !isPostLoading &&
+                //               (chatController?.profileList.isEmpty ?? false)
+                //           ? const Text("No Profiles with images")
+                //           : CircularProgressIndicator(),
+                //     ],
+                //   ),
+                // ),
+          ),
           Expanded(
             child: PageView.custom(
               controller: _postPageController,

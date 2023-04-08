@@ -21,6 +21,7 @@ class CardWithBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.all(0),
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: shape ??

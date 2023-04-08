@@ -70,11 +70,9 @@ class _ProfileGridState extends State<ProfileGrid> {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-
-      maxWidth: 380,
+        maxWidth: 380,
       ),
       child: PagedGridView<String, AppUser>(
-        shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           mainAxisExtent: 100,
           mainAxisSpacing: 0,
@@ -84,9 +82,14 @@ class _ProfileGridState extends State<ProfileGrid> {
         ),
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<AppUser>(
-          itemBuilder: (context, item, index) => ProfileSolo(
-            profile: item,
-          ),
+          itemBuilder: (context, item, index) =>
+              Flex(direction: Axis.horizontal, children: [
+            Expanded(
+              child: ProfileSolo(
+                profile: item,
+              ),
+            ),
+          ]),
         ),
       ),
     );
