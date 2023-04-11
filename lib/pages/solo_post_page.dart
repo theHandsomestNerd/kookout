@@ -181,7 +181,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
                         setState(() {});
                       },
                       text: "Comment",
-                    )
+                    ),
+                    SizedBox(height: 32),
                   ],
                 ),
               ),
