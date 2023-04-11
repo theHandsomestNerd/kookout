@@ -3,6 +3,7 @@ import 'package:cookout/pages/tabs/blocks_tab.dart';
 import 'package:cookout/pages/tabs/profile_list_tab.dart';
 import 'package:cookout/pages/tabs/timeline_events_tab.dart';
 import 'package:cookout/shared_components/menus/profile_page_menu.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import '../models/block.dart';
@@ -120,18 +121,12 @@ class _ProfilesPageState extends State<ProfilesPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-      floatingActionButton: ProfilePageMenu(
+    return AppScaffoldWrapper(
+      floatingActionMenu: ProfilePageMenu(
         updateMenu: _onItemTapped,
       ),
       key: ObjectKey(chatController),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Logo(),
-      ),
-      body: ConstrainedBox(
+      child: ConstrainedBox(
           key: Key(_selectedIndex.toString()),
           constraints: const BoxConstraints(),
           child: _widgetOptions(

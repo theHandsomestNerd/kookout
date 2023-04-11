@@ -53,7 +53,7 @@ class CardWithActions extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: 450, maxHeight: 450),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: locationRow !=null?MainAxisAlignment.spaceBetween:MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: [
                 if (locationRow != null)

@@ -126,6 +126,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
       return _fetchPostsPage(theLastId);
     });
 
+    _postPagingController
+        .notifyPageRequestListeners(_postPagingController.firstPageKey);
+    _profilePagingController
+        .notifyPageRequestListeners(_postPagingController.firstPageKey);
+
     _profilePageController.addListener(() {
       if (_profilePagingController.itemList != null) {
         isProfileLoading = false;
@@ -227,6 +232,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
+
     startHomeScreenTimers();
 
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -417,7 +423,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               ),
                             ],
                           ),
-                          image: SanityImageBuilder.imageProviderFor(sanityImage: theItem.profileImage,showDefaultImage: true).image,
+                          image: SanityImageBuilder.imageProviderFor(
+                                  sanityImage: theItem.profileImage,
+                                  showDefaultImage: true)
+                              .image,
                           action1Text:
                               "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
                           action2Text: 'All Profiles',
@@ -493,9 +502,16 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   sanityImage: theItem.mainImage,
                                   showDefaultImage: true)
                               .image,
-                          action2Text: 'Go to post',
                           action1Text: 'All Posts',
                           action1OnPressed: () async {
+                            await analyticsController?.sendAnalyticsEvent(
+                                'view-all-posts-while-highlighted-pressed',
+                                {"highlightedPostId": theItem.id});
+                            cancelHomeScreenTimers();
+                            Navigator.pushNamed(context, '/postsPage');
+                          },
+                          action2Text: 'Go to post',
+                          action2OnPressed: () async {
                             await analyticsController?.sendAnalyticsEvent(
                                 'view-post-while-highlighted-pressed',
                                 {"highlightedPostId": theItem.id});
@@ -505,13 +521,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               Navigator.pushNamed(context, '/post',
                                   arguments: {"id": theItem.id});
                             }
-                          },
-                          action2OnPressed: () async {
-                            await analyticsController?.sendAnalyticsEvent(
-                                'view-all-posts-while-highlighted-pressed',
-                                {"highlightedPostId": theItem.id});
-                            cancelHomeScreenTimers();
-                            Navigator.pushNamed(context, '/postsPage');
                           },
                         )
                       : Center(

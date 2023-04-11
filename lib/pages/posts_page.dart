@@ -1,6 +1,7 @@
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/shared_components/logo.dart';
 import 'package:cookout/shared_components/menus/posts_page_menu.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
@@ -28,17 +29,11 @@ class _PostsPageState extends State<PostsPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-      floatingActionButton: PostsPageMenu(
+    return AppScaffoldWrapper(
+      floatingActionMenu: PostsPageMenu(
         updateMenu: () {},
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the HomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Logo(),
-      ),
-      body: Container(
+      child: Container(
         margin: EdgeInsets.all(0),
         child: Flex(direction:Axis.horizontal,
             children:[ Expanded(child: PostThread())]),

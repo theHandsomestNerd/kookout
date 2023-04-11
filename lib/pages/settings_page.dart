@@ -3,14 +3,13 @@ import 'package:cookout/pages/tabs/blocks_tab.dart';
 import 'package:cookout/pages/tabs/edit_profile_tab.dart';
 import 'package:cookout/pages/tabs/timeline_events_tab.dart';
 import 'package:cookout/shared_components/menus/settings_menu.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
-import '../config/default_config.dart';
 import '../models/block.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/logo.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -118,17 +117,11 @@ class _SettingsPageState extends State<SettingsPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-        floatingActionButton: SettingsPageMenu(
+    return AppScaffoldWrapper(
+        floatingActionMenu: SettingsPageMenu(
           updateMenu: _onItemTapped,
         ),
-        appBar: AppBar(
-          backgroundColor: Colors.white.withOpacity(0.5),
-          // Here we take the value from the LoginPage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Logo(),
-        ),
-        body: Stack(children: [
+        child: Stack(children: [
           Positioned.fill(
             child: Opacity(
               opacity: .1,

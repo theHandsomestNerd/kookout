@@ -1,3 +1,4 @@
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookout/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
+import '../wrappers/analytics_loading_button.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({
@@ -16,7 +18,6 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
-
   didChangeDependencies() async {
     super.didChangeDependencies();
 
@@ -25,6 +26,7 @@ class _LogoutPageState extends State<LogoutPage> {
 
     theAnalyticsController?.logScreenView('Logout');
   }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -34,63 +36,67 @@ class _LogoutPageState extends State<LogoutPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Logo(),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Logout',
-            ),
-            CardWrapped(
-              child: SizedBox(
+    return AppScaffoldWrapper(
+      child: Stack(children: [
+        Positioned.fill(
+          child: Image.asset(
+            'assets/221.jpg',
+            repeat: ImageRepeat.repeat,
+          ),
+        ),
+        Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
                 width: 350,
                 child: Column(
                   children: [
-                    const Text("logoutBelow"),
-                    MaterialButton(
-                      color: Colors.red,
-                      textColor: Colors.white,
-                      // style: ButtonStyle(
-                      //     backgroundColor: _isMenuItemsOnly
-                      //         ? MaterialStateProperty.all(Colors.red)
-                      //         : MaterialStateProperty.all(Colors.white)),
-                      onPressed: () async {
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (FirebaseAuth.instance.currentUser != null)
+                          Text(
+                              "Logout ${FirebaseAuth.instance.currentUser?.email}")
+                      ],
+                    ),
+                    SizedBox(height: 32,),
+                    AnalyticsLoadingButton(
+                      action: (innerContext) async {
                         await FirebaseAuth.instance.signOut().then((x) {
-                          Navigator.popUntil(context, ModalRoute.withName('/'));
+                          Navigator.popUntil(innerContext, ModalRoute.withName('/'));
                         });
                       },
-                      child: const Text("Logout"),
+                      analyticsEventName: 'logout-page-logout-press',
+                      analyticsEventData: {
+                        "username": FirebaseAuth.instance.currentUser?.uid ??
+                            "No Logged In User",
+                      },
+                      text: "Logout",
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ]), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

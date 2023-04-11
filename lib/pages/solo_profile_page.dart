@@ -8,6 +8,7 @@ import 'package:cookout/pages/tabs/comments_tab.dart';
 import 'package:cookout/pages/tabs/follows_tab.dart';
 import 'package:cookout/pages/tabs/likes_tab.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import '../config/default_config.dart';
@@ -308,16 +309,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: AppMenu(updateMenu: _onItemTapped),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Logo(),
-      ),
-      // body: Center(child: Text("just text")),
-      body: Center(
+    return AppScaffoldWrapper(
+      floatingActionMenu: AppMenu(updateMenu: _onItemTapped),
+      child: Center(
         key: Key(_selectedIndex.toString()),
         child: Flex(
           direction: Axis.vertical,

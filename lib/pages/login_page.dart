@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
+import '../shared_components/tool_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -184,6 +185,34 @@ class _LoginPageState extends State<LoginPage> {
                                   width: 300,
                                   child: Image.asset('assets/logo.png'),
                                 ),
+                                Column(
+                                  key: ObjectKey(FirebaseAuth.instance.currentUser),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (FirebaseAuth.instance.currentUser !=
+                                        null)
+                                      Text(
+                                        "You are logged in as ${FirebaseAuth.instance.currentUser?.email}.",
+                                      ),
+                                    if (FirebaseAuth.instance.currentUser !=
+                                        null) ConstrainedBox(
+                                      constraints: BoxConstraints(maxWidth: 48, maxHeight: 48),
+                                      child: ToolButton(
+                                        label: "home",
+                                        action: (innerContext) {
+                                          Navigator.pushNamed(innerContext, '/home');
+                                        },
+                                        color: Colors.black38,
+                                        text: 'Home',
+                                        isHideLabel: true,
+                                        iconData: Icons.home,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 32,
+                                ),
                                 ConstrainedBox(
                                   constraints: BoxConstraints(
                                       maxWidth: 350, maxHeight: 450),
@@ -250,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                                           isDisabled: _loginUsername.isEmpty ||
                                               _loginPassword.isEmpty,
                                           action: (innerContext) async {
-                                             _loginUser(innerContext);
+                                            _loginUser(innerContext);
                                           },
                                           text: "Login",
                                         ),

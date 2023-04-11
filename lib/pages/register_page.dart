@@ -1,6 +1,8 @@
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/analytics_loading_button.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookout/wrappers/text_field_wrapped.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,7 @@ import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/logo.dart';
 import '../shared_components/menus/login_menu.dart';
+import '../shared_components/tool_button.dart';
 import '../wrappers/loading_button.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -131,15 +134,9 @@ class _RegisterPageState extends State<RegisterPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-      floatingActionButton: LoginMenu(),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Logo(),
-      ),
-      body: Flex(
+    return AppScaffoldWrapper(
+      floatingActionMenu: LoginMenu(),
+      child: Flex(
         direction: Axis.horizontal,
         children: [
           Expanded(
@@ -163,6 +160,30 @@ class _RegisterPageState extends State<RegisterPage> {
                               height: 150,
                               width: 300,
                               child: Image.asset('assets/logo.png'),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (FirebaseAuth.instance.currentUser !=
+                                    null)
+                                  Text(
+                                    "You are logged in as ${FirebaseAuth.instance.currentUser?.email}.",
+                                  ),
+                                if (FirebaseAuth.instance.currentUser !=
+                                    null) ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 48, maxHeight: 48),
+                                  child: ToolButton(
+                                    label: "home",
+                                    action: (innerContext) {
+                                      Navigator.pushNamed(innerContext, '/home');
+                                    },
+                                    color: Colors.black38,
+                                    text: 'Home',
+                                    isHideLabel: true,
+                                    iconData: Icons.home,
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(
                               width: 350,

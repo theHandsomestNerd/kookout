@@ -56,6 +56,8 @@ class _AnalyticsLoadingButtonState extends State<AnalyticsLoadingButton> {
 
         if (widget.action != null) {
           await widget.action!(context);
+          setState(() {
+          });
         }
 
         setState(() {

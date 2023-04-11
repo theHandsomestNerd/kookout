@@ -22,7 +22,7 @@ class LoadingButton extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondary,
       disabledColor: Colors.black12,
       textColor: Colors.white,
-      onPressed: isDisabled == true ? null : ()=>action(context),
+      onPressed: isDisabled == true ? null : ()async {await action(context);},
       child: SizedBox(
         key: Key(isLoading.toString()),
         height: 48,

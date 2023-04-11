@@ -44,8 +44,9 @@ class _SoloPostPageState extends State<SoloPostPage> {
       status = thestatus;
     }
 
+
+      commentBody = "";
     setState(() {
-      thisPostId = thisPostId.toString();
     });
   }
 
@@ -175,14 +176,14 @@ class _SoloPostPageState extends State<SoloPostPage> {
                       },
                       action: (x) async {
                         await _commentThisProfile();
-                        _pagingController.refresh();
-
                         commentBody = "";
                         setState(() {});
+                        _pagingController.refresh();
+
                       },
                       text: "Comment",
                     ),
-                    SizedBox(height: 32),
+                    SizedBox(height: 24),
                   ],
                 ),
               ),

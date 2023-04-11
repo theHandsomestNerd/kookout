@@ -3,6 +3,7 @@ import 'package:cookout/models/controllers/auth_inherited.dart';
 import 'package:cookout/shared_components/menus/posts_page_menu.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/analytics_loading_button.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,11 @@ import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
-import '../config/default_config.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
 import '../shared_components/app_image_uploader.dart';
-import '../shared_components/logo.dart';
-import '../wrappers/loading_button.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({
@@ -130,17 +128,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
           "Post creation failed. Try again.", context);
     }
 
-    return Scaffold(
-      floatingActionButton: PostsPageMenu(
+    return AppScaffoldWrapper(
+      floatingActionMenu: PostsPageMenu(
         updateMenu: () {},
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Logo(),
-      ),
-      body: FullPageLayout(
+      child: FullPageLayout(
         child: Column(
           children: [
             AppImageUploader(
@@ -170,7 +162,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               isDisabled: ((_postBody?.length ?? -1) <= 0),
               action: () async {
                 var status = await _makePost(context);
-                
+
                 if (status == "SUCCESS") {
                   await _sendSuccess();
                 } else if (status == "FAIL") {
