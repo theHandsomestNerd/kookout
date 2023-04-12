@@ -75,7 +75,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     var theLikes = await theChatController?.profileClient
         .getProfileLikes(widget.id) as ChatApiGetProfileLikesResponse;
     var theComments =
-        await theChatController?.profileClient.getProfileComments(widget.id) ??
+        await theChatController?.profileClient.getProfileComments(widget.id, 'profile-comment') ??
             [];
 
     _profileComments = theComments;
@@ -117,7 +117,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   }
 
   _getProfileComments() async {
-    return profileClient?.getProfileComments(widget.id);
+    return profileClient?.getProfileComments(widget.id, 'profile-comment');
   }
 
   // isThisProfileLikedByMe(List<Like> theLikes) {
@@ -267,7 +267,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
                 "That like didnt register. Try Again.", innerContext);
           } else {
             List<Comment> theComments =
-                await profileClient?.getProfileComments(widget.id) ?? [];
+                await profileClient?.getProfileComments(widget.id, 'profile-comment') ?? [];
             setState(() {
               _profileComments = theComments;
             });

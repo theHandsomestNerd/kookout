@@ -590,15 +590,15 @@ class ApiClient {
     return null;
   }
 
-  Future<List<Comment>> getProfileComments(String userId) async {
+  Future<List<Comment>> getProfileComments(String userId, String typeId) async {
     if (kDebugMode) {
-      print("Retrieving Profile Comments $userId");
+      print("Retrieving ${typeId} Comments $userId");
     }
     String? token = await getIdToken();
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-profile-comments/$userId"),
+              "${DefaultConfig.theAuthBaseUrl}/get-comments/${typeId != null?typeId+'/':'profile-comment/'}$userId"),
           headers: {"Authorization": ("Bearer $token")});
       try {
         dynamic processedResponse = jsonDecode(response.body);

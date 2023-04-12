@@ -39,12 +39,40 @@ class _SoloPostPageState extends State<SoloPostPage> {
       PagingController(firstPageKey: "");
 
   AnalyticsController? analyticsController;
-  Post? thePost=null;
+  Post? thePost = null;
   PostController? postController;
   String status = "";
+  List<Comment>? _profileComments = [];
+
+  _getProfileComments() async {
+    if (profileClient != null && widget.thisPostId != null) {
+      var comments = await profileClient?.getProfileComments(
+          widget.thisPostId!, 'post-comment');
+      print(
+        "The COmments retreived profClient:${profileClient} ${widget.thisPostId} $comments",
+      );
+      return comments;
+    }
+  }
+
+  updateComments(innerContext, String commentResponse, bool isUncomment) async {
+    if (commentResponse == "SUCCESS") {
+      await analyticsController?.sendAnalyticsEvent('comment-made', {
+        "commentee": widget.thisPostId.toString(),
+        "commented": authController?.myAppUser?.userId
+      });
+      List<Comment> theComments = await _getProfileComments() ?? [];
+
+      setState(() {
+        // _isCommenting = false;
+        _profileComments = theComments;
+      });
+    }
+  }
 
   _commentThisProfile() async {
     _isCommenting = true;
+    setState(() {});
     if (profileClient != null && thisPostId != null && commentBody != null) {
       var thestatus = await profileClient!
           .commentProfile(thisPostId!, commentBody!, 'post-comment');
@@ -72,36 +100,35 @@ class _SoloPostPageState extends State<SoloPostPage> {
   late List<Like>? _profileLikes = [];
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
-
   AuthController? authController;
 
   Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
-    return await profileClient?.getProfileLikes(widget.thisPostId??"");
+    return await profileClient?.getProfileLikes(widget.thisPostId ?? "");
   }
+
   updateLikes(innerContext, String likeResponse, bool isUnlike) async {
-  ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
+    ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
 
-  await analyticsController?.sendAnalyticsEvent('profile-liked', {
-  "likee": widget.thisPostId ?? "",
-  "liker": authController?.myAppUser?.userId ?? "",
-  "isUnlike": isUnlike.toString()
-  });
+    await analyticsController?.sendAnalyticsEvent('profile-liked', {
+      "likee": widget.thisPostId ?? "",
+      "liker": authController?.myAppUser?.userId ?? "",
+      "isUnlike": isUnlike.toString()
+    });
 
-  setState(() {
-  _profileLikes = theLikes?.list;
-  _profileLikedByMe = theLikes?.amIInThisList;
-  });
+    setState(() {
+      _profileLikes = theLikes?.list;
+      _profileLikedByMe = theLikes?.amIInThisList;
+    });
 
-  if (!isUnlike && likeResponse != "SUCCESS") {
-  _alertSnackbar.showErrorAlert(
-  "That ${isUnlike ? "unlike" : "like"} didnt register. Try Again.",
-  innerContext);
-  } else {
-  _alertSnackbar.showSuccessAlert(
-  "You ${isUnlike ? "unlike" : "like"} this profile.",
-  innerContext);
+    if (!isUnlike && likeResponse != "SUCCESS") {
+      _alertSnackbar.showErrorAlert(
+          "That ${isUnlike ? "unlike" : "like"} didnt register. Try Again.",
+          innerContext);
+    } else {
+      _alertSnackbar.showSuccessAlert(
+          "You ${isUnlike ? "unlike" : "like"} this profile.", innerContext);
+    }
   }
-}
 
   @override
   didChangeDependencies() async {
@@ -123,31 +150,51 @@ class _SoloPostPageState extends State<SoloPostPage> {
       }
     }
     var theLikes = await theChatController?.profileClient
-        .getProfileLikes(widget.thisPostId??"") as ChatApiGetProfileLikesResponse;
+            .getProfileLikes(widget.thisPostId ?? "")
+        as ChatApiGetProfileLikesResponse;
 
     _profileLikedByMe = theLikes.amIInThisList;
     _profileLikes = theLikes.list;
 
+    var isUncomment = false;
+    var commentResponse = await updateComments(context, "SUCCESS", false);
+    _alertSnackbar.showSuccessAlert(
+        "That ${isUncomment == true ? "Uncomment" : "Comment"} ", context);
 
+    // if (commentResponse != "SUCCESS") {
+    //   _alertSnackbar.showErrorAlert(
+    //       "That ${isUncomment == true ? "Uncomment" : "Comment"} didnt register. Try Again.",
+    //       context);
+    // } else {
+    //   _alertSnackbar.showSuccessAlert(
+    //       "That ${isUncomment == true ? "Uncomment" : "Comment"} ",
+    //       context);
+    // }
     theAnalyticsController?.logScreenView('Post');
     if (theAnalyticsController != null && analyticsController == null) {
       analyticsController = theAnalyticsController;
     }
 
-    ApiClient? theClient =
-        AuthInherited.of(context)?.chatController?.profileClient;
+    ApiClient? theClient = theChatController?.profileClient;
 
     if (theClient != null && profileClient == null) {
       profileClient = theClient;
     }
 
+    if (theClient != null) {
+      var theComments = await _getProfileComments();
+      if (theComments != null) {
+        _profileComments = theComments;
+      }
+    }
     setState(() {});
   }
+
   late bool _isLiking = false;
 
   _likeThisProfile(context) async {
-    await analyticsController
-        ?.sendAnalyticsEvent('profile-like-press', {"liked": widget.thisPostId});
+    await analyticsController?.sendAnalyticsEvent(
+        'profile-like-press', {"liked": widget.thisPostId});
 
     setState(() {
       _isLiking = true;
@@ -156,12 +203,13 @@ class _SoloPostPageState extends State<SoloPostPage> {
     bool isUnlike = false;
 
     if (_profileLikedByMe == null) {
-      likeResponse = await profileClient?.like(widget.thisPostId??"", 'profile-like');
+      likeResponse =
+          await profileClient?.like(widget.thisPostId ?? "", 'profile-like');
     } else {
       if (_profileLikedByMe != null) {
         isUnlike = true;
         likeResponse = await profileClient?.unlike(
-            widget.thisPostId??"", _profileLikedByMe!);
+            widget.thisPostId ?? "", _profileLikedByMe!);
       }
     }
 
@@ -218,8 +266,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
           ]),
           panelBuilder: (scrollController) => SingleChildScrollView(
             controller: scrollController,
-            child: Column(
-              children: [Card(
+            child: Column(children: [
+              Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
@@ -243,23 +291,20 @@ class _SoloPostPageState extends State<SoloPostPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ToolButton(
-                                    action:
-                                    _likeThisProfile,
-                                    iconData:
-                                    Icons.thumb_up,
-                                    color: Colors.green,
-                                    isLoading:
-                                    _isLiking,
-                                    text: _profileLikes
-                                        ?.length
-                                        .toString(),
-                                    label: 'Like',
-                                    isActive: _profileLikedByMe != null,
-                                   ),
+                                  action: _likeThisProfile,
+                                  iconData: Icons.thumb_up,
+                                  color: Colors.green,
+                                  isLoading: _isLiking,
+                                  text: _profileLikes?.length.toString(),
+                                  label: 'Like',
+                                  isActive: _profileLikedByMe != null,
+                                ),
                                 ToolButton(
                                     action: () {},
                                     iconData: Icons.comment,
                                     color: Colors.blue,
+                                    text:
+                                        "${_profileComments?.length} comments",
                                     label: "0"),
                               ],
                             ),
@@ -336,8 +381,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
                     )
                   ],
                 ),
-              ),]
-            ),
+              ),
+            ]),
           ),
         ),
       ),

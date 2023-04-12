@@ -45,7 +45,7 @@ class _CommentsTabState extends State<CommentsTab> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     _comments =
-        await theChatController?.profileClient.getProfileComments(widget.id) ??
+        await theChatController?.profileClient.getProfileComments(widget.id, 'profile-comment') ??
             [];
     chatController = theChatController;
 

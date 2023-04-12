@@ -155,6 +155,10 @@ class PostController {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
         print(err);
+        print(processedResponse);
+        if(processedResponse == null) {
+          return null;
+        }
       }
 
       // if (kDebugMode) {
