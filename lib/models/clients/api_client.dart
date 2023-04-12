@@ -40,7 +40,7 @@ class ApiClient {
     } else {
       print("Retrieving Id Token");
       String? theToken = await FirebaseAuth.instance.currentUser?.getIdToken();
-      print("Got token in client $theToken");
+
       if (theToken != null) {
         token = theToken;
         return theToken;
@@ -58,7 +58,7 @@ class ApiClient {
     if (kDebugMode) {
       print("Api raw status ${response.body}");
     }
-    var processedResponse = jsonDecode(response.body);
+    dynamic processedResponse = jsonDecode(response.body);
     String theVersion = "";
     if (processedResponse['apiVersion'] != null &&
         processedResponse['apiVersion'] != "null") {
@@ -105,7 +105,7 @@ class ApiClient {
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-all-profiles"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       // print("Profiles retrieved ${processedResponse}");
       if (processedResponse['profiles'] != null &&
           processedResponse['profiles'] != "null") {
@@ -122,11 +122,9 @@ class ApiClient {
       String? lastId, int pageSize) async {
     if (kDebugMode) {
       print(
-          "Retrieving paginated Profiles with lastid ${lastId} and pagesize ${pageSize}");
+          "Retrieving paginated Profiles with lastid $lastId and pagesize $pageSize");
     }
     String? token = await getIdToken();
-    print("token $token");
-    print("url ${DefaultConfig.theAuthBaseUrl}");
     if (DefaultConfig.theAuthBaseUrl == "") {
       print(
           "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
@@ -136,10 +134,10 @@ class ApiClient {
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-all-profiles-paginated/$pageSize${lastId != null ? "/${lastId}" : ""}"),
+              "${DefaultConfig.theAuthBaseUrl}/get-all-profiles-paginated/$pageSize${lastId != null ? "/$lastId" : ""}"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       // print("Profiles retrieved ${processedResponse}");
       if (processedResponse['profiles'] != null &&
           processedResponse['profiles'] != "null") {
@@ -155,11 +153,9 @@ class ApiClient {
   Future<List<Post>> fetchPostsPaginated(String? lastId, int pageSize) async {
     if (kDebugMode) {
       print(
-          "Retrieving paginated Posts with lastid ${lastId} and pagesize ${pageSize}");
+          "Retrieving paginated Posts with lastid $lastId and pagesize $pageSize");
     }
     String? token = await getIdToken();
-    print("token $token");
-    print("url ${DefaultConfig.theAuthBaseUrl}");
     if (DefaultConfig.theAuthBaseUrl == "") {
       print(
           "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
@@ -169,10 +165,10 @@ class ApiClient {
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-all-posts-paginated/$pageSize${lastId != null ? "/${lastId}" : ""}"),
+              "${DefaultConfig.theAuthBaseUrl}/get-all-posts-paginated/$pageSize${lastId != null ? "/$lastId" : ""}"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       // print("Profiles retrieved ${processedResponse}");
       if (processedResponse['posts'] != null &&
           processedResponse['posts'] != "null") {
@@ -189,7 +185,7 @@ class ApiClient {
       String? postId, String? lastId, int pageSize) async {
     if (kDebugMode) {
       print(
-          "Retrieving paginated Post's ${postId} comments with lastid ${lastId} and pagesize ${pageSize}");
+          "Retrieving paginated Post's $postId comments with lastid $lastId and pagesize $pageSize");
     }
     String? token = await getIdToken();
 
@@ -202,10 +198,10 @@ class ApiClient {
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-comment-thread-paginated/$postId/$pageSize${lastId != null ? "/${lastId}" : ""}"),
+              "${DefaultConfig.theAuthBaseUrl}/get-comment-thread-paginated/$postId/$pageSize${lastId != null ? "/$lastId" : ""}"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       // print("Profiles retrieved ${processedResponse}");
       if (processedResponse['comments'] != null &&
           processedResponse['comments'] != "null") {
@@ -229,7 +225,7 @@ class ApiClient {
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-timeline-events"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['profileTimelineEvents'] != null) {
         ChatApiGetTimelineEventsResponse responseModel =
@@ -267,7 +263,7 @@ class ApiClient {
       if (kDebugMode) {
         print("getMyBlocks response ${response.body}");
       }
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['profileBlocks'] != null) {
         if (kDebugMode) {
@@ -306,7 +302,7 @@ class ApiClient {
           body: {"userId": userId},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['blockStatus'] != null) {
         if (kDebugMode) {
@@ -338,7 +334,7 @@ class ApiClient {
           body: {"userId": userId},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['followStatus'] != null) {
         if (kDebugMode) {
@@ -370,7 +366,7 @@ class ApiClient {
           body: {"followId": currentFollow.id},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['unfollowStatus'] != null) {
         if (kDebugMode) {
@@ -412,7 +408,7 @@ class ApiClient {
             "Authorization": ("Bearer $token")
           });
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['commentStatus'] != null) {
         if (kDebugMode) {
@@ -441,7 +437,7 @@ class ApiClient {
               "${DefaultConfig.theAuthBaseUrl}/get-profile-likes/$userId"),
           headers: {"Authorization": ("Bearer $token")});
       try {
-        var processedResponse = jsonDecode(response.body);
+        dynamic processedResponse = jsonDecode(response.body);
         if (processedResponse['profileLikes'] != null) {
           ChatApiGetProfileLikesResponse responseModel =
               ChatApiGetProfileLikesResponse.fromJson(processedResponse);
@@ -549,7 +545,7 @@ class ApiClient {
         print("response from update ext profile $response");
       }
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       if (kDebugMode) {
         print("processedResponse ${processedResponse['newExtProfile']}");
       }
@@ -570,14 +566,13 @@ class ApiClient {
     }
     String? token = await getIdToken();
     if (token != null &&
-        userId != null &&
         userId != "" &&
         DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['extendedProfile'] != null) {
         ExtendedProfile responseModel =
@@ -605,7 +600,7 @@ class ApiClient {
               "${DefaultConfig.theAuthBaseUrl}/get-profile-comments/$userId"),
           headers: {"Authorization": ("Bearer $token")});
       try {
-        var processedResponse = jsonDecode(response.body);
+        dynamic processedResponse = jsonDecode(response.body);
         if (processedResponse['profileComments'] != null) {
           ChatApiGetProfileCommentsResponse responseModel =
               ChatApiGetProfileCommentsResponse.fromJson(
@@ -639,7 +634,7 @@ class ApiClient {
           body: {"likeId": currentLike.id},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['unlikeStatus'] != null) {
         if (kDebugMode) {
@@ -671,7 +666,7 @@ class ApiClient {
           body: {"blockId": currentBlock.id},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['unblockStatus'] != null) {
         if (kDebugMode) {
@@ -700,7 +695,7 @@ class ApiClient {
           Uri.parse(
               "${DefaultConfig.theAuthBaseUrl}/get-profile-follows/$userId"),
           headers: {"Authorization": ("Bearer $token")});
-      var processedResponse;
+      dynamic processedResponse;
       try {
         processedResponse = jsonDecode(response.body);
         if (processedResponse['profileFollows'] != null) {
@@ -721,7 +716,7 @@ class ApiClient {
           return ChatApiGetProfileFollowsResponse(list: []);
         }
       } catch (e) {
-        print("ERROR: ${e}");
+        print("ERROR: $e");
       }
     }
 
@@ -742,7 +737,7 @@ class ApiClient {
           body: {"likeeId": likeeId, "likeType": likeType},
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       if (processedResponse['likeStatus'] != null) {
         if (kDebugMode) {

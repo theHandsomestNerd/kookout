@@ -9,7 +9,7 @@ class ListAndSmallFormLayout extends StatefulWidget {
   });
 
   final Widget listChild;
-  final height;
+  final double? height;
   final Widget formChild;
 
   @override

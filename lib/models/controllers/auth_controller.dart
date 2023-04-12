@@ -17,8 +17,8 @@ class AuthController {
   String authBaseUrl = "";
 
   late bool isLoggedIn = false;
-  AuthUser? loggedInUser = null;
-  AppUser? myAppUser = null;
+  AuthUser? loggedInUser;
+  AppUser? myAppUser;
 
   AuthController.init() {
     authBaseUrl = DefaultConfig.theAuthBaseUrl;
@@ -80,7 +80,7 @@ class AuthController {
             Uri.parse("${DefaultConfig.theAuthBaseUrl}/register-app-user"),
             headers: {"Authorization": ("Bearer $token")});
 
-        var processedResponse = jsonDecode(response.body);
+        dynamic processedResponse = jsonDecode(response.body);
         if (kDebugMode) {
           print("processedResponse ${processedResponse['profile']}");
         }
@@ -165,7 +165,7 @@ class AuthController {
       final response = await http.get(Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-my-profile"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse;
+      dynamic processedResponse;
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
@@ -198,7 +198,7 @@ class AuthController {
       final response = await http.get(Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-auth-user"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
 
       AuthUser responseModel =
           AuthUser.fromJson(processedResponse['myAuthProfile']);
@@ -225,7 +225,7 @@ class AuthController {
           Uri.parse("$authBaseUrl/get-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse = jsonDecode(response.body);
+      dynamic processedResponse = jsonDecode(response.body);
       AppUser? responseModel = null;
       if (processedResponse['appProfile'] != null) {
         responseModel = AppUser.fromJson(processedResponse['appProfile']);

@@ -38,6 +38,7 @@ class _SoloPostPageState extends State<SoloPostPage> {
   String status = "";
 
   _commentThisProfile() async {
+    _isCommenting = true;
     if (profileClient != null && thisPostId != null && commentBody != null) {
       var thestatus = await profileClient!
           .commentProfile(thisPostId!, commentBody!, 'post-comment');
@@ -46,6 +47,7 @@ class _SoloPostPageState extends State<SoloPostPage> {
 
 
       commentBody = "";
+    _isCommenting = false;
     setState(() {
     });
   }
@@ -73,7 +75,7 @@ class _SoloPostPageState extends State<SoloPostPage> {
       var aPost = await thePostController.getPost(thisPostId ?? "");
       if (aPost != null) {
         thePost = aPost;
-        print("A post retrieved $aPost");
+        // print("A post retrieved $aPost");
       }
     }
 

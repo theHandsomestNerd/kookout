@@ -10,7 +10,6 @@ import '../models/block.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/logo.dart';
 
 class ProfilesPage extends StatefulWidget {
   const ProfilesPage({
@@ -40,6 +39,8 @@ class _ProfilesPageState extends State<ProfilesPage> {
     super.didChangeDependencies();
     var theChatController = AuthInherited.of(context)?.chatController;
     var theAuthController = AuthInherited.of(context)?.authController;
+    myUserId =
+        AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     AnalyticsController? theAnalyticsController =
         AuthInherited.of(context)?.analyticsController;
 
@@ -51,8 +52,6 @@ class _ProfilesPageState extends State<ProfilesPage> {
       authController = authController;
     }
     chatController = theChatController;
-    myUserId =
-        AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     myBlockedProfiles = await chatController?.updateMyBlocks();
     setState(() {});
   }
@@ -62,7 +61,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
 
   Widget _widgetOptions(selectedIndex) {
     var theOptions = <Widget>[
-      ProfileListTab(),
+      const ProfileListTab(),
       TimelineEventsTab(
           timelineEvents: chatController?.timelineOfEvents,
           id: authController?.myAppUser?.userId ??

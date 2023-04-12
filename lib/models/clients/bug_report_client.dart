@@ -1,25 +1,9 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 import '../../config/default_config.dart';
-import '../app_user.dart';
-import '../block.dart';
-import '../comment.dart';
-import '../extended_profile.dart';
-import '../follow.dart';
-import '../like.dart';
-import '../responses/auth_api_profile_list_response.dart';
-import '../responses/chat_api_get_profile_block_response.dart';
-import '../responses/chat_api_get_profile_comments_response.dart';
-import '../responses/chat_api_get_profile_follows_response.dart';
-import '../responses/chat_api_get_profile_likes_response.dart';
-import '../responses/chat_api_get_timeline_events_response.dart';
-import '../timeline_event.dart';
 
 class BugReportClient {
   String token = "";
@@ -41,6 +25,7 @@ class BugReportClient {
         token = theToken;
         return theToken;
       }
+      return null;
     }
   }
 

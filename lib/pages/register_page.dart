@@ -6,13 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../config/default_config.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/logo.dart';
 import '../shared_components/menus/login_menu.dart';
 import '../shared_components/tool_button.dart';
-import '../wrappers/loading_button.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
@@ -37,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _loginUsername = '';
   }
 
+  @override
   didChangeDependencies() async {
     super.didChangeDependencies();
     AnalyticsController? theAnalyticsController =
@@ -135,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: LoginMenu(),
+      floatingActionMenu: const LoginMenu(),
       child: Flex(
         direction: Axis.horizontal,
         children: [
@@ -171,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 if (FirebaseAuth.instance.currentUser !=
                                     null) ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 48, maxHeight: 48),
+                                  constraints: const BoxConstraints(maxWidth: 48, maxHeight: 48),
                                   child: ToolButton(
                                     label: "home",
                                     action: (innerContext) {

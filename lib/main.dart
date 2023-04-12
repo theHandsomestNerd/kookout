@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/controllers/analytics_controller.dart';
@@ -16,16 +15,14 @@ import 'package:cookout/pages/settings_page.dart';
 import 'package:cookout/pages/solo_post_page.dart';
 import 'package:cookout/pages/solo_profile_page.dart';
 import 'package:cookout/shared_components/bug_reporter/bug_reporter.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:meta_seo/meta_seo.dart';
-import 'package:package_info_plus_web/package_info_plus_web.dart';
 
 import 'config/firebase_options.dart';
+import 'models/app_user.dart';
 import 'models/controllers/auth_inherited.dart';
 import 'pages/login_page.dart';
 
@@ -47,15 +44,13 @@ Future<void> main() async {
   DefaultConfig();
   await DefaultConfig.initializingConfig;
 
-  print("main auth url ${DefaultConfig.theAuthBaseUrl}");
-
   if (kDebugMode) {
     //Emulator setup
     await FirebaseAuth.instance
         .useAuthEmulator('127.0.0.1', 9099); //Error is thrown here
   }
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -151,11 +146,12 @@ class _MyAppState extends State<MyApp> {
         title: 'Cookout',
         routes: {
           '/home': (context) {
-            return BugReporter(child: HomePage());
+            return HomePage();
           },
-          '/postsPage': (context) => BugReporter(child: PostsPage()),
-          '/createPostsPage': (context) => BugReporter(child: CreatePostPage()),
-          '/register': (context) => BugReporter(child: RegisterPage()),
+          '/postsPage': (context) => PostsPage(),
+          '/createPostsPage': (context) =>
+              const BugReporter(child: CreatePostPage()),
+          '/register': (context) => RegisterPage(),
           '/': (context) {
             if (kIsWeb) {
               // Define MetaSEO object
@@ -176,13 +172,12 @@ class _MyAppState extends State<MyApp> {
               meta.twitterTitle(twitterTitle: title);
               meta.ogImage(ogImage: image);
             }
-            return BugReporter(
-              child: LoginPage(),
-            );
+            return LoginPage();
           },
           // '/editProfile': (context) => const EditProfilePage(),
-          '/logout': (context) => BugReporter(child: LogoutPage()),
-          '/profilesPage': (context) => BugReporter(child: ProfilesPage()),
+          '/logout': (context) => LogoutPage(),
+          '/profilesPage': (context) =>
+              ProfilesPage(),
           '/profile': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
@@ -194,26 +189,24 @@ class _MyAppState extends State<MyApp> {
               theId = authController.myAppUser?.userId.toString() ?? "";
             }
 
-            var thisProfile = null;
+            AppUser? thisProfile;
             for (var element in chatController.profileList) {
               if (element.userId == theId) {
                 thisProfile = element;
               }
             }
 
-            return BugReporter(
-              child: SoloProfilePage(
-                thisProfile: thisProfile,
-                key: ObjectKey(arguments["id"]),
-                id: theId,
-              ),
+            return SoloProfilePage(
+              thisProfile: thisProfile,
+              key: ObjectKey(arguments["id"]),
+              id: theId,
             );
           },
           '/post': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
 
-            var theId;
+            String? theId;
             if (arguments['id'] != null) {
               theId = arguments['id'];
             }
@@ -223,9 +216,9 @@ class _MyAppState extends State<MyApp> {
             //    postController.getPost(theId).then((value){
             //     print("Post retrieved before ");
 
-                return SoloPostPage(
-                  thisPostId: theId,
-                );
+            return SoloPostPage(
+              thisPostId: theId,
+            );
 
             // }
             // return Placeholder();
@@ -233,16 +226,14 @@ class _MyAppState extends State<MyApp> {
           '/myProfile': (context) {
             var theId = authController.myAppUser?.userId.toString() ?? "";
             var thisProfile = null;
-            chatController.profileList.forEach((element) {
+            for (var element in chatController.profileList) {
               if (element.userId == theId) {
                 thisProfile = element;
               }
-            });
-            return BugReporter(
-              child: SoloProfilePage(
-                thisProfile: thisProfile,
-                id: theId,
-              ),
+            }
+            return SoloProfilePage(
+              thisProfile: thisProfile,
+              id: theId,
             );
           },
           // '/postsPage': (context) {
@@ -251,7 +242,7 @@ class _MyAppState extends State<MyApp> {
           //   );
           // },
           '/settings': (context) {
-            return BugReporter(child: SettingsPage());
+            return SettingsPage();
           },
         },
         theme: ThemeData(

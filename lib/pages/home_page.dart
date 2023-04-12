@@ -7,6 +7,7 @@ import 'package:cookout/models/extended_profile.dart';
 import 'package:cookout/models/post.dart';
 import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:cookout/shared_components/menus/home_page_menu.dart';
+import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookout/wrappers/card_with_actions.dart';
 import 'package:cookout/wrappers/circular_progress_indicator_with_message.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +108,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
       _profilePageController.nextPage(
           duration: Duration(milliseconds: 500), curve: ElasticInCurve());
     });
+
     _postTimer ??= Timer.periodic(Duration(seconds: 18), (timer) async {
       print("Timer went off $timer");
 
@@ -118,7 +120,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    startHomeScreenTimers();
+
+
     _profilePagingController.addPageRequestListener((theLastId) async {
       return _fetchProfilesPage(theLastId);
     });
@@ -127,9 +131,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
     });
 
     _postPagingController
-        .notifyPageRequestListeners(_postPagingController.firstPageKey);
+        .notifyPageRequestListeners("");
     _profilePagingController
-        .notifyPageRequestListeners(_postPagingController.firstPageKey);
+        .notifyPageRequestListeners("");
+
+
 
     _profilePageController.addListener(() {
       if (_profilePagingController.itemList != null) {
@@ -160,13 +166,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
           });
           client
               ?.getExtendedProfile(
-                  _profilePagingController.itemList![profileIndex].userId ?? "")
+              _profilePagingController.itemList![profileIndex].userId ?? "")
               .then((theProfile) {
-            setState(() {
               if (theProfile != null) {
                 extProfiles.add(theProfile);
               }
               // highlightedExtProfile = theProfile;
+            setState(() {
               isExtProfileLoading = false;
             });
             // setState(() {});
@@ -175,10 +181,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
       }
     });
 
-    // _profilePagingController.notifyPageRequestListeners("");
-    // _postPagingController.notifyPageRequestListeners("");
+    super.initState();
 
-    startHomeScreenTimers();
   }
 
   @override
@@ -231,9 +235,15 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   @override
   didChangeDependencies() async {
+    // startHomeScreenTimers();
+
+    // _postPagingController
+    //     .notifyPageRequestListeners("");
+    // _profilePagingController
+    //     .notifyPageRequestListeners("");
     super.didChangeDependencies();
 
-    startHomeScreenTimers();
+
 
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
 
@@ -303,18 +313,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return Scaffold(
-      floatingActionButton: HomePageMenu(
+    return AppScaffoldWrapper(
+      floatingActionMenu: HomePageMenu(
         updateMenu: () => {},
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.5),
-
-        // Here we take the value from the HomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Logo(),
-      ),
-      body: Flex(
+      child: Flex(
         direction: Axis.vertical,
         children: [
           Expanded(

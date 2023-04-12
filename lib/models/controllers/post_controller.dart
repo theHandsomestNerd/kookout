@@ -73,7 +73,7 @@ class PostController {
       final response = await http.get(Uri.parse("$authBaseUrl/get-all-posts"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse;
+      dynamic processedResponse;
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
@@ -150,7 +150,7 @@ class PostController {
       final response = await http.get(Uri.parse("$authBaseUrl/get-post/$postId"),
           headers: {"Authorization": ("Bearer $token")});
 
-      var processedResponse;
+      dynamic processedResponse;
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {

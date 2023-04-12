@@ -19,7 +19,7 @@ class _AppMenuState extends State<AppMenu> {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
-      distance: 112.0,
+      distance: 132.0,
       children: [
          ActionButton(
                 onPressed: () {

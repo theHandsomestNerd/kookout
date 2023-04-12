@@ -10,23 +10,23 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus_web/package_info_plus_web.dart';
 
 class DefaultConfig {
-  static late String authBaseUrl = "";
-  static late String sanityDB = "";
-  static late String sanityProjectID = "";
-  static late String appName = "";
-  static late String packageName = "";
-  static late String version = "";
-  static late String apiVersion = "";
-  static late String apiSanityDB = "";
-  static late String buildNumber = "";
-  static late String apiStatus = "";
+  static String authBaseUrl = "";
+  static String sanityDB = "";
+  static String sanityProjectID = "";
+  static String appName = "";
+  static String packageName = "";
+  static String version = "";
+  static String apiVersion = "";
+  static String apiSanityDB = "";
+  static String buildNumber = "";
+  static String apiStatus = "";
 
-  static late int homepagePostDurationSecs = 5;
-  static late int homepageProfileDurationSecs = 5;
+  static int homepagePostDurationSecs = 5;
+  static int homepageProfileDurationSecs = 5;
 
-  static late String blankUrl = "";
+  static String blankUrl = "";
 
-  static late ApiClient? _apiClient = null;
+  static ApiClient? _apiClient = null;
 
   static get client {
     return _apiClient;
@@ -128,7 +128,7 @@ class DefaultConfig {
         print("Activating Remote Config");
 
         return remoteConfig.fetchAndActivate().then((isActivated) async {
-          print("Activation Status: ${isActivated}");
+          print("Activation Status: $isActivated");
           try {
             final FirebaseRemoteConfig remoteConfig =
                 FirebaseRemoteConfig.instance;

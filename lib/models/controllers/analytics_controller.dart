@@ -5,7 +5,7 @@ class AnalyticsController {
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
-  AnalyticsController.init() {}
+  AnalyticsController.init();
 
   // Future<void> _setDefaultEventParameters() async {
   //   if (kIsWeb) {
@@ -55,13 +55,13 @@ class AnalyticsController {
     print('setUserId succeeded');
   }
 
-  Future<void> _testSetCurrentScreen(String screen) async {
-    await analytics.setCurrentScreen(
-      screenName: screen,
-      screenClassOverride: 'AnalyticsDemo',
-    );
-    print('setCurrentScreen succeeded');
-  }
+  // Future<void> _testSetCurrentScreen(String screen) async {
+  //   await analytics.setCurrentScreen(
+  //     screenName: screen,
+  //     screenClassOverride: 'AnalyticsDemo',
+  //   );
+  //   print('setCurrentScreen succeeded');
+  // }
 
   // Future<void> _testSetAnalyticsCollectionEnabled() async {
   // await analytics.setAnalyticsCollectionEnabled(false);
@@ -69,30 +69,30 @@ class AnalyticsController {
   // print('setAnalyticsCollectionEnabled succeeded');
   // }
 
-  Future<void> _setSessionTimeoutDuration(int duration) async {
-    return analytics
-        .setSessionTimeoutDuration(Duration(milliseconds: duration));
-    print('setSessionTimeoutDuration succeeded');
-  }
+  // Future<void> _setSessionTimeoutDuration(int duration) async {
+  //   return analytics
+  //       .setSessionTimeoutDuration(Duration(milliseconds: duration));
+  //   print('setSessionTimeoutDuration succeeded');
+  // }
 
-  Future<void> _testSetUserProperty() async {
-    await analytics.setUserProperty(name: 'regular', value: 'indeed');
-    print('setUserProperty succeeded');
-  }
-
-  Future<void> _testResetAnalyticsData() async {
-    await analytics.resetAnalyticsData();
-    print('resetAnalyticsData succeeded');
-  }
-
-  Future<void> _testAppInstanceId() async {
-    String? id = await analytics.appInstanceId;
-    if (id != null) {
-      print('appInstanceId succeeded: $id');
-    } else {
-      print('appInstanceId failed, consent declined');
-    }
-  }
+  // Future<void> _testSetUserProperty() async {
+  //   await analytics.setUserProperty(name: 'regular', value: 'indeed');
+  //   print('setUserProperty succeeded');
+  // }
+  //
+  // Future<void> _testResetAnalyticsData() async {
+  //   await analytics.resetAnalyticsData();
+  //   print('resetAnalyticsData succeeded');
+  // }
+  //
+  // Future<void> _testAppInstanceId() async {
+  //   String? id = await analytics.appInstanceId;
+  //   if (id != null) {
+  //     print('appInstanceId succeeded: $id');
+  //   } else {
+  //     print('appInstanceId failed, consent declined');
+  //   }
+  // }
 
   Future<void> logOpenApp() async {
     return analytics.logAppOpen();

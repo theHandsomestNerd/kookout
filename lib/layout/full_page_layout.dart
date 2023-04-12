@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FullPageLayout extends StatefulWidget {
   const FullPageLayout({Key? key, required this.child}) : super(key: key);
 
-  final child;
+  final Widget child;
 
   @override
   State<FullPageLayout> createState() => _FullPageLayoutState();

@@ -7,11 +7,15 @@ import 'package:cookout/pages/tabs/bio_tab.dart';
 import 'package:cookout/pages/tabs/comments_tab.dart';
 import 'package:cookout/pages/tabs/follows_tab.dart';
 import 'package:cookout/pages/tabs/likes_tab.dart';
+import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../config/default_config.dart';
+import '../models/app_user.dart';
 import '../models/comment.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
@@ -28,7 +32,7 @@ class SoloProfilePage extends StatefulWidget {
   });
 
   final String id;
-  final thisProfile;
+  final AppUser? thisProfile;
 
   @override
   State<SoloProfilePage> createState() => _SoloProfilePageState();
@@ -46,7 +50,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   late List<Follow>? _profileFollows = [];
 
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-  AnalyticsController? analyticsController=null;
+  AnalyticsController? analyticsController = null;
   ApiClient? profileClient = null;
   AuthController? authController = null;
   ChatController? chatController = null;
@@ -68,7 +72,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     theAnalyticsController
         ?.logScreenView(_isThisMe ? 'My Profile Page' : 'Profile Page');
 
-    if (analyticsController==null && theAnalyticsController != null) {
+    if (analyticsController == null && theAnalyticsController != null) {
       analyticsController = theAnalyticsController;
     }
     var theFollows = await theChatController?.profileClient
@@ -186,7 +190,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
 
           await analyticsController?.sendAnalyticsEvent('profile-liked', {
-            "likee": widget.id ??"",
+            "likee": widget.id ?? "",
             "liker": authController?.myAppUser?.userId ?? "",
             "isUnlike": isUnlike.toString()
           });
@@ -214,8 +218,8 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
                 innerContext);
           } else {
             await analyticsController?.sendAnalyticsEvent('profile-follow', {
-              "followed": widget.id ??"",
-              "follower": authController?.myAppUser?.userId??"",
+              "followed": widget.id ?? "",
+              "follower": authController?.myAppUser?.userId ?? "",
               "isUnfollow": isUnfollow.toString()
             });
             ChatApiGetProfileFollowsResponse theFollows =
@@ -263,16 +267,15 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         profileComments: _profileComments,
         thisProfile: widget.thisProfile,
         updateComments: (innerContext, String updateCommentResponse) async {
-
           if (updateCommentResponse != "SUCCESS") {
             _alertSnackbar.showErrorAlert(
                 "That like didnt register. Try Again.", innerContext);
           } else {
             List<Comment> theComments =
-              await profileClient?.getProfileComments(widget.id) ?? [];
-          setState(() {
-            _profileComments = theComments;
-          });
+                await profileClient?.getProfileComments(widget.id) ?? [];
+            setState(() {
+              _profileComments = theComments;
+            });
             _alertSnackbar.showSuccessAlert("Comment Posted.", innerContext);
           }
         },
@@ -316,7 +319,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         child: Flex(
           direction: Axis.vertical,
           children: [
-            Expanded(child: _widgetOptions(_selectedIndex)),
+            Expanded(
+              child: _widgetOptions(_selectedIndex),
+            ),
           ],
         ),
       ),

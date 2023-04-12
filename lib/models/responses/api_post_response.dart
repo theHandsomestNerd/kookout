@@ -10,7 +10,7 @@ class ApiPostResponse {
   });
 
   factory ApiPostResponse.fromJson(Map<String,dynamic> parsedJson) {
-    Post? thePost = null;
+    Post? thePost;
 
     // if (kDebugMode) {
     //   print("get-posts-response $parsedJson");

@@ -25,10 +25,10 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int _selectedIndex = 0;
   String myUserId = "";
-  late ChatController? chatController = null;
-  late AuthController? authController = null;
-  late List<Block>? myBlockedProfiles = [];
-  late AnalyticsController? analyticsController = null;
+  ChatController? chatController;
+  AuthController? authController;
+  List<Block>? myBlockedProfiles = [];
+  AnalyticsController? analyticsController;
 
   @override
   void initState() {
