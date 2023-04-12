@@ -1,7 +1,10 @@
 import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/layout/list_and_small_form.dart';
 import 'package:cookout/models/clients/api_client.dart';
+import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/models/controllers/auth_inherited.dart';
+import 'package:cookout/models/like.dart';
+import 'package:cookout/models/responses/chat_api_get_profile_likes_response.dart';
 import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:cookout/shared_components/comments/paged_comment_thread.dart';
 import 'package:cookout/shared_components/tool_button.dart';
@@ -17,6 +20,7 @@ import '../models/comment.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/post_controller.dart';
 import '../models/post.dart';
+import '../wrappers/alerts_snackbar.dart';
 
 class SoloPostPage extends StatefulWidget {
   const SoloPostPage({Key? key, this.thisPostId}) : super(key: key);
@@ -63,10 +67,48 @@ class _SoloPostPageState extends State<SoloPostPage> {
     // thePost= postController?.getPost(thisPostId);
     thisPostId = widget.thisPostId;
   }
+  late Like? _profileLikedByMe = null;
+  late List<Like>? _profileLikes = [];
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
+
+
+  AuthController? authController = null;
+
+  Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
+    return await profileClient?.getProfileLikes(widget.thisPostId??"");
+  }
+  updateLikes(innerContext, String likeResponse, bool isUnlike) async {
+  ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
+
+  await analyticsController?.sendAnalyticsEvent('profile-liked', {
+  "likee": widget.thisPostId ?? "",
+  "liker": authController?.myAppUser?.userId ?? "",
+  "isUnlike": isUnlike.toString()
+  });
+
+  setState(() {
+  _profileLikes = theLikes?.list;
+  _profileLikedByMe = theLikes?.amIInThisList;
+  });
+
+  if (!isUnlike && likeResponse != "SUCCESS") {
+  _alertSnackbar.showErrorAlert(
+  "That ${isUnlike ? "unlike" : "like"} didnt register. Try Again.",
+  innerContext);
+  } else {
+  _alertSnackbar.showSuccessAlert(
+  "You ${isUnlike ? "unlike" : "like"} this profile.",
+  innerContext);
+  }
+}
 
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
+    var theAuthController = AuthInherited.of(context)?.authController;
+    authController = theAuthController;
+    var theChatController = AuthInherited.of(context)?.chatController;
+
     AnalyticsController? theAnalyticsController =
         AuthInherited.of(context)?.analyticsController;
     PostController? thePostController =
@@ -79,6 +121,12 @@ class _SoloPostPageState extends State<SoloPostPage> {
         // print("A post retrieved $aPost");
       }
     }
+    var theLikes = await theChatController?.profileClient
+        .getProfileLikes(widget.thisPostId??"") as ChatApiGetProfileLikesResponse;
+
+    _profileLikedByMe = theLikes.amIInThisList;
+    _profileLikes = theLikes.list;
+
 
     theAnalyticsController?.logScreenView('Post');
     if (theAnalyticsController != null && analyticsController == null) {
@@ -94,16 +142,52 @@ class _SoloPostPageState extends State<SoloPostPage> {
 
     setState(() {});
   }
+  late bool _isLiking = false;
+late Like? profileLikedByMe = null;
+
+  _likeThisProfile(context) async {
+    await analyticsController
+        ?.sendAnalyticsEvent('profile-like-press', {"liked": widget.thisPostId});
+
+    setState(() {
+      _isLiking = true;
+    });
+    String? likeResponse = null;
+    bool isUnlike = false;
+
+    if (profileLikedByMe == null) {
+      likeResponse = await profileClient?.like(widget.thisPostId??"", 'profile-like');
+    } else {
+      if (profileLikedByMe != null) {
+        isUnlike = true;
+        likeResponse = await profileClient?.unlike(
+            widget.thisPostId??"", profileLikedByMe!);
+      }
+    }
+
+    await updateLikes(context, likeResponse ?? "", isUnlike);
+    setState(() {
+      _isLiking = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       child: FullPageLayout(
         child: SlidingUpPanel(
+          // header: Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: SizedBox(
+          //     height: 2,
+          //     width: 50,
+          //     child: Container(color: Colors.red),
+          //   ),
+          // ),
           backdropEnabled: true,
           isDraggable: true,
           parallaxEnabled: true,
-          maxHeight: 900,
+          maxHeight: 600,
           color: Colors.transparent,
           minHeight: 100,
           body: Stack(children: [
@@ -132,128 +216,128 @@ class _SoloPostPageState extends State<SoloPostPage> {
                 ],
               )
           ]),
-          panel: Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
-            child: Flex(
-              direction: Axis.vertical,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 2,
-                          width: 50,
-                          child: Container(color: Colors.red),
-                        ),
+          panelBuilder: (scrollController) => SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 2,
+                        width: 50,
+                        child: Container(color: Colors.red),
                       ),
-                      Flex(
-                        direction: Axis.horizontal,
-                        children: [
-                          Flexible(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(minHeight: 48),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ToolButton(
-                                      action: () {},
-                                      iconData: Icons.thumb_up,
-                                      color: Colors.blue,
-                                      label: "0"),
-                                  ToolButton(
-                                      action: () {},
-                                      iconData: Icons.comment,
-                                      color: Colors.blue,
-                                      label: "0"),
-                                ],
-                              ),
+                    ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Flexible(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: 48),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ToolButton(
+                                    action:
+                                    _likeThisProfile,
+                                    iconData:
+                                    Icons.thumb_up,
+                                    color: Colors.green,
+                                    isLoading:
+                                    _isLiking,
+                                    text: _profileLikes
+                                        ?.length
+                                        .toString(),
+                                    label: 'Like',
+                                    isActive: profileLikedByMe !=
+                                        null,
+                                   ),
+                                ToolButton(
+                                    action: () {},
+                                    iconData: Icons.comment,
+                                    color: Colors.blue,
+                                    label: "0"),
+                              ],
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (thePost?.author != null)
+                      Column(
+                        children: [
+                          AuthorAndText(
+                            author: thePost!.author!,
+                            when: thePost!.publishedAt!,
+                            body: thePost!.body!,
                           ),
                         ],
                       ),
-                      if (thePost?.author != null)
-                        Column(
-                          children: [
-                            AuthorAndText(
-                              author: thePost!.author!,
-                              when: thePost!.publishedAt!,
-                              body: thePost!.body!,
-                            ),
-                          ],
-                        ),
-                      SizedBox(height: 3,child: Container(color: Colors.red),),
-                      Expanded(
-                          child: Container(
-                        child: Flex(
-                          mainAxisSize: MainAxisSize.max,
-                          direction: Axis.vertical,
-                          children: [
-                            Flexible(
-                              flex: 3,
-                              fit: FlexFit.tight,
-                              child: thePost?.id != null
-                                  ? PagedCommentThread(
-                                      key: Key(thisPostId ?? ""),
-                                      pagingController: _pagingController,
-                                      postId: thePost!.id!,
-                                    )
-                                  : Container(),
-                            ),
-                            Flexible(
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(minHeight: 150),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      TextFormField(
-                                        autofocus: true,
-                                        onChanged: (e) {
-                                          _setCommentBody(e);
-                                        },
-                                        initialValue: commentBody,
-                                        minLines: 2,
-                                        maxLines: 4,
-                                        decoration: const InputDecoration(
-                                          border: UnderlineInputBorder(),
-                                          labelText: 'Comment:',
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      AnalyticsLoadingButton(
-                                        isDisabled: _isCommenting,
-                                        analyticsEventName:
-                                            'solo-post-create-comment',
-                                        analyticsEventData: {
-                                          'author': thePost?.author?.userId,
-                                          "body": commentBody ?? "",
-                                        },
-                                        action: (x) async {
-                                          await _commentThisProfile();
-                                          commentBody = "";
-                                          setState(() {});
-                                          _pagingController.refresh();
-                                        },
-                                        text: "Comment",
-                                      ),
-                                      SizedBox(height: 24),
-                                    ],
-                                  ),
+                    SizedBox(
+                      height: 3,
+                      child: Container(color: Colors.red),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 300),
+                      child: thePost?.id != null
+                          ? PagedCommentThread(
+                              key: Key(thisPostId ?? ""),
+                              pagingController: _pagingController,
+                              postId: thePost!.id!,
+                            )
+                          : Container(),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: 180),
+                      child: Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                autofocus: true,
+                                onChanged: (e) {
+                                  _setCommentBody(e);
+                                },
+                                initialValue: commentBody,
+                                minLines: 2,
+                                maxLines: 4,
+                                decoration: const InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  labelText: 'Comment:',
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 8),
+                              AnalyticsLoadingButton(
+                                isDisabled: _isCommenting,
+                                analyticsEventName: 'solo-post-create-comment',
+                                analyticsEventData: {
+                                  'author': thePost?.author?.userId,
+                                  "body": commentBody ?? "",
+                                },
+                                action: (x) async {
+                                  await _commentThisProfile();
+                                  commentBody = "";
+                                  setState(() {});
+                                  _pagingController.refresh();
+                                },
+                                text: "Comment",
+                              ),
+                              SizedBox(height: 24),
+                            ],
+                          ),
                         ),
-                      ))
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
-              ],
+              ),]
             ),
           ),
         ),
