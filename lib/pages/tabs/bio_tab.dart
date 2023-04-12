@@ -173,7 +173,7 @@ class _BioTabState extends State<BioTab> {
     return SlidingUpPanel(
       backdropEnabled: true,
       isDraggable: true,
-      parallaxEnabled: true,
+      parallaxEnabled: false,
       maxHeight: 600,
       color: Colors.transparent,
       minHeight: 100,
@@ -195,7 +195,7 @@ class _BioTabState extends State<BioTab> {
         ],
       ),
       panelBuilder: (scrollController) => SingleChildScrollView(
-        controller: scrollController,
+        // controller: scrollController,
         child: Column(
           children: [
             Card(
@@ -206,6 +206,7 @@ class _BioTabState extends State<BioTab> {
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 600),
                   child: ListView(
+                    controller: scrollController,
                     children: [
                       Column(
                         children: [
