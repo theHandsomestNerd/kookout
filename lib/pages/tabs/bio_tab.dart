@@ -177,7 +177,7 @@ class _BioTabState extends State<BioTab> {
       parallaxEnabled: true,
       maxHeight: 1000,
       color: Colors.transparent,
-      minHeight: 56,
+      minHeight: 100,
       body: CardWithBackground(
 
           width: 350,
@@ -192,11 +192,18 @@ class _BioTabState extends State<BioTab> {
           // in the middle of the parent.
           child: Flex(direction: Axis.vertical, children: [
             Expanded(
-              flex: 3,
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 1500),
+                constraints: BoxConstraints(),
                 child: ListView(
                   children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(height: 2, width: 50,child: Container(color:Colors.red),),
+                        ),
+                      ],
+                    ),
                     ListTile(
                       title: Container(
                         // color:
