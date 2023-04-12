@@ -195,8 +195,7 @@ class _BioTabState extends State<BioTab> {
           ),
         ],
       ),
-      panelBuilder: (scrollController) => SingleChildScrollView(
-        controller: scrollController,
+      panel:  SingleChildScrollView(
         child: Column(
           children: [
             Card(
