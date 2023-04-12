@@ -63,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
       authController = theAuthController;
     }
 
-    if (myUserId == null || myUserId == "") {
+    if (myUserId == "") {
       myUserId = theAuthController?.myAppUser?.userId ?? "";
     }
     setState(() {});

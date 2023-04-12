@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:cookout/models/clients/api_client.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform, kDebugMode, kIsWeb;
+    show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus_web/package_info_plus_web.dart';
 
@@ -26,7 +26,7 @@ class DefaultConfig {
 
   static String blankUrl = "";
 
-  static ApiClient? _apiClient = null;
+  static ApiClient? _apiClient;
 
   static get client {
     return _apiClient;

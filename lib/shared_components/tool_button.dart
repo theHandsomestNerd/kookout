@@ -18,7 +18,7 @@ class ToolButton extends StatefulWidget {
   final bool? isHideLabel;
   final bool? isDisabled;
   final String? text;
-  final action;
+  final Function action;
   final IconData iconData;
   final Color color;
   final Color? defaultColor;

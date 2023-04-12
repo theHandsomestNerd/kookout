@@ -2,10 +2,6 @@ import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/comment.dart';
 import 'package:cookout/models/controllers/analytics_controller.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
-import 'package:cookout/models/post.dart';
-import 'package:cookout/shared_components/comments/comment_solo.dart';
-import 'package:cookout/shared_components/posts/post_solo.dart';
-import 'package:cookout/wrappers/analytics_loading_button.dart';
 import 'package:cookout/wrappers/author_and_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -24,9 +20,9 @@ class PagedCommentThread extends StatefulWidget {
 
 class _PagedCommentThreadState extends State<PagedCommentThread> {
 
-  AuthController? authController = null;
+  AuthController? authController;
   late ApiClient client;
-  AnalyticsController? analyticsController = null;
+  AnalyticsController? analyticsController;
 
   static const _pageSize = 10;
 
@@ -89,13 +85,13 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
       newItems = await client.fetchCommentThreadPaginatedForPost(widget.postId, pageKey, _pageSize);
 
       print("Got more comment items ${newItems.length}");
-      final isLastPage = (newItems.length ?? 0) < _pageSize;
+      final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        widget.pagingController.appendLastPage(newItems ?? []);
+        widget.pagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.id;
         if (nextPageKey != null) {
-          widget.pagingController.appendPage(newItems ?? [], nextPageKey);
+          widget.pagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {
@@ -123,7 +119,7 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
             return Flex(direction: Axis.horizontal, children: [
               Expanded(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 500),
+                  constraints: const BoxConstraints(maxHeight: 500),
                   child: Flex(
                     direction: Axis.vertical,
                     children: [
@@ -131,8 +127,8 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("There are no comments yet."),
+                            children: const [
+                              Text("There are no comments yet."),
                             ],
                           ),
                         ),
@@ -144,7 +140,7 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
             ]);
           },
           itemBuilder: (context, item, index) => Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 1),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 1),
             child: AuthorAndText(
               when: item.publishedAt,
               author: item.author!,

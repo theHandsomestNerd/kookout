@@ -23,11 +23,11 @@ class ProfilesPage extends StatefulWidget {
 class _ProfilesPageState extends State<ProfilesPage> {
   int _selectedIndex = 0;
   String myUserId = "";
-  late AnalyticsController? analyticsController=null;
+  AnalyticsController? analyticsController;
 
-  late AuthController? authController = null;
-  late ChatController? chatController = null;
-  late List<Block>? myBlockedProfiles = [];
+  AuthController? authController;
+  ChatController? chatController;
+  List<Block>? myBlockedProfiles = [];
 
   @override
   void initState() {

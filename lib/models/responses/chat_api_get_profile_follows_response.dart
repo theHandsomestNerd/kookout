@@ -12,14 +12,11 @@ class ChatApiGetProfileFollowsResponse {
 
   factory ChatApiGetProfileFollowsResponse.fromJson(Map<String, dynamic> json) {
     getListOfFollows(List<dynamic> parsedJson) {
-      if (parsedJson != null) {
-        return parsedJson.map((i) => Follow.fromJson(i)).toList();
-      }
-      return <Follow>[];
+      return parsedJson.map((i) => Follow.fromJson(i)).toList();
     }
 
     List<Follow> list = <Follow>[];
-    Follow? amIInThisList=null;
+    Follow? amIInThisList;
 
     list = getListOfFollows(json['profileFollows']);
     if (json['amIInThisList'] != null && json['amIInThisList'] != "null") {

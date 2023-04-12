@@ -13,7 +13,7 @@ class CardWrapped extends StatelessWidget {
       child: SizedBox(
         height: height ?? 400.0,
         child: Card(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(20),
             ),

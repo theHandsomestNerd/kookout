@@ -11,7 +11,7 @@ class SanityImageBuilder {
   String? url;
 
   late ImageProvider image =
-      Image(image: AssetImage('assets/blankProfileImage.png')).image;
+      const Image(image: AssetImage('assets/blankProfileImage.png')).image;
 
   SanityImageBuilder.imageProviderFor(
       {required SanityImage? sanityImage,
@@ -32,7 +32,7 @@ class SanityImageBuilder {
       var theUrl = theBuilder.url();
 
       url = theUrl;
-      if (theUrl != null) {
+      if (theUrl != "") {
         image = Image(image: NetworkImage(theUrl)).image;
       }
     }

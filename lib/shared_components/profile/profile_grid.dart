@@ -1,5 +1,4 @@
 import 'package:cookout/models/clients/api_client.dart';
-import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/shared_components/profile/profile_solo.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -42,13 +41,13 @@ class _ProfileGridState extends State<ProfileGrid> {
       newItems = await client.fetchProfilesPaginated(pageKey, _pageSize);
 
       print("Got more items ${newItems.length}");
-      final isLastPage = (newItems.length ?? 0) < _pageSize;
+      final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        _pagingController.appendLastPage(newItems ?? []);
+        _pagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.userId;
         if (nextPageKey != null) {
-          _pagingController.appendPage(newItems ?? [], nextPageKey);
+          _pagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {
@@ -69,11 +68,11 @@ class _ProfileGridState extends State<ProfileGrid> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         maxWidth: 380,
       ),
       child: PagedGridView<String, AppUser>(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           mainAxisExtent: 100,
           mainAxisSpacing: 0,
           crossAxisSpacing: 0,

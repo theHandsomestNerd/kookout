@@ -138,7 +138,7 @@ class AuthController {
         request.fields['displayName'] = displayName;
       }
 
-      final response = await request.send();
+      await request.send();
       // if (kDebugMode) {
       //   print("Auth api response$response");
       // }
@@ -226,7 +226,7 @@ class AuthController {
           headers: {"Authorization": ("Bearer $token")});
 
       dynamic processedResponse = jsonDecode(response.body);
-      AppUser? responseModel = null;
+      AppUser? responseModel;
       if (processedResponse['appProfile'] != null) {
         responseModel = AppUser.fromJson(processedResponse['appProfile']);
       }

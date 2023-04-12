@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class LoadingButton extends StatelessWidget {
   const LoadingButton(
-      {super.key, this.action, this.text, this.isLoading, this.isDisabled, this.width});
+      {super.key, required this.action, this.text, this.isLoading, this.isDisabled, this.width});
 
-  final action;
-  final width;
+  final Function action;
+  final double? width;
   final bool? isLoading;
   final bool? isDisabled;
   final String? text;

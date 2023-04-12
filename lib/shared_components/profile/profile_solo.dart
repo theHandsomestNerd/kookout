@@ -3,7 +3,6 @@ import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/default_config.dart';
 import '../../models/app_user.dart';
 import '../../models/controllers/auth_inherited.dart';
 
@@ -21,12 +20,11 @@ class ProfileSolo extends StatefulWidget {
 }
 
 class _ProfileSoloState extends State<ProfileSolo> {
-  AnalyticsController? analyticsController=null;
+  AnalyticsController? analyticsController;
   String? myUserId;
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
-    var theAuthController = AuthInherited.of(context)?.authController;
     AnalyticsController? theAnalyticsController =
         AuthInherited.of(context)?.analyticsController;
 
@@ -39,20 +37,24 @@ class _ProfileSoloState extends State<ProfileSolo> {
     setState(() {});
   }
 
+  _gotoProfile() async {
+    analyticsController?.sendAnalyticsEvent('profile-clicked', {"clicker": myUserId, "clicked": widget.profile.userId});
+    Navigator.pushNamed(context, '/profile',
+        arguments: {"id": widget.profile.userId});
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        await analyticsController?.sendAnalyticsEvent('profile-clicked', {"clicker": myUserId, "clicked": widget.profile.userId});
-        Navigator.pushNamed(context, '/profile',
-            arguments: {"id": widget.profile.userId});
+        await _gotoProfile();
       },
       child: Stack(
         children: [
           widget.profile.profileImage != null
               ? ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 120, minWidth: 120),
+            constraints: const BoxConstraints(minHeight: 120, minWidth: 120),
                 child: Hero(
                   tag: widget.profile.userId ?? "",
                   child: CardWithBackground(
@@ -68,8 +70,8 @@ class _ProfileSoloState extends State<ProfileSolo> {
                   height: 100,
                   width: 100,
                   child: CardWithBackground(
-                    image: Image(
-                            image: const AssetImage(
+                    image: const Image(
+                            image: AssetImage(
                                 'assets/blankProfileImage.png'))
                         .image,
                     child: Padding(

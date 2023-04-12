@@ -1,5 +1,6 @@
 import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 
@@ -12,8 +13,8 @@ class HomePageMenu extends StatefulWidget {
     this.selected,
     
   }) : super(key: key);
-  final updateMenu;
-  final selected;
+  final Function updateMenu;
+  final bool? selected;
   
 
   @override
@@ -28,7 +29,7 @@ enum ProfileMenuOptions {
 }
 
 class _HomePageMenuState extends State<HomePageMenu> {
-  var profileImage = null;
+  SanityImage? profileImage;
 
   @override
   didChangeDependencies() async {

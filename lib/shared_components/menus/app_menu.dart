@@ -10,7 +10,7 @@ enum AppMenuOptions {
 }
 class AppMenu extends StatefulWidget {
   const AppMenu({Key? key, required this.updateMenu}) : super(key: key);
-final updateMenu;
+final Function updateMenu;
   @override
   State<AppMenu> createState() => _AppMenuState();
 }

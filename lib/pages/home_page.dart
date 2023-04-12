@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cookout/layout/full_page_layout.dart';
 import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/models/extended_profile.dart';
@@ -16,8 +15,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../models/app_user.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../sanity/sanity_image_builder.dart';
-import '../shared_components/logo.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -43,7 +40,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
       PagingController(firstPageKey: "");
 
   static const _pageSize = 5;
-  late ApiClient? client = null;
+  ApiClient? client;
 
   final _profilePageController = PageController(
     initialPage: 0,
@@ -62,13 +59,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
       newItems = await client?.fetchProfilesPaginated(pageKey, _pageSize) ?? [];
 
       print("Got more items ${newItems.length}");
-      final isLastPage = (newItems.length ?? 0) < _pageSize;
+      final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        _profilePagingController.appendLastPage(newItems ?? []);
+        _profilePagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.userId;
         if (nextPageKey != null) {
-          _profilePagingController.appendPage(newItems ?? [], nextPageKey);
+          _profilePagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {
@@ -84,13 +81,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
       newItems = await client?.fetchPostsPaginated(pageKey, _pageSize) ?? [];
 
       print("Got more post items ${newItems.length}");
-      final isLastPage = (newItems.length ?? 0) < _pageSize;
+      final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        _postPagingController.appendLastPage(newItems ?? []);
+        _postPagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.id;
         if (nextPageKey != null) {
-          _postPagingController.appendPage(newItems ?? [], nextPageKey);
+          _postPagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {
@@ -99,21 +96,23 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   startHomeScreenTimers() async {
-    _profileTimer ??= Timer.periodic(Duration(seconds: 6), (timer) async {
+    _profileTimer ??= Timer.periodic(const Duration(seconds: 6), (timer) async {
       print("Timer went off $timer");
 
       print(
           "There are ${_profilePagingController.itemList?.length} items in the list we on ${_profilePageController.page}");
       // move to next page in profile paging
       _profilePageController.nextPage(
-          duration: Duration(milliseconds: 500), curve: ElasticInCurve());
+          duration: const Duration(milliseconds: 500),
+          curve: const ElasticInCurve());
     });
 
-    _postTimer ??= Timer.periodic(Duration(seconds: 18), (timer) async {
+    _postTimer ??= Timer.periodic(const Duration(seconds: 18), (timer) async {
       print("Timer went off $timer");
 
       _postPageController.nextPage(
-          duration: Duration(milliseconds: 500), curve: ElasticInCurve());
+          duration: const Duration(milliseconds: 500),
+          curve: const ElasticInCurve());
     });
   }
 
@@ -122,7 +121,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
     // TODO: implement initState
     startHomeScreenTimers();
 
-
     _profilePagingController.addPageRequestListener((theLastId) async {
       return _fetchProfilesPage(theLastId);
     });
@@ -130,12 +128,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
       return _fetchPostsPage(theLastId);
     });
 
-    _postPagingController
-        .notifyPageRequestListeners("");
-    _profilePagingController
-        .notifyPageRequestListeners("");
-
-
+    _postPagingController.notifyPageRequestListeners("");
+    _profilePagingController.notifyPageRequestListeners("");
 
     _profilePageController.addListener(() {
       if (_profilePagingController.itemList != null) {
@@ -166,12 +160,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
           });
           client
               ?.getExtendedProfile(
-              _profilePagingController.itemList![profileIndex].userId ?? "")
+                  _profilePagingController.itemList![profileIndex].userId ?? "")
               .then((theProfile) {
-              if (theProfile != null) {
-                extProfiles.add(theProfile);
-              }
-              // highlightedExtProfile = theProfile;
+            if (theProfile != null) {
+              extProfiles.add(theProfile);
+            }
+            // highlightedExtProfile = theProfile;
             setState(() {
               isExtProfileLoading = false;
             });
@@ -182,7 +176,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
     });
 
     super.initState();
-
   }
 
   @override
@@ -230,8 +223,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
     super.dispose();
   }
 
-  late ChatController? chatController = null;
-  late AnalyticsController? analyticsController = null;
+  ChatController? chatController;
+  AnalyticsController? analyticsController;
 
   @override
   didChangeDependencies() async {
@@ -242,8 +235,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
     // _profilePagingController
     //     .notifyPageRequestListeners("");
     super.didChangeDependencies();
-
-
 
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
 
@@ -343,14 +334,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                         _profilePagingController.nextPageKey ?? "");
                   }
 
-                  var thisExtProfile;
-                  extProfiles.forEach((element) {
+                  ExtendedProfile? thisExtProfile;
+                  for (var element in extProfiles) {
                     if (element.userId ==
                         _profilePagingController
                             .itemList![thePageIndex].userId) {
                       thisExtProfile = element;
                     }
-                  });
+                  }
 
                   //get the extended profile for this user
                   return theItem != null
@@ -435,23 +426,24 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           action2Text: 'All Profiles',
                           action1OnPressed: () async {
                             if (theItem.userId != null) {
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-profile-while-highlighted-pressed',
-                                  {"highlightedUserId": theItem.userId});
                               cancelHomeScreenTimers();
-
-                              Navigator.pushNamed(context, '/profile',
-                                  arguments: {"id": theItem.userId});
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-profile-while-highlighted-pressed', {
+                                "highlightedUserId": theItem.userId
+                              }).then((x) {
+                                Navigator.pushNamed(context, '/profile',
+                                    arguments: {"id": theItem.userId});
+                              });
                             }
                           },
                           action2OnPressed: () async {
-                            await analyticsController?.sendAnalyticsEvent(
-                                'view-all-profiles-pressed',
-                                {"highlightedUserId": theItem.userId});
-
                             cancelHomeScreenTimers();
-
-                            Navigator.pushNamed(context, '/profilesPage');
+                            await analyticsController?.sendAnalyticsEvent(
+                                'view-all-profiles-pressed', {
+                              "highlightedUserId": theItem.userId
+                            }).then((x) {
+                              Navigator.pushNamed(context, '/profilesPage');
+                            });
                           },
                         )
                       : Center(
@@ -460,7 +452,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             children: [
                               !isProfileLoading && (theItem != null)
                                   ? const Text("No Profiles with images")
-                                  : CircularProgressIndicatorWithMessage(
+                                  : const CircularProgressIndicatorWithMessage(
                                       message: "Loading Profile Previews",
                                     ),
                             ],
@@ -507,23 +499,24 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               .image,
                           action1Text: 'All Posts',
                           action1OnPressed: () async {
+                            cancelHomeScreenTimers();
                             await analyticsController?.sendAnalyticsEvent(
                                 'view-all-posts-while-highlighted-pressed',
-                                {"highlightedPostId": theItem.id});
-                            cancelHomeScreenTimers();
-                            Navigator.pushNamed(context, '/postsPage');
+                                {"highlightedPostId": theItem.id}).then((x) {
+                              Navigator.pushNamed(context, '/postsPage');
+                            });
                           },
                           action2Text: 'Go to post',
                           action2OnPressed: () async {
+                            cancelHomeScreenTimers();
                             await analyticsController?.sendAnalyticsEvent(
                                 'view-post-while-highlighted-pressed',
-                                {"highlightedPostId": theItem.id});
-
-                            if (theItem.id != null) {
-                              cancelHomeScreenTimers();
-                              Navigator.pushNamed(context, '/post',
-                                  arguments: {"id": theItem.id});
-                            }
+                                {"highlightedPostId": theItem.id}).then((x) {
+                              if (theItem.id != null) {
+                                Navigator.pushNamed(context, '/post',
+                                    arguments: {"id": theItem.id});
+                              }
+                            });
                           },
                         )
                       : Center(
@@ -532,7 +525,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             children: [
                               !isPostLoading && (theItem == null)
                                   ? const Text("No Posts with images")
-                                  : CircularProgressIndicatorWithMessage(
+                                  : const CircularProgressIndicatorWithMessage(
                                       message: "Loading Post Previews",
                                     ),
                             ],

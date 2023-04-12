@@ -14,7 +14,7 @@ class AnalyticsLoadingButton extends StatefulWidget {
       this.width});
 
   final Function? action;
-  final width;
+  final double? width;
   final bool? isDisabled;
   final String? text;
   final String analyticsEventName;

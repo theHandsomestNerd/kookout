@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 class CardWithActions extends StatelessWidget {
   final String? action1Text;
   final String? caption;
-  final locationRow;
+  final Widget? locationRow;
 
-  final action1OnPressed;
+  final VoidCallback? action1OnPressed;
   final ImageProvider image;
 
   final String? action2Text;
 
-  final action2OnPressed;
-  final infoCard;
+  final VoidCallback? action2OnPressed;
+  final Widget? infoCard;
   final DateTime? when;
   final AppUser? author;
   final int? width;
@@ -51,7 +51,7 @@ class CardWithActions extends StatelessWidget {
         CardWithBackground(
           image: image,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 450, maxHeight: 450),
+            constraints: const BoxConstraints(minHeight: 450, maxHeight: 450),
             child: Column(
               mainAxisAlignment: locationRow !=null?MainAxisAlignment.spaceBetween:MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
@@ -99,7 +99,7 @@ class CardWithActions extends StatelessWidget {
                                         ? Colors.blue
                                         : Colors.white,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Text(
@@ -141,7 +141,7 @@ class CardWithActions extends StatelessWidget {
                                     action2Icon,
                                     color: Colors.white,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Text(

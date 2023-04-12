@@ -44,7 +44,7 @@ class UserBlockMini extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: CardWithBackground(image: SanityImageBuilder.imageProviderFor(sanityImage: user?.profileImage,width: 80,height: 80).image, child: SizedBox(width:80,height: 80),),
+                            child: CardWithBackground(image: SanityImageBuilder.imageProviderFor(sanityImage: user?.profileImage,width: 80,height: 80).image, child: const SizedBox(width:80,height: 80),),
                           ),
                           Flexible(
                             flex: 3,

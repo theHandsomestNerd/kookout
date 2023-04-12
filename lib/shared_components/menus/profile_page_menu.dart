@@ -3,7 +3,6 @@ import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 
 import '../../wrappers/expanding_fab.dart';
@@ -14,9 +13,9 @@ class ProfilePageMenu extends StatefulWidget {
     required this.updateMenu,
     this.selected,
   }) : super(key: key);
-  final updateMenu;
+  final Function updateMenu;
 
-  final selected;
+  final bool? selected;
 
   @override
   State<ProfilePageMenu> createState() => _ProfilePageMenuState();

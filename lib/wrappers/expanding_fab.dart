@@ -4,7 +4,6 @@ import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../config/default_config.dart';
 import '../models/controllers/auth_inherited.dart';
 
 //

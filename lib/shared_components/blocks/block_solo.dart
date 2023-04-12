@@ -4,7 +4,6 @@ import 'package:cookout/shared_components/user_block_text.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/default_config.dart';
 import '../../models/block.dart';
 import '../../models/controllers/auth_inherited.dart';
 
@@ -16,7 +15,7 @@ class BlockSolo extends StatefulWidget {
   });
 
   final Block block;
-  final unblockProfile;
+  final Function unblockProfile;
 
   @override
   State<BlockSolo> createState() => _BlockSoloState();

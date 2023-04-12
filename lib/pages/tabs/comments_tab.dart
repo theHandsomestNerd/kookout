@@ -2,7 +2,6 @@ import 'package:cookout/layout/list_and_small_form.dart';
 import 'package:cookout/models/controllers/chat_controller.dart';
 import 'package:cookout/shared_components/comments/comment_thread.dart';
 import 'package:cookout/wrappers/analytics_loading_button.dart';
-import 'package:cookout/wrappers/loading_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/app_user.dart';
@@ -22,17 +21,17 @@ class CommentsTab extends StatefulWidget {
   final AppUser? thisProfile;
   final String id;
   final bool isThisMe;
-  final updateComments;
+  final Function updateComments;
 
   @override
   State<CommentsTab> createState() => _CommentsTabState();
 }
 
 class _CommentsTabState extends State<CommentsTab> {
-  late ChatController? chatController = null;
-  late String? _commentBody = null;
+  ChatController? chatController;
+  String? _commentBody;
   bool isCommenting = false;
-  late List<Comment> _comments = [];
+  List<Comment> _comments = [];
 
   @override
   initState() {

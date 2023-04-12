@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
-  const SearchBox({super.key, required this.searchTerms, this.setTerms});
+  const SearchBox({super.key, required this.searchTerms,required this.setTerms});
 
   final String searchTerms;
-  final setTerms;
+  final Function setTerms;
 
   @override
   State<SearchBox> createState() => _SearchBoxState();

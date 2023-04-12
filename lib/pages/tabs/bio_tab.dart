@@ -8,7 +8,6 @@ import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../config/default_config.dart';
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
 import '../../models/controllers/auth_inherited.dart';
@@ -35,11 +34,11 @@ class BioTab extends StatefulWidget {
       required this.goToCommentsTab});
 
   final String id;
-  final updateBlocks;
-  final goToCommentsTab;
-  final updateLikes;
-  final updateComments;
-  final updateFollows;
+  final Function updateBlocks;
+  final Function goToCommentsTab;
+  final Function updateLikes;
+  final Function updateComments;
+  final Function updateFollows;
   final List<Like>? profileLikes;
   final List<Comment>? profileComments;
   final AppUser? thisProfile;
@@ -53,24 +52,24 @@ class BioTab extends StatefulWidget {
 }
 
 class _BioTabState extends State<BioTab> {
-  late ExtendedProfile? extProfile = null;
+  ExtendedProfile? extProfile;
   late bool _isLiking = false;
   late bool _isFollowing = false;
   late bool _isBlocking = false;
 
-  late ApiClient? profileClient = null;
-  late ChatController? chatController = null;
-  late AnalyticsController? analyticsController = null;
+  ApiClient? profileClient;
+  ChatController? chatController;
+  AnalyticsController? analyticsController;
 
   @override
   initState() {
     super.initState();
     analyticsController?.logScreenView('profile-bio-tab').then((x) async {
       if (widget.id == "") {
-        await analyticsController
-            ?.sendAnalyticsEvent('bio-tab-redirect', {"message": "no-id"});
-
-        Navigator.popAndPushNamed(context, '/profilesPage');
+        await analyticsController?.sendAnalyticsEvent(
+            'bio-tab-redirect', {"message": "no-id"}).then((x) {
+          Navigator.popAndPushNamed(context, '/profilesPage');
+        });
       }
     });
     // if (widget.id != null) {
@@ -105,7 +104,7 @@ class _BioTabState extends State<BioTab> {
     setState(() {
       _isLiking = true;
     });
-    String? likeResponse = null;
+    String? likeResponse;
     bool isUnlike = false;
 
     if (widget.profileLikedByMe == null) {
@@ -195,17 +194,17 @@ class _BioTabState extends State<BioTab> {
           ),
         ],
       ),
-      panelBuilder: (scrollController)=>SingleChildScrollView(
+      panelBuilder: (scrollController) => SingleChildScrollView(
         controller: scrollController,
         child: Column(
           children: [
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
-              margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
               child: Column(children: [
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 600),
+                  constraints: const BoxConstraints(maxHeight: 600),
                   child: ListView(
                     children: [
                       Column(
@@ -219,107 +218,100 @@ class _BioTabState extends State<BioTab> {
                             ),
                           ),
                           ListTile(
-                            title: Container(
-                              // color:
-                              // Colors.black.withOpacity(.5),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                child: Flex(
-                                  key: ObjectKey(
-                                      (widget.profileLikes.toString()) +
-                                          (widget.profileFollows.toString()) +
-                                          (widget.profileComments.toString())),
-                                  direction: Axis.horizontal,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Flexible(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ToolButton(
+                            title: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Flex(
+                                key: ObjectKey(
+                                    (widget.profileLikes.toString()) +
+                                        (widget.profileFollows.toString()) +
+                                        (widget.profileComments.toString())),
+                                direction: Axis.horizontal,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ToolButton(
+                                          // defaultColor:
+                                          // Colors.white,
+                                          isDisabled: (widget.isThisMe == true),
+                                          action: _likeThisProfile,
+                                          iconData: Icons.thumb_up,
+                                          color: Colors.green,
+                                          isLoading: _isLiking,
+                                          text: widget.profileLikes?.length
+                                              .toString(),
+                                          label: 'Like',
+                                          isActive:
+                                              widget.profileLikedByMe != null,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ToolButton(
                                             // defaultColor:
                                             // Colors.white,
                                             isDisabled:
                                                 (widget.isThisMe == true),
-                                            action: _likeThisProfile,
-                                            iconData: Icons.thumb_up,
-                                            color: Colors.green,
-                                            isLoading: _isLiking,
-                                            text: widget.profileLikes?.length
+                                            action: _followThisProfile,
+                                            text: widget.profileFollows?.length
                                                 .toString(),
-                                            label: 'Like',
                                             isActive:
-                                                widget.profileLikedByMe != null,
-                                          ),
-                                        ],
-                                      ),
+                                                widget.profileFollowedByMe !=
+                                                    null,
+                                            iconData: Icons.favorite,
+                                            isLoading: _isFollowing,
+                                            color: Colors.blue,
+                                            label: 'Follow'),
+                                      ],
                                     ),
-                                    Flexible(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ToolButton(
-                                              // defaultColor:
-                                              // Colors.white,
-                                              isDisabled:
-                                                  (widget.isThisMe == true),
-                                              action: _followThisProfile,
-                                              text: widget
-                                                  .profileFollows?.length
-                                                  .toString(),
-                                              isActive:
-                                                  widget.profileFollowedByMe !=
-                                                      null,
-                                              iconData: Icons.favorite,
-                                              isLoading: _isFollowing,
-                                              color: Colors.blue,
-                                              label: 'Follow'),
-                                        ],
-                                      ),
+                                  ),
+                                  // const Divider(
+                                  //   color: Colors.black12,
+                                  //   thickness: 2,
+                                  // ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ToolButton(
+                                            // defaultColor:
+                                            // Colors.white,
+                                            isDisabled:
+                                                (widget.isThisMe == true),
+                                            // key: ObjectKey(
+                                            //     "${widget.profileComments?.length}-comments"),
+                                            text: widget.profileComments?.length
+                                                .toString(),
+                                            action: (context) {
+                                              widget.goToCommentsTab();
+                                            },
+                                            iconData: Icons.comment,
+                                            color: Colors.yellow,
+                                            label: 'Comment'),
+                                      ],
                                     ),
-                                    // const Divider(
-                                    //   color: Colors.black12,
-                                    //   thickness: 2,
-                                    // ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ToolButton(
-                                              // defaultColor:
-                                              // Colors.white,
-                                              isDisabled:
-                                                  (widget.isThisMe == true),
-                                              // key: ObjectKey(
-                                              //     "${widget.profileComments?.length}-comments"),
-                                              text: widget
-                                                  .profileComments?.length
-                                                  .toString(),
-                                              action: (context) {
-                                                widget.goToCommentsTab();
-                                              },
-                                              iconData: Icons.comment,
-                                              color: Colors.yellow,
-                                              label: 'Comment'),
-                                        ],
-                                      ),
-                                    ),
-                                    // const Divider(
-                                    //   color: Colors.black12,
-                                    //   thickness: 2,
-                                    // ),
+                                  ),
+                                  // const Divider(
+                                  //   color: Colors.black12,
+                                  //   thickness: 2,
+                                  // ),
 
-                                    // const Divider(
-                                    //   color: Colors.black12,
-                                    //   thickness: 2,
-                                    // ),
-                                  ],
-                                ),
+                                  // const Divider(
+                                  //   color: Colors.black12,
+                                  //   thickness: 2,
+                                  // ),
+                                ],
                               ),
                             ),
                           ),
@@ -365,7 +357,7 @@ class _BioTabState extends State<BioTab> {
                                                       children: [
                                                         ConstrainedBox(
                                                           constraints:
-                                                              BoxConstraints(
+                                                              const BoxConstraints(
                                                                   maxWidth:
                                                                       320),
                                                           child: Column(

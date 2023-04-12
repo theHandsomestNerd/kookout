@@ -35,11 +35,11 @@ class EditProfileTab extends StatefulWidget {
 }
 
 class _EditProfileTabState extends State<EditProfileTab> {
-  late ExtendedProfile? extProfile = null;
-  late AppUser? _myAppUser = null;
-  late ChatController? chatController = null;
-  late AuthController? authController = null;
-  var imageToBeUploaded;
+  ExtendedProfile? extProfile;
+  AppUser? _myAppUser;
+  ChatController? chatController;
+  AuthController? authController;
+  ImageProvider? imageToBeUploaded;
 
   String _loginUsername = "";
   String _displayName = "";
@@ -56,7 +56,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
   String _whereILive = "";
   String _sexPreferences = "";
   bool isUpdating = false;
-  late SanityImage? profileImage = null;
+  late SanityImage? profileImage;
 
   int _age = 0;
   int _weight = 0;
@@ -337,7 +337,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
                           labelText: "Age",
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       Flexible(

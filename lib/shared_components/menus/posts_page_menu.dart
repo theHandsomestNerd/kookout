@@ -1,7 +1,7 @@
 import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 
 import '../../wrappers/expanding_fab.dart';
@@ -12,9 +12,9 @@ class PostsPageMenu extends StatefulWidget {
     required this.updateMenu,
     this.selected,
   }) : super(key: key);
-  final updateMenu;
+  final Function updateMenu;
 
-  final selected;
+  final bool? selected;
 
   @override
   State<PostsPageMenu> createState() => _PostsPageMenuState();
@@ -23,7 +23,7 @@ class PostsPageMenu extends StatefulWidget {
 enum ProfileMenuOptions { MY_POSTS, POSTS, ADD_POST, HOME }
 
 class _PostsPageMenuState extends State<PostsPageMenu> {
-  var profileImage = null;
+  SanityImage?  profileImage;
 
   @override
   didChangeDependencies() async {
@@ -61,7 +61,7 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
               ? CircleAvatar(
                   backgroundImage: SanityImageBuilder.imageProviderFor(sanityImage: profileImage,showDefaultImage: true).image,
                 )
-              : Icon(Icons.add),
+              : const Icon(Icons.add),
         ),
         ActionButton(
           tooltip: "Posts",

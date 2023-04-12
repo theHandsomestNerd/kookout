@@ -2,7 +2,6 @@ import 'package:cookout/models/comment.dart';
 import 'package:cookout/wrappers/author_and_text.dart';
 import 'package:flutter/material.dart';
 
-import 'comment_solo.dart';
 
 class CommentThread extends StatelessWidget {
   const CommentThread({

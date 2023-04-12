@@ -8,8 +8,8 @@ class CircularProgressIndicatorWithMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CircularProgressIndicator(),
-        SizedBox(height: 16,),
+        const CircularProgressIndicator(),
+        const SizedBox(height: 16,),
         Text(message??""),
       ],
     );

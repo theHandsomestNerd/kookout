@@ -11,7 +11,7 @@ class BlockThread extends StatelessWidget {
   });
 
   final List<Block> blocks;
-  final unblockProfile;
+  final Function unblockProfile;
 
   // This widget is the root of your application.
   @override

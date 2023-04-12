@@ -1,11 +1,9 @@
 import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookout/wrappers/card_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/logo.dart';
 import '../wrappers/analytics_loading_button.dart';
 
 class LogoutPage extends StatefulWidget {
@@ -18,6 +16,7 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
+  @override
   didChangeDependencies() async {
     super.didChangeDependencies();
 
@@ -76,7 +75,7 @@ class _LogoutPageState extends State<LogoutPage> {
                               "Logout ${FirebaseAuth.instance.currentUser?.email}")
                       ],
                     ),
-                    SizedBox(height: 32,),
+                    const SizedBox(height: 32,),
                     AnalyticsLoadingButton(
                       action: (innerContext) async {
                         await FirebaseAuth.instance.signOut().then((x) {

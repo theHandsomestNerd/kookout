@@ -146,12 +146,12 @@ class _MyAppState extends State<MyApp> {
         title: 'Cookout',
         routes: {
           '/home': (context) {
-            return HomePage();
+            return const HomePage();
           },
-          '/postsPage': (context) => PostsPage(),
+          '/postsPage': (context) => const PostsPage(),
           '/createPostsPage': (context) =>
               const BugReporter(child: CreatePostPage()),
-          '/register': (context) => RegisterPage(),
+          '/register': (context) => const RegisterPage(),
           '/': (context) {
             if (kIsWeb) {
               // Define MetaSEO object
@@ -172,17 +172,17 @@ class _MyAppState extends State<MyApp> {
               meta.twitterTitle(twitterTitle: title);
               meta.ogImage(ogImage: image);
             }
-            return LoginPage();
+            return const LoginPage();
           },
           // '/editProfile': (context) => const EditProfilePage(),
-          '/logout': (context) => LogoutPage(),
+          '/logout': (context) => const LogoutPage(),
           '/profilesPage': (context) =>
-              ProfilesPage(),
+              const ProfilesPage(),
           '/profile': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
 
-            var theId;
+            String theId;
             if (arguments['id'] != null) {
               theId = arguments['id'];
             } else {
@@ -224,8 +224,8 @@ class _MyAppState extends State<MyApp> {
             // return Placeholder();
           },
           '/myProfile': (context) {
-            var theId = authController.myAppUser?.userId.toString() ?? "";
-            var thisProfile = null;
+            String theId = authController.myAppUser?.userId.toString() ?? "";
+             AppUser? thisProfile;
             for (var element in chatController.profileList) {
               if (element.userId == theId) {
                 thisProfile = element;
@@ -242,7 +242,7 @@ class _MyAppState extends State<MyApp> {
           //   );
           // },
           '/settings': (context) {
-            return SettingsPage();
+            return const SettingsPage();
           },
         },
         theme: ThemeData(

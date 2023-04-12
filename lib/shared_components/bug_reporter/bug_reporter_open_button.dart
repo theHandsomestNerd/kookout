@@ -16,7 +16,7 @@ class _BugReporterOpenButtonState extends State<BugReporterOpenButton> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-          return BugReporterContent();
+          return const BugReporterContent();
       },
     );
   }
@@ -35,7 +35,7 @@ class _BugReporterOpenButtonState extends State<BugReporterOpenButton> {
               width: 48,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: const [
                   Icon(Icons.bug_report_outlined),
                 ],
               ),

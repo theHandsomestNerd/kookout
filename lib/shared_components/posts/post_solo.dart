@@ -24,10 +24,10 @@ class PostSolo extends StatefulWidget {
 }
 
 class _PostSoloState extends State<PostSolo> {
-  late AuthController? authController = null;
-  late ApiClient? profileClient = null;
-  late List<Like> likes = <Like>[];
-  late Like? isPostLikedByMe = null;
+  AuthController? authController;
+  ApiClient? profileClient;
+  List<Like> likes = <Like>[];
+  Like? isPostLikedByMe;
   bool isLiking = false;
 
   @override

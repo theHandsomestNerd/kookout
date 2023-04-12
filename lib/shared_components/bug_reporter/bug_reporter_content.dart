@@ -31,12 +31,15 @@ class _BugReporterContentState extends State<BugReporterContent> {
       isSubmitting = true;
     });
 
-    await BugReportClient().submitBugReport(_title ?? "", _description ?? "",
-        imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
-    setState(() {
-      isSubmitting = false;
+    BuildContext theContext = context;
+    await BugReportClient().submitBugReport(_title, _description,
+        imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context).then((x){
+      setState(() {
+        isSubmitting = false;
+      });
+          Navigator.of(theContext).pop();
     });
-    Navigator.of(context).pop();
+
   }
 
   @override
@@ -78,7 +81,7 @@ class _BugReporterContentState extends State<BugReporterContent> {
         ),
       ],
       content: ConstrainedBox(
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           maxHeight: 600,
           minWidth: 400,
         ),
@@ -141,9 +144,9 @@ class _BugReporterContentState extends State<BugReporterContent> {
                             border: Border.all(
                               color: Colors.white,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(10))
+                            borderRadius: const BorderRadius.all(Radius.circular(10))
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Thank you!",
                             style: TextStyle(color: Colors.white),

@@ -10,7 +10,7 @@ class BlocksTab extends StatefulWidget {
   const BlocksTab({super.key, required this.blocks, required this.unblockProfile});
 
   final List<Block> blocks;
-  final unblockProfile;
+  final Function unblockProfile;
 
   @override
   State<BlocksTab> createState() => _BlocksTabState();

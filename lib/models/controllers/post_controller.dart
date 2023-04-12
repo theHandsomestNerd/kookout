@@ -41,7 +41,7 @@ class PostController {
     var thePosts = await getPosts();
     postsFuture = thePosts;
 
-    if (thePosts != null && thePosts.length > 0) {
+    if (thePosts.isNotEmpty) {
       thePosts.removeWhere((element) {
         if (element.mainImage == null) {
           return true;
@@ -127,7 +127,7 @@ class PostController {
       request.fields['postBody'] = postBody;
       // }
 
-      final response = await request.send();
+      await request.send();
       // if (kDebugMode) {
       //   print("post controller api response$response");
       // }

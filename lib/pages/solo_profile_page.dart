@@ -7,21 +7,16 @@ import 'package:cookout/pages/tabs/bio_tab.dart';
 import 'package:cookout/pages/tabs/comments_tab.dart';
 import 'package:cookout/pages/tabs/follows_tab.dart';
 import 'package:cookout/pages/tabs/likes_tab.dart';
-import 'package:cookout/sanity/sanity_image_builder.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../config/default_config.dart';
 import '../models/app_user.dart';
 import '../models/comment.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../models/follow.dart';
 import '../models/like.dart';
-import '../shared_components/logo.dart';
 import '../shared_components/menus/app_menu.dart';
 
 class SoloProfilePage extends StatefulWidget {
@@ -39,21 +34,21 @@ class SoloProfilePage extends StatefulWidget {
 }
 
 class _SoloProfilePageState extends State<SoloProfilePage> {
-  late bool _isThisMe = false;
+  bool _isThisMe = false;
 
-  late List<Comment>? _profileComments = [];
+  List<Comment>? _profileComments = [];
 
-  late Like? _profileLikedByMe = null;
-  late List<Like>? _profileLikes = [];
+  Like? _profileLikedByMe = null;
+  List<Like>? _profileLikes = [];
 
-  late Follow? _profileFollowedByMe = null;
-  late List<Follow>? _profileFollows = [];
+  Follow? _profileFollowedByMe;
+  List<Follow>? _profileFollows = [];
 
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-  AnalyticsController? analyticsController = null;
-  ApiClient? profileClient = null;
-  AuthController? authController = null;
-  ChatController? chatController = null;
+  AnalyticsController? analyticsController;
+  ApiClient? profileClient;
+  AuthController? authController;
+  ChatController? chatController;
 
   SoloProfilePage() {
     if (widget.id == "") {
@@ -106,12 +101,12 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     // }
   }
 
-  _getTagLine() {
-    if (_isThisMe == true) {
-      return "This is you ${authController?.myAppUser?.displayName ?? ""}";
-    }
-    return widget.thisProfile?.displayName;
-  }
+  // _getTagLine() {
+  //   if (_isThisMe == true) {
+  //     return "This is you ${authController?.myAppUser?.displayName ?? ""}";
+  //   }
+  //   return widget.thisProfile?.displayName;
+  // }
 
   Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
     return await profileClient?.getProfileLikes(widget.id);
@@ -190,7 +185,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
           ChatApiGetProfileLikesResponse? theLikes = await _getProfileLikes();
 
           await analyticsController?.sendAnalyticsEvent('profile-liked', {
-            "likee": widget.id ?? "",
+            "likee": widget.id,
             "liker": authController?.myAppUser?.userId ?? "",
             "isUnlike": isUnlike.toString()
           });
@@ -218,7 +213,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
                 innerContext);
           } else {
             await analyticsController?.sendAnalyticsEvent('profile-follow', {
-              "followed": widget.id ?? "",
+              "followed": widget.id,
               "follower": authController?.myAppUser?.userId ?? "",
               "isUnfollow": isUnfollow.toString()
             });

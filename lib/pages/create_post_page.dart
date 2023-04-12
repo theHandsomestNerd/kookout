@@ -33,12 +33,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late ImageUploader? imageUploader;
   AuthController? authController;
   PostController? postController;
-  AnalyticsController? analyticsController = null;
+  AnalyticsController? analyticsController;
 
   String? _postBody;
   bool? _isPosting;
-  var imageToBeUploaded = null;
-  late SanityImage? profileImage = null;
+  ImageProvider? imageToBeUploaded;
+  late SanityImage? profileImage;
 
   @override
   initState() {
@@ -119,11 +119,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    _sendSuccess() async {
+    sendSuccess() async {
       await _alertSnackbar.showSuccessAlert("Post created:", context);
     }
 
-    _sendError() async {
+    sendError() async {
       await _alertSnackbar.showErrorAlert(
           "Post creation failed. Try again.", context);
     }
@@ -159,14 +159,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
             AnalyticsLoadingButton(
               analyticsEventName: 'create-post',
               analyticsEventData: {"body": _postBody, "author": ""},
-              isDisabled: ((_postBody?.length ?? -1) <= 0),
+              isDisabled: ((_postBody?.length ?? -1) <= 0) || _isPosting == true,
               action: () async {
                 var status = await _makePost(context);
 
                 if (status == "SUCCESS") {
-                  await _sendSuccess();
+                  await sendSuccess();
                 } else if (status == "FAIL") {
-                  await _sendError();
+                  await sendError();
                 }
               },
               text: "Post",

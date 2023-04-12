@@ -19,9 +19,9 @@ class PostThread extends StatefulWidget {
 class _PostThreadState extends State<PostThread>{
   final PagingController<String, Post> _pagingController =
       PagingController(firstPageKey: "");
-  AuthController? authController = null;
+  AuthController? authController;
   late ApiClient client;
-  AnalyticsController? analyticsController = null;
+  AnalyticsController? analyticsController;
 
   static const _pageSize = 10;
 
@@ -82,13 +82,13 @@ class _PostThreadState extends State<PostThread>{
       newItems = await client.fetchPostsPaginated(pageKey, _pageSize);
 
       print("Got more items ${newItems.length}");
-      final isLastPage = (newItems.length ?? 0) < _pageSize;
+      final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        _pagingController.appendLastPage(newItems ?? []);
+        _pagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.id;
         if (nextPageKey != null) {
-          _pagingController.appendPage(newItems ?? [], nextPageKey);
+          _pagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {
@@ -116,7 +116,7 @@ class _PostThreadState extends State<PostThread>{
             return Flex(direction: Axis.horizontal, children: [
               Expanded(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 500),
+                  constraints: const BoxConstraints(maxHeight: 500),
                   child: Flex(
                     direction: Axis.vertical,
                     children: [
@@ -130,7 +130,7 @@ class _PostThreadState extends State<PostThread>{
                                 height: 16,
                               ),
                               AnalyticsLoadingButton(
-                                analyticsEventData: {
+                                analyticsEventData: const {
                                   'frequency_of_event': "once_in_app_history"
                                 },
                                 analyticsEventName: 'add-the-very-first-post',
@@ -153,7 +153,7 @@ class _PostThreadState extends State<PostThread>{
             ]);
           },
           itemBuilder: (context, item, index) => Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 1),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 1),
             child: PostSolo(
               post: item,
             ),

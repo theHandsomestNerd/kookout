@@ -1,6 +1,5 @@
 import 'package:cookout/config/default_config.dart';
 import 'package:cookout/models/controllers/analytics_controller.dart';
-import 'package:cookout/shared_components/logo.dart';
 import 'package:cookout/shared_components/menus/login_menu.dart';
 import 'package:cookout/wrappers/alerts_snackbar.dart';
 import 'package:cookout/wrappers/analytics_loading_button.dart';
@@ -60,8 +59,8 @@ class _LoginPageState extends State<LoginPage> {
       analyticsControllerController = theAnalyticsController;
     }
     theAnalyticsController?.logScreenView('Login');
-    apiVersion = DefaultConfig.apiVersion ?? "no version";
-    sanityApiDB = DefaultConfig.apiSanityDB ?? "no api env";
+    apiVersion = DefaultConfig.apiVersion;
+    sanityApiDB = DefaultConfig.apiSanityDB;
     setState(() {});
     if (kDebugMode) {
       print("dependencies changed login page");
@@ -142,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  String? errorText = null;
+  String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: LoginMenu(),
+      floatingActionMenu: const LoginMenu(),
       child: Flex(
         direction: Axis.vertical,
         children: [
@@ -196,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     if (FirebaseAuth.instance.currentUser !=
                                         null) ConstrainedBox(
-                                      constraints: BoxConstraints(maxWidth: 48, maxHeight: 48),
+                                      constraints: const BoxConstraints(maxWidth: 48, maxHeight: 48),
                                       child: ToolButton(
                                         label: "home",
                                         action: (innerContext) {
@@ -210,11 +209,11 @@ class _LoginPageState extends State<LoginPage> {
                                     )
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 32,
                                 ),
                                 ConstrainedBox(
-                                  constraints: BoxConstraints(
+                                  constraints: const BoxConstraints(
                                       maxWidth: 350, maxHeight: 450),
                                   child: Flex(
                                     direction: Axis.vertical,
@@ -318,11 +317,11 @@ class _LoginPageState extends State<LoginPage> {
                           flex: 1,
                           child: Column(
                             children: [
-                              Text("${DefaultConfig.appName}"),
+                              Text(DefaultConfig.appName),
                               Text(
                                   "ui v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
                               Text("api - ${DefaultConfig.apiStatus}"),
-                              Text("v${apiVersion} -${sanityApiDB}"),
+                              Text("v$apiVersion -$sanityApiDB"),
                             ],
                           ),
                         ),

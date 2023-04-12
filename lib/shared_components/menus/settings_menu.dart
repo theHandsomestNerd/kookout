@@ -10,7 +10,7 @@ enum SettingsMenuOptions {
 class SettingsPageMenu extends StatefulWidget {
   const SettingsPageMenu({Key? key, required this.updateMenu})
       : super(key: key);
-  final updateMenu;
+  final Function updateMenu;
 
   @override
   State<SettingsPageMenu> createState() => _SettingsPageMenuState();

@@ -6,7 +6,7 @@ import '../models/submodels/height.dart';
 class HeightInput extends StatefulWidget {
   const HeightInput({super.key, required this.updateHeight, this.initialValue});
 
-  final updateHeight;
+  final Function updateHeight;
   final Height? initialValue;
 
   @override

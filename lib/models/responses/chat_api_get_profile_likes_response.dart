@@ -8,14 +8,11 @@ class ChatApiGetProfileLikesResponse {
 
   factory ChatApiGetProfileLikesResponse.fromJson(Map<String, dynamic> json) {
     getListOfLikes(List<dynamic> parsedJson) {
-      if(parsedJson != null) {
-        return parsedJson.map((i) => Like.fromJson(i)).toList();
-      }
-      return <Like>[];
+      return parsedJson.map((i) => Like.fromJson(i)).toList();
     }
 
     List<Like> theList = <Like>[];
-    Like? amIInThisList=null;
+    Like? amIInThisList;
 
     // if (kDebugMode) {
     //   print("get-likes-response $json");

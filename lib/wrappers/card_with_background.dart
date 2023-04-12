@@ -10,7 +10,7 @@ class CardWithBackground extends StatelessWidget {
     this.shape,
   }) : super(key: key);
 
-  final shape;
+  final ShapeBorder? shape;
   final Widget child;
   final double? width;
   final double? height;
@@ -21,7 +21,7 @@ class CardWithBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: shape ??

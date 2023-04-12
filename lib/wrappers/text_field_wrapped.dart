@@ -28,9 +28,9 @@ class TextFieldWrapped extends StatefulWidget {
   final bool? autofocus;
   final bool? autoCorrect;
   final bool? enabled;
-  final setField;
+  final Function? setField;
   final IconData? icon;
-  final validator;
+  final Function? validator;
   final int? maxLines;
   final int? minLines;
 
@@ -58,27 +58,33 @@ class _TextFieldWrappedState extends State<TextFieldWrapped> {
       obscureText: widget.obscureText ?? false,
       enableSuggestions: widget.enableSuggestions ?? false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: widget.validator,
+      validator: (x) {
+        if (widget.validator != null) {
+          return widget.validator!(x);
+        }
+        return true.toString();
+      },
       autocorrect: widget.autocorrect ?? false,
       initialValue: widget.initialValue,
       onChanged: (e) {
         _setField(e);
-        widget.setField(e);
+        widget.setField!(e);
       },
       decoration: InputDecoration(
         alignLabelWithHint: true,
         helperText: errorText,
         filled: true,
         fillColor: Colors.white70,
-        prefixIcon: widget.icon!=null? Icon(widget.icon):null,
+        prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
         border: OutlineInputBorder(
-          borderSide: BorderSide( color: widget.borderColor??Colors.blue), //<-- SEE HERE
-          borderRadius: BorderRadius.all(
+          borderSide: BorderSide(color: widget.borderColor ?? Colors.blue),
+          //<-- SEE HERE
+          borderRadius: const BorderRadius.all(
             Radius.circular(30.0),
           ),
         ),
         labelText: widget.labelText,
-        labelStyle: TextStyle(),
+        labelStyle: const TextStyle(),
       ),
     );
   }

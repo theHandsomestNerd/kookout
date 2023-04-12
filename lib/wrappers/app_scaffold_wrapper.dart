@@ -16,7 +16,7 @@ class AppScaffoldWrapper extends StatelessWidget {
         floatingActionButton: floatingActionMenu,
         appBar: AppBar(
           backgroundColor: Colors.white.withOpacity(0.5),
-          title: Logo(),
+          title: const Logo(),
         ),
         body: child,
       ),

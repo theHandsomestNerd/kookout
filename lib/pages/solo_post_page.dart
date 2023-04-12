@@ -1,5 +1,4 @@
 import 'package:cookout/layout/full_page_layout.dart';
-import 'package:cookout/layout/list_and_small_form.dart';
 import 'package:cookout/models/clients/api_client.dart';
 import 'package:cookout/models/controllers/auth_controller.dart';
 import 'package:cookout/models/controllers/auth_inherited.dart';
@@ -40,8 +39,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
       PagingController(firstPageKey: "");
 
   AnalyticsController? analyticsController;
-  late Post? thePost = null;
-  late PostController? postController = null;
+  Post? thePost=null;
+  PostController? postController;
   String status = "";
 
   _commentThisProfile() async {
@@ -64,15 +63,17 @@ class _SoloPostPageState extends State<SoloPostPage> {
 
   @override
   initState() {
+    super.initState();
     // thePost= postController?.getPost(thisPostId);
     thisPostId = widget.thisPostId;
   }
-  late Like? _profileLikedByMe = null;
+
+  Like? _profileLikedByMe;
   late List<Like>? _profileLikes = [];
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
 
-  AuthController? authController = null;
+  AuthController? authController;
 
   Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
     return await profileClient?.getProfileLikes(widget.thisPostId??"");
@@ -143,7 +144,6 @@ class _SoloPostPageState extends State<SoloPostPage> {
     setState(() {});
   }
   late bool _isLiking = false;
-late Like? profileLikedByMe = null;
 
   _likeThisProfile(context) async {
     await analyticsController
@@ -152,16 +152,16 @@ late Like? profileLikedByMe = null;
     setState(() {
       _isLiking = true;
     });
-    String? likeResponse = null;
+    String? likeResponse;
     bool isUnlike = false;
 
-    if (profileLikedByMe == null) {
+    if (_profileLikedByMe == null) {
       likeResponse = await profileClient?.like(widget.thisPostId??"", 'profile-like');
     } else {
-      if (profileLikedByMe != null) {
+      if (_profileLikedByMe != null) {
         isUnlike = true;
         likeResponse = await profileClient?.unlike(
-            widget.thisPostId??"", profileLikedByMe!);
+            widget.thisPostId??"", _profileLikedByMe!);
       }
     }
 
@@ -222,7 +222,7 @@ late Like? profileLikedByMe = null;
               children: [Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
-                margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Column(
                   children: [
                     Padding(
@@ -238,7 +238,7 @@ late Like? profileLikedByMe = null;
                       children: [
                         Flexible(
                           child: ConstrainedBox(
-                            constraints: BoxConstraints(minHeight: 48),
+                            constraints: const BoxConstraints(minHeight: 48),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -254,8 +254,7 @@ late Like? profileLikedByMe = null;
                                         ?.length
                                         .toString(),
                                     label: 'Like',
-                                    isActive: profileLikedByMe !=
-                                        null,
+                                    isActive: _profileLikedByMe != null,
                                    ),
                                 ToolButton(
                                     action: () {},
@@ -283,7 +282,7 @@ late Like? profileLikedByMe = null;
                       child: Container(color: Colors.red),
                     ),
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 300),
+                      constraints: const BoxConstraints(maxHeight: 300),
                       child: thePost?.id != null
                           ? PagedCommentThread(
                               key: Key(thisPostId ?? ""),
@@ -293,7 +292,7 @@ late Like? profileLikedByMe = null;
                           : Container(),
                     ),
                     ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: 180),
+                      constraints: const BoxConstraints(minHeight: 180),
                       child: Container(
                         color: Colors.white,
                         child: Padding(
@@ -313,7 +312,7 @@ late Like? profileLikedByMe = null;
                                   labelText: 'Comment:',
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               AnalyticsLoadingButton(
                                 isDisabled: _isCommenting,
                                 analyticsEventName: 'solo-post-create-comment',
@@ -329,7 +328,7 @@ late Like? profileLikedByMe = null;
                                 },
                                 text: "Comment",
                               ),
-                              SizedBox(height: 24),
+                              const SizedBox(height: 24),
                             ],
                           ),
                         ),

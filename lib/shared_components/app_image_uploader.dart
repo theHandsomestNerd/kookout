@@ -10,14 +10,14 @@ import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
 
 class AppImageUploader extends StatefulWidget {
-  final uploadImage;
+  final Function uploadImage;
   final String? text;
   final ImageProvider? image;
   final ImageUploader imageUploader;
   final bool? hideInfo;
 
-  final width;
-  final height;
+  final double? width;
+  final double? height;
 
   const AppImageUploader(
       {super.key,
@@ -37,8 +37,8 @@ class _AppImageUploaderState extends State<AppImageUploader> {
   AuthController? authController;
   PostController? postController;
 
-  var imageToBeUploaded = null;
-  late SanityImage? profileImage = null;
+  ImageProvider? imageToBeUploaded;
+  late SanityImage? profileImage;
 
   @override
   initState() {
@@ -116,7 +116,7 @@ class _AppImageUploaderState extends State<AppImageUploader> {
                     ),
                   ),
                   if(widget.hideInfo != true && widget.imageUploader.file?.name != null) ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 100, minHeight: 0),
+                    constraints: const BoxConstraints(maxHeight: 100, minHeight: 0),
                     child: Column(
                       children: [
                         Text(widget.imageUploader.file?.name ?? ""),

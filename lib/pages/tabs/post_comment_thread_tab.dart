@@ -7,7 +7,6 @@ import 'package:cookout/shared_components/tool_button.dart';
 import 'package:cookout/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/default_config.dart';
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
 import '../../models/controllers/auth_inherited.dart';
@@ -34,11 +33,11 @@ class PostCommentThreadTab extends StatefulWidget {
       required this.goToCommentsTab});
 
   final String id;
-  final updateBlocks;
-  final goToCommentsTab;
-  final updateLikes;
-  final updateComments;
-  final updateFollows;
+  final Function updateBlocks;
+  final Function goToCommentsTab;
+  final Function updateLikes;
+  final Function updateComments;
+  final Function updateFollows;
   final List<Like>? profileLikes;
   final List<Comment>? profileComments;
   final AppUser? thisPost;
@@ -52,24 +51,25 @@ class PostCommentThreadTab extends StatefulWidget {
 }
 
 class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
-  late ExtendedProfile? extProfile = null;
+  ExtendedProfile? extProfile;
   late bool _isLiking = false;
   late bool _isFollowing = false;
   late bool _isBlocking = false;
 
-  late ApiClient? profileClient = null;
-  late ChatController? chatController = null;
-  late AnalyticsController? analyticsController = null;
+  ApiClient? profileClient;
+  ChatController? chatController;
+  AnalyticsController? analyticsController;
 
   @override
   initState() {
     super.initState();
     analyticsController?.logScreenView('profile-bio-tab').then((x) async {
       if (widget.id == "") {
-        await analyticsController
-            ?.sendAnalyticsEvent('bio-tab-redirect', {"message": "no-id"});
-
-        Navigator.popAndPushNamed(context, '/profilesPage');
+        BuildContext theContext = context;
+        await analyticsController?.sendAnalyticsEvent(
+            'bio-tab-redirect', {"message": "no-id"}).then((x) {
+          Navigator.popAndPushNamed(theContext, '/profilesPage');
+        });
       }
     });
     // if (widget.id != null) {
@@ -104,7 +104,7 @@ class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
     setState(() {
       _isLiking = true;
     });
-    String? likeResponse = null;
+    String? likeResponse;
     bool isUnlike = false;
 
     if (widget.profileLikedByMe == null) {
@@ -112,8 +112,8 @@ class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
     } else {
       if (widget.profileLikedByMe != null) {
         isUnlike = true;
-        likeResponse = await profileClient?.unlike(
-            widget.id, widget.profileLikedByMe!);
+        likeResponse =
+            await profileClient?.unlike(widget.id, widget.profileLikedByMe!);
       }
     }
 
@@ -202,14 +202,19 @@ class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
                                       child: CardWithBackground(
                                         width: 350,
                                         height: 350,
-                                        image: SanityImageBuilder.imageProviderFor(sanityImage: widget.thisPost?.profileImage,showDefaultImage: true).image,
+                                        image:
+                                            SanityImageBuilder.imageProviderFor(
+                                                    sanityImage: widget
+                                                        .thisPost?.profileImage,
+                                                    showDefaultImage: true)
+                                                .image,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             ConstrainedBox(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 320),
+                                              constraints: const BoxConstraints(
+                                                  maxWidth: 320),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,

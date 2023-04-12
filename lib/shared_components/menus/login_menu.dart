@@ -1,7 +1,6 @@
 import 'package:cookout/models/app_user.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/default_config.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../wrappers/expanding_fab.dart';
 
@@ -16,7 +15,7 @@ class LoginMenu extends StatefulWidget {
 }
 
 class _LoginMenuState extends State<LoginMenu> {
-  late AppUser? myAppUser = null;
+  AppUser? myAppUser;
 
   @override
   didChangeDependencies() async {

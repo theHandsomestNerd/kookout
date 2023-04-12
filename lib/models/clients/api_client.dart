@@ -46,6 +46,7 @@ class ApiClient {
         return theToken;
       }
     }
+    return null;
   }
 
   Future<dynamic> healthCheck() async {
@@ -475,10 +476,10 @@ class ApiClient {
       if (newProfile.longBio != null && newProfile.longBio != "null") {
         body = {...body, "longBio": newProfile.longBio};
       }
-      if (newProfile.age != null && newProfile.age != "null") {
+      if (newProfile.age != null) {
         body = {...body, "age": newProfile.age.toString()};
       }
-      if (newProfile.weight != null && newProfile.weight != "null") {
+      if (newProfile.weight != null) {
         body = {...body, "weight": newProfile.weight.toString()};
       }
       if (newProfile.height != null) {
