@@ -65,7 +65,7 @@ class _ToolButtonState extends State<ToolButton> {
                       width: 12,
                       child: CircularProgressIndicator(
                         color:
-                            widget.isActive == true ? widget.color : Colors.white,
+                            widget.isActive == true ? widget.color : widget.defaultColor ?? Colors.black,
                       ),
                     ),
                   ),
