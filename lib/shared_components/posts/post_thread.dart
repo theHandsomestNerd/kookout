@@ -138,7 +138,7 @@ class _PostThreadState extends State<PostThread>{
                                 action: (context) async {
                                   Navigator.pushNamed(
                                     context,
-                                    '/createPost',
+                                    '/createPostsPage',
                                   );
                                 },
                               )

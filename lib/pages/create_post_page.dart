@@ -160,8 +160,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
               analyticsEventName: 'create-post',
               analyticsEventData: {"body": _postBody, "author": ""},
               isDisabled: ((_postBody?.length ?? -1) <= 0) || _isPosting == true,
-              action: () async {
-                var status = await _makePost(context);
+              action: (innerContext) async {
+                var status = await _makePost(innerContext);
 
                 if (status == "SUCCESS") {
                   await sendSuccess();
