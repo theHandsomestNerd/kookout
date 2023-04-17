@@ -237,8 +237,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     },
                                     isDisabled: _loginUsername.isEmpty ||
                                         _loginPassword.isEmpty,
-                                    action: (innerContext) {
-                                      _registerUser(innerContext);
+                                    action: (innerContext) async {
+                                      await _registerUser(innerContext);
                                     },
                                     text: "Register",
                                   ),

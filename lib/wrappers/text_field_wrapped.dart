@@ -62,7 +62,7 @@ class _TextFieldWrappedState extends State<TextFieldWrapped> {
         if (widget.validator != null) {
           return widget.validator!(x);
         }
-        return true.toString();
+        return "";
       },
       autocorrect: widget.autocorrect ?? false,
       initialValue: widget.initialValue,
