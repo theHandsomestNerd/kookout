@@ -1,4 +1,4 @@
-import 'package:cookout/sanity/sanity_image_builder.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 

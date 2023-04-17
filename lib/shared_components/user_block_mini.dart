@@ -1,6 +1,6 @@
-import 'package:cookout/models/app_user.dart';
-import 'package:cookout/sanity/sanity_image_builder.dart';
-import 'package:cookout/wrappers/card_with_background.dart';
+import 'package:cookowt/models/app_user.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

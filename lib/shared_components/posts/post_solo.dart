@@ -1,9 +1,9 @@
-import 'package:cookout/models/clients/api_client.dart';
-import 'package:cookout/models/controllers/auth_controller.dart';
-import 'package:cookout/models/like.dart';
-import 'package:cookout/sanity/sanity_image_builder.dart';
-import 'package:cookout/wrappers/author_and_text.dart';
-import 'package:cookout/wrappers/card_with_actions.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/models/like.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/wrappers/author_and_text.dart';
+import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/auth_inherited.dart';

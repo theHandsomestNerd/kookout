@@ -1,20 +1,20 @@
 import 'dart:async';
 
-import 'package:cookout/config/default_config.dart';
-import 'package:cookout/models/controllers/analytics_controller.dart';
-import 'package:cookout/models/controllers/auth_controller.dart';
-import 'package:cookout/models/controllers/chat_controller.dart';
-import 'package:cookout/models/controllers/post_controller.dart';
-import 'package:cookout/pages/create_post_page.dart';
-import 'package:cookout/pages/home_page.dart';
-import 'package:cookout/pages/logout_page.dart';
-import 'package:cookout/pages/posts_page.dart';
-import 'package:cookout/pages/profiles_page.dart';
-import 'package:cookout/pages/register_page.dart';
-import 'package:cookout/pages/settings_page.dart';
-import 'package:cookout/pages/solo_post_page.dart';
-import 'package:cookout/pages/solo_profile_page.dart';
-import 'package:cookout/shared_components/bug_reporter/bug_reporter.dart';
+import 'package:cookowt/config/default_config.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/post_controller.dart';
+import 'package:cookowt/pages/create_post_page.dart';
+import 'package:cookowt/pages/home_page.dart';
+import 'package:cookowt/pages/logout_page.dart';
+import 'package:cookowt/pages/posts_page.dart';
+import 'package:cookowt/pages/profiles_page.dart';
+import 'package:cookowt/pages/register_page.dart';
+import 'package:cookowt/pages/settings_page.dart';
+import 'package:cookowt/pages/solo_post_page.dart';
+import 'package:cookowt/pages/solo_profile_page.dart';
+import 'package:cookowt/shared_components/bug_reporter/bug_reporter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -142,8 +142,9 @@ class _MyAppState extends State<MyApp> {
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
       child: MaterialApp(
-        key: ObjectKey(isUserLoggedIn),
-        title: 'Cookout',
+        // key: ObjectKey(isUserLoggedIn),
+        navigatorObservers: <NavigatorObserver>[routeObserver],
+        title: 'Cookowt',
         routes: {
           '/home': (context) {
             return const HomePage();
@@ -157,11 +158,11 @@ class _MyAppState extends State<MyApp> {
               // Define MetaSEO object
               MetaSEO meta = MetaSEO();
               // add meta seo data for web app as you want
-              var title = 'Cookout-The Invite Only Social Media Network';
+              var title = 'Cookowt-The Invite Only Network';
               var image =
                   "https://cdn.sanity.io/images/dhhk6mar/production/ae5b21a6e5982153e74ca8a815b90f92368ac9fa-3125x1875.png";
               var description =
-                  'Cookout is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookout. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookoutinvitee';
+                  'Cookowt is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookowt. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookowtinvitee';
               meta.ogTitle(ogTitle: title);
               meta.description(description: description);
               meta.keywords(keywords: 'social media, black twitter, memes');

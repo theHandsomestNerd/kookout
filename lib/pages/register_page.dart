@@ -1,7 +1,7 @@
-import 'package:cookout/wrappers/alerts_snackbar.dart';
-import 'package:cookout/wrappers/analytics_loading_button.dart';
-import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookout/wrappers/text_field_wrapped.dart';
+import 'package:cookowt/wrappers/alerts_snackbar.dart';
+import 'package:cookowt/wrappers/analytics_loading_button.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/wrappers/text_field_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

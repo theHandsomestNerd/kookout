@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:cookout/config/default_config.dart';
-import 'package:cookout/models/auth/auth_user.dart';
-import 'package:cookout/wrappers/alerts_snackbar.dart';
+import 'package:cookowt/config/default_config.dart';
+import 'package:cookowt/models/auth/auth_user.dart';
+import 'package:cookowt/wrappers/alerts_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

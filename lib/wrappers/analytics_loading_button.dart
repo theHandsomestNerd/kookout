@@ -1,6 +1,6 @@
-import 'package:cookout/models/controllers/analytics_controller.dart';
-import 'package:cookout/models/controllers/auth_inherited.dart';
-import 'package:cookout/wrappers/loading_button.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/auth_inherited.dart';
+import 'package:cookowt/wrappers/loading_button.dart';
 import 'package:flutter/material.dart';
 
 class AnalyticsLoadingButton extends StatefulWidget {

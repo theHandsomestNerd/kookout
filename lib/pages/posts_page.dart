@@ -1,5 +1,5 @@
-import 'package:cookout/shared_components/menus/posts_page_menu.dart';
-import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/shared_components/menus/posts_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import '../shared_components/posts/post_thread.dart';

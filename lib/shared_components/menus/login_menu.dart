@@ -1,4 +1,4 @@
-import 'package:cookout/models/app_user.dart';
+import 'package:cookowt/models/app_user.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/controllers/auth_inherited.dart';

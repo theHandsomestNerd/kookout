@@ -1,5 +1,5 @@
-import 'package:cookout/models/comment.dart';
-import 'package:cookout/wrappers/author_and_text.dart';
+import 'package:cookowt/models/comment.dart';
+import 'package:cookowt/wrappers/author_and_text.dart';
 import 'package:flutter/material.dart';
 
 

@@ -1,5 +1,5 @@
 
-import 'package:cookout/models/app_user.dart';
+import 'package:cookowt/models/app_user.dart';
 
 import 'submodels/height.dart';
 

@@ -1,5 +1,5 @@
-import 'package:cookout/models/controllers/auth_inherited.dart';
-import 'package:cookout/wrappers/card_with_background.dart';
+import 'package:cookowt/models/controllers/auth_inherited.dart';
+import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

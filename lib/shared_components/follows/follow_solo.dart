@@ -1,4 +1,4 @@
-import 'package:cookout/shared_components/user_block_text.dart';
+import 'package:cookowt/shared_components/user_block_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/follow.dart';

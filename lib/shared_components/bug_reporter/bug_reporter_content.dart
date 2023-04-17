@@ -1,4 +1,4 @@
-import 'package:cookout/config/default_config.dart';
+import 'package:cookowt/config/default_config.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/clients/bug_report_client.dart';

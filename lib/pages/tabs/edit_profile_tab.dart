@@ -1,7 +1,7 @@
-import 'package:cookout/models/controllers/analytics_controller.dart';
-import 'package:cookout/models/controllers/auth_controller.dart';
-import 'package:cookout/wrappers/analytics_loading_button.dart';
-import 'package:cookout/wrappers/text_field_wrapped.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/wrappers/analytics_loading_button.dart';
+import 'package:cookowt/wrappers/text_field_wrapped.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

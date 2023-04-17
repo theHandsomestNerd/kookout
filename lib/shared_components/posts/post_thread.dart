@@ -1,9 +1,9 @@
-import 'package:cookout/models/clients/api_client.dart';
-import 'package:cookout/models/controllers/analytics_controller.dart';
-import 'package:cookout/models/controllers/auth_controller.dart';
-import 'package:cookout/models/post.dart';
-import 'package:cookout/shared_components/posts/post_solo.dart';
-import 'package:cookout/wrappers/analytics_loading_button.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/models/post.dart';
+import 'package:cookowt/shared_components/posts/post_solo.dart';
+import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 

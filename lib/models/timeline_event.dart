@@ -1,6 +1,6 @@
-import 'package:cookout/models/comment.dart';
-import 'package:cookout/models/like.dart';
-import 'package:cookout/models/post.dart';
+import 'package:cookowt/models/comment.dart';
+import 'package:cookowt/models/like.dart';
+import 'package:cookowt/models/post.dart';
 import 'package:flutter/foundation.dart';
 
 import 'app_user.dart';

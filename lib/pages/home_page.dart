@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cookout/models/clients/api_client.dart';
-import 'package:cookout/models/controllers/chat_controller.dart';
-import 'package:cookout/models/extended_profile.dart';
-import 'package:cookout/models/post.dart';
-import 'package:cookout/sanity/sanity_image_builder.dart';
-import 'package:cookout/shared_components/menus/home_page_menu.dart';
-import 'package:cookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookout/wrappers/card_with_actions.dart';
-import 'package:cookout/wrappers/circular_progress_indicator_with_message.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/extended_profile.dart';
+import 'package:cookowt/models/post.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/wrappers/card_with_actions.dart';
+import 'package:cookowt/wrappers/circular_progress_indicator_with_message.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
