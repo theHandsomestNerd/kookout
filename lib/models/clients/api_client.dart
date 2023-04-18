@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cookowt/models/position.dart';
 import 'package:cookowt/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -564,7 +565,7 @@ class ApiClient {
 
   Future<ExtendedProfile?> getExtendedProfile(String userId) async {
     if (kDebugMode) {
-      print("Retrieving Ext Profile $userId");
+      // print("Retrieving Ext Profile $userId");
     }
     String? token = await getIdToken();
     if (token != null && userId != "" && DefaultConfig.theAuthBaseUrl != "") {
@@ -578,8 +579,39 @@ class ApiClient {
         ExtendedProfile responseModel =
             ExtendedProfile.fromJson(processedResponse['extendedProfile']);
         if (kDebugMode) {
-          print(
-              "get extended profile api response ${responseModel.toString()}");
+          // print(
+          //     "get extended profile api response ${responseModel.toString()}");
+        }
+        return responseModel;
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  Future<SanityPosition?> getLastPosition(String userId) async {
+    if (kDebugMode) {
+      print("Retrieving Last position for $userId");
+    }
+    String? token = await getIdToken();
+    if (token != null && userId != "" && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.get(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-position/$userId"),
+          headers: {"Authorization": ("Bearer $token")});
+      dynamic processedResponse;
+      try {
+        processedResponse = jsonDecode(response.body);
+      } catch (e) {
+        print(e);
+      }
+
+      if (processedResponse['lastPosition'] != null) {
+        // print(processedResponse);
+        SanityPosition responseModel =
+            SanityPosition.fromJson(processedResponse['lastPosition']);
+        if (kDebugMode) {
+          print("get position api response ${responseModel.toString()}");
         }
         return responseModel;
       } else {

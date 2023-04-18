@@ -35,12 +35,12 @@ class _ProfileGridState extends State<ProfileGrid> {
       PagingController(firstPageKey: "");
 
   Future<void> _fetchPage(String pageKey) async {
-    print("Retrieving page with pagekey $pageKey  and size $_pageSize $client");
+    // print("Retrieving page with pagekey $pageKey  and size $_pageSize $client");
     try {
       List<AppUser>? newItems;
       newItems = await client.fetchProfilesPaginated(pageKey, _pageSize);
 
-      print("Got more items ${newItems.length}");
+      // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

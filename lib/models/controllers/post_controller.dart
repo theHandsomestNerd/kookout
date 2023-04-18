@@ -165,7 +165,7 @@ class PostController {
       //   print(processedResponse);
       // }
       if (processedResponse['post'] != null) {
-        print("postResponse ${processedResponse['post']}");
+        // print("postResponse ${processedResponse['post']}");
         Post responseModel = Post.fromJson(processedResponse['post']);
         // if (kDebugMode) {
         //   print("get posts api response ${responseModel.list}");

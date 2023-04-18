@@ -7,6 +7,6 @@ class Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(width: 100,child: InkWell(onTap:(){
       Navigator.pushNamed(context, '/home',);
-    },child:Image.asset('assets/logo.png')),);
+    },child:Image.asset('assets/logo-w.png')),);
   }
 }

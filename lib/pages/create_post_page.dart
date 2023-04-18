@@ -83,7 +83,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     });
     String? postResponse;
 
-    print(" make post");
+    // print(" make post");
     postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
 
@@ -91,7 +91,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       _isPosting = false;
     });
 
-    print(" post response $postResponse");
+    // print(" post response $postResponse");
     return postResponse ?? "FAIL";
   }
 

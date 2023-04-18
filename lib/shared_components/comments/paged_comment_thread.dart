@@ -78,13 +78,13 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
   }
 
   Future<void> _fetchPage(String pageKey) async {
-    print(
-        "Retrieving post comments thread page with pagekey $pageKey and size $_pageSize $client");
+    // print(
+    //     "Retrieving post comments thread page with pagekey $pageKey and size $_pageSize $client");
     try {
       List<Comment>? newItems;
       newItems = await client.fetchCommentThreadPaginatedForPost(widget.postId, pageKey, _pageSize);
 
-      print("Got more comment items ${newItems.length}");
+      // print("Got more comment items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
         widget.pagingController.appendLastPage(newItems);

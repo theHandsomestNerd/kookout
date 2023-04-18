@@ -157,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             SizedBox(
                               height: 150,
                               width: 300,
-                              child: Image.asset('assets/logo.png'),
+                              child: Image.asset('assets/logo-w.png'),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,

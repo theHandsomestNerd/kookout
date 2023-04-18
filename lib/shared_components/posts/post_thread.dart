@@ -75,13 +75,13 @@ class _PostThreadState extends State<PostThread>{
   }
 
   Future<void> _fetchPage(String pageKey) async {
-    print(
-        "Retrieving post page with pagekey $pageKey  and size $_pageSize $client");
+    // print(
+    //     "Retrieving post page with pagekey $pageKey  and size $_pageSize $client");
     try {
       List<Post>? newItems;
       newItems = await client.fetchPostsPaginated(pageKey, _pageSize);
 
-      print("Got more items ${newItems.length}");
+      // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

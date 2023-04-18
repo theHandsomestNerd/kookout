@@ -90,7 +90,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
     profileImage = theUser?.profileImage;
     imageToBeUploaded = await _getMyProfileImage(null);
 
-    print("about to get extended profile for ${theUser?.userId}");
+    // print("about to get extended profile for ${theUser?.userId}");
     if (theUser?.userId != null) {
       theChatController?.updateExtProfile((theUser?.userId)!);
       extProfile = await theChatController?.profileClient

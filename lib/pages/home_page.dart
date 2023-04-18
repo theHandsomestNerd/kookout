@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cookowt/models/clients/api_client.dart';
 import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/extended_profile.dart';
 import 'package:cookowt/models/post.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
@@ -10,11 +11,13 @@ import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:cookowt/wrappers/circular_progress_indicator_with_message.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../models/app_user.dart';
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
+import '../models/position.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -31,8 +34,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
   bool isPostLoading = true;
   bool isProfileLoading = true;
   bool isExtProfileLoading = false;
+  bool isPositionLoading = false;
   bool isUserLoggedIn = false;
   List<ExtendedProfile> extProfiles = [];
+  List<SanityPosition> positions = [];
 
   final PagingController<String, AppUser> _profilePagingController =
       PagingController(firstPageKey: "");
@@ -53,12 +58,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
   Timer? _postTimer;
 
   Future<void> _fetchProfilesPage(String pageKey) async {
-    print("Retrieving page with pagekey $pageKey  and size $_pageSize $client");
+    // print("Retrieving page with pagekey $pageKey  and size $_pageSize $client");
     try {
       List<AppUser>? newItems;
       newItems = await client?.fetchProfilesPaginated(pageKey, _pageSize) ?? [];
 
-      print("Got more items ${newItems.length}");
+      // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
         _profilePagingController.appendLastPage(newItems);
@@ -74,13 +79,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   Future<void> _fetchPostsPage(String pageKey) async {
-    print(
-        "Retrieving posts page with pagekey $pageKey  and size $_pageSize $client");
+    // print(
+    //     "Retrieving posts page with pagekey $pageKey  and size $_pageSize $client");
     try {
       List<Post>? newItems;
       newItems = await client?.fetchPostsPaginated(pageKey, _pageSize) ?? [];
 
-      print("Got more post items ${newItems.length}");
+      // print("Got more post items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
         _postPagingController.appendLastPage(newItems);
@@ -97,10 +102,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   startHomeScreenTimers() async {
     _profileTimer ??= Timer.periodic(const Duration(seconds: 6), (timer) async {
-      print("Timer went off $timer");
+      // print("Timer went off $timer");
 
-      print(
-          "There are ${_profilePagingController.itemList?.length} items in the list we on ${_profilePageController.page}");
+      // print(
+      //     "There are ${_profilePagingController.itemList?.length} items in the list we on ${_profilePageController.page}");
       // move to next page in profile paging
       _profilePageController.nextPage(
           duration: const Duration(milliseconds: 500),
@@ -108,7 +113,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
     });
 
     _postTimer ??= Timer.periodic(const Duration(seconds: 18), (timer) async {
-      print("Timer went off $timer");
+      // print("Timer went off $timer");
 
       _postPageController.nextPage(
           duration: const Duration(milliseconds: 500),
@@ -165,9 +170,61 @@ class _HomePageState extends State<HomePage> with RouteAware {
             if (theProfile != null) {
               extProfiles.add(theProfile);
             }
+
+
             // highlightedExtProfile = theProfile;
             setState(() {
               isExtProfileLoading = false;
+            });
+            // setState(() {});
+          });
+        }
+      }
+    });
+
+    _profilePageController.addListener(() {
+      if (_profilePagingController.itemList != null) {
+        isPositionLoading = false;
+        setState(() {});
+      }
+      var profileIndex = _profilePageController.page?.round() ?? 0;
+      if (_profilePagingController.itemList != null &&
+          _profilePageController.page?.round() == profileIndex) {
+        // print(
+        //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
+        // highlightedProfile = _profilePagingController.itemList![profileIndex];
+        SanityPosition? foundLastPosition;
+        //get the ext profile
+        for (var element in positions) {
+          // print(
+          //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
+          if (element.userRef?.userId ==
+              _profilePagingController.itemList![profileIndex].userId) {
+            foundLastPosition = element;
+          }
+        }
+        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+            foundLastPosition == null &&
+            !isPositionLoading) {
+          setState(() {
+            isPositionLoading = true;
+          });
+          client
+              ?.getLastPosition(
+              _profilePagingController.itemList![profileIndex].userId ?? "")
+              .then((thePosition) {
+
+            if (thePosition != null) {
+              print("remove user position $foundLastPosition");
+              print("got user position $thePosition");
+              positions.remove(foundLastPosition);
+              positions.add(thePosition);
+            }
+
+
+            // highlightedExtProfile = theProfile;
+            setState(() {
+              isPositionLoading = false;
             });
             // setState(() {});
           });
@@ -225,6 +282,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   ChatController? chatController;
   AnalyticsController? analyticsController;
+  GeolocationController? geolocationController;
 
   @override
   didChangeDependencies() async {
@@ -240,6 +298,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
     var theAuthController = AuthInherited.of(context)?.authController;
     var theChatController = AuthInherited.of(context)?.chatController;
+    var theGeoController = AuthInherited.of(context)?.geolocationController;
     AnalyticsController? theAnalyticsController =
         AuthInherited.of(context)?.analyticsController;
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
@@ -255,6 +314,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
     if (chatController == null && theChatController != null) {
       chatController = theChatController;
+    }
+    if (theGeoController == null && theGeoController != null) {
+      geolocationController = theGeoController;
     }
     isUserLoggedIn = theAuthController?.isLoggedIn ?? false;
 
@@ -343,6 +405,15 @@ class _HomePageState extends State<HomePage> with RouteAware {
                     }
                   }
 
+                  SanityPosition? thisUserPosition;
+                  for (var element in positions) {
+                    if (element.userRef?.userId ==
+                        _profilePagingController
+                            .itemList![thePageIndex].userId) {
+                      thisUserPosition = element;
+                    }
+                  }
+
                   //get the extended profile for this user
                   return theItem != null
                       ? CardWithActions(
@@ -408,8 +479,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                       color: Colors.white.withOpacity(.8),
                                       semanticLabel: "Location",
                                     ),
-                                    const Text(
-                                      '300 mi.',
+                                     Text(
+                                      "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],

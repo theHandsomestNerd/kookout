@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/position.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -11,26 +12,42 @@ import '../../config/default_config.dart';
 /// When the location services are not enabled or permissions
 /// are denied the `Future` will return an error.
 class GeolocationController {
-  Position? lastKnownPosition = null;
-  Position? currentPosition = null;
-  ApiClient apiClient = ApiClient(DefaultConfig.theAuthBaseUrl);
-  Timer? geolocationTimer = null;
+  static Position? lastKnownPosition = null;
+  static Position? currentPosition = null;
+  static ApiClient apiClient = ApiClient(DefaultConfig.theAuthBaseUrl);
+  static Timer? geolocationTimer = null;
 
   GeolocationController() {
+    _recordCurrentPosition().then((theCurrentLocation) {
+      if (!kIsWeb) {
+        return _recordLastKnownPosition().then((theCurrentLocation) {
+          currentPosition = theCurrentLocation;
+          return theCurrentLocation;
+        });
+      } else {
+        currentPosition = theCurrentLocation;
+        return theCurrentLocation;
+      }
+    });
+
     geolocationTimer ??=
-        Timer.periodic(const Duration(seconds: 10), (timer) async {
-      print("Location Timer went off $timer");
+        Timer.periodic(const Duration(seconds: 30), (timer) async {
+      // print("Location Timer went off $timer");
 
       var theCurrentLocation = await _recordCurrentPosition();
-      if(!kIsWeb) {
+      if (!kIsWeb) {
         theCurrentLocation ??= await _recordLastKnownPosition();
-        currentPosition = theCurrentLocation;
       }
+      currentPosition = theCurrentLocation;
     });
   }
 
-  dispose(){
+  dispose() {
     geolocationTimer?.cancel();
+  }
+
+  static get theCurrentPosition {
+    return currentPosition;
   }
 
   Future<Position?> _recordLastKnownPosition() async {
@@ -44,7 +61,7 @@ class GeolocationController {
     return theLastKnownPosition;
   }
 
-  Future<Position?> _recordCurrentPosition() async {
+  static Future<Position?> _recordCurrentPosition() async {
     try {
       var theCurrentPosition = await _determinePosition();
       currentPosition = theCurrentPosition;
@@ -56,7 +73,7 @@ class GeolocationController {
     }
   }
 
-  Future<Position> _determinePosition() async {
+  static Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -93,8 +110,19 @@ class GeolocationController {
     return await Geolocator.getCurrentPosition();
   }
 
-  double _distanceBetween(Position startPosition, Position endPosition) {
-    return Geolocator.distanceBetween(startPosition.latitude,
-        startPosition.longitude, endPosition.latitude, endPosition.longitude);
+  static String distanceBetween(
+      Position? startPosition, SanityPosition? endPosition) {
+    // print("distance between $startPosition $endPosition");
+    if (startPosition != null && endPosition != null) {
+      var result = Geolocator.distanceBetween(
+          startPosition.latitude,
+          startPosition.longitude,
+          double.parse(endPosition.latitude ?? "0"),
+          double.parse(endPosition.longitude ?? "0"));
+
+      // print("distance$result");
+      return (result / 1609.344).toStringAsFixed(3);
+    }
+    return "0";
   }
 }

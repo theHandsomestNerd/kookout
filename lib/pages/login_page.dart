@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(
                                   height: 150,
                                   width: 300,
-                                  child: Image.asset('assets/logo.png'),
+                                  child: Image.asset('assets/logo-w.png'),
                                 ),
                                 Column(
                                   key: ObjectKey(FirebaseAuth.instance.currentUser),
