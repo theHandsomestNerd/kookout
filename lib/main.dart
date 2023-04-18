@@ -4,6 +4,7 @@ import 'package:cookowt/config/default_config.dart';
 import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/controllers/post_controller.dart';
 import 'package:cookowt/pages/create_post_page.dart';
 import 'package:cookowt/pages/home_page.dart';
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
   late ChatController chatController = ChatController.init();
   late PostController postController = PostController.init();
   late AnalyticsController analyticsController = AnalyticsController.init();
+  late GeolocationController geolocationController = GeolocationController();
 
   // var myExtProfile = null;
 
@@ -82,6 +84,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     analyticsController.logOpenApp();
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
@@ -95,6 +98,12 @@ class _MyAppState extends State<MyApp> {
         analyticsController.setUserId(user.uid);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    geolocationController.dispose();
+    super.dispose();
   }
 
   String id = "";
@@ -136,6 +145,7 @@ class _MyAppState extends State<MyApp> {
       version: version,
       buildNumber: buildNumber,
       analyticsController: analyticsController,
+      geolocationController: geolocationController,
       authController: authController,
       chatController: chatController,
       postController: postController,
@@ -177,8 +187,7 @@ class _MyAppState extends State<MyApp> {
           },
           // '/editProfile': (context) => const EditProfilePage(),
           '/logout': (context) => const LogoutPage(),
-          '/profilesPage': (context) =>
-              const ProfilesPage(),
+          '/profilesPage': (context) => const ProfilesPage(),
           '/profile': (context) {
             var arguments = (ModalRoute.of(context)?.settings.arguments ??
                 <String, dynamic>{}) as Map;
@@ -226,7 +235,7 @@ class _MyAppState extends State<MyApp> {
           },
           '/myProfile': (context) {
             String theId = authController.myAppUser?.userId.toString() ?? "";
-             AppUser? thisProfile;
+            AppUser? thisProfile;
             for (var element in chatController.profileList) {
               if (element.userId == theId) {
                 thisProfile = element;

@@ -4,6 +4,7 @@ import 'package:cookowt/models/responses/chat_api_get_profile_posts_response.dar
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/default_config.dart';
@@ -566,9 +567,7 @@ class ApiClient {
       print("Retrieving Ext Profile $userId");
     }
     String? token = await getIdToken();
-    if (token != null &&
-        userId != "" &&
-        DefaultConfig.theAuthBaseUrl != "") {
+    if (token != null && userId != "" && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/get-ext-profile/$userId"),
           headers: {"Authorization": ("Bearer $token")});
@@ -598,7 +597,7 @@ class ApiClient {
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-comments/${typeId != null?typeId+'/':'profile-comment/'}$userId"),
+              "${DefaultConfig.theAuthBaseUrl}/get-comments/${typeId != null ? typeId + '/' : 'profile-comment/'}$userId"),
           headers: {"Authorization": ("Bearer $token")});
       try {
         dynamic processedResponse = jsonDecode(response.body);
@@ -737,6 +736,49 @@ class ApiClient {
           Uri.parse("${DefaultConfig.theAuthBaseUrl}/like"),
           body: {"likeeId": likeeId, "likeType": likeType},
           headers: {"Authorization": ("Bearer $token")});
+
+      dynamic processedResponse = jsonDecode(response.body);
+
+      if (processedResponse['likeStatus'] != null) {
+        if (kDebugMode) {
+          print(processedResponse['likeStatus']);
+        }
+        String responseModel = processedResponse['likeStatus'];
+        if (kDebugMode) {
+          print("$message status: $responseModel");
+        }
+        return responseModel;
+      } else {
+        return "FAIL";
+      }
+    }
+    return "FAIL";
+  }
+
+  Future<String> updatePosition(Position location) async {
+    var message = "Location ${location}";
+    if (kDebugMode) {
+      print(message);
+    }
+
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/update-position"),
+          body: {
+            "longitude": location.longitude.toString(),
+            "latitude": location.latitude.toString(),
+            "timestamp": location.timestamp.toString(),
+            "accuracy": location.accuracy.toString(),
+            "altitude": location.altitude.toString(),
+            "heading": location.heading.toString(),
+            "speed": location.speed.toString(),
+            "speedAccuracy": location.speedAccuracy.toString(),
+            "floor": location.floor.toString()
+          },
+          headers: {
+            "Authorization": ("Bearer $token")
+          });
 
       dynamic processedResponse = jsonDecode(response.body);
 

@@ -1,5 +1,6 @@
 import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/controllers/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
@@ -11,6 +12,7 @@ class AuthInherited extends InheritedWidget {
   final AuthController? authController;
   final ChatController? chatController;
   final PostController? postController;
+  final GeolocationController? geolocationController;
   final AnalyticsController? analyticsController;
   final AuthUser? myLoggedInUser;
   final SanityImage? profileImage;
@@ -27,6 +29,7 @@ class AuthInherited extends InheritedWidget {
       this.authController,
       this.chatController,
       this.postController,
+      this.geolocationController,
       this.analyticsController,
       this.myLoggedInUser,
       required this.appName,
