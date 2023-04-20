@@ -11,7 +11,6 @@ import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:cookowt/wrappers/circular_progress_indicator_with_message.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../models/app_user.dart';
@@ -171,7 +170,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
               extProfiles.add(theProfile);
             }
 
-
             // highlightedExtProfile = theProfile;
             setState(() {
               isExtProfileLoading = false;
@@ -211,16 +209,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
           });
           client
               ?.getLastPosition(
-              _profilePagingController.itemList![profileIndex].userId ?? "")
+                  _profilePagingController.itemList![profileIndex].userId ?? "")
               .then((thePosition) {
-
             if (thePosition != null) {
               print("remove user position $foundLastPosition");
               print("got user position $thePosition");
               positions.remove(foundLastPosition);
               positions.add(thePosition);
             }
-
 
             // highlightedExtProfile = theProfile;
             setState(() {
@@ -416,32 +412,47 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
                   //get the extended profile for this user
                   return theItem != null
-                      ? CardWithActions(
-                          locationRow: Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Center(
-                                  child: Text(
-                                    "${thisExtProfile?.age ?? "99"} yrs",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.merge(
-                                          TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(.85)),
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text(
-                                      "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
+                      ? GestureDetector(
+                    onTap: () async {
+                      if (theItem.userId != null) {
+                        cancelHomeScreenTimers();
+                        await analyticsController?.sendAnalyticsEvent(
+                            'view-profile-while-highlighted-pressed', {
+                          "highlightedUserId": theItem.userId
+                        }).then((x) {
+                          Navigator.pushNamed(context, '/profile',
+                              arguments: {"id": theItem.userId});
+                        });
+                      }
+                    },
+                    onPanUpdate: (details) async {
+                      // Swiping in up direction.
+                      if (details.delta.dy < 0) {
+                        cancelHomeScreenTimers();
+                        await analyticsController?.sendAnalyticsEvent(
+                            'view-all-profiles-pressed', {
+                          "highlightedUserId": theItem.userId
+                        }).then((x) {
+                          Navigator.pushNamed(context, '/profilesPage');
+                        });
+                      }
+
+                      // Swiping in down direction.
+                      if (details.delta.dy > 0) {
+
+                        print('swipe down');
+                      }
+                    },
+                        child: CardWithActions(
+                            locationRow: Flex(
+                              direction: Axis.horizontal,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Center(
+                                    child: Text(
+                                      "${thisExtProfile?.age ?? "99"} yrs",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall
@@ -449,74 +460,91 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                             TextStyle(
                                                 color: Colors.white
                                                     .withOpacity(.85)),
-                                          )),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Center(
-                                  child: Text(
-                                    "${thisExtProfile?.weight ?? "999"} lbs",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.merge(
-                                          TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(.85)),
-                                        ),
+                                          ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.pin_drop,
-                                      size: 30.0,
-                                      color: Colors.white.withOpacity(.8),
-                                      semanticLabel: "Location",
-                                    ),
-                                     Text(
-                                      "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                        "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.merge(
+                                              TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(.85)),
+                                            )),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          image: SanityImageBuilder.imageProviderFor(
-                                  sanityImage: theItem.profileImage,
-                                  showDefaultImage: true)
-                              .image,
-                          action1Text:
-                              "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
-                          action2Text: 'All Profiles',
-                          action1OnPressed: () async {
-                            if (theItem.userId != null) {
+                                Expanded(
+                                  flex: 2,
+                                  child: Center(
+                                    child: Text(
+                                      "${thisExtProfile?.weight ?? "999"} lbs",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.merge(
+                                            TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(.85)),
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(
+                                        Icons.pin_drop,
+                                        size: 30.0,
+                                        color: Colors.white.withOpacity(.8),
+                                        semanticLabel: "Location",
+                                      ),
+                                      Text(
+                                        "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            image: SanityImageBuilder.imageProviderFor(
+                                    sanityImage: theItem.profileImage,
+                                    showDefaultImage: true)
+                                .image,
+                            // action1Text:
+                            //     "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
+                            action2Text: 'All Profiles',
+                            // action1OnPressed: () async {
+                              // if (theItem.userId != null) {
+                              //   cancelHomeScreenTimers();
+                              //   await analyticsController?.sendAnalyticsEvent(
+                              //       'view-profile-while-highlighted-pressed', {
+                              //     "highlightedUserId": theItem.userId
+                              //   }).then((x) {
+                              //     Navigator.pushNamed(context, '/profile',
+                              //         arguments: {"id": theItem.userId});
+                              //   });
+                              // }
+                            // },
+                            action2OnPressed: () async {
                               cancelHomeScreenTimers();
                               await analyticsController?.sendAnalyticsEvent(
-                                  'view-profile-while-highlighted-pressed', {
+                                  'view-all-profiles-pressed', {
                                 "highlightedUserId": theItem.userId
                               }).then((x) {
-                                Navigator.pushNamed(context, '/profile',
-                                    arguments: {"id": theItem.userId});
+                                Navigator.pushNamed(context, '/profilesPage');
                               });
-                            }
-                          },
-                          action2OnPressed: () async {
-                            cancelHomeScreenTimers();
-                            await analyticsController?.sendAnalyticsEvent(
-                                'view-all-profiles-pressed', {
-                              "highlightedUserId": theItem.userId
-                            }).then((x) {
-                              Navigator.pushNamed(context, '/profilesPage');
-                            });
-                          },
-                        )
+                            },
+                          ),
+                      )
                       : Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -559,26 +587,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
                   //get the extended profile for this user
                   return theItem != null
-                      ? CardWithActions(
-                          author: theItem.author,
-                          when: theItem.publishedAt,
-                          locationRow: null,
-                          caption: theItem.body,
-                          image: SanityImageBuilder.imageProviderFor(
-                                  sanityImage: theItem.mainImage,
-                                  showDefaultImage: true)
-                              .image,
-                          action1Text: 'All Posts',
-                          action1OnPressed: () async {
-                            cancelHomeScreenTimers();
-                            await analyticsController?.sendAnalyticsEvent(
-                                'view-all-posts-while-highlighted-pressed',
-                                {"highlightedPostId": theItem.id}).then((x) {
-                              Navigator.pushNamed(context, '/postsPage');
-                            });
-                          },
-                          action2Text: 'Go to post',
-                          action2OnPressed: () async {
+                      ? GestureDetector(
+                          onTap: () async {
                             cancelHomeScreenTimers();
                             await analyticsController?.sendAnalyticsEvent(
                                 'view-post-while-highlighted-pressed',
@@ -589,6 +599,55 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               }
                             });
                           },
+                          onPanUpdate: (details) async {
+                            // Swiping in up direction.
+                            if (details.delta.dy < 0) {
+                              print('swipe upswipe up');
+                              cancelHomeScreenTimers();
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-all-posts-while-highlighted-pressed',
+                                  {"highlightedPostId": theItem.id}).then((x) {
+                                Navigator.pushNamed(context, '/postsPage');
+                              });
+                            }
+
+                            // Swiping in down direction.
+                            if (details.delta.dy > 0) {
+
+                              print('swipe down');
+                            }
+                          },
+                          child: CardWithActions(
+                            author: theItem.author,
+                            when: theItem.publishedAt,
+                            locationRow: null,
+                            caption: theItem.body,
+                            image: SanityImageBuilder.imageProviderFor(
+                                    sanityImage: theItem.mainImage,
+                                    showDefaultImage: true)
+                                .image,
+                            action1Text: 'All Posts',
+                            action1OnPressed: () async {
+                              cancelHomeScreenTimers();
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-all-posts-while-highlighted-pressed',
+                                  {"highlightedPostId": theItem.id}).then((x) {
+                                Navigator.pushNamed(context, '/postsPage');
+                              });
+                            },
+                            // action2Text: 'Go to post',
+                            // action2OnPressed: () async {
+                            //   cancelHomeScreenTimers();
+                            //   await analyticsController?.sendAnalyticsEvent(
+                            //       'view-post-while-highlighted-pressed',
+                            //       {"highlightedPostId": theItem.id}).then((x) {
+                            //     if (theItem.id != null) {
+                            //       Navigator.pushNamed(context, '/post',
+                            //           arguments: {"id": theItem.id});
+                            //     }
+                            //   });
+                            // },
+                          ),
                         )
                       : Center(
                           child: Column(
