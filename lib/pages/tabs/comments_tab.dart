@@ -98,8 +98,8 @@ class _CommentsTabState extends State<CommentsTab> {
             isDisabled: isCommenting,
             analyticsEventName: 'create-comment',
             analyticsEventData: {'author': widget.id, "body":_commentBody},
-            action: () async {
-              await _commentThisProfile(context);
+            action: (innercontext) async {
+              await _commentThisProfile(innercontext);
             },
             text: "Comment",
           )

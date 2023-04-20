@@ -101,19 +101,21 @@ class _AuthorAndTextState extends State<AuthorAndText> {
             child: Flex(
               direction: Axis.horizontal,
               children: [
-                Flexible(
-                  flex: 2,
-                  child: CardWithBackground(
-                      height: 67,
-                      width: 67,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(0)),
-                        //set border radius more than 50% of height and width to make circle
-                      ),
-                      image: authorImage,
-                      child: const SizedBox(height: 67, width: 67)),
-                ),
+                UserBlockText(
+                    hideText: true, user: widget.author)
+                // Flexible(
+                //   flex: 2,
+                //   child: CardWithBackground(
+                //       height: 67,
+                //       width: 67,
+                //       shape: const RoundedRectangleBorder(
+                //         borderRadius:
+                //             BorderRadius.only(topLeft: Radius.circular(0)),
+                //         //set border radius more than 50% of height and width to make circle
+                //       ),
+                //       image: authorImage,
+                //       child: const SizedBox(height: 67, width: 67)),
+                // ),
               ],
             ),
           ),
