@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'image_uploader_abstract.dart';
 
 class ImageUploaderImpl extends ImageUploader {
-
   ImageUploaderImpl() {
     file = null;
     fileExtension = null;
@@ -19,10 +19,9 @@ class ImageUploaderImpl extends ImageUploader {
     // pickedFile = null;
   }
 
-
   void clear() {
-      file = null;
-      notifyListeners();
+    file = null;
+    notifyListeners();
   }
 
   // Future<void> _uploadImage() async {
@@ -35,7 +34,8 @@ class ImageUploaderImpl extends ImageUploader {
   //   }
   // }
 
-  Widget _imageCard(BuildContext context, double screenWidth, double screenHeight) {
+  Widget _imageCard(
+      BuildContext context, double screenWidth, double screenHeight) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -43,7 +43,7 @@ class ImageUploaderImpl extends ImageUploader {
         children: [
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: kIsWeb ? 24.0 : 16.0),
+                const EdgeInsets.symmetric(horizontal: kIsWeb ? 24.0 : 16.0),
             child: Card(
               elevation: 4.0,
               child: Padding(
@@ -59,13 +59,14 @@ class ImageUploaderImpl extends ImageUploader {
     );
   }
 
-  Widget _uploaderCard(context) {
+  Widget _uploaderCard(context, image) {
     return Center(
-      child: Card(
-        elevation: 4.0,
+      child: CardWithBackground(
+        // elevation: 4.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
+        image: image,
         child: SizedBox(
           width: kIsWeb ? 380.0 : 320.0,
           height: 300.0,
@@ -77,41 +78,45 @@ class ImageUploaderImpl extends ImageUploader {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: DottedBorder(
-                    radius: const Radius.circular(12.0),
-                    borderType: BorderType.RRect,
-                    dashPattern: const [8, 4],
-                    color: Theme.of(context).highlightColor.withOpacity(0.4),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.image,
-                            color: Theme.of(context).highlightColor,
-                            size: 80.0,
+                  child: image == null
+                      ? DottedBorder(
+                          radius: const Radius.circular(12.0),
+                          borderType: BorderType.RRect,
+                          dashPattern: const [8, 4],
+                          color:
+                              Theme.of(context).highlightColor.withOpacity(0.4),
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image,
+                                  color: Theme.of(context).highlightColor,
+                                  size: 80.0,
+                                ),
+                                const SizedBox(height: 24.0),
+                                Text(
+                                  'Upload an image to start',
+                                  style: kIsWeb
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .headline5!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .highlightColor)
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .highlightColor),
+                                )
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 24.0),
-                          Text(
-                            'Upload an image to start',
-                            style: kIsWeb
-                                ? Theme.of(context)
-                                .textTheme
-                                .headline5!
-                                .copyWith(
-                                color: Theme.of(context).highlightColor)
-                                : Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .copyWith(
-                                color:
-                                Theme.of(context).highlightColor),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                        )
+                      : Container(),
                 ),
               ),
               Padding(
@@ -120,7 +125,8 @@ class ImageUploaderImpl extends ImageUploader {
                   onPressed: () {
                     _uploadImage();
                   },
-                  child: const Text('Upload'),
+                  child:
+                      Text(image == null ? 'Upload' : "Change Profile Image"),
                 ),
               ),
             ],
@@ -154,7 +160,7 @@ class ImageUploaderImpl extends ImageUploader {
               height: 350,
             ),
             viewPort:
-            const CroppieViewPort(width: 300, height: 300, type: 'square'),
+                const CroppieViewPort(width: 300, height: 300, type: 'square'),
             enableExif: true,
             enableZoom: true,
             showZoomer: true,
@@ -162,23 +168,23 @@ class ImageUploaderImpl extends ImageUploader {
         ],
       );
       if (theCroppedFile != null) {
-          croppedFile = theCroppedFile;
-          notifyListeners();
+        croppedFile = theCroppedFile;
+        notifyListeners();
       }
     }
   }
 
   void _clear() {
-      file = null;
-      croppedFile = null;
+    file = null;
+    croppedFile = null;
   }
 
   Future<void> _uploadImage() async {
     final pickedFile = await uploadImage();
 
     if (pickedFile != null) {
-        file = pickedFile;
-        notifyListeners();
+      file = pickedFile;
+      notifyListeners();
     }
   }
 
@@ -210,19 +216,18 @@ class ImageUploaderImpl extends ImageUploader {
     );
   }
 
-
-  Widget body(context, double screenWidth, double screenHeight, ImageProvider? inputImage) {
+  Widget body(context, double screenWidth, double screenHeight,
+      ImageProvider? inputImage) {
     if (croppedFile != null || file != null) {
-      return _imageCard(context, screenWidth, screenHeight,);
-    } else if(inputImage != null) {
-      return Image(image: inputImage);
-    }
-    else {
-
-      return _uploaderCard(context);
+      return _imageCard(
+        context,
+        screenWidth,
+        screenHeight,
+      );
+    } else {
+      return _uploaderCard(context, inputImage);
     }
   }
-
 
   Widget _image(double screenWidth, double screenHeight) {
     if (croppedFile != null) {
@@ -268,7 +273,7 @@ class ImageUploaderImpl extends ImageUploader {
 
       if (kDebugMode) {
         print(
-          "File Picked ${theFile.name} extension:${theFile.mimeType} ${theFile.length()} bytes");
+            "File Picked ${theFile.name} extension:${theFile.mimeType} ${theFile.length()} bytes");
       }
       return theFile;
     } else {
