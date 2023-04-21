@@ -65,11 +65,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
       // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
+        if(_profilePageController != null)
         _profilePagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = newItems.last.userId;
         if (nextPageKey != null) {
-          _profilePagingController.appendPage(newItems, nextPageKey);
+          if(_profilePageController != null)
+            _profilePagingController.appendPage(newItems, nextPageKey);
         }
       }
     } catch (error) {

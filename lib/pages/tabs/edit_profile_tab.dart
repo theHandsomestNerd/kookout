@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 import '../../models/app_user.dart';
 import '../../models/controllers/auth_inherited.dart';
@@ -39,7 +40,6 @@ class _EditProfileTabState extends State<EditProfileTab> {
   AppUser? _myAppUser;
   ChatController? chatController;
   AuthController? authController;
-  ImageProvider? imageToBeUploaded;
 
   String _loginUsername = "";
   String _displayName = "";
@@ -62,19 +62,27 @@ class _EditProfileTabState extends State<EditProfileTab> {
   int _weight = 0;
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
+  Uint8List? theFileBytes;
+
   @override
   initState() {
     super.initState();
-    imageUploader = ImageUploaderImpl();
+    var theUploader = ImageUploaderImpl();
+    imageUploader = theUploader;
 
-    // if (widget.id != null) {
-    //   print("NOT NULL !!!!!!!!!!!!!!!!!");
-    //   extProfile = widget.chatController.myExtProfile;
-    // }
-    //
-    // _getExtProfile(widget.id!).then((value) {
-    //   extProfile = value;
-    // });
+    theUploader.addListener(() async {
+      print("image uploader change");
+      if(theUploader.croppedFile != null){
+        print("there iz a cropped");
+        theFileBytes = await theUploader.croppedFile?.readAsBytes();
+      } else {
+        print("there iz a file");
+        theFileBytes = await theUploader.file?.readAsBytes();
+      }
+      setState(() {
+
+      });
+    });
   }
 
   @override
@@ -88,36 +96,13 @@ class _EditProfileTabState extends State<EditProfileTab> {
     authController = theAuthController;
     _myAppUser = theUser;
     profileImage = theUser?.profileImage;
-    imageToBeUploaded = await _getMyProfileImage(null);
 
-    // print("about to get extended profile for ${theUser?.userId}");
     if (theUser?.userId != null) {
       theChatController?.updateExtProfile((theUser?.userId)!);
       extProfile = await theChatController?.profileClient
           .getExtendedProfile((theUser?.userId)!);
     }
     setState(() {});
-  }
-
-  _getMyProfileImage(PlatformFile? theFile) {
-    if (theFile != null) {
-      if (kDebugMode) {
-        print("profile image is froom memory");
-      }
-      return MemoryImage(
-        theFile.bytes ?? [] as Uint8List,
-      );
-    }
-    if (kDebugMode) {
-      print("profile image $profileImage");
-    }
-
-    if (kDebugMode) {
-      print("profile image is froom db");
-    }
-    return SanityImageBuilder.imageProviderFor(
-            sanityImage: profileImage, showDefaultImage: true)
-        .image;
   }
 
   void _setUsername(String newUsername) async {
@@ -211,11 +196,18 @@ class _EditProfileTabState extends State<EditProfileTab> {
       isUpdating = true;
     });
     try {
+      // var theFileBytes = await imageUploader.file?.readAsBytes();
+      //
+      // if(imageUploader.croppedFile != null){
+      //   theFileBytes = await imageUploader.croppedFile?.readAsBytes();
+      // }
+
+
       var authUser = await authController?.updateUser(
           _loginUsername,
           _displayName,
           imageUploader.file?.name ?? "",
-          imageUploader.file?.bytes,
+          theFileBytes,
           context);
       if (kDebugMode) {
         print("updated fields in authuser result: $authUser");
@@ -277,6 +269,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      key: ObjectKey(imageUploader),
       padding: const EdgeInsets.all(32.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -292,7 +285,6 @@ class _EditProfileTabState extends State<EditProfileTab> {
                     height: 350,
                     width: 350,
                     text: "Change Profile Photo",
-                    image: _getMyProfileImage(imageUploader.file),
                     imageUploader: imageUploader,
                     uploadImage: (theImageUploader) {
                       imageUploader = theImageUploader;
@@ -497,18 +489,18 @@ class _EditProfileTabState extends State<EditProfileTab> {
                   title: AnalyticsLoadingButton(
                     analyticsEventData: {
                       'username': _myAppUser?.email,
-                      'sex_preferences': (extProfile?.sexPreferences?.length ?? 0) > 0,
-                      'height': (extProfile?.height != null),
-                      'weight': (extProfile?.weight != null),
-                      'age': (extProfile?.age != null),
-                      'where_i_live': (extProfile?.whereILive?.length ?? 0) > 0,
-                      'what_interests_me': (extProfile?.whatInterestsMe?.length ?? 0) > 0,
-                      'what_im_looking_for': (extProfile?.whatImLookingFor?.length ?? 0) > 0,
-                      'what_i_do': (extProfile?.whatIDo?.length ?? 0) > 0,
-                      'im_open_to': (extProfile?.imOpenTo?.length ?? 0) > 0,
-                      'i_am': (extProfile?.iAm?.length ?? 0) > 0,
-                      'short_bio': (extProfile?.shortBio?.length ?? 0) > 0,
-                      'long_bio': (extProfile?.longBio?.length ?? 0) > 0,
+                      'sex_preferences': ((extProfile?.sexPreferences?.length ?? 0) > 0).toString(),
+                      'height': (extProfile?.height != null).toString(),
+                      'weight': (extProfile?.weight != null).toString(),
+                      'age': (extProfile?.age != null).toString(),
+                      'where_i_live': ((extProfile?.whereILive?.length ?? 0) > 0).toString(),
+                      'what_interests_me': ((extProfile?.whatInterestsMe?.length ?? 0) > 0).toString(),
+                      'what_im_looking_for': ((extProfile?.whatImLookingFor?.length ?? 0) > 0).toString(),
+                      'what_i_do': ((extProfile?.whatIDo?.length ?? 0) > 0).toString(),
+                      'im_open_to': ((extProfile?.imOpenTo?.length ?? 0) > 0).toString(),
+                      'i_am': ((extProfile?.iAm?.length ?? 0) > 0).toString(),
+                      'short_bio': ((extProfile?.shortBio?.length ?? 0) > 0).toString(),
+                      'long_bio': ((extProfile?.longBio?.length ?? 0) > 0).toString(),
                     },
                     analyticsEventName: 'settings-save-profile',
                     isDisabled: isUpdating,

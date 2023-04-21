@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cookowt/config/default_config.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +25,29 @@ var INITIAL_DESCRIPTION =
 class _BugReporterContentState extends State<BugReporterContent> {
   String _title = "";
   String _description = INITIAL_DESCRIPTION;
-  late ImageUploader? imageUploader = ImageUploaderImpl();
+  ImageUploader? imageUploader = ImageUploaderImpl();
   late bool isSubmitting = false;
+
+  Uint8List? theFileBytes;
+  @override
+  initState(){
+    super.initState();
+
+
+    imageUploader?.addListener(() async {
+      print("image uploader change");
+      if(imageUploader?.croppedFile != null){
+        print("there iz a cropped");
+        theFileBytes = await imageUploader?.croppedFile?.readAsBytes();
+      } else {
+        print("there iz a file");
+        theFileBytes = await imageUploader?.file?.readAsBytes();
+      }
+      setState(() {
+
+      });
+    });
+  }
 
   submitBug() async {
     setState(() {
@@ -33,7 +56,7 @@ class _BugReporterContentState extends State<BugReporterContent> {
 
     BuildContext theContext = context;
     await BugReportClient().submitBugReport(_title, _description,
-        imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context).then((x){
+        imageUploader?.file?.name ?? "", theFileBytes, context).then((x){
       setState(() {
         isSubmitting = false;
       });

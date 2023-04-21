@@ -1,14 +1,17 @@
 import 'dart:async';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
+import 'package:image_cropper/image_cropper.dart';
 
-abstract class ImageUploader {
-  late PlatformFile? file;
+abstract class ImageUploader extends ChangeNotifier {
+  late XFile? file;
   late String? fileExtension;
   late String? contentType;
-  late Completer? theCompressedCompleter;
-  late Future<PlatformFile>? compressedPlatformFuture;
+  // late XFile? pickedFile;
+  CroppedFile? croppedFile;
 
-  Future<PlatformFile?> uploadImage();
-
+  Future<XFile?> uploadImage();
+  void clear();
+  Widget body(BuildContext context, double screenWidth, double screenHeight);
   }

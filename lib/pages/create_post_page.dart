@@ -29,8 +29,7 @@ class CreatePostPage extends StatefulWidget {
 
 class _CreatePostPageState extends State<CreatePostPage> {
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
-
-  late ImageUploader? imageUploader;
+  ImageUploader? imageUploader;
   AuthController? authController;
   PostController? postController;
   AnalyticsController? analyticsController;
@@ -40,11 +39,27 @@ class _CreatePostPageState extends State<CreatePostPage> {
   ImageProvider? imageToBeUploaded;
   late SanityImage? profileImage;
 
+  Uint8List? theFileBytes;
   @override
   initState() {
     super.initState();
-    imageUploader = ImageUploaderImpl();
-    imageToBeUploaded = _getMyProfileImage(null);
+
+    var theUploader = ImageUploaderImpl();
+    imageUploader = theUploader;
+    theUploader.addListener(() async {
+      print("image uploader change");
+      if(theUploader.croppedFile != null){
+        print("there iz a cropped");
+        theFileBytes = await theUploader.croppedFile?.readAsBytes();
+      } else {
+        print("there iz a file");
+        theFileBytes = await theUploader.file?.readAsBytes();
+      }
+      setState(() {
+
+      });
+    });
+    // imageToBeUploaded = _getMyProfileImage(null);
   }
 
   @override
@@ -85,7 +100,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     // print(" make post");
     postResponse = await postController?.createPost(_postBody ?? "",
-        imageUploader?.file?.name ?? "", imageUploader?.file?.bytes, context);
+        imageUploader?.file?.name ?? "", theFileBytes, context);
 
     setState(() {
       _isPosting = false;
@@ -95,20 +110,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return postResponse ?? "FAIL";
   }
 
-  _getMyProfileImage(PlatformFile? theFile) {
-    if (theFile != null) {
-      if (kDebugMode) {
-        print("profile image is froom memory");
-      }
-      return MemoryImage(
-        theFile.bytes ?? [] as Uint8List,
-      );
-    }
-    if (kDebugMode) {
-      print("profile image is default");
-    }
-    return const AssetImage('assets/blankProfileImage.png');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +169,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 } else if (status == "FAIL") {
                   await sendError();
                 }
+                Navigator.popAndPushNamed(context, '/postsPage');
               },
               text: "Post",
             )
