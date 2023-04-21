@@ -133,11 +133,11 @@ class _BugReporterContentState extends State<BugReporterContent> {
                   ),
                   if (imageUploader != null)
                     SizedBox(
-                      height: 200,
-                      width: 200,
+                      height: 350,
+                      width: 350,
                       child: AppImageUploader(
                         hideInfo: true,
-                        height: 200,
+                        height: 350,
                         width: 200,
                         text: "Photo",
                         imageUploader: imageUploader!,

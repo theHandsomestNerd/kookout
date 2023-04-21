@@ -211,10 +211,14 @@ class ImageUploaderImpl extends ImageUploader {
   }
 
 
-  Widget body(context, double screenWidth, double screenHeight) {
+  Widget body(context, double screenWidth, double screenHeight, ImageProvider? inputImage) {
     if (croppedFile != null || file != null) {
       return _imageCard(context, screenWidth, screenHeight,);
-    } else {
+    } else if(inputImage != null) {
+      return Image(image: inputImage);
+    }
+    else {
+
       return _uploaderCard(context);
     }
   }

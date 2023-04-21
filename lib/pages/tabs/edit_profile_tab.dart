@@ -284,6 +284,9 @@ class _EditProfileTabState extends State<EditProfileTab> {
                   title: AppImageUploader(
                     height: 350,
                     width: 350,
+                    image: SanityImageBuilder.imageProviderFor(
+                        sanityImage: profileImage, showDefaultImage: true)
+                        .image,
                     text: "Change Profile Photo",
                     imageUploader: imageUploader,
                     uploadImage: (theImageUploader) {

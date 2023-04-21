@@ -13,5 +13,5 @@ abstract class ImageUploader extends ChangeNotifier {
 
   Future<XFile?> uploadImage();
   void clear();
-  Widget body(BuildContext context, double screenWidth, double screenHeight);
+  Widget body(BuildContext context, double screenWidth, double screenHeight, ImageProvider? imageProvider);
   }
