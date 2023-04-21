@@ -160,7 +160,7 @@ class ImageUploaderImpl extends ImageUploader {
               height: 350,
             ),
             viewPort:
-                const CroppieViewPort(width: 300, height: 300, type: 'square'),
+                const CroppieViewPort(width: 340, height: 340, type: 'rectangle'),
             enableExif: true,
             enableZoom: true,
             showZoomer: true,
@@ -257,8 +257,8 @@ class ImageUploaderImpl extends ImageUploader {
   Future<XFile?> uploadImage() async {
     final XFile? pickedImageFile = await ImagePicker().pickImage(
         source: ImageSource.gallery,
-        imageQuality: 90,
-        maxWidth: 1000,
+        imageQuality: 100,
+        maxWidth: 580,
         preferredCameraDevice: CameraDevice.rear);
 
     XFile? theFile;
