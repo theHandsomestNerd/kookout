@@ -68,100 +68,102 @@ class CardWithActions extends StatelessWidget {
                     ],
                   ),
                 Flexible(
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      if (action1Text != null)
-                        Expanded(
-                          child: MaterialButton(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(0.0)),
-                            ),
-                            color: Colors.black.withOpacity(.5),
-                            onPressed: action1OnPressed,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 20, 20, 20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  isAction1Loading == true?SizedBox(
-                                    height: 12,
-                                    width: 12,
-                                    child: CircularProgressIndicator(
-                                      color:
-                                      isAction1Active == true ? Colors.blue : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0,8.0,8.0,8.0),
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        if (action1Text != null)
+                          Expanded(
+                            child: MaterialButton(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+
+                              ),
+                              color: Colors.black,
+                              onPressed: action1OnPressed,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    isAction1Loading == true?SizedBox(
+                                      height: 12,
+                                      width: 12,
+                                      child: CircularProgressIndicator(
+                                        color:
+                                        isAction1Active == true ? Colors.blue : Colors.white,
+                                      ),
+                                    ):Icon(
+                                      action1Icon,
+                                      color: isAction1Active == true
+                                          ? Colors.blue
+                                          : Colors.white,
                                     ),
-                                  ):Icon(
-                                    action1Icon,
-                                    color: isAction1Active == true
-                                        ? Colors.blue
-                                        : Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    action1Text!,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.merge(
-                                          TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: isAction1Active == true
-                                                ? Colors.blue
-                                                : Colors.white,
+                                    if(action1Icon != null)const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      action1Text!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.merge(
+                                            TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              color: isAction1Active == true
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      // if (action2Text != null) const SizedBox(width: 8),
-                      const SizedBox(width: 1),
-                      if (action2Text != null)
-                        Expanded(
-                          child: MaterialButton(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(0.0)),
-                            ),
-                            color: Colors.black.withOpacity(.5),
-                            onPressed: action2OnPressed,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    action2Icon,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    action2Text!,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.merge(
-                                          const TextStyle(
-                                            color: Colors.white,
-                                            overflow: TextOverflow.ellipsis,
+                        if (action2Text != null) const SizedBox(width: 8),
+                        const SizedBox(width: 1),
+                        if (action2Text != null)
+                          Expanded(
+                            child: MaterialButton(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              color: Colors.black,
+                              onPressed: action2OnPressed,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      action2Icon,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      action2Text!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.merge(
+                                            const TextStyle(
+                                              color: Colors.white,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                        ),
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

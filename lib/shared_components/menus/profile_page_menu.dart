@@ -58,28 +58,36 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         //   icon: const Icon(Icons.post_add),
         // ),
 
+        // ActionButton(
+        //   tooltip: "Album",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
+        //   },
+        //   icon: const Icon(Icons.photo_album),
+        // ),
+        // ActionButton(
+        //   tooltip: "Inbox",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.INBOX.index);
+        //   },
+        //   icon: const Icon(Icons.inbox),
+        // ),
+        // ActionButton(
+        //   tooltip: "Timeline",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.TIMELINE.index);
+        //   },
+        //   icon: const Icon(Icons.timeline),
+        // ),
         ActionButton(
-          tooltip: "Album",
+          tooltip: "Posts",
           onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
-          },
-          icon: const Icon(Icons.photo_album),
-        ),
-        ActionButton(
-          tooltip: "Inbox",
-          onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.INBOX.index);
-          },
-          icon: const Icon(Icons.inbox),
-        ),
-        ActionButton(
-          tooltip: "Timeline",
-          onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.TIMELINE.index);
+            GoRouter.of(context).go('/postsPage');
+
+            // Navigator.popAndPushNamed(context, '/postsPage');
           },
           icon: const Icon(Icons.timeline),
         ),
-
         ActionButton(
           tooltip: "My Profile",
           onPressed: () {
@@ -94,6 +102,7 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
           ),
         ),
         ActionButton(
+          tooltip: "Home",
           onPressed: () {
             GoRouter.of(context).go('/home');
 

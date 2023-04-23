@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
       }
     } catch (error) {
       if(_postPagingController != null) {
-        _profilePagingController.error = error;
+        // _profilePagingController.error = error;
       }
     }
   }
@@ -531,7 +531,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                 .image,
                             // action1Text:
                             //     "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
-                            action2Text: 'All Profiles',
+                            action1Text: 'All Profiles',
                             // action1OnPressed: () async {
                               // if (theItem.userId != null) {
                               //   cancelHomeScreenTimers();
@@ -544,7 +544,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               //   });
                               // }
                             // },
-                            action2OnPressed: () async {
+                            action1OnPressed: () async {
                               cancelHomeScreenTimers();
                               await analyticsController?.sendAnalyticsEvent(
                                   'view-all-profiles-pressed', {

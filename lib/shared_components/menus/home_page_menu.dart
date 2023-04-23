@@ -69,13 +69,22 @@ class _HomePageMenuState extends State<HomePageMenu> {
         //   },
         //   icon: const Icon(Icons.inbox),
         // ),
-        ActionButton(
-          tooltip: "Timeline",
-          onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.TIMELINE.index);
-          },
-          icon: const Icon(Icons.timeline),
-        ),
+        // ActionButton(
+        //   tooltip: "Timeline",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.TIMELINE.index);
+        //   },
+        //   icon: const Icon(Icons.timeline),
+        // ),
+        // ActionButton(
+        //   tooltip: "Profiles",
+        //   onPressed: () {
+        //     GoRouter.of(context).go('/profilesPage');
+        //
+        //     // Navigator.popAndPushNamed(context, '/profilesPage');
+        //   },
+        //   icon: const Icon(Icons.people),
+        // ),
         ActionButton(
           tooltip: "Profiles",
           onPressed: () {
@@ -92,7 +101,7 @@ class _HomePageMenuState extends State<HomePageMenu> {
 
             // Navigator.popAndPushNamed(context, '/postsPage');
           },
-          icon: const Icon(Icons.post_add),
+          icon: const Icon(Icons.timeline),
         ),
         ActionButton(
           tooltip: "My Profile",

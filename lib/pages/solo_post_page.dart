@@ -156,10 +156,10 @@ class _SoloPostPageState extends State<SoloPostPage> {
     _profileLikedByMe = theLikes.amIInThisList;
     _profileLikes = theLikes.list;
 
-    var isUncomment = false;
-    var commentResponse = await updateComments(context, "SUCCESS", false);
-    _alertSnackbar.showSuccessAlert(
-        "That ${isUncomment == true ? "Uncomment" : "Comment"} ", context);
+    // var isUncomment = false;
+    // var commentResponse = await updateComments(context, "SUCCESS", false);
+    // _alertSnackbar.showSuccessAlert(
+    //     "That ${isUncomment == true ? "Uncomment" : "Comment"} ", context);
 
     // if (commentResponse != "SUCCESS") {
     //   _alertSnackbar.showErrorAlert(

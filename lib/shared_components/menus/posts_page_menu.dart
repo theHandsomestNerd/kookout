@@ -48,28 +48,28 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           },
           icon: const Icon(Icons.settings),
         ),
-        ActionButton(
-          tooltip: "Album",
-          onPressed: () {
-            GoRouter.of(context).go('/settings');
-
-            // Navigator.popAndPushNamed(context, '/settings');
-          },
-          icon: const Icon(Icons.photo_album),
-        ),
-        ActionButton(
-          tooltip: "My Posts",
-          onPressed: () {
-            GoRouter.of(context).go('/myProfile');
-
-            // Navigator.pushNamed(context, '/myProfile');
-          },
-          icon: profileImage != null
-              ? CircleAvatar(
-                  backgroundImage: SanityImageBuilder.imageProviderFor(sanityImage: profileImage,showDefaultImage: true).image,
-                )
-              : const Icon(Icons.add),
-        ),
+        // ActionButton(
+        //   tooltip: "Album",
+        //   onPressed: () {
+        //     GoRouter.of(context).go('/settings');
+        //
+        //     // Navigator.popAndPushNamed(context, '/settings');
+        //   },
+        //   icon: const Icon(Icons.photo_album),
+        // ),
+        // ActionButton(
+        //   tooltip: "My Posts",
+        //   onPressed: () {
+        //     GoRouter.of(context).go('/myProfile');
+        //
+        //     // Navigator.pushNamed(context, '/myProfile');
+        //   },
+        //   icon: profileImage != null
+        //       ? CircleAvatar(
+        //           backgroundImage: SanityImageBuilder.imageProviderFor(sanityImage: profileImage,showDefaultImage: true).image,
+        //         )
+        //       : const Icon(Icons.add),
+        // ),
         ActionButton(
           tooltip: "Posts",
           onPressed: () {

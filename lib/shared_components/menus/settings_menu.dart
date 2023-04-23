@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../wrappers/expanding_fab.dart';
 enum SettingsMenuOptions {
   EDIT_PROFILE,
-  BLOCKS,
   TIMELINE,
+  BLOCKS,
   PEOPLE,
 }
 class SettingsPageMenu extends StatefulWidget {
@@ -27,34 +27,34 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
             tooltip: "Logout",
             onPressed: () {
               GoRouter.of(context).go('/logout');
-
-              // Navigator.popAndPushNamed(context, '/logout');
             },
             icon: const Icon(Icons.logout),
           ),
         ActionButton(
+          tooltip: "Edit Profile",
           onPressed: () {
             widget.updateMenu(SettingsMenuOptions.EDIT_PROFILE.index);
           },
           icon: const Icon(Icons.edit),
         ),
         ActionButton(
-          onPressed: () {
-            widget.updateMenu(SettingsMenuOptions.BLOCKS.index);
-          },
-          icon: const Icon(Icons.block),
-        ),
-        ActionButton(
+          tooltip: "Timeline",
           onPressed: () {
             widget.updateMenu(SettingsMenuOptions.TIMELINE.index);
           },
           icon: const Icon(Icons.timeline),
         ),
         ActionButton(
+          tooltip: "Blocked Users",
+          onPressed: () {
+            widget.updateMenu(SettingsMenuOptions.BLOCKS.index);
+          },
+          icon: const Icon(Icons.block),
+        ),
+        ActionButton(
+          tooltip: "Home",
           onPressed: () {
             GoRouter.of(context).go('/home');
-
-            // Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

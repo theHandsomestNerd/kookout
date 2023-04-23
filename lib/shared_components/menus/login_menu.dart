@@ -1,4 +1,5 @@
 import 'package:cookowt/models/app_user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,12 +17,12 @@ class LoginMenu extends StatefulWidget {
 }
 
 class _LoginMenuState extends State<LoginMenu> {
-  AppUser? myAppUser;
+  User? myAppUser;
 
   @override
   didChangeDependencies() async {
     super.didChangeDependencies();
-    myAppUser = AuthInherited.of(context)?.authController?.myAppUser;
+    myAppUser = FirebaseAuth.instance.currentUser;
     setState(() {});
   }
 
@@ -65,7 +66,7 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Login",
             onPressed: () {
-              GoRouter.of(context).go('/');
+              GoRouter.of(context).go('/login');
 
               // Navigator.popAndPushNamed(context, '/');
             },
