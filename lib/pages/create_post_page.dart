@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
@@ -169,7 +170,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 } else if (status == "FAIL") {
                   await sendError();
                 }
-                Navigator.popAndPushNamed(context, '/postsPage');
+                GoRouter.of(context).go('/postsPage');
+
+                // Navigator.popAndPushNamed(context, '/postsPage');
               },
               text: "Post",
             )

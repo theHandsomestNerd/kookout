@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 import '../../models/app_user.dart';
@@ -252,10 +253,12 @@ class _EditProfileTabState extends State<EditProfileTab> {
     }
     _alertSnackbar.showSuccessAlert(
         "Profile Updated. Now get out there in crowd.", context);
-    Navigator.pushNamed(
-      context,
-      '/home',
-    );
+    // Navigator.pushNamed(
+    //   context,
+    //   '/home',
+    // );
+    GoRouter.of(context).go('/home');
+
   }
 
   Height? _height;

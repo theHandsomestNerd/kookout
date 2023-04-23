@@ -45,11 +45,11 @@ class AppOptions {
   /// [AppOptions
   ///] instance, for example when data is sent back from a
   /// [MethodChannel].
-  AppOptions.fromPigeon(PigeonAppOptionsoptions)
-      : authBaseUrl = PigeonAppOptionsoptions.authBaseUrl,
-        blankUrl = PigeonAppOptionsoptions.blankUrl,
-        sanityDB = PigeonAppOptionsoptions.sanityDB,
-        sanityProjectID = PigeonAppOptionsoptions.sanityProjectID;
+  AppOptions.fromPigeon(pigeonAppOptionsOptions)
+      : authBaseUrl = pigeonAppOptionsOptions.authBaseUrl,
+        blankUrl = pigeonAppOptionsOptions.blankUrl,
+        sanityDB = pigeonAppOptionsOptions.sanityDB,
+        sanityProjectID = pigeonAppOptionsOptions.sanityProjectID;
 
   /// An API key used for authenticating requests from your app to Google
   /// servers.

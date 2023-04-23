@@ -1,6 +1,7 @@
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
@@ -79,7 +80,8 @@ class _LogoutPageState extends State<LogoutPage> {
                     AnalyticsLoadingButton(
                       action: (innerContext) async {
                         await FirebaseAuth.instance.signOut().then((x) {
-                          Navigator.popUntil(innerContext, ModalRoute.withName('/'));
+                          GoRouter.of(context).go('/');
+
                         });
                       },
                       analyticsEventName: 'logout-page-logout-press',

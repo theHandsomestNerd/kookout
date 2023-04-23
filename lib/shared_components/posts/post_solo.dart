@@ -5,6 +5,7 @@ import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/wrappers/author_and_text.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 import '../../models/post.dart';
@@ -87,7 +88,9 @@ class _PostSoloState extends State<PostSolo> {
   }
 
   commentOnThisPost(String? postId) {
-    Navigator.pushNamed(context, '/profile', arguments: {"id": postId});
+    GoRouter.of(context).go('/profile/${postId}');
+
+    // Navigator.pushNamed(context, '/profile', arguments: {"id": postId});
   }
 
   // This widget is the root of your application.
@@ -143,8 +146,10 @@ class _PostSoloState extends State<PostSolo> {
                       }
                     },
                     action2OnPressed: () async {
-                      Navigator.pushNamed(context, '/post',
-                          arguments: {"id": widget.post.id});
+                      GoRouter.of(context).go('/post/${widget.post.id}');
+
+                      // Navigator.pushNamed(context, '/post',
+                      //     arguments: {"id": widget.post.id});
                     },
                     image: SanityImageBuilder.imageProviderFor(
                             sanityImage: widget.post.mainImage,

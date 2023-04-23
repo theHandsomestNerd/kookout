@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../wrappers/expanding_fab.dart';
 enum SettingsMenuOptions {
@@ -25,7 +26,9 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
           ActionButton(
             tooltip: "Logout",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/logout');
+              GoRouter.of(context).go('/logout');
+
+              // Navigator.popAndPushNamed(context, '/logout');
             },
             icon: const Icon(Icons.logout),
           ),
@@ -49,7 +52,9 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/home');
+            GoRouter.of(context).go('/home');
+
+            // Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

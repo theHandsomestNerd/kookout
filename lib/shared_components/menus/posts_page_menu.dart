@@ -1,6 +1,7 @@
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 
@@ -41,21 +42,27 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
         ActionButton(
           tooltip: "Settings",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/settings');
+            GoRouter.of(context).go('/settings');
+
+            // Navigator.popAndPushNamed(context, '/settings');
           },
           icon: const Icon(Icons.settings),
         ),
         ActionButton(
           tooltip: "Album",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/settings');
+            GoRouter.of(context).go('/settings');
+
+            // Navigator.popAndPushNamed(context, '/settings');
           },
           icon: const Icon(Icons.photo_album),
         ),
         ActionButton(
           tooltip: "My Posts",
           onPressed: () {
-            Navigator.pushNamed(context, '/myProfile');
+            GoRouter.of(context).go('/myProfile');
+
+            // Navigator.pushNamed(context, '/myProfile');
           },
           icon: profileImage != null
               ? CircleAvatar(
@@ -66,20 +73,26 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
         ActionButton(
           tooltip: "Posts",
           onPressed: () {
-            Navigator.pushNamed(context, '/postsPage');
+            GoRouter.of(context).go('/postsPage');
+
+            // Navigator.pushNamed(context, '/postsPage');
           },
           icon: const Icon(Icons.timeline),
         ),
         ActionButton(
           tooltip: "Add Post",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/createPostsPage');
+            GoRouter.of(context).go('/createPostsPage');
+
+            // Navigator.popAndPushNamed(context, '/createPostsPage');
           },
           icon: const Icon(Icons.post_add),
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/home');
+            GoRouter.of(context).go('/home');
+
+            // Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

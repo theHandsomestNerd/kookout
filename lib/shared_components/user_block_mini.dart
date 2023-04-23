@@ -3,18 +3,19 @@ import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 class UserBlockMini extends StatelessWidget {
   const UserBlockMini({
     super.key,
     this.user,
-    
+
 
   });
 
   final AppUser? user;
-  
+
 
 
   @override
@@ -37,7 +38,9 @@ class UserBlockMini extends StatelessWidget {
                             flex: 4,
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/myProfile');
+                        GoRouter.of(context).go('/myProfile');
+
+                        // Navigator.pushNamed(context, '/myProfile');
                       },
                       child: Flex(
                         direction: Axis.horizontal,
@@ -68,7 +71,9 @@ class UserBlockMini extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, '/settings');
+                            GoRouter.of(context).go('/settings');
+
+                            // Navigator.popAndPushNamed(context, '/settings');
                           },
                           icon: const Icon(
                             Icons.settings,

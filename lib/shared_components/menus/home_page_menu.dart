@@ -1,6 +1,7 @@
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 
@@ -48,24 +49,26 @@ class _HomePageMenuState extends State<HomePageMenu> {
         ActionButton(
           tooltip: "Settings",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/settings');
+            GoRouter.of(context).go('/settings');
+
+            // Navigator.popAndPushNamed(context, '/settings');
           },
           icon: const Icon(Icons.settings),
         ),
-        ActionButton(
-          tooltip: "Album",
-          onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
-          },
-          icon: const Icon(Icons.photo_album),
-        ),
-        ActionButton(
-          tooltip: "Inbox",
-          onPressed: () {
-            widget.updateMenu(ProfileMenuOptions.LIKES_AND_FOLLOWS.index);
-          },
-          icon: const Icon(Icons.inbox),
-        ),
+        // ActionButton(
+        //   tooltip: "Album",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.ALBUMS.index);
+        //   },
+        //   icon: const Icon(Icons.photo_album),
+        // ),
+        // ActionButton(
+        //   tooltip: "Inbox",
+        //   onPressed: () {
+        //     widget.updateMenu(ProfileMenuOptions.LIKES_AND_FOLLOWS.index);
+        //   },
+        //   icon: const Icon(Icons.inbox),
+        // ),
         ActionButton(
           tooltip: "Timeline",
           onPressed: () {
@@ -76,21 +79,27 @@ class _HomePageMenuState extends State<HomePageMenu> {
         ActionButton(
           tooltip: "Profiles",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/profilesPage');
+            GoRouter.of(context).go('/profilesPage');
+
+            // Navigator.popAndPushNamed(context, '/profilesPage');
           },
           icon: const Icon(Icons.people),
         ),
         ActionButton(
           tooltip: "Posts",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/postsPage');
+            GoRouter.of(context).go('/postsPage');
+
+            // Navigator.popAndPushNamed(context, '/postsPage');
           },
           icon: const Icon(Icons.post_add),
         ),
         ActionButton(
           tooltip: "My Profile",
           onPressed: () {
-            Navigator.pushNamed(context, '/myProfile');
+            GoRouter.of(context).go('/myProfile');
+
+            // Navigator.pushNamed(context, '/myProfile');
           },
           icon: CircleAvatar(
                   backgroundImage: SanityImageBuilder.imageProviderFor(sanityImage: profileImage,showDefaultImage: true).image,

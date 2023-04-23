@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../wrappers/expanding_fab.dart';
 enum AppMenuOptions {
@@ -54,7 +55,9 @@ class _AppMenuState extends State<AppMenu> {
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/home');
+            GoRouter.of(context).go('/home');
+
+            // Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

@@ -15,15 +15,17 @@ import 'package:cookowt/pages/register_page.dart';
 import 'package:cookowt/pages/settings_page.dart';
 import 'package:cookowt/pages/solo_post_page.dart';
 import 'package:cookowt/pages/solo_profile_page.dart';
+import 'package:cookowt/pages/splash_screen.dart';
 import 'package:cookowt/shared_components/bug_reporter/bug_reporter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meta_seo/meta_seo.dart';
 
 import 'config/firebase_options.dart';
-import 'models/app_user.dart';
 import 'models/controllers/auth_inherited.dart';
 import 'pages/login_page.dart';
 
@@ -32,6 +34,8 @@ import 'pages/login_page.dart';
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
+  usePathUrlStrategy();
+
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   // Ideal time to initialize
@@ -64,6 +68,104 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late GoRouter router = GoRouter(
+    redirect: (BuildContext context, GoRouterState state) {
+      // print("GO_ROUTER ${state.location} ${state.subloc}");
+      if (state.subloc == '/register') {
+        return null;
+      }
+
+      // if the user is not logged in, they need to login
+      final loggedIn = FirebaseAuth.instance.currentUser != null;
+      final loggingIn = state.subloc == '/login';
+
+      print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
+
+      if (!loggedIn) return loggingIn ? null : '/login';
+
+      // if the user is logged in but still on the login page, send them to
+      // the home page
+      if (loggingIn) return '/home';
+
+      // no need to redirect at all
+      return null;
+    },
+    routes: <GoRoute>[
+      GoRoute(
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginPage();
+        },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginPage();
+        },
+      ),
+      GoRoute(
+        path: '/logout',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LogoutPage();
+        },
+      ),
+      GoRoute(
+        path: '/profilesPage',
+        builder: (BuildContext context, GoRouterState state) {
+          return BugReporter(child: const ProfilesPage());
+        },
+      ),
+      GoRoute(
+        path: '/splash',
+        builder: (BuildContext context, GoRouterState state) {
+          return BugReporter(child: const SplashPage());
+        },
+      ),
+      GoRoute(
+          path: '/home',
+          builder: (BuildContext context, GoRouterState state) =>
+              BugReporter(child: HomePage())),
+      GoRoute(
+          path: '/postsPage',
+          builder: (BuildContext context, GoRouterState state) =>
+              BugReporter(child: PostsPage())),
+      GoRoute(
+          path: '/createPostsPage',
+          builder: (BuildContext context, GoRouterState state) =>
+              BugReporter(child: CreatePostPage())),
+      GoRoute(
+          path: '/register',
+          builder: (BuildContext context, GoRouterState state) =>
+              BugReporter(child: RegisterPage())),
+      GoRoute(
+          path: '/settings',
+          builder: (BuildContext context, GoRouterState state) =>
+              BugReporter(child: SettingsPage())),
+      GoRoute(
+          path: '/post/:id',
+          builder: (BuildContext context, GoRouterState state) => BugReporter(
+              child: SoloPostPage(
+                thisPostId: state.params["id"],
+              ))),
+      GoRoute(
+          path: '/profile/:id',
+          builder: (BuildContext context, GoRouterState state) {
+            return BugReporter(
+                child: SoloProfilePage(
+                  id: state.params["id"]!,
+                ));
+          }),
+    GoRoute(
+          path: '/myProfile',
+          builder: (BuildContext context, GoRouterState state) {
+            return BugReporter(
+                child: SoloProfilePage(
+                  id: FirebaseAuth.instance.currentUser?.uid ?? "",
+                ));
+          }),
+    ],
+  );
+
   late AuthController authController = AuthController.init();
   late ChatController chatController = ChatController.init();
   late PostController postController = PostController.init();
@@ -72,7 +174,7 @@ class _MyAppState extends State<MyApp> {
 
   // var myExtProfile = null;
 
-  bool isUserLoggedIn = false;
+  static bool isUserLoggedIn = false;
 
   String appName = "";
   String packageName = "";
@@ -98,6 +200,8 @@ class _MyAppState extends State<MyApp> {
         analyticsController.setUserId(user.uid);
       }
     });
+
+
   }
 
   @override
@@ -151,110 +255,113 @@ class _MyAppState extends State<MyApp> {
       postController: postController,
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
-      child: MaterialApp(
+      child: MaterialApp.router(
+        routeInformationProvider: router.routeInformationProvider,
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
         // key: ObjectKey(isUserLoggedIn),
-        navigatorObservers: <NavigatorObserver>[routeObserver],
+        // navigatorObservers: <NavigatorObserver>[routeObserver],
         title: 'Cookowt',
-        routes: {
-          '/home': (context) {
-            return const HomePage();
-          },
-          '/postsPage': (context) => const PostsPage(),
-          '/createPostsPage': (context) =>
-              const BugReporter(child: CreatePostPage()),
-          '/register': (context) => const RegisterPage(),
-          '/': (context) {
-            if (kIsWeb) {
-              // Define MetaSEO object
-              MetaSEO meta = MetaSEO();
-              // add meta seo data for web app as you want
-              var title = 'Cookowt-The Invite Only Network';
-              var image =
-                  "https://cdn.sanity.io/images/dhhk6mar/production/ae5b21a6e5982153e74ca8a815b90f92368ac9fa-3125x1875.png";
-              var description =
-                  'Cookowt is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookowt. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookowtinvitee';
-              meta.ogTitle(ogTitle: title);
-              meta.description(description: description);
-              meta.keywords(keywords: 'social media, black twitter, memes');
-              meta.twitterCard(twitterCard: TwitterCard.summaryLargeImage);
-              meta.author(author: "The Handsomest Nerd");
-              meta.twitterDescription(twitterDescription: description);
-              meta.twitterImage(twitterImage: image);
-              meta.twitterTitle(twitterTitle: title);
-              meta.ogImage(ogImage: image);
-            }
-            return const LoginPage();
-          },
-          // '/editProfile': (context) => const EditProfilePage(),
-          '/logout': (context) => const LogoutPage(),
-          '/profilesPage': (context) => const ProfilesPage(),
-          '/profile': (context) {
-            var arguments = (ModalRoute.of(context)?.settings.arguments ??
-                <String, dynamic>{}) as Map;
-
-            String theId;
-            if (arguments['id'] != null) {
-              theId = arguments['id'];
-            } else {
-              theId = authController.myAppUser?.userId.toString() ?? "";
-            }
-
-            AppUser? thisProfile;
-            for (var element in chatController.profileList) {
-              if (element.userId == theId) {
-                thisProfile = element;
-              }
-            }
-
-            return SoloProfilePage(
-              thisProfile: thisProfile,
-              key: ObjectKey(arguments["id"]),
-              id: theId,
-            );
-          },
-          '/post': (context) {
-            var arguments = (ModalRoute.of(context)?.settings.arguments ??
-                <String, dynamic>{}) as Map;
-
-            String? theId;
-            if (arguments['id'] != null) {
-              theId = arguments['id'];
-            }
-
-            // var thisPost;
-            // if (theId != null) {
-            //    postController.getPost(theId).then((value){
-            //     print("Post retrieved before ");
-
-            return SoloPostPage(
-              thisPostId: theId,
-            );
-
-            // }
-            // return Placeholder();
-          },
-          '/myProfile': (context) {
-            String theId = authController.myAppUser?.userId.toString() ?? "";
-            AppUser? thisProfile;
-            for (var element in chatController.profileList) {
-              if (element.userId == theId) {
-                thisProfile = element;
-              }
-            }
-            return SoloProfilePage(
-              thisProfile: thisProfile,
-              id: theId,
-            );
-          },
-          // '/postsPage': (context) {
-          //   return PostsThreadPage(
-          //     drawer: widget.drawer,
-          //   );
-          // },
-          '/settings': (context) {
-            return const SettingsPage();
-          },
-        },
+        // routes: {
+        //   '/home': (context) {
+        //     return const HomePage();
+        //   },
+        //   '/postsPage': (context) => const PostsPage(),
+        //   '/createPostsPage': (context) =>
+        //       const BugReporter(child: CreatePostPage()),
+        //   '/register': (context) => const RegisterPage(),
+        //   '/': (context) {
+        //     if (kIsWeb) {
+        //       // Define MetaSEO object
+        //       MetaSEO meta = MetaSEO();
+        //       // add meta seo data for web app as you want
+        //       var title = 'Cookowt-The Invite Only Network';
+        //       var image =
+        //           "https://cdn.sanity.io/images/dhhk6mar/production/ae5b21a6e5982153e74ca8a815b90f92368ac9fa-3125x1875.png";
+        //       var description =
+        //           'Cookowt is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookowt. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookowtinvitee';
+        //       meta.ogTitle(ogTitle: title);
+        //       meta.description(description: description);
+        //       meta.keywords(keywords: 'social media, black twitter, memes');
+        //       meta.twitterCard(twitterCard: TwitterCard.summaryLargeImage);
+        //       meta.author(author: "The Handsomest Nerd");
+        //       meta.twitterDescription(twitterDescription: description);
+        //       meta.twitterImage(twitterImage: image);
+        //       meta.twitterTitle(twitterTitle: title);
+        //       meta.ogImage(ogImage: image);
+        //     }
+        //     return const LoginPage();
+        //   },
+        //   // '/editProfile': (context) => const EditProfilePage(),
+        //   '/logout': (context) => const LogoutPage(),
+        //   '/profilesPage': (context) => const ProfilesPage(),
+        //   '/profile': (context) {
+        //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
+        //         <String, dynamic>{}) as Map;
+        //
+        //     String theId;
+        //     if (arguments['id'] != null) {
+        //       theId = arguments['id'];
+        //     } else {
+        //       theId = authController.myAppUser?.userId.toString() ?? "";
+        //     }
+        //
+        //     AppUser? thisProfile;
+        //     for (var element in chatController.profileList) {
+        //       if (element.userId == theId) {
+        //         thisProfile = element;
+        //       }
+        //     }
+        //
+        //     return SoloProfilePage(
+        //       thisProfile: thisProfile,
+        //       key: ObjectKey(arguments["id"]),
+        //       id: theId,
+        //     );
+        //   },
+        //   '/post': (context) {
+        //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
+        //         <String, dynamic>{}) as Map;
+        //
+        //     String? theId;
+        //     if (arguments['id'] != null) {
+        //       theId = arguments['id'];
+        //     }
+        //
+        //     // var thisPost;
+        //     // if (theId != null) {
+        //     //    postController.getPost(theId).then((value){
+        //     //     print("Post retrieved before ");
+        //
+        //     return SoloPostPage(
+        //       thisPostId: theId,
+        //     );
+        //
+        //     // }
+        //     // return Placeholder();
+        //   },
+        //   '/myProfile': (context) {
+        //     String theId = authController.myAppUser?.userId.toString() ?? "";
+        //     AppUser? thisProfile;
+        //     for (var element in chatController.profileList) {
+        //       if (element.userId == theId) {
+        //         thisProfile = element;
+        //       }
+        //     }
+        //     return SoloProfilePage(
+        //       thisProfile: thisProfile,
+        //       id: theId,
+        //     );
+        //   },
+        //   // '/postsPage': (context) {
+        //   //   return PostsThreadPage(
+        //   //     drawer: widget.drawer,
+        //   //   );
+        //   // },
+        //   '/settings': (context) {
+        //     return const SettingsPage();
+        //   },
+        // },
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.red,

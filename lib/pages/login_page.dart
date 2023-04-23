@@ -8,6 +8,7 @@ import 'package:cookowt/wrappers/text_field_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
@@ -118,7 +119,9 @@ class _LoginPageState extends State<LoginPage> {
 
       _alertSnackbar.showSuccessAlert(
           "${credential.user?.email ?? ""}Logged In", context);
-      Navigator.pushNamed(context, '/home');
+      GoRouter.of(context).go('/home');
+
+      // Navigator.pushNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         if (kDebugMode) {
@@ -199,7 +202,9 @@ class _LoginPageState extends State<LoginPage> {
                                       child: ToolButton(
                                         label: "home",
                                         action: (innerContext) {
-                                          Navigator.pushNamed(innerContext, '/home');
+                                          GoRouter.of(context).go('/home');
+
+                                          // Navigator.pushNamed(innerContext, '/home');
                                         },
                                         color: Colors.black38,
                                         text: 'Home',
@@ -300,8 +305,10 @@ class _LoginPageState extends State<LoginPage> {
                                             "username": _loginUsername
                                           },
                                           action: (innerContext) async {
-                                            Navigator.pushNamed(
-                                                innerContext, '/register');
+                                            GoRouter.of(context).go('/register');
+
+                                            // Navigator.pushNamed(
+                                            //     innerContext, '/register');
                                           },
                                           text: "Register",
                                         ),

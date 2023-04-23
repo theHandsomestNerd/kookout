@@ -1,6 +1,7 @@
 import 'package:cookowt/models/app_user.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../wrappers/card_with_background.dart';
 
@@ -34,8 +35,10 @@ class UserBlockText extends StatelessWidget {
               child: InkWell(
 
               onTap: () {
-                Navigator.pushNamed(context, '/profile',
-                    arguments: {"id": user?.userId});
+                GoRouter.of(context).go('/profile/${user?.userId}');
+
+                // Navigator.pushNamed(context, '/profile',
+                //     arguments: {"id": user?.userId});
               },
                 child: CardWithBackground(
                   height: 67,
@@ -58,8 +61,10 @@ class UserBlockText extends StatelessWidget {
             Flexible(
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/profile',
-                      arguments: {"id": user?.userId});
+                  GoRouter.of(context).go('/profile/${user?.userId}');
+
+                  // Navigator.pushNamed(context, '/profile',
+                  //     arguments: {"id": user?.userId});
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,

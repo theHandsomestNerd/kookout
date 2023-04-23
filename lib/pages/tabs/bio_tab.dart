@@ -6,6 +6,7 @@ import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/shared_components/tool_button.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../models/app_user.dart';
@@ -68,7 +69,9 @@ class _BioTabState extends State<BioTab> {
       if (widget.id == "") {
         await analyticsController?.sendAnalyticsEvent(
             'bio-tab-redirect', {"message": "no-id"}).then((x) {
-          Navigator.popAndPushNamed(context, '/profilesPage');
+          GoRouter.of(context).go('/profilesPage');
+
+          // Navigator.popAndPushNamed(context, '/profilesPage');
         });
       }
     });

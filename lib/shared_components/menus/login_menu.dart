@@ -1,5 +1,6 @@
 import 'package:cookowt/models/app_user.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 import '../../wrappers/expanding_fab.dart';
@@ -34,7 +35,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Logout",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/logout');
+              GoRouter.of(context).go('/logout');
+
+              // Navigator.popAndPushNamed(context, '/logout');
             },
             icon: const Icon(Icons.logout),
           ),
@@ -42,7 +45,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Profiles",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/profilesPage');
+              GoRouter.of(context).go('/profilesPage');
+
+              // Navigator.popAndPushNamed(context, '/profilesPage');
             },
             icon: const Icon(Icons.people),
           ),
@@ -50,7 +55,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Posts",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/postsPage');
+              GoRouter.of(context).go('/postsPage');
+
+              // Navigator.popAndPushNamed(context, '/postsPage');
             },
             icon: const Icon(Icons.post_add),
           ),
@@ -58,7 +65,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Login",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/');
+              GoRouter.of(context).go('/');
+
+              // Navigator.popAndPushNamed(context, '/');
             },
             icon: const Icon(Icons.logout),
           ),
@@ -66,7 +75,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Home",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/home');
+              GoRouter.of(context).go('/home');
+
+              // Navigator.popAndPushNamed(context, '/home');
             },
             icon: const Icon(Icons.home),
           ),
@@ -74,7 +85,9 @@ class _LoginMenuState extends State<LoginMenu> {
           ActionButton(
             tooltip: "Register",
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/register');
+              GoRouter.of(context).go('/register');
+
+              // Navigator.popAndPushNamed(context, '/register');
             },
             icon: const Icon(Icons.app_registration),
           ),

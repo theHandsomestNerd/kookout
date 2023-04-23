@@ -10,6 +10,7 @@ import 'package:cookowt/pages/tabs/likes_tab.dart';
 import 'package:cookowt/wrappers/alerts_snackbar.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/app_user.dart';
 import '../models/comment.dart';
@@ -23,11 +24,11 @@ class SoloProfilePage extends StatefulWidget {
   const SoloProfilePage({
     super.key,
     required this.id,
-    required this.thisProfile,
+    // required this.thisProfile,
   });
 
   final String id;
-  final AppUser? thisProfile;
+  // final AppUser? thisProfile;
 
   @override
   State<SoloProfilePage> createState() => _SoloProfilePageState();
@@ -35,6 +36,8 @@ class SoloProfilePage extends StatefulWidget {
 
 class _SoloProfilePageState extends State<SoloProfilePage> {
   bool _isThisMe = false;
+  AppUser? thisProfile;
+
 
   List<Comment>? _profileComments = [];
 
@@ -50,11 +53,21 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   AuthController? authController;
   ChatController? chatController;
 
-  SoloProfilePage() {
-    if (widget.id == "") {
-      Navigator.popAndPushNamed(context, '/profilesPage');
-    }
-  }
+  // SoloProfilePage() {
+  //   if (widget.id == "") {
+  //     GoRouter.of(context).go('/profilesPage');
+  //
+  //     // Navigator.popAndPushNamed(context, '/profilesPage');
+  //   }
+  // }
+
+  // @override
+  // void initState() {
+  //
+  //
+  //
+  //   super.initState();
+  // }
 
   @override
   didChangeDependencies() async {
@@ -94,6 +107,12 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
     authController = theAuthController;
 
     _isThisMe = widget.id == theAuthController?.myAppUser?.userId;
+    String theId = widget.id;
+    for (var element in (theChatController?.profileList ??[])) {
+      if (element.userId == theId) {
+        thisProfile = element;
+      }
+    }
 
     setState(() {});
     // if (kDebugMode) {
@@ -105,7 +124,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
   //   if (_isThisMe == true) {
   //     return "This is you ${authController?.myAppUser?.displayName ?? ""}";
   //   }
-  //   return widget.thisProfile?.displayName;
+  //   return thisProfile?.displayName;
   // }
 
   Future<ChatApiGetProfileLikesResponse?> _getProfileLikes() async {
@@ -159,7 +178,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             _selectedIndex = 1;
           });
         },
-        thisProfile: widget.thisProfile,
+        thisProfile: thisProfile,
         profileLikes: _profileLikes,
         id: widget.id,
         updateBlocks: (innercontext, String blockResponse) async {
@@ -176,8 +195,9 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             await chatController?.updateMyBlocks();
             _alertSnackbar.showSuccessAlert(
                 "You blocked this user. Ew!", innercontext);
+            GoRouter.of(context).go('/profilesPage');
 
-            Navigator.popAndPushNamed(innercontext, '/profilesPage');
+            // Navigator.popAndPushNamed(innercontext, '/profilesPage');
           }
         },
         profileFollows: _profileFollows,
@@ -260,7 +280,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         key: ObjectKey(_profileComments),
         id: widget.id,
         profileComments: _profileComments,
-        thisProfile: widget.thisProfile,
+        thisProfile: thisProfile,
         updateComments: (innerContext, String updateCommentResponse) async {
           if (updateCommentResponse != "SUCCESS") {
             _alertSnackbar.showErrorAlert(
@@ -277,14 +297,14 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
         isThisMe: _isThisMe,
       ),
       FollowsTab(
-        thisProfile: widget.thisProfile,
+        thisProfile: thisProfile,
         isThisMe: _isThisMe,
         profileFollowedByMe: _profileFollowedByMe,
         profileFollows: _profileFollows,
         id: widget.id,
       ),
       LikesTab(
-        thisProfile: widget.thisProfile,
+        thisProfile: thisProfile,
         isThisMe: _isThisMe,
         profileLikedByMe: _profileLikedByMe,
         profileLikes: _profileLikes,

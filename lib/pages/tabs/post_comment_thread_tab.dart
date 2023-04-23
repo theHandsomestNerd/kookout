@@ -6,6 +6,7 @@ import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/shared_components/tool_button.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/app_user.dart';
 import '../../models/comment.dart';
@@ -68,7 +69,9 @@ class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
         BuildContext theContext = context;
         await analyticsController?.sendAnalyticsEvent(
             'bio-tab-redirect', {"message": "no-id"}).then((x) {
-          Navigator.popAndPushNamed(theContext, '/profilesPage');
+          GoRouter.of(context).go('/profilesPage');
+
+          // Navigator.popAndPushNamed(theContext, '/profilesPage');
         });
       }
     });

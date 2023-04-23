@@ -5,6 +5,7 @@ import 'package:cookowt/wrappers/text_field_wrapped.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/controllers/analytics_controller.dart';
 import '../models/controllers/auth_inherited.dart';
@@ -107,7 +108,9 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         isLoading = true;
       });
-      Navigator.popAndPushNamed(context, '/settings');
+      GoRouter.of(context).go('/settings');
+
+      // Navigator.popAndPushNamed(context, '/settings');
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -173,7 +176,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: ToolButton(
                                     label: "home",
                                     action: (innerContext) {
-                                      Navigator.pushNamed(innerContext, '/home');
+                                      GoRouter.of(context).go('/home');
+
+                                      // Navigator.pushNamed(innerContext, '/home');
                                     },
                                     color: Colors.black38,
                                     text: 'Home',

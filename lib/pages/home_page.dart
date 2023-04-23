@@ -11,6 +11,7 @@ import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:cookowt/wrappers/circular_progress_indicator_with_message.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../models/app_user.dart';
@@ -75,7 +76,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
         }
       }
     } catch (error) {
-      _profilePagingController.error = error;
+      if(_postPagingController != null) {
+        _profilePagingController.error = error;
+      }
     }
   }
 
@@ -97,6 +100,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
         }
       }
     } catch (error) {
+      if(_postPagingController != null)
       _postPagingController.error = error;
     }
   }
@@ -182,53 +186,53 @@ class _HomePageState extends State<HomePage> with RouteAware {
       }
     });
 
-    _profilePageController.addListener(() {
-      if (_profilePagingController.itemList != null) {
-        isPositionLoading = false;
-        setState(() {});
-      }
-      var profileIndex = _profilePageController.page?.round() ?? 0;
-      if (_profilePagingController.itemList != null &&
-          _profilePageController.page?.round() == profileIndex) {
-        // print(
-        //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
-        // highlightedProfile = _profilePagingController.itemList![profileIndex];
-        SanityPosition? foundLastPosition;
-        //get the ext profile
-        for (var element in positions) {
-          // print(
-          //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
-          if (element.userRef?.userId ==
-              _profilePagingController.itemList![profileIndex].userId) {
-            foundLastPosition = element;
-          }
-        }
-        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
-            foundLastPosition == null &&
-            !isPositionLoading) {
-          setState(() {
-            isPositionLoading = true;
-          });
-          client
-              ?.getLastPosition(
-                  _profilePagingController.itemList![profileIndex].userId ?? "")
-              .then((thePosition) {
-            if (thePosition != null) {
-              print("remove user position $foundLastPosition");
-              print("got user position $thePosition");
-              positions.remove(foundLastPosition);
-              positions.add(thePosition);
-            }
-
-            // highlightedExtProfile = theProfile;
-            setState(() {
-              isPositionLoading = false;
-            });
-            // setState(() {});
-          });
-        }
-      }
-    });
+    // _profilePageController.addListener(() {
+    //   if (_profilePagingController.itemList != null) {
+    //     isPositionLoading = false;
+    //     setState(() {});
+    //   }
+    //   var profileIndex = _profilePageController.page?.round() ?? 0;
+    //   if (_profilePagingController.itemList != null &&
+    //       _profilePageController.page?.round() == profileIndex) {
+    //     // print(
+    //     //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
+    //     // highlightedProfile = _profilePagingController.itemList![profileIndex];
+    //     SanityPosition? foundLastPosition;
+    //     //get the ext profile
+    //     for (var element in positions) {
+    //       // print(
+    //       //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
+    //       if (element.userRef?.userId ==
+    //           _profilePagingController.itemList![profileIndex].userId) {
+    //         foundLastPosition = element;
+    //       }
+    //     }
+    //     if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+    //         foundLastPosition == null &&
+    //         !isPositionLoading) {
+    //       setState(() {
+    //         isPositionLoading = true;
+    //       });
+    //       client
+    //           ?.getLastPosition(
+    //               _profilePagingController.itemList![profileIndex].userId ?? "")
+    //           .then((thePosition) {
+    //         if (thePosition != null) {
+    //           print("remove user position $foundLastPosition");
+    //           print("got user position $thePosition");
+    //           positions.remove(foundLastPosition);
+    //           positions.add(thePosition);
+    //         }
+    //
+    //         // highlightedExtProfile = theProfile;
+    //         setState(() {
+    //           isPositionLoading = false;
+    //         });
+    //         // setState(() {});
+    //       });
+    //     }
+    //   }
+    // });
 
     super.initState();
   }
@@ -422,8 +426,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             'view-profile-while-highlighted-pressed', {
                           "highlightedUserId": theItem.userId
                         }).then((x) {
-                          Navigator.pushNamed(context, '/profile',
-                              arguments: {"id": theItem.userId});
+                          GoRouter.of(context).go('/profile/${theItem.userId}');
+
+                          // Navigator.pushNamed(context, '/profile',
+                          //     arguments: {"id": theItem.userId});
                         });
                       }
                     },
@@ -435,7 +441,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             'view-all-profiles-pressed', {
                           "highlightedUserId": theItem.userId
                         }).then((x) {
-                          Navigator.pushNamed(context, '/profilesPage');
+                          GoRouter.of(context).go('/profilesPage');
+
+                          // Navigator.pushNamed(context, '/profilesPage');
                         });
                       }
 
@@ -542,7 +550,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   'view-all-profiles-pressed', {
                                 "highlightedUserId": theItem.userId
                               }).then((x) {
-                                Navigator.pushNamed(context, '/profilesPage');
+                                GoRouter.of(context).go('/profilesPage');
+
+                                // Navigator.pushNamed(context, '/profilesPage');
                               });
                             },
                           ),
@@ -596,8 +606,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                 'view-post-while-highlighted-pressed',
                                 {"highlightedPostId": theItem.id}).then((x) {
                               if (theItem.id != null) {
-                                Navigator.pushNamed(context, '/post',
-                                    arguments: {"id": theItem.id});
+                                GoRouter.of(context).go('/post/${theItem.id}');
+
+                                // Navigator.pushNamed(context, '/post',
+                                //     arguments: {"id": theItem.id});
                               }
                             });
                           },
@@ -609,7 +621,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               await analyticsController?.sendAnalyticsEvent(
                                   'view-all-posts-while-highlighted-pressed',
                                   {"highlightedPostId": theItem.id}).then((x) {
-                                Navigator.pushNamed(context, '/postsPage');
+                                GoRouter.of(context).go('/postsPage');
+
+                                // Navigator.pushNamed(context, '/postsPage');
                               });
                             }
 
@@ -634,7 +648,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               await analyticsController?.sendAnalyticsEvent(
                                   'view-all-posts-while-highlighted-pressed',
                                   {"highlightedPostId": theItem.id}).then((x) {
-                                Navigator.pushNamed(context, '/postsPage');
+                                GoRouter.of(context).go('/postsPage');
+
+                                // Navigator.pushNamed(context, '/postsPage');
                               });
                             },
                             // action2Text: 'Go to post',

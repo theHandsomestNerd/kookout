@@ -139,7 +139,7 @@ class ImageUploaderImpl extends ImageUploader {
   Future<void> _cropImage(context) async {
     if (file != null && file?.path != null) {
       final theCroppedFile = await ImageCropper().cropImage(
-        sourcePath: file!.path!,
+        sourcePath: file!.path,
         compressFormat: ImageCompressFormat.jpg,
         compressQuality: 100,
         uiSettings: [
@@ -246,7 +246,7 @@ class ImageUploaderImpl extends ImageUploader {
           maxWidth: 0.8 * screenWidth,
           maxHeight: 0.7 * screenHeight,
         ),
-        child: kIsWeb ? Image.network(path) : Image.file(File(path!)),
+        child: kIsWeb ? Image.network(path) : Image.file(File(path)),
       );
     } else {
       return const SizedBox.shrink();

@@ -161,11 +161,11 @@ class DefaultConfig {
                   int.parse(rawData['homepagePostDurationSecs']);
             }
 
-            print("Config from remote: $authBaseUrl");
+            // print("Config from remote: $authBaseUrl");
             var theClient = ApiClient(rawData['authBaseUrl']);
             _apiClient = theClient;
             var healthResponse = await theClient.healthCheck();
-            print("THe health response $healthResponse");
+            // print("THe health response $healthResponse");
             apiVersion = healthResponse['apiVersion'];
             apiSanityDB = healthResponse['sanityDB'];
             apiStatus = healthResponse['status'];

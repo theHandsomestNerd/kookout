@@ -2,6 +2,7 @@ import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/app_user.dart';
 import '../../models/controllers/auth_inherited.dart';
@@ -39,8 +40,11 @@ class _ProfileSoloState extends State<ProfileSolo> {
 
   _gotoProfile() async {
     analyticsController?.sendAnalyticsEvent('profile-clicked', {"clicker": myUserId, "clicked": widget.profile.userId});
-    Navigator.pushNamed(context, '/profile',
-        arguments: {"id": widget.profile.userId});
+
+    GoRouter.of(context).go('/profile/${widget.profile.userId}');
+
+    // Navigator.pushNamed(context, '/profile',
+    //     arguments: {"id": widget.profile.userId});
   }
 
   // This widget is the root of your application.

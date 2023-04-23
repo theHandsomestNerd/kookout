@@ -11,7 +11,7 @@ import 'package:http_parser/http_parser.dart';
 
 import '../app_user.dart';
 
-class AuthController {
+class AuthController with ChangeNotifier {
   final AlertSnackbar _alertSnackbar = AlertSnackbar();
 
   String authBaseUrl = "";

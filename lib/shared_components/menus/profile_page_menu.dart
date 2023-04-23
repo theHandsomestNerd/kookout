@@ -2,6 +2,7 @@ import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 
@@ -43,7 +44,9 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         ActionButton(
           tooltip: "Settings",
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/settings');
+            GoRouter.of(context).go('/settings');
+
+            // Navigator.popAndPushNamed(context, '/settings');
           },
           icon: const Icon(Icons.settings),
         ),
@@ -80,18 +83,21 @@ class _ProfilePageMenuState extends State<ProfilePageMenu> {
         ActionButton(
           tooltip: "My Profile",
           onPressed: () {
-            Navigator.pushNamed(context, '/myProfile');
+            GoRouter.of(context).go('/myProfile');
+
+            // Navigator.pushNamed(context, '/myProfile');
           },
           icon: CircleAvatar(
             backgroundImage: SanityImageBuilder.imageProviderFor(
-                    sanityImage: profileImage,
-                    showDefaultImage: true)
+                    sanityImage: profileImage, showDefaultImage: true)
                 .image,
           ),
         ),
         ActionButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/home');
+            GoRouter.of(context).go('/home');
+
+            // Navigator.popAndPushNamed(context, '/home');
           },
           icon: const Icon(Icons.home),
         ),

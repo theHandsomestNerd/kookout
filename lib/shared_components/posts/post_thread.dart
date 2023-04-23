@@ -5,6 +5,7 @@ import 'package:cookowt/models/post.dart';
 import 'package:cookowt/shared_components/posts/post_solo.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../models/controllers/auth_inherited.dart';
@@ -136,10 +137,12 @@ class _PostThreadState extends State<PostThread>{
                                 analyticsEventName: 'add-the-very-first-post',
                                 text: "Add a Post",
                                 action: (context) async {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/createPostsPage',
-                                  );
+                                  GoRouter.of(context).go('/createPostsPage');
+
+                                  // Navigator.pushNamed(
+                                  //   context,
+                                  //   '/createPostsPage',
+                                  // );
                                 },
                               )
                             ],
