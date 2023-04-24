@@ -186,53 +186,53 @@ class _HomePageState extends State<HomePage> with RouteAware {
       }
     });
 
-    // _profilePageController.addListener(() {
-    //   if (_profilePagingController.itemList != null) {
-    //     isPositionLoading = false;
-    //     setState(() {});
-    //   }
-    //   var profileIndex = _profilePageController.page?.round() ?? 0;
-    //   if (_profilePagingController.itemList != null &&
-    //       _profilePageController.page?.round() == profileIndex) {
-    //     // print(
-    //     //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
-    //     // highlightedProfile = _profilePagingController.itemList![profileIndex];
-    //     SanityPosition? foundLastPosition;
-    //     //get the ext profile
-    //     for (var element in positions) {
-    //       // print(
-    //       //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
-    //       if (element.userRef?.userId ==
-    //           _profilePagingController.itemList![profileIndex].userId) {
-    //         foundLastPosition = element;
-    //       }
-    //     }
-    //     if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
-    //         foundLastPosition == null &&
-    //         !isPositionLoading) {
-    //       setState(() {
-    //         isPositionLoading = true;
-    //       });
-    //       client
-    //           ?.getLastPosition(
-    //               _profilePagingController.itemList![profileIndex].userId ?? "")
-    //           .then((thePosition) {
-    //         if (thePosition != null) {
-    //           print("remove user position $foundLastPosition");
-    //           print("got user position $thePosition");
-    //           positions.remove(foundLastPosition);
-    //           positions.add(thePosition);
-    //         }
-    //
-    //         // highlightedExtProfile = theProfile;
-    //         setState(() {
-    //           isPositionLoading = false;
-    //         });
-    //         // setState(() {});
-    //       });
-    //     }
-    //   }
-    // });
+    _profilePageController.addListener(() {
+      if (_profilePagingController.itemList != null) {
+        isPositionLoading = false;
+        setState(() {});
+      }
+      var profileIndex = _profilePageController.page?.round() ?? 0;
+      if (_profilePagingController.itemList != null &&
+          _profilePageController.page?.round() == profileIndex) {
+        // print(
+        //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
+        // highlightedProfile = _profilePagingController.itemList![profileIndex];
+        SanityPosition? foundLastPosition;
+        //get the ext profile
+        for (var element in positions) {
+          // print(
+          //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
+          if (element.userRef?.userId ==
+              _profilePagingController.itemList![profileIndex].userId) {
+            foundLastPosition = element;
+          }
+        }
+        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+            foundLastPosition == null &&
+            !isPositionLoading) {
+          setState(() {
+            isPositionLoading = true;
+          });
+          client
+              ?.getLastPosition(
+                  _profilePagingController.itemList![profileIndex].userId ?? "")
+              .then((thePosition) {
+            if (thePosition != null) {
+              print("remove user position $foundLastPosition");
+              print("got user position $thePosition");
+              positions.remove(foundLastPosition);
+              positions.add(thePosition);
+            }
+
+            // highlightedExtProfile = theProfile;
+            setState(() {
+              isPositionLoading = false;
+            });
+            // setState(() {});
+          });
+        }
+      }
+    });
 
     super.initState();
   }
