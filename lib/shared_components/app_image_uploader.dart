@@ -36,9 +36,12 @@ class _AppImageUploaderState extends State<AppImageUploader> {
   @override
   Widget build(BuildContext context) {
     return Flex(
+      mainAxisSize: MainAxisSize.min,
       direction: Axis.horizontal,
       children: [
-        Expanded(
+        Flexible(
+          flex: 1,
+          fit: FlexFit.loose,
           child: widget.imageUploader.body(
             context,
             MediaQuery.of(context).size.width,

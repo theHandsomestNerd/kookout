@@ -22,8 +22,12 @@ import '../shared_components/app_image_uploader.dart';
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({
     super.key,
+    this.onClose,
+    required this.onPost
   });
 
+  final Function? onClose;
+  final Function onPost;
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
 }
@@ -130,55 +134,60 @@ class _CreatePostPageState extends State<CreatePostPage> {
           "Post creation failed. Try again.", context);
     }
 
-    return AppScaffoldWrapper(
-      floatingActionMenu: PostsPageMenu(
-        updateMenu: () {},
-      ),
-      child: FullPageLayout(
-        child: Column(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AppImageUploader(
+          height: 350,
+          width: 350,
+          text: "Change Main Post Photo",
+          imageUploader: imageUploader!,
+          uploadImage: (uploader) {
+            imageUploader = uploader;
+          },
+        ),
+        Flex(
+          direction: Axis.horizontal,
           children: [
-            AppImageUploader(
-              height: 350,
-              width: 350,
-              text: "Change Main Post Photo",
-              imageUploader: imageUploader!,
-              uploadImage: (uploader) {
-                imageUploader = uploader;
-              },
-            ),
-            TextFormField(
-              autofocus: true,
-              onChanged: (e) {
-                _setPostBody(e);
-              },
-              minLines: 2,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Post:',
+            Expanded(
+              child: TextFormField(
+                autofocus: true,
+                onChanged: (e) {
+                  _setPostBody(e);
+                },
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Post:',
+                ),
               ),
             ),
-            AnalyticsLoadingButton(
-              analyticsEventName: 'create-post',
-              analyticsEventData: {"body": _postBody, "author": ""},
-              isDisabled: ((_postBody?.length ?? -1) <= 0) || _isPosting == true,
-              action: (innerContext) async {
-                var status = await _makePost(innerContext);
-
-                if (status == "SUCCESS") {
-                  await sendSuccess();
-                } else if (status == "FAIL") {
-                  await sendError();
-                }
-                GoRouter.of(context).go('/postsPage');
-
-                // Navigator.popAndPushNamed(context, '/postsPage');
-              },
-              text: "Post",
-            )
           ],
         ),
-      ),
+        AnalyticsLoadingButton(
+          analyticsEventName: 'create-post',
+          analyticsEventData: {"body": _postBody, "author": ""},
+          isDisabled: ((_postBody?.length ?? -1) <= 0) || _isPosting == true,
+          action: (innerContext) async {
+            var status = await _makePost(innerContext);
+
+            if (status == "SUCCESS") {
+              await sendSuccess();
+            } else if (status == "FAIL") {
+              await sendError();
+            }
+            GoRouter.of(context).go('/postsPage');
+            widget.onPost();
+            setState(() {
+
+            });
+
+            // Navigator.popAndPushNamed(context, '/postsPage');
+          },
+          text: "Post",
+        )
+      ],
     );
   }
 }

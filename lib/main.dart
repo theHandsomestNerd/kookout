@@ -129,10 +129,10 @@ class _MyAppState extends State<MyApp> {
           path: '/postsPage',
           builder: (BuildContext context, GoRouterState state) =>
               BugReporter(child: PostsPage())),
-      GoRoute(
-          path: '/createPostsPage',
-          builder: (BuildContext context, GoRouterState state) =>
-              BugReporter(child: CreatePostPage())),
+      // GoRoute(
+      //     path: '/createPostsPage',
+      //     builder: (BuildContext context, GoRouterState state) =>
+      //         BugReporter(child: CreatePostPage())),
       GoRoute(
           path: '/register',
           builder: (BuildContext context, GoRouterState state) =>

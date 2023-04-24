@@ -1,12 +1,16 @@
+import 'package:cookowt/layout/full_page_layout.dart';
 import 'package:cookowt/models/clients/api_client.dart';
 import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/models/post.dart';
+import 'package:cookowt/pages/create_post_page.dart';
+import 'package:cookowt/pages/tabs/comments_tab.dart';
 import 'package:cookowt/shared_components/posts/post_solo.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../models/controllers/auth_inherited.dart';
 
@@ -17,14 +21,16 @@ class PostThread extends StatefulWidget {
   State<PostThread> createState() => _PostThreadState();
 }
 
-class _PostThreadState extends State<PostThread>{
+class _PostThreadState extends State<PostThread> {
   final PagingController<String, Post> _pagingController =
       PagingController(firstPageKey: "");
   AuthController? authController;
   late ApiClient client;
   AnalyticsController? analyticsController;
+  bool isPanelOpen = false;
 
   static const _pageSize = 10;
+  String lastId = "";
 
   @override
   void initState() {
@@ -34,6 +40,8 @@ class _PostThreadState extends State<PostThread>{
 
     super.initState();
   }
+
+  PanelController panelController = PanelController();
 
   @override
   didChangeDependencies() async {
@@ -137,7 +145,7 @@ class _PostThreadState extends State<PostThread>{
                                 analyticsEventName: 'add-the-very-first-post',
                                 text: "Add a Post",
                                 action: (context) async {
-                                  GoRouter.of(context).go('/createPostsPage');
+                                  panelController.open();
 
                                   // Navigator.pushNamed(
                                   //   context,
@@ -159,6 +167,183 @@ class _PostThreadState extends State<PostThread>{
             margin: const EdgeInsets.fromLTRB(0, 0, 0, 1),
             child: PostSolo(
               post: item,
+            ),
+          ),
+        ),
+      ),
+      SlidingUpPanel(
+        onPanelClosed: (){
+          isPanelOpen = false;
+        },
+        onPanelOpened: (){
+
+          isPanelOpen = true;
+        },
+
+        collapsed: MaterialButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          color: Colors.red,
+          onPressed: () {
+            if (isPanelOpen) {
+              panelController.close();
+              // isPanelOpen = false;
+            } else {
+              panelController.open();
+              // isPanelOpen = true;
+            }
+            setState(() {});
+          },
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                ),
+                child: Container(
+                  color: Colors.white,
+                  width: 80,
+                  height: 3,
+                ),
+              ),
+              Text(
+                "Create a Post",
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
+        ),
+        controller: panelController,
+        backdropEnabled: true,
+        isDraggable: true,
+        parallaxEnabled: false,
+        maxHeight: 500,
+        color: Colors.transparent,
+        minHeight: 64,
+        panelBuilder: (scrollController) => SingleChildScrollView(
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(0),
+                    bottomLeft: Radius.circular(0))),
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            child: Flex(
+              direction: Axis.horizontal,
+              children: [
+                // MaterialButton(
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                //   ),
+                //   color: Colors.white,
+                //   onPressed: () {
+                //     panelController.close();
+                //   },
+                //   child: Flex(
+                //     direction: Axis.vertical,
+                //     children: [
+                //       Flexible(
+                //         flex: 1,
+                //         child: Padding(
+                //           padding: const EdgeInsets.fromLTRB(
+                //             8.0,
+                //             8.0,
+                //             8.0,
+                //             8.0,
+                //           ),
+                //           child: Container(
+                //             color: Colors.white,
+                //             width: 80,
+                //             height: 3,
+                //           ),
+                //         ),
+                //       ),
+                //       Expanded(
+                //         flex: 2,
+                //         child: Column(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             Text(
+                //               "Create a Post",
+                //               style: TextStyle(color: Colors.black, fontSize: 18),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+                Expanded(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 48,
+                        child: Flex(direction: Axis.horizontal, children: [
+                          Expanded(
+                            child: MaterialButton(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                              color: Colors.white,
+                              onPressed: () {
+                                panelController.hide();
+                              },
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      8.0,
+                                      8.0,
+                                      8.0,
+                                      8.0,
+                                    ),
+                                    child: Container(
+                                      color: Colors.black,
+                                      width: 80,
+                                      height: 3,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Create a Post",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                      CreatePostPage(
+                        onPost: () {
+                          panelController.close();
+                          _pagingController.refresh();
+                          _fetchPage(_pagingController.firstPageKey);
+                          // _pagingController.firstPageKey
+                        },
+                        onClose: () {
+                          panelController.close();
+                          setState(() {});
+                        },
+                      ),
+                      SizedBox(height: 24,)
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

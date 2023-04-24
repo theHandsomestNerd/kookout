@@ -14,9 +14,9 @@ class _FullPageLayoutState extends State<FullPageLayout> {
   Widget build(BuildContext context) {
     return Center(
       child: Flex(
-        direction: Axis.vertical,
+        direction: Axis.horizontal,
         children: [
-          Expanded(child: widget.child)
+          Flexible(child: widget.child)
         ],
       ),
     );

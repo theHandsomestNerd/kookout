@@ -79,15 +79,15 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           },
           icon: const Icon(Icons.timeline),
         ),
-        ActionButton(
-          tooltip: "Add Post",
-          onPressed: () {
-            GoRouter.of(context).go('/createPostsPage');
-
-            // Navigator.popAndPushNamed(context, '/createPostsPage');
-          },
-          icon: const Icon(Icons.post_add),
-        ),
+        // ActionButton(
+        //   tooltip: "Add Post",
+        //   onPressed: () {
+        //     GoRouter.of(context).go('/createPostsPage');
+        //
+        //     // Navigator.popAndPushNamed(context, '/createPostsPage');
+        //   },
+        //   icon: const Icon(Icons.post_add),
+        // ),
         ActionButton(
           onPressed: () {
             GoRouter.of(context).go('/home');

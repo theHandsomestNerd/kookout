@@ -14,7 +14,6 @@ class PostsPage extends StatefulWidget {
 }
 
 class _PostsPageState extends State<PostsPage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -28,10 +27,13 @@ class _PostsPageState extends State<PostsPage> {
       floatingActionMenu: PostsPageMenu(
         updateMenu: () {},
       ),
-      child: Container(
-        margin: const EdgeInsets.all(0),
-        child: Flex(direction:Axis.horizontal,
-            children:const [ Expanded(child: PostThread())]),
+      child: Flex(
+        direction: Axis.vertical,
+        children: [
+          Expanded(
+            child: PostThread(),
+          ),
+        ],
       ),
     );
   }
