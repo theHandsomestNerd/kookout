@@ -1,9 +1,7 @@
-import 'package:cookowt/models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../models/controllers/auth_inherited.dart';
 import '../../wrappers/expanding_fab.dart';
 
 class LoginMenu extends StatefulWidget {

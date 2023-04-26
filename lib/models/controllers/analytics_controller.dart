@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 
 class AnalyticsController {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -44,15 +45,21 @@ class AnalyticsController {
         // },
       );
     }catch(e){
-      print("Analytics error $e");
+      if (kDebugMode) {
+        print("Analytics error $e");
+      }
     }
 
-    print('logEvent succeeded');
+    if (kDebugMode) {
+      print('logEvent succeeded');
+    }
   }
 
   Future<void> setUserId(String userId) async {
     await analytics.setUserId(id: userId);
-    print('setUserId succeeded');
+    if (kDebugMode) {
+      print('setUserId succeeded');
+    }
   }
 
   // Future<void> _testSetCurrentScreen(String screen) async {

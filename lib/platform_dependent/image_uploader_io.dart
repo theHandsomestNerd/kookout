@@ -1,6 +1,4 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 import 'image_uploader_abstract.dart';

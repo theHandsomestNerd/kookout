@@ -1,10 +1,6 @@
-import 'package:cookowt/layout/full_page_layout.dart';
 import 'package:cookowt/models/controllers/auth_inherited.dart';
-import 'package:cookowt/shared_components/menus/posts_page_menu.dart';
 import 'package:cookowt/wrappers/alerts_snackbar.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
-import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
@@ -52,12 +48,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
     var theUploader = ImageUploaderImpl();
     imageUploader = theUploader;
     theUploader.addListener(() async {
-      print("image uploader change");
+      if (kDebugMode) {
+        print("image uploader change");
+      }
       if(theUploader.croppedFile != null){
-        print("there iz a cropped");
+        if (kDebugMode) {
+          print("there iz a cropped");
+        }
         theFileBytes = await theUploader.croppedFile?.readAsBytes();
       } else {
-        print("there iz a file");
+        if (kDebugMode) {
+          print("there iz a file");
+        }
         theFileBytes = await theUploader.file?.readAsBytes();
       }
       setState(() {
@@ -177,7 +179,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             } else if (status == "FAIL") {
               await sendError();
             }
-            GoRouter.of(context).go('/postsPage');
+            GoRouter.of(innerContext).go('/postsPage');
             widget.onPost();
             setState(() {
 

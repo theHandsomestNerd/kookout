@@ -69,7 +69,7 @@ class _PostCommentThreadTabState extends State<PostCommentThreadTab> {
         BuildContext theContext = context;
         await analyticsController?.sendAnalyticsEvent(
             'bio-tab-redirect', {"message": "no-id"}).then((x) {
-          GoRouter.of(context).go('/profilesPage');
+          GoRouter.of(theContext).go('/profilesPage');
 
           // Navigator.popAndPushNamed(theContext, '/profilesPage');
         });

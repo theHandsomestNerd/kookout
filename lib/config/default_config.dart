@@ -75,10 +75,16 @@ class DefaultConfig {
   }
 
   _initializeConfig() async {
-    print("API Status Check");
+    if (kDebugMode) {
+      print("API Status Check");
+    }
 
-    print("Getting Package info");
-    print("Initializing Remote Config");
+    if (kDebugMode) {
+      print("Getting Package info");
+    }
+    if (kDebugMode) {
+      print("Initializing Remote Config");
+    }
     final remoteConfig = FirebaseRemoteConfig.instance;
 
     return remoteConfig
@@ -90,7 +96,9 @@ class DefaultConfig {
       ),
     )
         .then((response) {
-      print("Getting Remote Config");
+      if (kDebugMode) {
+        print("Getting Remote Config");
+      }
       return remoteConfig.setDefaults(
         {
           "development": jsonEncode(
@@ -125,16 +133,22 @@ class DefaultConfig {
           )
         },
       ).then((value) {
-        print("Activating Remote Config");
+        if (kDebugMode) {
+          print("Activating Remote Config");
+        }
 
         return remoteConfig.fetchAndActivate().then((isActivated) async {
-          print("Activation Status: $isActivated");
+          if (kDebugMode) {
+            print("Activation Status: $isActivated");
+          }
           try {
             final FirebaseRemoteConfig remoteConfig =
                 FirebaseRemoteConfig.instance;
 
             getMode() {
-              print(" mode: $kDebugMode");
+              if (kDebugMode) {
+                print(" mode: $kDebugMode");
+              }
               return kDebugMode ? 'development' : 'production';
             }
 
@@ -171,18 +185,26 @@ class DefaultConfig {
             apiStatus = healthResponse['status'];
 
             return PackageInfoPlugin().getAll().then((packageInfo) {
-              print("retrieved Package Info $packageInfo");
+              if (kDebugMode) {
+                print("retrieved Package Info $packageInfo");
+              }
               appName = packageInfo.appName;
               packageName = packageInfo.packageName;
               version = packageInfo.version;
               buildNumber = packageInfo.buildNumber;
             });
           } on PlatformException catch (exception) {
-            print(exception);
+            if (kDebugMode) {
+              print(exception);
+            }
 // return 'Exception: $exception';
           } catch (exception) {
-            print("Cant get remote config");
-            print(exception);
+            if (kDebugMode) {
+              print("Cant get remote config");
+            }
+            if (kDebugMode) {
+              print(exception);
+            }
 // return 'Unable to fetch remote config. Cached or default values will be '
 // 'used';
           }

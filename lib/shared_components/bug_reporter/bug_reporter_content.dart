@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cookowt/config/default_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/clients/bug_report_client.dart';
@@ -35,12 +36,18 @@ class _BugReporterContentState extends State<BugReporterContent> {
 
 
     imageUploader?.addListener(() async {
-      print("image uploader change");
+      if (kDebugMode) {
+        print("image uploader change");
+      }
       if(imageUploader?.croppedFile != null){
-        print("there iz a cropped");
+        if (kDebugMode) {
+          print("there iz a cropped");
+        }
         theFileBytes = await imageUploader?.croppedFile?.readAsBytes();
       } else {
-        print("there iz a file");
+        if (kDebugMode) {
+          print("there iz a file");
+        }
         theFileBytes = await imageUploader?.file?.readAsBytes();
       }
       setState(() {

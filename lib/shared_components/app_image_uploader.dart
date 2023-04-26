@@ -1,9 +1,5 @@
-import 'package:cookowt/models/controllers/auth_inherited.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 
-import '../models/controllers/auth_controller.dart';
-import '../models/controllers/post_controller.dart';
 import '../platform_dependent/image_uploader_abstract.dart';
 
 class AppImageUploader extends StatefulWidget {

@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cookowt/wrappers/card_with_background.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import 'image_uploader_abstract.dart';
 
@@ -19,6 +18,7 @@ class ImageUploaderImpl extends ImageUploader {
     // pickedFile = null;
   }
 
+  @override
   void clear() {
     file = null;
     notifyListeners();
@@ -101,13 +101,13 @@ class ImageUploaderImpl extends ImageUploader {
                                   style: kIsWeb
                                       ? Theme.of(context)
                                           .textTheme
-                                          .headline5!
+                                          .headlineSmall!
                                           .copyWith(
                                               color: Theme.of(context)
                                                   .highlightColor)
                                       : Theme.of(context)
                                           .textTheme
-                                          .bodyText2!
+                                          .bodyMedium!
                                           .copyWith(
                                               color: Theme.of(context)
                                                   .highlightColor),
@@ -173,11 +173,11 @@ class ImageUploaderImpl extends ImageUploader {
       }
     }
   }
-
-  void _clear() {
-    file = null;
-    croppedFile = null;
-  }
+  //
+  // void _clear() {
+  //   file = null;
+  //   croppedFile = null;
+  // }
 
   Future<void> _uploadImage() async {
     final pickedFile = await uploadImage();
@@ -216,6 +216,7 @@ class ImageUploaderImpl extends ImageUploader {
     );
   }
 
+  @override
   Widget body(context, double screenWidth, double screenHeight,
       ImageProvider? inputImage) {
     if (croppedFile != null || file != null) {

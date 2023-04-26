@@ -11,6 +11,7 @@ import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/author_and_text.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -39,7 +40,7 @@ class _SoloPostPageState extends State<SoloPostPage> {
       PagingController(firstPageKey: "");
 
   AnalyticsController? analyticsController;
-  Post? thePost = null;
+  Post? thePost;
   PostController? postController;
   String status = "";
   List<Comment>? _profileComments = [];
@@ -48,9 +49,11 @@ class _SoloPostPageState extends State<SoloPostPage> {
     if (profileClient != null && widget.thisPostId != null) {
       var comments = await profileClient?.getProfileComments(
           widget.thisPostId!, 'post-comment');
-      print(
-        "The COmments retreived profClient:${profileClient} ${widget.thisPostId} $comments",
+      if (kDebugMode) {
+        print(
+        "The COmments retreived profClient:$profileClient ${widget.thisPostId} $comments",
       );
+      }
       return comments;
     }
   }

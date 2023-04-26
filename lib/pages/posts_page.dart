@@ -29,7 +29,7 @@ class _PostsPageState extends State<PostsPage> {
       ),
       child: Flex(
         direction: Axis.vertical,
-        children: [
+        children: const [
           Expanded(
             child: PostThread(),
           ),

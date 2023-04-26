@@ -37,10 +37,14 @@ class ApiClient {
 
   Future<String?> getIdToken() async {
     if (token != "") {
-      print("Using cached Id Token");
+      if (kDebugMode) {
+        print("Using cached Id Token");
+      }
       return token;
     } else {
-      print("Retrieving Id Token");
+      if (kDebugMode) {
+        print("Retrieving Id Token");
+      }
       String? theToken = await FirebaseAuth.instance.currentUser?.getIdToken();
 
       if (theToken != null) {
@@ -98,8 +102,10 @@ class ApiClient {
     }
     String? token = await getIdToken();
     if (DefaultConfig.theAuthBaseUrl == "") {
-      print(
+      if (kDebugMode) {
+        print(
           "Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
       return <AppUser>[];
     }
 
@@ -129,8 +135,10 @@ class ApiClient {
     }
     String? token = await getIdToken();
     if (DefaultConfig.theAuthBaseUrl == "") {
-      print(
+      if (kDebugMode) {
+        print(
           "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
       return <AppUser>[];
     }
 
@@ -160,8 +168,10 @@ class ApiClient {
     }
     String? token = await getIdToken();
     if (DefaultConfig.theAuthBaseUrl == "") {
-      print(
+      if (kDebugMode) {
+        print(
           "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
       return <Post>[];
     }
 
@@ -193,8 +203,10 @@ class ApiClient {
     String? token = await getIdToken();
 
     if (DefaultConfig.theAuthBaseUrl == "") {
-      print(
+      if (kDebugMode) {
+        print(
           "Retrieving paginated comments for post $postId authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
       return <Comment>[];
     }
 
@@ -454,7 +466,9 @@ class ApiClient {
           return ChatApiGetProfileLikesResponse(list: [], amIInThisList: null);
         }
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       }
     }
     return ChatApiGetProfileLikesResponse(list: [], amIInThisList: null);
@@ -603,7 +617,9 @@ class ApiClient {
       try {
         processedResponse = jsonDecode(response.body);
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       }
 
       if (processedResponse['lastPosition'] != null) {
@@ -623,13 +639,13 @@ class ApiClient {
 
   Future<List<Comment>> getProfileComments(String userId, String typeId) async {
     if (kDebugMode) {
-      print("Retrieving ${typeId} Comments $userId");
+      print("Retrieving $typeId Comments $userId");
     }
     String? token = await getIdToken();
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
       final response = await http.get(
           Uri.parse(
-              "${DefaultConfig.theAuthBaseUrl}/get-comments/${typeId != null ? typeId + '/' : 'profile-comment/'}$userId"),
+              "${DefaultConfig.theAuthBaseUrl}/get-comments/${typeId != null ? '$typeId/' : 'profile-comment/'}$userId"),
           headers: {"Authorization": ("Bearer $token")});
       try {
         dynamic processedResponse = jsonDecode(response.body);
@@ -646,7 +662,9 @@ class ApiClient {
           return [];
         }
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       }
     }
     return [];
@@ -748,7 +766,9 @@ class ApiClient {
           return ChatApiGetProfileFollowsResponse(list: []);
         }
       } catch (e) {
-        print("ERROR: $e");
+        if (kDebugMode) {
+          print("ERROR: $e");
+        }
       }
     }
 
@@ -788,7 +808,7 @@ class ApiClient {
   }
 
   Future<String> updatePosition(Position location) async {
-    var message = "Location ${location}";
+    var message = "Location $location";
     if (kDebugMode) {
       print(message);
     }

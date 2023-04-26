@@ -47,17 +47,13 @@ class _SettingsPageState extends State<SettingsPage> {
     if (analyticsController == null && theAnalyticsController != null) {
       analyticsController = theAnalyticsController;
     }
-    var theChatController;
+    ChatController? theChatController;
     if (chatController == null) {
       theChatController = AuthInherited.of(context)?.chatController;
       chatController = theChatController;
     }
 
-    if (theChatController != null) {
-      myBlockedProfiles = await theChatController.updateMyBlocks();
-    }
-
-    var theAuthController;
+    AuthController? theAuthController;
     if (authController == null) {
       theAuthController = AuthInherited.of(context)?.authController;
       authController = theAuthController;
@@ -66,10 +62,12 @@ class _SettingsPageState extends State<SettingsPage> {
     if (myUserId == "") {
       myUserId = theAuthController?.myAppUser?.userId ?? "";
     }
+
+    if (theChatController != null) {
+      myBlockedProfiles = await theChatController.updateMyBlocks();
+    }
+
     setState(() {});
-    // if (kDebugMode) {
-    //   print("dependencies changed $myUserId");
-    // }
   }
 
   Widget _widgetOptions(selectedIndex) {

@@ -12,10 +12,10 @@ import '../../config/default_config.dart';
 /// When the location services are not enabled or permissions
 /// are denied the `Future` will return an error.
 class GeolocationController {
-  static Position? lastKnownPosition = null;
-  static Position? currentPosition = null;
+  static Position? lastKnownPosition;
+  static Position? currentPosition;
   static ApiClient apiClient = ApiClient(DefaultConfig.theAuthBaseUrl);
-  static Timer? geolocationTimer = null;
+  static Timer? geolocationTimer;
 
   GeolocationController() {
     _recordCurrentPosition().then((theCurrentLocation) {
@@ -68,7 +68,9 @@ class GeolocationController {
       apiClient.updatePosition(theCurrentPosition);
       return theCurrentPosition;
     } catch (e) {
-      print("Geolocation Controller Error: $e}");
+      if (kDebugMode) {
+        print("Geolocation Controller Error: $e}");
+      }
       return null;
     }
   }

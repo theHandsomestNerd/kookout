@@ -10,6 +10,7 @@ import 'package:cookowt/shared_components/menus/home_page_menu.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:cookowt/wrappers/circular_progress_indicator_with_message.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -66,17 +67,19 @@ class _HomePageState extends State<HomePage> with RouteAware {
       // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        if(_profilePageController != null)
-        _profilePagingController.appendLastPage(newItems);
+        if (_profilePageController != null) {
+          _profilePagingController.appendLastPage(newItems);
+        }
       } else {
         final nextPageKey = newItems.last.userId;
         if (nextPageKey != null) {
-          if(_profilePageController != null)
+          if (_profilePageController != null) {
             _profilePagingController.appendPage(newItems, nextPageKey);
+          }
         }
       }
     } catch (error) {
-      if(_postPagingController != null) {
+      if (_postPagingController != null) {
         // _profilePagingController.error = error;
       }
     }
@@ -100,8 +103,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
         }
       }
     } catch (error) {
-      if(_postPagingController != null)
-      _postPagingController.error = error;
+      if (_postPagingController != null) _postPagingController.error = error;
     }
   }
 
@@ -126,6 +128,103 @@ class _HomePageState extends State<HomePage> with RouteAware {
     });
   }
 
+  profilePagingControllerLocationListener() {
+    if (_profilePagingController.itemList != null) {
+      isPositionLoading = false;
+      setState(() {});
+    }
+    var profileIndex = _profilePageController.page?.round() ?? 0;
+    if (_profilePagingController.itemList != null &&
+        _profilePageController.page?.round() == profileIndex) {
+      // print(
+      //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
+      // highlightedProfile = _profilePagingController.itemList![profileIndex];
+      SanityPosition? foundLastPosition;
+      //get the ext profile
+      for (var element in positions) {
+        // print(
+        //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
+        if (element.userRef?.userId ==
+            _profilePagingController.itemList![profileIndex].userId) {
+          foundLastPosition = element;
+        }
+      }
+      if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+          foundLastPosition == null &&
+          !isPositionLoading) {
+        setState(() {
+          isPositionLoading = true;
+        });
+        client
+            ?.getLastPosition(
+                _profilePagingController.itemList![profileIndex].userId ?? "")
+            .then((thePosition) {
+          if (thePosition != null) {
+            if (kDebugMode) {
+              print("remove user position $foundLastPosition");
+            }
+            if (kDebugMode) {
+              print("got user position $thePosition");
+            }
+            positions.remove(foundLastPosition);
+            positions.add(thePosition);
+            // setState(() {
+              isPositionLoading = false;
+            // });
+          }
+
+          // highlightedExtProfile = theProfile;
+          // setState(() {});
+        });
+      }
+    }
+  }
+
+  profilePagingControllerExtProfileListener() {
+    if (_profilePagingController.itemList != null) {
+      isProfileLoading = false;
+      setState(() {});
+    }
+    var profileIndex = _profilePageController.page?.round() ?? 0;
+    if (_profilePagingController.itemList != null &&
+        _profilePageController.page?.round() == profileIndex) {
+      // print(
+      //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
+      // highlightedProfile = _profilePagingController.itemList![profileIndex];
+      ExtendedProfile? foundExtProfile;
+      //get the ext profile
+      for (var element in extProfiles) {
+        // print(
+        //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
+        if (element.userId ==
+            _profilePagingController.itemList![profileIndex].userId) {
+          foundExtProfile = element;
+        }
+      }
+      if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
+          foundExtProfile == null &&
+          !isExtProfileLoading) {
+        setState(() {
+          isExtProfileLoading = true;
+        });
+        client
+            ?.getExtendedProfile(
+                _profilePagingController.itemList![profileIndex].userId ?? "")
+            .then((theProfile) {
+          if (theProfile != null) {
+            extProfiles.add(theProfile);
+          }
+
+          // highlightedExtProfile = theProfile;
+          setState(() {
+            isExtProfileLoading = false;
+          });
+          // setState(() {});
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -138,115 +237,28 @@ class _HomePageState extends State<HomePage> with RouteAware {
       return _fetchPostsPage(theLastId);
     });
 
-    _postPagingController.notifyPageRequestListeners("");
-    _profilePagingController.notifyPageRequestListeners("");
+    _profilePageController
+        .addListener(profilePagingControllerExtProfileListener);
 
-    _profilePageController.addListener(() {
-      if (_profilePagingController.itemList != null) {
-        isProfileLoading = false;
-        setState(() {});
-      }
-      var profileIndex = _profilePageController.page?.round() ?? 0;
-      if (_profilePagingController.itemList != null &&
-          _profilePageController.page?.round() == profileIndex) {
-        // print(
-        //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
-        // highlightedProfile = _profilePagingController.itemList![profileIndex];
-        ExtendedProfile? foundExtProfile;
-        //get the ext profile
-        for (var element in extProfiles) {
-          // print(
-          //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
-          if (element.userId ==
-              _profilePagingController.itemList![profileIndex].userId) {
-            foundExtProfile = element;
-          }
-        }
-        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
-            foundExtProfile == null &&
-            !isExtProfileLoading) {
-          setState(() {
-            isExtProfileLoading = true;
-          });
-          client
-              ?.getExtendedProfile(
-                  _profilePagingController.itemList![profileIndex].userId ?? "")
-              .then((theProfile) {
-            if (theProfile != null) {
-              extProfiles.add(theProfile);
-            }
-
-            // highlightedExtProfile = theProfile;
-            setState(() {
-              isExtProfileLoading = false;
-            });
-            // setState(() {});
-          });
-        }
-      }
-    });
-
-    _profilePageController.addListener(() {
-      if (_profilePagingController.itemList != null) {
-        isPositionLoading = false;
-        setState(() {});
-      }
-      var profileIndex = _profilePageController.page?.round() ?? 0;
-      if (_profilePagingController.itemList != null &&
-          _profilePageController.page?.round() == profileIndex) {
-        // print(
-        //     "$profileIndex ${_profilePageController.page} ${profileIndex == _profilePageController.page}");
-        // highlightedProfile = _profilePagingController.itemList![profileIndex];
-        SanityPosition? foundLastPosition;
-        //get the ext profile
-        for (var element in positions) {
-          // print(
-          //     "${element.userId == _profilePagingController.itemList![profileIndex].userId} ${element.userId} ${_profilePagingController.itemList![profileIndex].userId}");
-          if (element.userRef?.userId ==
-              _profilePagingController.itemList![profileIndex].userId) {
-            foundLastPosition = element;
-          }
-        }
-        if (profileIndex < (_profilePagingController.itemList?.length ?? 0) &&
-            foundLastPosition == null &&
-            !isPositionLoading) {
-          setState(() {
-            isPositionLoading = true;
-          });
-          client
-              ?.getLastPosition(
-                  _profilePagingController.itemList![profileIndex].userId ?? "")
-              .then((thePosition) {
-            if (thePosition != null) {
-              print("remove user position $foundLastPosition");
-              print("got user position $thePosition");
-              positions.remove(foundLastPosition);
-              positions.add(thePosition);
-            }
-
-            // highlightedExtProfile = theProfile;
-            setState(() {
-              isPositionLoading = false;
-            });
-            // setState(() {});
-          });
-        }
-      }
-    });
+    _profilePageController.addListener(profilePagingControllerLocationListener);
 
     super.initState();
   }
 
   @override
   void didPushNext() {
-    print("router status: didPushnext");
+    if (kDebugMode) {
+      print("router status: didPushnext");
+    }
     cancelHomeScreenTimers();
     super.didPushNext();
   }
 
   @override
   void didPush() {
-    print("router status: didPush");
+    if (kDebugMode) {
+      print("router status: didPush");
+    }
     super.didPush();
 
     startHomeScreenTimers();
@@ -259,14 +271,18 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   @override
   void didPopNext() {
-    print("router status: didPopnext");
+    if (kDebugMode) {
+      print("router status: didPopnext");
+    }
     super.didPopNext();
     startHomeScreenTimers();
   }
 
   @override
   void didPop() async {
-    print("router status: didPop");
+    if (kDebugMode) {
+      print("router status: didPop");
+    }
     cancelHomeScreenTimers();
     super.didPop();
   }
@@ -275,10 +291,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
   void dispose() async {
     routeObserver.unsubscribe(this);
     cancelHomeScreenTimers();
-    _profilePageController.dispose();
+    _profilePageController
+        .removeListener(profilePagingControllerExtProfileListener);
+    _profilePageController
+        .removeListener(profilePagingControllerLocationListener);
     _postPageController.dispose();
     _profilePagingController.dispose();
     _postPagingController.dispose();
+    _profilePageController.dispose();
     super.dispose();
   }
 
@@ -419,41 +439,43 @@ class _HomePageState extends State<HomePage> with RouteAware {
                   //get the extended profile for this user
                   return theItem != null
                       ? GestureDetector(
-                    onTap: () async {
-                      if (theItem.userId != null) {
-                        cancelHomeScreenTimers();
-                        await analyticsController?.sendAnalyticsEvent(
-                            'view-profile-while-highlighted-pressed', {
-                          "highlightedUserId": theItem.userId
-                        }).then((x) {
-                          GoRouter.of(context).go('/profile/${theItem.userId}');
+                          onTap: () async {
+                            if (theItem.userId != null) {
+                              cancelHomeScreenTimers();
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-profile-while-highlighted-pressed', {
+                                "highlightedUserId": theItem.userId
+                              }).then((x) {
+                                GoRouter.of(context)
+                                    .go('/profile/${theItem.userId}');
 
-                          // Navigator.pushNamed(context, '/profile',
-                          //     arguments: {"id": theItem.userId});
-                        });
-                      }
-                    },
-                    onPanUpdate: (details) async {
-                      // Swiping in up direction.
-                      if (details.delta.dy < 0) {
-                        cancelHomeScreenTimers();
-                        await analyticsController?.sendAnalyticsEvent(
-                            'view-all-profiles-pressed', {
-                          "highlightedUserId": theItem.userId
-                        }).then((x) {
-                          GoRouter.of(context).go('/profilesPage');
+                                // Navigator.pushNamed(context, '/profile',
+                                //     arguments: {"id": theItem.userId});
+                              });
+                            }
+                          },
+                          onPanUpdate: (details) async {
+                            // Swiping in up direction.
+                            if (details.delta.dy < 0) {
+                              cancelHomeScreenTimers();
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-all-profiles-pressed', {
+                                "highlightedUserId": theItem.userId
+                              }).then((x) {
+                                GoRouter.of(context).go('/profilesPage');
 
-                          // Navigator.pushNamed(context, '/profilesPage');
-                        });
-                      }
+                                // Navigator.pushNamed(context, '/profilesPage');
+                              });
+                            }
 
-                      // Swiping in down direction.
-                      if (details.delta.dy > 0) {
-
-                        print('swipe down');
-                      }
-                    },
-                        child: CardWithActions(
+                            // Swiping in down direction.
+                            if (details.delta.dy > 0) {
+                              if (kDebugMode) {
+                                print('swipe down');
+                              }
+                            }
+                          },
+                          child: CardWithActions(
                             locationRow: Flex(
                               direction: Axis.horizontal,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -518,7 +540,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                       ),
                                       Text(
                                         "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
-                                        style: TextStyle(color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -533,16 +555,16 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             //     "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
                             action1Text: 'All Profiles',
                             // action1OnPressed: () async {
-                              // if (theItem.userId != null) {
-                              //   cancelHomeScreenTimers();
-                              //   await analyticsController?.sendAnalyticsEvent(
-                              //       'view-profile-while-highlighted-pressed', {
-                              //     "highlightedUserId": theItem.userId
-                              //   }).then((x) {
-                              //     Navigator.pushNamed(context, '/profile',
-                              //         arguments: {"id": theItem.userId});
-                              //   });
-                              // }
+                            // if (theItem.userId != null) {
+                            //   cancelHomeScreenTimers();
+                            //   await analyticsController?.sendAnalyticsEvent(
+                            //       'view-profile-while-highlighted-pressed', {
+                            //     "highlightedUserId": theItem.userId
+                            //   }).then((x) {
+                            //     Navigator.pushNamed(context, '/profile',
+                            //         arguments: {"id": theItem.userId});
+                            //   });
+                            // }
                             // },
                             action1OnPressed: () async {
                               cancelHomeScreenTimers();
@@ -556,7 +578,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               });
                             },
                           ),
-                      )
+                        )
                       : Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -616,7 +638,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           onPanUpdate: (details) async {
                             // Swiping in up direction.
                             if (details.delta.dy < 0) {
-                              print('swipe upswipe up');
+                              if (kDebugMode) {
+                                print('swipe upswipe up');
+                              }
                               cancelHomeScreenTimers();
                               await analyticsController?.sendAnalyticsEvent(
                                   'view-all-posts-while-highlighted-pressed',
@@ -629,8 +653,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
                             // Swiping in down direction.
                             if (details.delta.dy > 0) {
-
-                              print('swipe down');
+                              if (kDebugMode) {
+                                print('swipe down');
+                              }
                             }
                           },
                           child: CardWithActions(

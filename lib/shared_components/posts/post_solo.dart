@@ -4,6 +4,7 @@ import 'package:cookowt/models/like.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
 import 'package:cookowt/wrappers/author_and_text.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -71,7 +72,9 @@ class _PostSoloState extends State<PostSolo> {
         });
         isPostLikedByMe = myLike;
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
         isPostLikedByMe = null;
       }
     }
@@ -88,7 +91,7 @@ class _PostSoloState extends State<PostSolo> {
   }
 
   commentOnThisPost(String? postId) {
-    GoRouter.of(context).go('/profile/${postId}');
+    GoRouter.of(context).go('/profile/$postId');
 
     // Navigator.pushNamed(context, '/profile', arguments: {"id": postId});
   }

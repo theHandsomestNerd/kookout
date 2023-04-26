@@ -1,14 +1,11 @@
-import 'package:cookowt/layout/full_page_layout.dart';
 import 'package:cookowt/models/clients/api_client.dart';
 import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/models/post.dart';
 import 'package:cookowt/pages/create_post_page.dart';
-import 'package:cookowt/pages/tabs/comments_tab.dart';
 import 'package:cookowt/shared_components/posts/post_solo.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -181,7 +178,7 @@ class _PostThreadState extends State<PostThread> {
         },
 
         collapsed: MaterialButton(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           color: Colors.red,
@@ -210,7 +207,7 @@ class _PostThreadState extends State<PostThread> {
                   height: 3,
                 ),
               ),
-              Text(
+              const Text(
                 "Create a Post",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
@@ -226,7 +223,7 @@ class _PostThreadState extends State<PostThread> {
         minHeight: 64,
         panelBuilder: (scrollController) => SingleChildScrollView(
           child: Card(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -288,7 +285,7 @@ class _PostThreadState extends State<PostThread> {
                           Expanded(
                             child: MaterialButton(
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
                               ),
@@ -313,7 +310,7 @@ class _PostThreadState extends State<PostThread> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Text(
                                         "Create a Post",
                                         style: TextStyle(
@@ -339,7 +336,7 @@ class _PostThreadState extends State<PostThread> {
                           setState(() {});
                         },
                       ),
-                      SizedBox(height: 24,)
+                      const SizedBox(height: 24,)
                     ],
                   ),
                 ),

@@ -41,7 +41,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
 
   List<Comment>? _profileComments = [];
 
-  Like? _profileLikedByMe = null;
+  Like? _profileLikedByMe;
   List<Like>? _profileLikes = [];
 
   Follow? _profileFollowedByMe;
@@ -195,7 +195,7 @@ class _SoloProfilePageState extends State<SoloProfilePage> {
             await chatController?.updateMyBlocks();
             _alertSnackbar.showSuccessAlert(
                 "You blocked this user. Ew!", innercontext);
-            GoRouter.of(context).go('/profilesPage');
+            GoRouter.of(innercontext).go('/profilesPage');
 
             // Navigator.popAndPushNamed(innercontext, '/profilesPage');
           }

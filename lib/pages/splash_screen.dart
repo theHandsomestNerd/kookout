@@ -1,18 +1,12 @@
 import 'package:cookowt/config/default_config.dart';
 import 'package:cookowt/models/controllers/analytics_controller.dart';
 import 'package:cookowt/shared_components/menus/login_menu.dart';
-import 'package:cookowt/wrappers/alerts_snackbar.dart';
-import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookowt/wrappers/text_field_wrapped.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../models/controllers/auth_controller.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../shared_components/tool_button.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({
@@ -28,11 +22,8 @@ class _SplashPageState extends State<SplashPage> {
   late String packageName;
   late String version;
   late String buildNumber;
-  String _loginUsername = "";
-  String _loginPassword = "";
   late AuthController authController;
   late AnalyticsController analyticsControllerController;
-  final AlertSnackbar _alertSnackbar = AlertSnackbar();
   late String sanityDB;
   late String apiVersion;
   late String sanityApiDB;
@@ -40,9 +31,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-
-    _loginPassword = '';
-    _loginUsername = '';
   }
 
   @override
@@ -64,87 +52,9 @@ class _SplashPageState extends State<SplashPage> {
     sanityApiDB = DefaultConfig.apiSanityDB;
     setState(() {});
     if (kDebugMode) {
-      print("dependencies changed login page");
+      print("dependencies changed splash page");
     }
   }
-
-  void _setUsername(String newUsername) async {
-    if (newUsername.length == 1) {
-      await analyticsControllerController
-          .sendAnalyticsEvent('login-username', {'event': "started_typing"});
-    }
-
-    if (!(_loginUsername.isEmpty || _loginPassword.isEmpty)) {
-      await analyticsControllerController.sendAnalyticsEvent(
-          'login-form-enabled', {'username': _loginUsername});
-    }
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _loginUsername = newUsername;
-    });
-  }
-
-  void _setPassword(String newPassword) async {
-    if (newPassword.length == 1) {
-      await analyticsControllerController.sendAnalyticsEvent(
-          'login-password-field', {'event': "started_typing"});
-    }
-    if (!(_loginUsername.isEmpty || _loginPassword.isEmpty)) {
-      await analyticsControllerController.sendAnalyticsEvent(
-          'login-form-enabled', {'username': _loginUsername});
-    }
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _loginPassword = newPassword;
-    });
-  }
-
-  void _loginUser(context) async {
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _loginUsername,
-        password: _loginPassword,
-      );
-      if (kDebugMode) {
-        print(credential);
-      }
-
-      _alertSnackbar.showSuccessAlert(
-          "${credential.user?.email ?? ""}Logged In", context);
-      GoRouter.of(context).go('/home');
-
-      // Navigator.pushNamed(context, '/home');
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        if (kDebugMode) {
-          print('No user found for that email.');
-        }
-
-        _alertSnackbar.showSuccessAlert(
-            "No user found for that email.", context);
-
-        // Navigator.pushNamed(context, '/');
-      } else if (e.code == 'wrong-password') {
-        if (kDebugMode) {
-          print('Wrong password provided for that user.');
-        }
-        _alertSnackbar.showSuccessAlert(
-            "Wrong password provided for that user.", context);
-
-        // Navigator.pushNamed(context, '/');
-      }
-    }
-  }
-
-  String? errorText;
 
   @override
   Widget build(BuildContext context) {

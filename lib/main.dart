@@ -6,7 +6,6 @@ import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/models/controllers/chat_controller.dart';
 import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/controllers/post_controller.dart';
-import 'package:cookowt/pages/create_post_page.dart';
 import 'package:cookowt/pages/home_page.dart';
 import 'package:cookowt/pages/logout_page.dart';
 import 'package:cookowt/pages/posts_page.dart';
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       final loggedIn = FirebaseAuth.instance.currentUser != null;
       final loggingIn = state.subloc == '/login';
 
-      print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
+      // print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
 
       if (!loggedIn) return loggingIn ? null : '/login';
 
@@ -112,23 +111,23 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/profilesPage',
         builder: (BuildContext context, GoRouterState state) {
-          return BugReporter(child: const ProfilesPage());
+          return const BugReporter(child: ProfilesPage());
         },
       ),
       GoRoute(
         path: '/splash',
         builder: (BuildContext context, GoRouterState state) {
-          return BugReporter(child: const SplashPage());
+          return const BugReporter(child: SplashPage());
         },
       ),
       GoRoute(
           path: '/home',
           builder: (BuildContext context, GoRouterState state) =>
-              BugReporter(child: HomePage())),
+              const BugReporter(child: HomePage())),
       GoRoute(
           path: '/postsPage',
           builder: (BuildContext context, GoRouterState state) =>
-              BugReporter(child: PostsPage())),
+              const BugReporter(child: PostsPage())),
       // GoRoute(
       //     path: '/createPostsPage',
       //     builder: (BuildContext context, GoRouterState state) =>
@@ -136,11 +135,11 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/register',
           builder: (BuildContext context, GoRouterState state) =>
-              BugReporter(child: RegisterPage())),
+              const BugReporter(child: RegisterPage())),
       GoRoute(
           path: '/settings',
           builder: (BuildContext context, GoRouterState state) =>
-              BugReporter(child: SettingsPage())),
+              const BugReporter(child: SettingsPage())),
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => BugReporter(
@@ -174,7 +173,7 @@ class _MyAppState extends State<MyApp> {
 
   // var myExtProfile = null;
 
-  static bool isUserLoggedIn = false;
+  // static bool isUserLoggedIn = false;
 
   String appName = "";
   String packageName = "";
@@ -217,10 +216,10 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-    var intermediate =
-        AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
-
-    isUserLoggedIn = intermediate;
+    // var intermediate =
+    //     AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
+    //
+    // isUserLoggedIn = intermediate;
 
     var theAppVersion = DefaultConfig.version;
 

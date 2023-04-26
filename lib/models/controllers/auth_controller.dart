@@ -169,8 +169,12 @@ class AuthController with ChangeNotifier {
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
-        print(err);
-        print("Processed response $processedResponse");
+        if (kDebugMode) {
+          print(err);
+        }
+        if (kDebugMode) {
+          print("Processed response $processedResponse");
+        }
       }
       if ( processedResponse!= null && processedResponse['myAppProfile'] != null) {
         AppUser responseModel =

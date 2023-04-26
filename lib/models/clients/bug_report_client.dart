@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -16,10 +17,14 @@ class BugReportClient {
 
   Future<String?> getIdToken() async {
     if (token != "") {
-      print("Using cached Id Token");
+      if (kDebugMode) {
+        print("Using cached Id Token");
+      }
       return token;
     } else {
-      print("Retrieving Id Token");
+      if (kDebugMode) {
+        print("Retrieving Id Token");
+      }
       String? theToken = await FirebaseAuth.instance.currentUser?.getIdToken();
       if (theToken != null) {
         token = theToken;
@@ -50,10 +55,18 @@ class BugReportClient {
       request.fields['apiVersion'] = DefaultConfig.theApiVersion;
       request.fields['uiSanityDB'] = DefaultConfig.theSanityDB;
       request.fields['apiSanityDB'] = DefaultConfig.theApiDb;
-      print("Before bug submission ui Version ${DefaultConfig.theVersion}");
-      print("Before bug submission api version${DefaultConfig.theApiVersion}");
-      print("Before bug submission ui db${DefaultConfig.theSanityDB}");
-      print("Before bug submission api db ${DefaultConfig.theApiDb}");
+      if (kDebugMode) {
+        print("Before bug submission ui Version ${DefaultConfig.theVersion}");
+      }
+      if (kDebugMode) {
+        print("Before bug submission api version${DefaultConfig.theApiVersion}");
+      }
+      if (kDebugMode) {
+        print("Before bug submission ui db${DefaultConfig.theSanityDB}");
+      }
+      if (kDebugMode) {
+        print("Before bug submission api db ${DefaultConfig.theApiDb}");
+      }
 
       await request.send();
       return;

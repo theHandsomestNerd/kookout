@@ -6,6 +6,7 @@ import 'package:cookowt/models/extended_profile.dart';
 import 'package:cookowt/models/clients/api_client.dart';
 import 'package:cookowt/models/timeline_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import '../app_user.dart';
 import '../like.dart';
@@ -38,7 +39,9 @@ class ChatController {
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user != null) {
-        print('chatController: User is signed in!');
+        if (kDebugMode) {
+          print('chatController: User is signed in!');
+        }
 
         await updateChatController();
       }

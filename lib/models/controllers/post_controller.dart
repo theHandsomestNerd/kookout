@@ -77,7 +77,9 @@ class PostController {
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
-        print(err);
+        if (kDebugMode) {
+          print(err);
+        }
       }
 
       // if (kDebugMode) {
@@ -154,8 +156,12 @@ class PostController {
       try {
         processedResponse = jsonDecode(response.body);
       } catch (err) {
-        print(err);
-        print(processedResponse);
+        if (kDebugMode) {
+          print(err);
+        }
+        if (kDebugMode) {
+          print(processedResponse);
+        }
         if(processedResponse == null) {
           return null;
         }
