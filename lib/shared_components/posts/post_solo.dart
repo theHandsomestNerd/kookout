@@ -59,7 +59,7 @@ class _PostSoloState extends State<PostSolo> {
     // myUserId =
     //     AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     // myBlockedProfiles = await chatController?.updateMyBlocks();
-    setState(() {});
+    // setState(() {});
   }
 
   updateLikes() async {
