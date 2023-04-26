@@ -28,8 +28,7 @@ class LoadingButton extends StatelessWidget {
         height: 48,
         width: width??200,
         child: isLoading == true
-            ? Flex(
-                direction: Axis.vertical,
+            ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
@@ -41,8 +40,7 @@ class LoadingButton extends StatelessWidget {
                       ),
                     ),
                   ])
-            : Flex(
-                direction: Axis.vertical,
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(text ?? ""),

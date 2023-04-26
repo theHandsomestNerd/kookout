@@ -153,7 +153,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
           children: [
             Expanded(
               child: TextFormField(
-                autofocus: true,
                 onChanged: (e) {
                   _setPostBody(e);
                 },

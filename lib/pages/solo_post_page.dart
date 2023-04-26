@@ -348,7 +348,6 @@ class _SoloPostPageState extends State<SoloPostPage> {
                           child: Column(
                             children: [
                               TextFormField(
-                                autofocus: true,
                                 onChanged: (e) {
                                   _setCommentBody(e);
                                 },

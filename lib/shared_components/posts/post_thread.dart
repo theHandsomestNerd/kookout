@@ -116,6 +116,12 @@ class _PostThreadState extends State<PostThread> {
         child: Container(color: Colors.black87),
       ),
       PagedListView<String, Post>(
+        padding: EdgeInsets.fromLTRB(
+          0,
+          0,
+          0,
+          56,
+        ),
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Post>(
           noItemsFoundIndicatorBuilder: (build) {
@@ -169,17 +175,18 @@ class _PostThreadState extends State<PostThread> {
         ),
       ),
       SlidingUpPanel(
-        onPanelClosed: (){
+        onPanelClosed: () {
           isPanelOpen = false;
         },
-        onPanelOpened: (){
-
+        onPanelOpened: () {
           isPanelOpen = true;
         },
-
         collapsed: MaterialButton(
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
           color: Colors.red,
           onPressed: () {
@@ -199,7 +206,7 @@ class _PostThreadState extends State<PostThread> {
                   8.0,
                   8.0,
                   8.0,
-                  8.0,
+                  16.0,
                 ),
                 child: Container(
                   color: Colors.white,
@@ -222,6 +229,7 @@ class _PostThreadState extends State<PostThread> {
         color: Colors.transparent,
         minHeight: 64,
         panelBuilder: (scrollController) => SingleChildScrollView(
+          // controller: scrollController,
           child: Card(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -336,7 +344,9 @@ class _PostThreadState extends State<PostThread> {
                           setState(() {});
                         },
                       ),
-                      const SizedBox(height: 24,)
+                      const SizedBox(
+                        height: 24,
+                      )
                     ],
                   ),
                 ),

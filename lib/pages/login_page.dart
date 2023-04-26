@@ -157,48 +157,46 @@ class _LoginPageState extends State<LoginPage> {
 
     return AppScaffoldWrapper(
       floatingActionMenu: const LoginMenu(),
-      child: Flex(
-        direction: Axis.vertical,
-        children: [
-          Flexible(
-            child: Center(
-              child: Stack(
+      child: Center(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/221.jpg',
+                repeat: ImageRepeat.repeat,
+              ),
+            ),
+            Center(
+              child: Flex(
+                direction: Axis.vertical,
                 children: [
-                  Positioned.fill(
-                    child: Image.asset(
-                      'assets/221.jpg',
-                      repeat: ImageRepeat.repeat,
-                    ),
-                  ),
-                  Center(
-                    child: Flex(
-                      direction: Axis.vertical,
+                  Flexible(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Flexible(
-                          flex: 8,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 150,
-                                  width: 300,
-                                  child: Image.asset('assets/logo-w.png'),
-                                ),
-                                Column(
-                                  key: ObjectKey(FirebaseAuth.instance.currentUser),
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (FirebaseAuth.instance.currentUser !=
-                                        null)
-                                      Text(
-                                        "You are logged in as ${FirebaseAuth.instance.currentUser?.email}.",
-                                      ),
-                                    if (FirebaseAuth.instance.currentUser !=
-                                        null) ConstrainedBox(
-                                      constraints: const BoxConstraints(maxWidth: 48, maxHeight: 48),
+                        Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 150,
+                                width: 300,
+                                child: Image.asset('assets/logo-w.png'),
+                              ),
+                              Column(
+                                key: ObjectKey(FirebaseAuth.instance.currentUser),
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (FirebaseAuth.instance.currentUser != null)
+                                    Text(
+                                      "You are logged in as ${FirebaseAuth.instance.currentUser?.email}.",
+                                    ),
+                                  if (FirebaseAuth.instance.currentUser != null)
+                                    ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                          maxWidth: 48, maxHeight: 48),
                                       child: ToolButton(
                                         label: "home",
                                         action: (innerContext) {
@@ -212,116 +210,97 @@ class _LoginPageState extends State<LoginPage> {
                                         iconData: Icons.home,
                                       ),
                                     )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              SizedBox(
+                                width: 350,
+                                height: 400,
+                                child: Column(
+                                  children: [
+                                    TextFieldWrapped(
+                                      icon: Icons.person,
+                                      autofocus: _loginPassword.isEmpty,
+                                      validator: (String? value) {
+                                        const pattern =
+                                            r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
+                                            r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
+                                            r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
+                                            r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
+                                            r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
+                                            r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
+                                            r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
+                                        final regex = RegExp(pattern);
+
+                                        return value!.isNotEmpty &&
+                                                !regex.hasMatch(value)
+                                            ? 'Enter a valid email address'
+                                            : null;
+                                      },
+                                      autocorrect: false,
+                                      initialValue: _loginUsername,
+                                      setField: (e) {
+                                        _setUsername(e);
+                                      },
+                                      labelText: "Username/Email",
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    TextFieldWrapped(
+                                      icon: Icons.password,
+                                      obscureText: true,
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      setField: (e) {
+                                        _setPassword(e);
+                                      },
+                                      initialValue: _loginPassword,
+                                      labelText: "Password",
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    AnalyticsLoadingButton(
+                                      analyticsEventName: 'login-button-pressed',
+                                      analyticsEventData: {
+                                        "username": _loginUsername
+                                      },
+                                      isDisabled: _loginUsername.isEmpty ||
+                                          _loginPassword.isEmpty,
+                                      action: (innerContext) async {
+                                        _loginUser(innerContext);
+                                      },
+                                      text: "Login",
+                                    ),
+                                    const SizedBox(
+                                      height: 32,
+                                    ),
+                                    Text("If you do not have an account..."),
+                                    AnalyticsLoadingButton(
+                                      analyticsEventName:
+                                          'login-register-button-pressed',
+                                      analyticsEventData: {
+                                        "username": _loginUsername
+                                      },
+                                      action: (innerContext) async {
+                                        GoRouter.of(context).go('/register');
+
+                                        // Navigator.pushNamed(
+                                        //     innerContext, '/register');
+                                      },
+                                      text: "Register",
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 32,
-                                ),
-                                ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 350, maxHeight: 450),
-                                  child: Flex(
-                                    direction: Axis.vertical,
-                                    children: [
-                                      Flexible(
-                                        flex: 1,
-                                        child: TextFieldWrapped(
-                                          icon: Icons.person,
-                                          autofocus: _loginPassword.isEmpty,
-                                          validator: (String? value) {
-                                            const pattern =
-                                                r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
-                                                r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-'
-                                                r'\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*'
-                                                r'[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4]'
-                                                r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
-                                                r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
-                                                r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
-                                            final regex = RegExp(pattern);
-
-                                            return value!.isNotEmpty &&
-                                                    !regex.hasMatch(value)
-                                                ? 'Enter a valid email address'
-                                                : null;
-                                          },
-                                          autocorrect: false,
-                                          initialValue: _loginUsername,
-                                          setField: (e) {
-                                            _setUsername(e);
-                                          },
-                                          labelText: "Username/Email",
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: TextFieldWrapped(
-                                          icon: Icons.password,
-                                          obscureText: true,
-                                          enableSuggestions: false,
-                                          autocorrect: false,
-                                          setField: (e) {
-                                            _setPassword(e);
-                                          },
-                                          initialValue: _loginPassword,
-                                          labelText: "Password",
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: AnalyticsLoadingButton(
-                                          analyticsEventName:
-                                              'login-button-pressed',
-                                          analyticsEventData: {
-                                            "username": _loginUsername
-                                          },
-                                          isDisabled: _loginUsername.isEmpty ||
-                                              _loginPassword.isEmpty,
-                                          action: (innerContext) async {
-                                            _loginUser(innerContext);
-                                          },
-                                          text: "Login",
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 32,
-                                      ),
-                                      const Flexible(
-                                        flex: 1,
-                                        child: Text(
-                                            "If you do not have an account..."),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: AnalyticsLoadingButton(
-                                          analyticsEventName:
-                                              'login-register-button-pressed',
-                                          analyticsEventData: {
-                                            "username": _loginUsername
-                                          },
-                                          action: (innerContext) async {
-                                            GoRouter.of(context).go('/register');
-
-                                            // Navigator.pushNamed(
-                                            //     innerContext, '/register');
-                                          },
-                                          text: "Register",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                        Flexible(
-                          flex: 1,
+                        SizedBox(
+                          height: 80,
                           child: Column(
                             children: [
                               Text(DefaultConfig.appName),
@@ -338,8 +317,8 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
