@@ -121,12 +121,8 @@ class _ProfilesPageState extends State<ProfilesPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: ProfilePageMenu(
-        updateMenu: _onItemTapped,
-      ),
-      key: ObjectKey(chatController),
+      floatingActionMenu: ProfilePageMenu(),
       child: ConstrainedBox(
-          key: Key(_selectedIndex.toString()),
           constraints: const BoxConstraints(),
           child: _widgetOptions(
               _selectedIndex)), // This trailing comma makes auto-formatting nicer for build methods.

@@ -31,7 +31,7 @@ class _SearchAndListState extends State<SearchAndList> {
               )
             : const Text(""),
         Expanded(
-          child: Center(child: widget.listChild),
+          child:  widget.listChild,
         ),
       ]),
     );

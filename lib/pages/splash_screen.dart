@@ -1,5 +1,6 @@
 import 'package:cookowt/config/default_config.dart';
 import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/shared_components/loading_logo.dart';
 import 'package:cookowt/shared_components/menus/login_menu.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/foundation.dart';
@@ -65,63 +66,28 @@ class _SplashPageState extends State<SplashPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return AppScaffoldWrapper(
-      floatingActionMenu: const LoginMenu(),
-      child: Flex(
-        direction: Axis.vertical,
-        children: [
-          Flexible(
-            child: Center(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.asset(
-                      'assets/221.jpg',
-                      repeat: ImageRepeat.repeat,
-                    ),
-                  ),
-                  Center(
-                    child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 8,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 150,
-                                  width: 300,
-                                  child: Image.asset('assets/logo-w.png'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Text(DefaultConfig.appName),
-                              Text(
-                                  "ui v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
-                              Text("api - ${DefaultConfig.apiStatus}"),
-                              Text("v$apiVersion -$sanityApiDB"),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Center(
+              child: LoadingLogo(),
             ),
-          ),
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+            Column(
+              children: [
+                Text(DefaultConfig.appName),
+                Text(
+                    "ui v${DefaultConfig.version}.${DefaultConfig.buildNumber} - ${DefaultConfig.sanityDB}"),
+                Text("api - ${DefaultConfig.apiStatus}"),
+                Text("v$apiVersion -$sanityApiDB"),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

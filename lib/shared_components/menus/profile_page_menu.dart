@@ -11,10 +11,8 @@ import '../../wrappers/expanding_fab.dart';
 class ProfilePageMenu extends StatefulWidget {
   const ProfilePageMenu({
     Key? key,
-    required this.updateMenu,
     this.selected,
   }) : super(key: key);
-  final Function updateMenu;
 
   final bool? selected;
 

@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
   late GoRouter router = GoRouter(
     redirect: (BuildContext context, GoRouterState state) {
       // print("GO_ROUTER ${state.location} ${state.subloc}");
-      if (state.subloc == '/register') {
+      if (state.subloc == '/register' || state.subloc == '/splash') {
         return null;
       }
 

@@ -5,7 +5,9 @@ import 'package:cookowt/models/controllers/chat_controller.dart';
 import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/extended_profile.dart';
 import 'package:cookowt/models/post.dart';
+import 'package:cookowt/pages/splash_screen.dart';
 import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/shared_components/loading_logo.dart';
 import 'package:cookowt/shared_components/menus/home_page_menu.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:cookowt/wrappers/card_with_actions.dart';
@@ -169,7 +171,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
             positions.remove(foundLastPosition);
             positions.add(thePosition);
             // setState(() {
-              isPositionLoading = false;
+            isPositionLoading = false;
             // });
           }
 
@@ -392,115 +394,101 @@ class _HomePageState extends State<HomePage> with RouteAware {
       floatingActionMenu: HomePageMenu(
         updateMenu: () => {},
       ),
-      child: Flex(
-        direction: Axis.vertical,
-        children: [
-          Expanded(
-            child: PageView.custom(
-              controller: _profilePageController,
-              // pagingController: _pagingController,
-              // shrinkWrap: true,
-              // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //   mainAxisExtent: 450,
-              //   crossAxisCount: 1,
-              //   childAspectRatio: 1,
-              // ),
-              childrenDelegate: SliverChildBuilderDelegate(
-                (build, thePageIndex) {
-                  var theItem =
-                      _profilePagingController.itemList?.isNotEmpty ?? false
-                          ? _profilePagingController.itemList![thePageIndex]
-                          : null;
+      child: Container(
+        color: Colors.white,
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            Expanded(
+              child: PageView.custom(
+                controller: _profilePageController,
+                // pagingController: _pagingController,
+                // shrinkWrap: true,
+                // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //   mainAxisExtent: 450,
+                //   crossAxisCount: 1,
+                //   childAspectRatio: 1,
+                // ),
+                childrenDelegate: SliverChildBuilderDelegate(
+                  (build, thePageIndex) {
+                    var theItem =
+                        _profilePagingController.itemList?.isNotEmpty ?? false
+                            ? _profilePagingController.itemList![thePageIndex]
+                            : null;
 
-                  if (thePageIndex >=
-                      (_profilePagingController.itemList?.length ?? 0) - 3) {
-                    _profilePagingController.notifyPageRequestListeners(
-                        _profilePagingController.nextPageKey ?? "");
-                  }
-
-                  ExtendedProfile? thisExtProfile;
-                  for (var element in extProfiles) {
-                    if (element.userId ==
-                        _profilePagingController
-                            .itemList![thePageIndex].userId) {
-                      thisExtProfile = element;
+                    if (thePageIndex >=
+                        (_profilePagingController.itemList?.length ?? 0) - 3) {
+                      _profilePagingController.notifyPageRequestListeners(
+                          _profilePagingController.nextPageKey ?? "");
                     }
-                  }
 
-                  SanityPosition? thisUserPosition;
-                  for (var element in positions) {
-                    if (element.userRef?.userId ==
-                        _profilePagingController
-                            .itemList![thePageIndex].userId) {
-                      thisUserPosition = element;
+                    ExtendedProfile? thisExtProfile;
+                    for (var element in extProfiles) {
+                      if (element.userId ==
+                          _profilePagingController
+                              .itemList![thePageIndex].userId) {
+                        thisExtProfile = element;
+                      }
                     }
-                  }
 
-                  //get the extended profile for this user
-                  return theItem != null
-                      ? GestureDetector(
-                          onTap: () async {
-                            if (theItem.userId != null) {
-                              cancelHomeScreenTimers();
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-profile-while-highlighted-pressed', {
-                                "highlightedUserId": theItem.userId
-                              }).then((x) {
-                                GoRouter.of(context)
-                                    .go('/profile/${theItem.userId}');
+                    SanityPosition? thisUserPosition;
+                    for (var element in positions) {
+                      if (element.userRef?.userId ==
+                          _profilePagingController
+                              .itemList![thePageIndex].userId) {
+                        thisUserPosition = element;
+                      }
+                    }
 
-                                // Navigator.pushNamed(context, '/profile',
-                                //     arguments: {"id": theItem.userId});
-                              });
-                            }
-                          },
-                          onPanUpdate: (details) async {
-                            // Swiping in up direction.
-                            if (details.delta.dy < 0) {
-                              cancelHomeScreenTimers();
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-all-profiles-pressed', {
-                                "highlightedUserId": theItem.userId
-                              }).then((x) {
-                                GoRouter.of(context).go('/profilesPage');
+                    //get the extended profile for this user
+                    return theItem != null
+                        ? GestureDetector(
+                            onTap: () async {
+                              if (theItem.userId != null) {
+                                cancelHomeScreenTimers();
+                                await analyticsController?.sendAnalyticsEvent(
+                                    'view-profile-while-highlighted-pressed', {
+                                  "highlightedUserId": theItem.userId
+                                }).then((x) {
+                                  GoRouter.of(context)
+                                      .go('/profile/${theItem.userId}');
 
-                                // Navigator.pushNamed(context, '/profilesPage');
-                              });
-                            }
-
-                            // Swiping in down direction.
-                            if (details.delta.dy > 0) {
-                              if (kDebugMode) {
-                                print('swipe down');
+                                  // Navigator.pushNamed(context, '/profile',
+                                  //     arguments: {"id": theItem.userId});
+                                });
                               }
-                            }
-                          },
-                          child: CardWithActions(
-                            locationRow: Flex(
-                              direction: Axis.horizontal,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Center(
-                                    child: Text(
-                                      "${thisExtProfile?.age ?? "99"} yrs",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.merge(
-                                            TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(.85)),
-                                          ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Center(
-                                    child: Text(
-                                        "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
+                            },
+                            onPanUpdate: (details) async {
+                              // Swiping in up direction.
+                              if (details.delta.dy < 0) {
+                                cancelHomeScreenTimers();
+                                await analyticsController?.sendAnalyticsEvent(
+                                    'view-all-profiles-pressed', {
+                                  "highlightedUserId": theItem.userId
+                                }).then((x) {
+                                  GoRouter.of(context).go('/profilesPage');
+
+                                  // Navigator.pushNamed(context, '/profilesPage');
+                                });
+                              }
+
+                              // Swiping in down direction.
+                              if (details.delta.dy > 0) {
+                                if (kDebugMode) {
+                                  print('swipe down');
+                                }
+                              }
+                            },
+                            child: CardWithActions(
+                              locationRow: Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Center(
+                                      child: Text(
+                                        "${thisExtProfile?.age ?? "99"} yrs",
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleSmall
@@ -508,207 +496,231 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                               TextStyle(
                                                   color: Colors.white
                                                       .withOpacity(.85)),
-                                            )),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Center(
-                                    child: Text(
-                                      "${thisExtProfile?.weight ?? "999"} lbs",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.merge(
-                                            TextStyle(
-                                                color: Colors.white
-                                                    .withOpacity(.85)),
-                                          ),
+                                            ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Icon(
-                                        Icons.pin_drop,
-                                        size: 30.0,
-                                        color: Colors.white.withOpacity(.8),
-                                        semanticLabel: "Location",
-                                      ),
-                                      Text(
-                                        "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                    ],
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                      child: Text(
+                                          "${thisExtProfile?.height?.feet ?? "9"}' ${thisExtProfile?.height?.inches ?? "9"}\"",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.merge(
+                                                TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(.85)),
+                                              )),
+                                    ),
                                   ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Center(
+                                      child: Text(
+                                        "${thisExtProfile?.weight ?? "999"} lbs",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.merge(
+                                              TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(.85)),
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.pin_drop,
+                                          size: 30.0,
+                                          color: Colors.white.withOpacity(.8),
+                                          semanticLabel: "Location",
+                                        ),
+                                        Text(
+                                          "${GeolocationController.distanceBetween(GeolocationController.theCurrentPosition, thisUserPosition).toString()} mi.",
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              image: SanityImageBuilder.imageProviderFor(
+                                      sanityImage: theItem.profileImage,
+                                      showDefaultImage: true)
+                                  .image,
+                              // action1Text:
+                              //     "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
+                              action1Text: 'All Profiles',
+                              // action1OnPressed: () async {
+                              // if (theItem.userId != null) {
+                              //   cancelHomeScreenTimers();
+                              //   await analyticsController?.sendAnalyticsEvent(
+                              //       'view-profile-while-highlighted-pressed', {
+                              //     "highlightedUserId": theItem.userId
+                              //   }).then((x) {
+                              //     Navigator.pushNamed(context, '/profile',
+                              //         arguments: {"id": theItem.userId});
+                              //   });
+                              // }
+                              // },
+                              action1OnPressed: () async {
+                                cancelHomeScreenTimers();
+                                await analyticsController?.sendAnalyticsEvent(
+                                    'view-all-profiles-pressed', {
+                                  "highlightedUserId": theItem.userId
+                                }).then((x) {
+                                  GoRouter.of(context).go('/profilesPage');
+
+                                  // Navigator.pushNamed(context, '/profilesPage');
+                                });
+                              },
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                !isProfileLoading && (theItem != null)
+                                    ? const Text("No Profiles with images")
+                                    : Column(
+                                        children: [
+                                          LoadingLogo(),
+                                          Text("Loading Profile Previews")
+                                        ],
+                                      ),
+                              ],
+                            ),
+                          );
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: PageView.custom(
+                controller: _postPageController,
+                // pagingController: _pagingController,
+                // shrinkWrap: true,
+                // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //   mainAxisExtent: 450,
+                //   crossAxisCount: 1,
+                //   childAspectRatio: 1,
+                // ),
+
+                childrenDelegate: SliverChildBuilderDelegate(
+                  (build, thePageIndex) {
+                    var theItem =
+                        _postPagingController.itemList?.isNotEmpty ?? false
+                            ? _postPagingController.itemList![thePageIndex]
+                            : null;
+
+                    if (thePageIndex >=
+                        (_postPagingController.itemList?.length ?? 0) - 3) {
+                      _postPagingController.notifyPageRequestListeners(
+                          _postPagingController.nextPageKey ?? "");
+                    }
+
+                    //get the extended profile for this user
+                    return theItem != null
+                        ? GestureDetector(
+                            onTap: () async {
+                              cancelHomeScreenTimers();
+                              await analyticsController?.sendAnalyticsEvent(
+                                  'view-post-while-highlighted-pressed',
+                                  {"highlightedPostId": theItem.id}).then((x) {
+                                if (theItem.id != null) {
+                                  GoRouter.of(context).go('/post/${theItem.id}');
+
+                                  // Navigator.pushNamed(context, '/post',
+                                  //     arguments: {"id": theItem.id});
+                                }
+                              });
+                            },
+                            onPanUpdate: (details) async {
+                              // Swiping in up direction.
+                              if (details.delta.dy < 0) {
+                                if (kDebugMode) {
+                                  print('swipe upswipe up');
+                                }
+                                cancelHomeScreenTimers();
+                                await analyticsController?.sendAnalyticsEvent(
+                                    'view-all-posts-while-highlighted-pressed',
+                                    {"highlightedPostId": theItem.id}).then((x) {
+                                  GoRouter.of(context).go('/postsPage');
+
+                                  // Navigator.pushNamed(context, '/postsPage');
+                                });
+                              }
+
+                              // Swiping in down direction.
+                              if (details.delta.dy > 0) {
+                                if (kDebugMode) {
+                                  print('swipe down');
+                                }
+                              }
+                            },
+                            child: CardWithActions(
+                              author: theItem.author,
+                              when: theItem.publishedAt,
+                              locationRow: null,
+                              caption: theItem.body,
+                              image: SanityImageBuilder.imageProviderFor(
+                                      sanityImage: theItem.mainImage,
+                                      showDefaultImage: true)
+                                  .image,
+                              action1Text: 'All Posts',
+                              action1OnPressed: () async {
+                                cancelHomeScreenTimers();
+                                await analyticsController?.sendAnalyticsEvent(
+                                    'view-all-posts-while-highlighted-pressed',
+                                    {"highlightedPostId": theItem.id}).then((x) {
+                                  GoRouter.of(context).go('/postsPage');
+
+                                  // Navigator.pushNamed(context, '/postsPage');
+                                });
+                              },
+                              // action2Text: 'Go to post',
+                              // action2OnPressed: () async {
+                              //   cancelHomeScreenTimers();
+                              //   await analyticsController?.sendAnalyticsEvent(
+                              //       'view-post-while-highlighted-pressed',
+                              //       {"highlightedPostId": theItem.id}).then((x) {
+                              //     if (theItem.id != null) {
+                              //       Navigator.pushNamed(context, '/post',
+                              //           arguments: {"id": theItem.id});
+                              //     }
+                              //   });
+                              // },
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                !isPostLoading && (theItem == null)
+                                    ? const Text("No Posts with images")
+                                    : Column(
+                                  children: [
+                                    LoadingLogo(),
+                                    Text("Loading Post Previews")
+                                  ],
                                 ),
                               ],
                             ),
-                            image: SanityImageBuilder.imageProviderFor(
-                                    sanityImage: theItem.profileImage,
-                                    showDefaultImage: true)
-                                .image,
-                            // action1Text:
-                            //     "${theItem.displayName?.toUpperCase()[0]}${theItem.displayName?.substring(1).toLowerCase()}",
-                            action1Text: 'All Profiles',
-                            // action1OnPressed: () async {
-                            // if (theItem.userId != null) {
-                            //   cancelHomeScreenTimers();
-                            //   await analyticsController?.sendAnalyticsEvent(
-                            //       'view-profile-while-highlighted-pressed', {
-                            //     "highlightedUserId": theItem.userId
-                            //   }).then((x) {
-                            //     Navigator.pushNamed(context, '/profile',
-                            //         arguments: {"id": theItem.userId});
-                            //   });
-                            // }
-                            // },
-                            action1OnPressed: () async {
-                              cancelHomeScreenTimers();
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-all-profiles-pressed', {
-                                "highlightedUserId": theItem.userId
-                              }).then((x) {
-                                GoRouter.of(context).go('/profilesPage');
-
-                                // Navigator.pushNamed(context, '/profilesPage');
-                              });
-                            },
-                          ),
-                        )
-                      : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              !isProfileLoading && (theItem != null)
-                                  ? const Text("No Profiles with images")
-                                  : const CircularProgressIndicatorWithMessage(
-                                      message: "Loading Profile Previews",
-                                    ),
-                            ],
-                          ),
-                        );
-                },
+                          );
+                  },
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: PageView.custom(
-              controller: _postPageController,
-              // pagingController: _pagingController,
-              // shrinkWrap: true,
-              // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //   mainAxisExtent: 450,
-              //   crossAxisCount: 1,
-              //   childAspectRatio: 1,
-              // ),
-
-              childrenDelegate: SliverChildBuilderDelegate(
-                (build, thePageIndex) {
-                  var theItem =
-                      _postPagingController.itemList?.isNotEmpty ?? false
-                          ? _postPagingController.itemList![thePageIndex]
-                          : null;
-
-                  if (thePageIndex >=
-                      (_postPagingController.itemList?.length ?? 0) - 3) {
-                    _postPagingController.notifyPageRequestListeners(
-                        _postPagingController.nextPageKey ?? "");
-                  }
-
-                  //get the extended profile for this user
-                  return theItem != null
-                      ? GestureDetector(
-                          onTap: () async {
-                            cancelHomeScreenTimers();
-                            await analyticsController?.sendAnalyticsEvent(
-                                'view-post-while-highlighted-pressed',
-                                {"highlightedPostId": theItem.id}).then((x) {
-                              if (theItem.id != null) {
-                                GoRouter.of(context).go('/post/${theItem.id}');
-
-                                // Navigator.pushNamed(context, '/post',
-                                //     arguments: {"id": theItem.id});
-                              }
-                            });
-                          },
-                          onPanUpdate: (details) async {
-                            // Swiping in up direction.
-                            if (details.delta.dy < 0) {
-                              if (kDebugMode) {
-                                print('swipe upswipe up');
-                              }
-                              cancelHomeScreenTimers();
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-all-posts-while-highlighted-pressed',
-                                  {"highlightedPostId": theItem.id}).then((x) {
-                                GoRouter.of(context).go('/postsPage');
-
-                                // Navigator.pushNamed(context, '/postsPage');
-                              });
-                            }
-
-                            // Swiping in down direction.
-                            if (details.delta.dy > 0) {
-                              if (kDebugMode) {
-                                print('swipe down');
-                              }
-                            }
-                          },
-                          child: CardWithActions(
-                            author: theItem.author,
-                            when: theItem.publishedAt,
-                            locationRow: null,
-                            caption: theItem.body,
-                            image: SanityImageBuilder.imageProviderFor(
-                                    sanityImage: theItem.mainImage,
-                                    showDefaultImage: true)
-                                .image,
-                            action1Text: 'All Posts',
-                            action1OnPressed: () async {
-                              cancelHomeScreenTimers();
-                              await analyticsController?.sendAnalyticsEvent(
-                                  'view-all-posts-while-highlighted-pressed',
-                                  {"highlightedPostId": theItem.id}).then((x) {
-                                GoRouter.of(context).go('/postsPage');
-
-                                // Navigator.pushNamed(context, '/postsPage');
-                              });
-                            },
-                            // action2Text: 'Go to post',
-                            // action2OnPressed: () async {
-                            //   cancelHomeScreenTimers();
-                            //   await analyticsController?.sendAnalyticsEvent(
-                            //       'view-post-while-highlighted-pressed',
-                            //       {"highlightedPostId": theItem.id}).then((x) {
-                            //     if (theItem.id != null) {
-                            //       Navigator.pushNamed(context, '/post',
-                            //           arguments: {"id": theItem.id});
-                            //     }
-                            //   });
-                            // },
-                          ),
-                        )
-                      : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              !isPostLoading && (theItem == null)
-                                  ? const Text("No Posts with images")
-                                  : const CircularProgressIndicatorWithMessage(
-                                      message: "Loading Post Previews",
-                                    ),
-                            ],
-                          ),
-                        );
-                },
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

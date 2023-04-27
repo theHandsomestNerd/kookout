@@ -1,4 +1,6 @@
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
 import 'package:cookowt/shared_components/menus/posts_page_menu.dart';
+import 'package:cookowt/shared_components/menus/profile_page_menu.dart';
 import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +26,8 @@ class _PostsPageState extends State<PostsPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: PostsPageMenu(
-        updateMenu: () {},
-      ),
+      floatingActionMenu: HomePageMenu(updateMenu: (){},),
+
       child: Flex(
         direction: Axis.vertical,
         children: const [

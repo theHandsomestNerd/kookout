@@ -67,29 +67,21 @@ class _ProfileGridState extends State<ProfileGrid> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 380,
+    return PagedGridView<String, AppUser>(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisExtent: 125,
+        mainAxisSpacing: 0,
+        crossAxisSpacing: 0,
+        crossAxisCount: 4,
       ),
-      child: PagedGridView<String, AppUser>(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 100,
-          mainAxisSpacing: 0,
-          crossAxisSpacing: 0,
-          crossAxisCount: 4,
-          childAspectRatio: 0.5,
-        ),
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<AppUser>(
-          itemBuilder: (context, item, index) =>
-              Flex(direction: Axis.horizontal, children: [
-            Expanded(
+      pagingController: _pagingController,
+      builderDelegate: PagedChildBuilderDelegate<AppUser>(
+        itemBuilder: (context, item, index) =>
+            Center(
               child: ProfileSolo(
                 profile: item,
               ),
             ),
-          ]),
-        ),
       ),
     );
   }

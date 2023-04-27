@@ -58,7 +58,7 @@ class _ProfileSoloState extends State<ProfileSolo> {
         children: [
           widget.profile.profileImage != null
               ? ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 120, minWidth: 120),
+            constraints: const BoxConstraints(minHeight: 125, minWidth: 125),
                 child: Hero(
                   tag: widget.profile.userId ?? "",
                   child: CardWithBackground(
@@ -71,9 +71,11 @@ class _ProfileSoloState extends State<ProfileSolo> {
                 )
               )
               : SizedBox(
-                  height: 100,
-                  width: 100,
+                  height: 125,
+                  width: 125,
                   child: CardWithBackground(
+                    height: 125,
+                    width: 125,
                     image: const Image(
                             image: AssetImage(
                                 'assets/blankProfileImage.png'))
