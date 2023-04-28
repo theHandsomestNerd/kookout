@@ -1,10 +1,13 @@
 import 'package:cookowt/models/controllers/auth_inherited.dart';
+import 'package:cookowt/models/extract_hash_tag_details.dart';
+import 'package:cookowt/models/hash_tag.dart';
 import 'package:cookowt/wrappers/alerts_snackbar.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hashtagable/hashtagable.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
@@ -105,6 +108,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     });
     String? postResponse;
 
+
     // print(" make post");
     postResponse = await postController?.createPost(_postBody ?? "",
         imageUploader?.file?.name ?? "", theFileBytes, context);
@@ -152,10 +156,24 @@ class _CreatePostPageState extends State<CreatePostPage> {
           direction: Axis.horizontal,
           children: [
             Expanded(
-              child: TextFormField(
+              // child: TextFormField(
+              //   onChanged: (e) {
+              //     _setPostBody(e);
+              //   },
+              //   minLines: 2,
+              //   maxLines: 4,
+              //   decoration: const InputDecoration(
+              //     border: UnderlineInputBorder(),
+              //     labelText: 'Post:',
+              //   ),
+              // ),
+              child: HashTagTextField(
+                decoratedStyle: TextStyle(fontSize: 14, color: Colors.blue),
+                basicStyle: TextStyle(fontSize: 14, color: Colors.black),
                 onChanged: (e) {
                   _setPostBody(e);
                 },
+                decorateAtSign: true,
                 minLines: 2,
                 maxLines: 4,
                 decoration: const InputDecoration(

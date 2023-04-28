@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hashtagable/hashtagable.dart';
 
 import '../models/app_user.dart';
 import '../sanity/sanity_image_builder.dart';
@@ -81,8 +82,13 @@ class _AuthorAndTextState extends State<AuthorAndText> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(12, 8.0, 8, 12),
-                              child: Text(
-                                widget.body ?? "",
+                              child: HashTagText(
+                                decoratedStyle: TextStyle(fontSize: 22,color:Colors.red),
+                                basicStyle: TextStyle(fontSize: 22,color:Colors.black),
+                                text:widget.body ?? "",
+                                onTap: (text){
+                                  print("You clicked hashtag $text");
+                                },
                               ),
                             ),
                           ),
