@@ -42,6 +42,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - run: |
+         echo $ENV_FILE_CONTENTS | base64 -d > assets/.env
+        env:
+          ENV_FILE_CONTENTS: ${{ secrets.ENV_FILE_CONTENTS }}
       - run: flutter pub get
       - run: flutter test
       - run: flutter build web
