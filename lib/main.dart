@@ -36,11 +36,11 @@ import 'pages/login_page.dart';
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
-  await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
-  const _requiredEnvVars = const ['FIREBASE_PROJECT_ID', 'FIREBASE_APP_ID'];
-  bool get (hasEnv) => dotenv.isEveryDefined(_requiredEnvVars);
+  // await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
+  // const _requiredEnvVars = const ['FIREBASE_PROJECT_ID', 'FIREBASE_APP_ID'];
+  // bool get (hasEnv) => dotenv.isEveryDefined(_requiredEnvVars);
 
-  print("platform env vars${Platform.environment} ${dotenv.env}");
+  // print("platform env vars${Platform.environment} ${dotenv.env}");
   usePathUrlStrategy();
 
   WidgetsFlutterBinding.ensureInitialized();
