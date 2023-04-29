@@ -6,6 +6,7 @@ import 'package:cookowt/models/controllers/auth_controller.dart';
 import 'package:cookowt/models/controllers/chat_controller.dart';
 import 'package:cookowt/models/controllers/geolocation_controller.dart';
 import 'package:cookowt/models/controllers/post_controller.dart';
+import 'package:cookowt/pages/hashtag_page.dart';
 import 'package:cookowt/pages/home_page.dart';
 import 'package:cookowt/pages/logout_page.dart';
 import 'package:cookowt/pages/posts_page.dart';
@@ -162,6 +163,13 @@ class _MyAppState extends State<MyApp> {
                   id: FirebaseAuth.instance.currentUser?.uid ?? "",
                 ));
           }),
+      GoRoute(
+          path: '/hashtag/:id',
+          builder: (BuildContext context, GoRouterState state) => BugReporter(
+              child: HashtagPage(
+                key: Key(state.params["id"]!),
+                thisHashtagId: state.params["id"],
+              ))),
     ],
   );
 

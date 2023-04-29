@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hashtagable/hashtagable.dart';
 
 import '../models/app_user.dart';
@@ -87,7 +88,7 @@ class _AuthorAndTextState extends State<AuthorAndText> {
                                 basicStyle: TextStyle(fontSize: 22,color:Colors.black),
                                 text:widget.body ?? "",
                                 onTap: (text){
-                                  print("You clicked hashtag $text");
+                                  GoRouter.of(context).go('/hashtag/${text.replaceAll("#", "")}');
                                 },
                               ),
                             ),

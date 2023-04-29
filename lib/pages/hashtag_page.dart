@@ -13,20 +13,23 @@ import '../shared_components/posts/post_solo.dart';
 import '../wrappers/analytics_loading_button.dart';
 import 'create_post_page.dart';
 
-class PostsPage extends StatefulWidget {
-  const PostsPage({
+
+class HashtagPage extends StatefulWidget {
+  const HashtagPage({
     super.key,
+    required this.thisHashtagId
   });
 
+  final String? thisHashtagId;
   @override
-  State<PostsPage> createState() => _PostsPageState();
+  State<HashtagPage> createState() => _HashtagPageState();
 }
 
-class _PostsPageState extends State<PostsPage> {
+class _HashtagPageState extends State<HashtagPage> {
   final PagingController<String, Post> _pagingController =
-      PagingController(firstPageKey: "");
-  AuthController? authController;
+  PagingController(firstPageKey: "");
   PanelController panelController = PanelController();
+  AuthController? authController;
   late ApiClient client;
   AnalyticsController? analyticsController;
   bool isPanelOpen = false;
@@ -42,7 +45,6 @@ class _PostsPageState extends State<PostsPage> {
 
     super.initState();
   }
-
 
   @override
   didChangeDependencies() async {
@@ -89,7 +91,7 @@ class _PostsPageState extends State<PostsPage> {
     //     "Retrieving post page with pagekey $pageKey  and size $_pageSize $client");
     try {
       List<Post>? newItems;
-      newItems = await client.fetchPostsPaginated(pageKey, _pageSize);
+      newItems = await client.fetchHashtaggedPosts(widget.thisHashtagId, pageKey, _pageSize);
 
       // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
@@ -105,6 +107,7 @@ class _PostsPageState extends State<PostsPage> {
       _pagingController.error = error;
     }
   }
+
 
   @override
   void dispose() {
@@ -122,12 +125,14 @@ class _PostsPageState extends State<PostsPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: HomePageMenu(
-        updateMenu: () {},
-      ),
+      key: widget.key,
+      floatingActionMenu: HomePageMenu(updateMenu: (){},),
+
       child: Flex(
         direction: Axis.vertical,
         children: [
+          Text("#${widget.thisHashtagId}", style: Theme.of(context).textTheme.titleLarge,),
+          Divider(),
           Expanded(
             child: Stack(
               children: [
@@ -155,7 +160,7 @@ class _PostsPageState extends State<PostsPage> {
                                   child: Center(
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: [
                                         const Text("There are no posts yet."),
                                         const SizedBox(
@@ -164,10 +169,10 @@ class _PostsPageState extends State<PostsPage> {
                                         AnalyticsLoadingButton(
                                           analyticsEventData: const {
                                             'frequency_of_event':
-                                                "once_in_app_history"
+                                            "once_in_app_history"
                                           },
                                           analyticsEventName:
-                                              'add-the-very-first-post',
+                                          'add-the-very-first-post',
                                           text: "Add a Post",
                                           action: (context) async {
                                             panelController.open();
@@ -329,7 +334,7 @@ class _PostsPageState extends State<PostsPage> {
                                               children: [
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
+                                                  const EdgeInsets.fromLTRB(
                                                     8.0,
                                                     8.0,
                                                     8.0,
@@ -343,7 +348,7 @@ class _PostsPageState extends State<PostsPage> {
                                                 ),
                                                 Column(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                  MainAxisAlignment.center,
                                                   children: const [
                                                     Text(
                                                       "Create a Post",
@@ -387,6 +392,6 @@ class _PostsPageState extends State<PostsPage> {
           ),
         ],
       ),
-    );
+      );
   }
 }

@@ -194,6 +194,39 @@ class ApiClient {
     return <Post>[];
   }
 
+  Future<List<Post>> fetchHashtaggedPosts(String? hashtagId, String? lastId, int pageSize) async {
+    if (kDebugMode) {
+      print(
+          "Retrieving paginated hashtagged with ${hashtagId} Posts with lastid $lastId and pagesize $pageSize");
+    }
+    String? token = await getIdToken();
+    if (DefaultConfig.theAuthBaseUrl == "") {
+      if (kDebugMode) {
+        print(
+            "Retrieving paginated hashtagged posts authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
+      return <Post>[];
+    }
+
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.get(
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-hashtagged-posts-paginated/$hashtagId/$pageSize${lastId != null ? "/$lastId" : ""}"),
+          headers: {"Authorization": ("Bearer $token")});
+
+      dynamic processedResponse = jsonDecode(response.body);
+      print("hashtagged posts retrieved ${processedResponse}");
+      if (processedResponse['posts'] != null &&
+          processedResponse['posts'] != "null") {
+        ChatApiGetProfilePostsResponse responseModelList =
+        ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
+
+        return responseModelList.list;
+      }
+    }
+    return <Post>[];
+  }
+
   Future<List<Comment>> fetchCommentThreadPaginatedForPost(
       String? postId, String? lastId, int pageSize) async {
     if (kDebugMode) {
