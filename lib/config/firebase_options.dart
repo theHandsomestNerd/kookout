@@ -44,41 +44,15 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCVdqo70ZZO1Wl_r-BiVsZ7XSlD9kAnktA',
-    appId: '1:853598734701:web:2b79a6c88850e775177264',
-    messagingSenderId: '853598734701',
-    projectId: 'the-handsomest-nerd-auth',
-    authDomain: 'the-handsomest-nerd-auth.firebaseapp.com',
-    storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-    measurementId: 'G-R31EL8ZSSY',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC5FkJAr9E4EmbMjKZNuTmG7eFWQJk8Y-8',
-    appId: '1:853598734701:android:c6f4eac320608c54177264',
-    messagingSenderId: '853598734701',
-    projectId: 'the-handsomest-nerd-auth',
-    storageBucket: 'the-handsomest-nerd-auth.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
-    appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
-    messagingSenderId: '853598734701',
-    projectId: 'the-handsomest-nerd-auth',
-    storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-    iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
-    iosBundleId: 'com.thehandsomestnerd.chatLine',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBBk1hBMrUPxW3dItdxDQxURHE413eSmkI',
-    appId: '1:853598734701:ios:4b3e26f0eb239c01177264',
-    messagingSenderId: '853598734701',
-    projectId: 'the-handsomest-nerd-auth',
-    storageBucket: 'the-handsomest-nerd-auth.appspot.com',
-    iosClientId: '853598734701-b9vf3cj8hp91ov2692hflju16dbb4rt6.apps.googleusercontent.com',
-    iosBundleId: 'com.thehandsomestnerd.chatLine',
   );
 }
 
