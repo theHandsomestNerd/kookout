@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -43,16 +44,44 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
+  static  FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
+  static  FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
+  static  FirebaseOptions macos = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 }
 

@@ -21,6 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meta_seo/meta_seo.dart';
@@ -35,6 +36,7 @@ import 'pages/login_page.dart';
 
 Future<void> main() async {
   usePathUrlStrategy();
+  await dotenv.load();
 
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
