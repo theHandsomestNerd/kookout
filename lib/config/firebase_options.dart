@@ -46,13 +46,13 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions web = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY') ?? dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
-    appId: String.fromEnvironment('FIREBASE_APP_ID') ?? dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
-    messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID') ?? dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
-    projectId: String.fromEnvironment('FIREBASE_PROJECT_ID') ?? dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
-    authDomain: String.fromEnvironment('FIREBASE_AUTH_DOMAIN') ?? dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
-    storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET') ?? dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
-    measurementId: String.fromEnvironment('FIREBASE_MEASUREMENT_ID') ?? dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
+    apiKey: const String.fromEnvironment('FIREBASE_API_KEY') ?? dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: const String.fromEnvironment('FIREBASE_APP_ID') ?? dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: const String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID') ?? dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: const String.fromEnvironment('FIREBASE_PROJECT_ID') ?? dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: const String.fromEnvironment('FIREBASE_AUTH_DOMAIN') ?? dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: const String.fromEnvironment('FIREBASE_STORAGE_BUCKET') ?? dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: const String.fromEnvironment('FIREBASE_MEASUREMENT_ID') ?? dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 
   static  FirebaseOptions android = FirebaseOptions(
