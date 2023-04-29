@@ -48,7 +48,7 @@ jobs:
           ENV_FILE_CONTENTS: ${{ secrets.ENV_FILE_CONTENTS }}
       - run: flutter pub get
       - run: flutter test
-      - run: flutter build web
+      - run: flutter build web --release
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
