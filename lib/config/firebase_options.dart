@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universal_io/io.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -45,13 +46,13 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions web = FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
-    appId: dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
-    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
-    projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
-    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
-    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
-    measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
+    apiKey: Platform.environment['FIREBASE_API_KEY'] ?? dotenv.env['FIREBASE_API_KEY'] ?? 'FIREBASE_API_KEY not found',
+    appId: Platform.environment['FIREBASE_APP_ID'] ?? dotenv.env['FIREBASE_APP_ID'] ?? 'FIREBASE_APP_ID not found',
+    messagingSenderId: Platform.environment['FIREBASE_MESSAGING_SENDER_ID'] ?? dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? 'FIREBASE_MESSAGING_SENDER_ID not found',
+    projectId: Platform.environment['FIREBASE_PROJECT_ID'] ?? dotenv.env['FIREBASE_PROJECT_ID'] ?? 'FIREBASE_PROJECT_ID not found',
+    authDomain: Platform.environment['FIREBASE_AUTH_DOMAIN'] ?? dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? 'FIREBASE_AUTH_DOMAIN not found',
+    storageBucket: Platform.environment['FIREBASE_STORAGE_BUCKET'] ?? dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? 'FIREBASE_STORAGE_BUCKET not found',
+    measurementId: Platform.environment['FIREBASE_MEASUREMENT_ID'] ?? dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? 'FIREBASE_MEASUREMENT_ID not found',
   );
 
   static  FirebaseOptions android = FirebaseOptions(
