@@ -252,144 +252,134 @@ class _HashtagPageState extends State<HashtagPage> {
                   backdropEnabled: true,
                   isDraggable: true,
                   parallaxEnabled: false,
-                  maxHeight: 600,
+                  maxHeight: 500,
                   color: Colors.transparent,
                   minHeight: 64,
                   panelBuilder: (scrollController) => SingleChildScrollView(
                     // controller: scrollController,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 600),
+                    child: Card(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(0))),
+                      margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                       child: Flex(
-                        direction: Axis.vertical,
+                        direction: Axis.horizontal,
                         children: [
-                          Expanded(
-                            child: Card(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomRight: Radius.circular(0),
-                                      bottomLeft: Radius.circular(0))),
-                              margin: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                              child: Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  // MaterialButton(
-                                  //   shape: RoundedRectangleBorder(
-                                  //     borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  //   ),
-                                  //   color: Colors.white,
-                                  //   onPressed: () {
-                                  //     panelController.close();
-                                  //   },
-                                  //   child: Flex(
-                                  //     direction: Axis.vertical,
-                                  //     children: [
-                                  //       Flexible(
-                                  //         flex: 1,
-                                  //         child: Padding(
-                                  //           padding: const EdgeInsets.fromLTRB(
-                                  //             8.0,
-                                  //             8.0,
-                                  //             8.0,
-                                  //             8.0,
-                                  //           ),
-                                  //           child: Container(
-                                  //             color: Colors.white,
-                                  //             width: 80,
-                                  //             height: 3,
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //       Expanded(
-                                  //         flex: 2,
-                                  //         child: Column(
-                                  //           mainAxisAlignment: MainAxisAlignment.center,
-                                  //           children: [
-                                  //             Text(
-                                  //               "Create a Post",
-                                  //               style: TextStyle(color: Colors.black, fontSize: 18),
-                                  //             ),
-                                  //           ],
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
+                          // MaterialButton(
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                          //   ),
+                          //   color: Colors.white,
+                          //   onPressed: () {
+                          //     panelController.close();
+                          //   },
+                          //   child: Flex(
+                          //     direction: Axis.vertical,
+                          //     children: [
+                          //       Flexible(
+                          //         flex: 1,
+                          //         child: Padding(
+                          //           padding: const EdgeInsets.fromLTRB(
+                          //             8.0,
+                          //             8.0,
+                          //             8.0,
+                          //             8.0,
+                          //           ),
+                          //           child: Container(
+                          //             color: Colors.white,
+                          //             width: 80,
+                          //             height: 3,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       Expanded(
+                          //         flex: 2,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             Text(
+                          //               "Create a Post",
+                          //               style: TextStyle(color: Colors.black, fontSize: 18),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
 
-                                  Expanded(
-                                    child: Column(
+                          Expanded(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 48,
+                                  child: Flex(
+                                      direction: Axis.horizontal,
                                       children: [
-                                        SizedBox(
-                                          height: 48,
-                                          child: Flex(
-                                              direction: Axis.horizontal,
+                                        Expanded(
+                                          child: MaterialButton(
+                                            elevation: 0,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            color: Colors.white,
+                                            onPressed: () {
+                                              panelController.hide();
+                                            },
+                                            child: Column(
                                               children: [
-                                                Expanded(
-                                                  child: MaterialButton(
-                                                    elevation: 0,
-                                                    shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(20)),
-                                                    ),
-                                                    color: Colors.white,
-                                                    onPressed: () {
-                                                      panelController.hide();
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                          const EdgeInsets.fromLTRB(
-                                                            8.0,
-                                                            8.0,
-                                                            8.0,
-                                                            8.0,
-                                                          ),
-                                                          child: Container(
-                                                            color: Colors.black,
-                                                            width: 80,
-                                                            height: 3,
-                                                          ),
-                                                        ),
-                                                        Column(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.center,
-                                                          children: const [
-                                                            Text(
-                                                              "Create a Post",
-                                                              style: TextStyle(
-                                                                  color: Colors.black,
-                                                                  fontSize: 18),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                    8.0,
+                                                    8.0,
+                                                    8.0,
+                                                    8.0,
+                                                  ),
+                                                  child: Container(
+                                                    color: Colors.black,
+                                                    width: 80,
+                                                    height: 3,
                                                   ),
                                                 ),
-                                              ]),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: const [
+                                                    Text(
+                                                      "Create a Post",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 18),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                        CreatePostPage(
-                                          onPost: () {
-                                            panelController.close();
-                                            _pagingController.refresh();
-                                            _fetchPage(_pagingController.firstPageKey);
-                                            // _pagingController.firstPageKey
-                                          },
-                                          onClose: () {
-                                            panelController.close();
-                                            setState(() {});
-                                          },
-                                        ),
-                                        const SizedBox(
-                                          height: 24,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                      ]),
+                                ),
+                                CreatePostPage(
+                                  onPost: () {
+                                    panelController.close();
+                                    _pagingController.refresh();
+                                    _fetchPage(_pagingController.firstPageKey);
+                                    // _pagingController.firstPageKey
+                                  },
+                                  onClose: () {
+                                    panelController.close();
+                                    setState(() {});
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 100,
+                                )
+                              ],
                             ),
                           ),
                         ],
