@@ -14,31 +14,22 @@ jobs:
 
 #      - run: flutter pub get
       - name: Install dependencies
-        env:
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
         run: |
           set -e
-          FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          FIREBASE_PROJECT_ID=${{ vars.FIREBASE_PROJECT_ID }}
-          FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          FIREBASE_MEASUREMENT_ID=${{ secrets.FIREBASE_MEASUREMENT_ID }}
-          SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }}
-          # Put your environment variables here. Don't forget
-          # to create secrets for them on GitHub:
-          # https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
-          cat << EOF > assets/.env
-          ${{ secrets.ENV_FILE_CONTENTS }}
-          EOF
+#          FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
+#          FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
+#          FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+#          FIREBASE_PROJECT_ID=${{ vars.FIREBASE_PROJECT_ID }}
+#          FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
+#          FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+#          FIREBASE_MEASUREMENT_ID=${{ secrets.FIREBASE_MEASUREMENT_ID }}
+#          SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }}
+#           Put your environment variables here. Don't forget
+#           to create secrets for them on GitHub:
+#           https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
+#          cat << EOF > assets/.env
+#          ${{ secrets.ENV_FILE_CONTENTS }}
+#          EOF
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -49,6 +40,15 @@ jobs:
       - run: flutter pub get
       - run: flutter test
       - run: flutter build web --release
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
