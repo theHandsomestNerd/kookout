@@ -36,7 +36,7 @@ import 'pages/login_page.dart';
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
-  await dotenv.load(mergeWith: Platform.environment);
+  await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
   print("platform env vars${Platform.environment}");
   usePathUrlStrategy();
 
