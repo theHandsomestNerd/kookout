@@ -25,6 +25,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meta_seo/meta_seo.dart';
+import 'package:universal_io/io.dart';
 
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
@@ -35,8 +36,9 @@ import 'pages/login_page.dart';
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
 Future<void> main() async {
+  await dotenv.load(mergeWith: Platform.environment);
+  print("platform env vars${Platform.environment}");
   usePathUrlStrategy();
-  await dotenv.load();
 
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
