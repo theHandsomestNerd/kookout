@@ -37,7 +37,10 @@ import 'pages/login_page.dart';
 
 Future<void> main() async {
   await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
-  print("platform env vars${Platform.environment}");
+  const _requiredEnvVars = const ['FIREBASE_PROJECT_ID', 'FIREBASE_APP_ID'];
+  bool get (hasEnv) => dotenv.isEveryDefined(_requiredEnvVars);
+
+  print("platform env vars${Platform.environment} ${dotenv.env}");
   usePathUrlStrategy();
 
   WidgetsFlutterBinding.ensureInitialized();
