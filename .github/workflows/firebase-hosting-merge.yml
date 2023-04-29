@@ -30,7 +30,7 @@ jobs:
           # Put your environment variables here. Don't forget
           # to create secrets for them on GitHub:
           # https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
-          cat << EOF > .env
+          cat << EOF > assets/.env.production
           FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
@@ -42,7 +42,7 @@ jobs:
           EOF
           flutter pub get 
           flutter test 
-          flutter build web --web-renderer html
+          flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
