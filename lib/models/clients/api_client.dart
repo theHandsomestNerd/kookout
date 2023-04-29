@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hashtagable/functions.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/default_config.dart';
@@ -104,7 +105,7 @@ class ApiClient {
     if (DefaultConfig.theAuthBaseUrl == "") {
       if (kDebugMode) {
         print(
-          "Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+            "Retrieving Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
       }
       return <AppUser>[];
     }
@@ -137,7 +138,7 @@ class ApiClient {
     if (DefaultConfig.theAuthBaseUrl == "") {
       if (kDebugMode) {
         print(
-          "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+            "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
       }
       return <AppUser>[];
     }
@@ -170,7 +171,7 @@ class ApiClient {
     if (DefaultConfig.theAuthBaseUrl == "") {
       if (kDebugMode) {
         print(
-          "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+            "Retrieving paginated Profiles authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
       }
       return <Post>[];
     }
@@ -194,7 +195,8 @@ class ApiClient {
     return <Post>[];
   }
 
-  Future<List<Post>> fetchHashtaggedPosts(String? hashtagId, String? lastId, int pageSize) async {
+  Future<List<Post>> fetchHashtaggedPosts(
+      String? hashtagId, String? lastId, int pageSize) async {
     if (kDebugMode) {
       print(
           "Retrieving paginated hashtagged with ${hashtagId} Posts with lastid $lastId and pagesize $pageSize");
@@ -215,11 +217,11 @@ class ApiClient {
           headers: {"Authorization": ("Bearer $token")});
 
       dynamic processedResponse = jsonDecode(response.body);
-      print("hashtagged posts retrieved ${processedResponse}");
+      // print("hashtagged posts retrieved ${processedResponse}");
       if (processedResponse['posts'] != null &&
           processedResponse['posts'] != "null") {
         ChatApiGetProfilePostsResponse responseModelList =
-        ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
+            ChatApiGetProfilePostsResponse.fromJson(processedResponse['posts']);
 
         return responseModelList.list;
       }
@@ -238,7 +240,7 @@ class ApiClient {
     if (DefaultConfig.theAuthBaseUrl == "") {
       if (kDebugMode) {
         print(
-          "Retrieving paginated comments for post $postId authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+            "Retrieving paginated comments for post $postId authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
       }
       return <Comment>[];
     }
@@ -432,10 +434,10 @@ class ApiClient {
     return "FAIL";
   }
 
-  Future<String> commentProfile(
-      String userId, String commentBody, String? commentType) async {
+  Future<String> commentDocument(
+      String documentId, String commentBody, String? commentType) async {
     var message =
-        "Comment Profile $userId by ${FirebaseAuth.instance.currentUser?.uid}";
+        "Comment Profile $documentId by ${FirebaseAuth.instance.currentUser?.uid}";
     if (kDebugMode) {
       print(message);
     }
@@ -443,14 +445,25 @@ class ApiClient {
       print(commentBody);
     }
 
+    var hashtags = [];
+    extractHashTags(commentBody).forEach((element) {
+      hashtags.add(element.replaceFirst("#", ''));
+    });
+
+    print("hashtags $hashtags ${jsonEncode(hashtags)}");
+
     String? token = await getIdToken();
+
     if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      print(
+          "docId:$documentId type:$commentType body:$commentBody tags:$hashtags");
       final response = await http.post(
-          Uri.parse("${DefaultConfig.theAuthBaseUrl}/comment-profile"),
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/comment-document"),
           body: {
-            "userId": userId,
+            "documentId": documentId,
             "commentBody": commentBody,
-            "commentType": commentType ?? 'profile-comment'
+            "commentType": commentType ?? 'profile-comment',
+            "hashtags": jsonEncode(hashtags)
           },
           headers: {
             "Authorization": ("Bearer $token")

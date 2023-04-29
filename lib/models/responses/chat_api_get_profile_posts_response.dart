@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/foundation.dart';
+
 import '../post.dart';
 
 class ChatApiGetProfilePostsResponse {

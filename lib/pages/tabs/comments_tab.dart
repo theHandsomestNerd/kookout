@@ -65,7 +65,7 @@ class _CommentsTabState extends State<CommentsTab> {
     String? commentResponse;
 
     commentResponse = await chatController?.profileClient
-        .commentProfile(widget.id, _commentBody ?? "", 'profile-comment');
+        .commentDocument(widget.id, _commentBody ?? "", 'profile-comment');
 
     await widget.updateComments(context, commentResponse);
     setState(() {

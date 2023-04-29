@@ -13,6 +13,7 @@ import 'package:cookowt/wrappers/author_and_text.dart';
 import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hashtagable/hashtagable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -78,7 +79,7 @@ class _SoloPostPageState extends State<SoloPostPage> {
     setState(() {});
     if (profileClient != null && thisPostId != null && commentBody != null) {
       var thestatus = await profileClient!
-          .commentProfile(thisPostId!, commentBody!, 'post-comment');
+          .commentDocument(thisPostId!, commentBody!, 'post-comment');
       status = thestatus;
     }
 
@@ -347,11 +348,11 @@ class _SoloPostPageState extends State<SoloPostPage> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              TextFormField(
+                              HashTagTextField(
                                 onChanged: (e) {
                                   _setCommentBody(e);
                                 },
-                                initialValue: commentBody,
+                                // value: commentBody,
                                 minLines: 2,
                                 maxLines: 4,
                                 decoration: const InputDecoration(
