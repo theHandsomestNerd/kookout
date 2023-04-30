@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cookowt/models/position.dart';
-import 'package:cookowt/models/responses/chat_api_get_profile_posts_response.dart';
+import 'package:kookout/models/position.dart';
+import 'package:kookout/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
