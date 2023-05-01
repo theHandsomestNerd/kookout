@@ -6,6 +6,7 @@ import 'package:kookout/models/controllers/auth_controller.dart';
 import 'package:kookout/models/controllers/chat_controller.dart';
 import 'package:kookout/models/controllers/geolocation_controller.dart';
 import 'package:kookout/models/controllers/post_controller.dart';
+import 'package:kookout/pages/hashtag_library_page.dart';
 import 'package:kookout/pages/hashtag_page.dart';
 import 'package:kookout/pages/home_page.dart';
 import 'package:kookout/pages/logout_page.dart';
@@ -151,7 +152,7 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => BugReporter(
-              child: SoloPostPage(
+                  child: SoloPostPage(
                 thisPostId: state.params["id"],
               ))),
       GoRoute(
@@ -159,24 +160,28 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context, GoRouterState state) {
             return BugReporter(
                 child: SoloProfilePage(
-                  id: state.params["id"]!,
-                ));
+              id: state.params["id"]!,
+            ));
           }),
-    GoRoute(
+      GoRoute(
           path: '/myProfile',
           builder: (BuildContext context, GoRouterState state) {
             return BugReporter(
                 child: SoloProfilePage(
-                  id: FirebaseAuth.instance.currentUser?.uid ?? "",
-                ));
+              id: FirebaseAuth.instance.currentUser?.uid ?? "",
+            ));
           }),
       GoRoute(
           path: '/hashtag/:id',
           builder: (BuildContext context, GoRouterState state) => BugReporter(
-              child: HashtagPage(
+                  child: HashtagPage(
                 key: Key(state.params["id"]!),
                 thisHashtagId: state.params["id"],
               ))),
+      GoRoute(
+          path: '/hashtagCollections',
+          builder: (BuildContext context, GoRouterState state) =>
+              const BugReporter(child: const HashtagLibraryPage())),
     ],
   );
 
@@ -214,8 +219,6 @@ class _MyAppState extends State<MyApp> {
         analyticsController.setUserId(user.uid);
       }
     });
-
-
   }
 
   @override
@@ -229,7 +232,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() async {
     // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
 
     // var intermediate =
     //     AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
@@ -251,6 +253,7 @@ class _MyAppState extends State<MyApp> {
     // }
 
     setState(() {});
+    super.didChangeDependencies();
   }
 
   // This widget is the root of your application.

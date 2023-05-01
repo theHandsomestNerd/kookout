@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:kookout/models/hash_tag_collection.dart';
 import 'package:kookout/models/position.dart';
 import 'package:kookout/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -227,6 +227,39 @@ class ApiClient {
       }
     }
     return <Post>[];
+  }
+
+  Future<HashtagCollection?> fetchHashtagCollection(
+      String? hashtagCollectionSlug) async {
+    if (kDebugMode) {
+      print("Retrieving hashtag collection ${hashtagCollectionSlug}");
+    }
+    String? token = await getIdToken();
+    if (DefaultConfig.theAuthBaseUrl == "") {
+      if (kDebugMode) {
+        print(
+            "Retrieving paginated hashtag collection authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
+      return null;
+    }
+
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.get(
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-hashtag-collection-by-slug/$hashtagCollectionSlug"),
+          headers: {"Authorization": ("Bearer $token")});
+
+      dynamic processedResponse = jsonDecode(response.body);
+      // print("hashtagged posts retrieved ${processedResponse}");
+      if (processedResponse['hashtagCollection'] != null &&
+          processedResponse['hashtagCollection'] != "null") {
+        HashtagCollection responseModelList =
+            HashtagCollection.fromJson(processedResponse['hashtagCollection']);
+
+        return responseModelList;
+      }
+    }
+    return null;
   }
 
   Future<List<Comment>> fetchCommentThreadPaginatedForPost(
