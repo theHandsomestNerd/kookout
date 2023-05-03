@@ -13,6 +13,7 @@ class AppScaffoldWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return BugReporter(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         floatingActionButton: floatingActionMenu,
         appBar: AppBar(
           backgroundColor: Colors.white.withOpacity(0.5),
