@@ -1,13 +1,11 @@
-import 'package:kookout/models/controllers/auth_inherited.dart';
-import 'package:kookout/models/extract_hash_tag_details.dart';
-import 'package:kookout/models/hash_tag.dart';
-import 'package:kookout/wrappers/alerts_snackbar.dart';
-import 'package:kookout/wrappers/analytics_loading_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hashtagable/hashtagable.dart';
+import 'package:kookout/models/controllers/auth_inherited.dart';
+import 'package:kookout/wrappers/alerts_snackbar.dart';
+import 'package:kookout/wrappers/analytics_loading_button.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
@@ -143,15 +141,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppImageUploader(
-          height: 350,
-          width: 350,
-          text: "Change Main Post Photo",
-          imageUploader: imageUploader!,
-          uploadImage: (uploader) {
-            imageUploader = uploader;
-          },
-        ),
         Flex(
           direction: Axis.horizontal,
           children: [
@@ -184,6 +173,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
             ),
           ],
         ),
+        AppImageUploader(
+          height: 350,
+          width: 350,
+          text: "Change Main Post Photo",
+          imageUploader: imageUploader!,
+          uploadImage: (uploader) {
+            imageUploader = uploader;
+          },
+        ),
+
         AnalyticsLoadingButton(
           analyticsEventName: 'create-post',
           analyticsEventData: {"body": _postBody, "author": ""},
