@@ -2,6 +2,8 @@ import 'package:kookout/models/hash_tag.dart';
 
 import 'hash_tag.dart';
 
+import 'hash_tag.dart';
+
 class HashtagCollection {
   String? id;
   String? name;
