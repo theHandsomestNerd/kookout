@@ -14,6 +14,7 @@ import '../../models/comment.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../models/follow.dart';
 import '../../models/like.dart';
+import '../../shared_components/expanded_interactive_viewer.dart';
 
 const PROFILE_IMAGE_SQUARE_SIZE = 200;
 
@@ -183,16 +184,12 @@ class _BioTabState extends State<BioTab> {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          Flexible(
-            flex: 4,
-            child: CardWithBackground(
-              width: 350,
-              height: 350,
+          Expanded(
+            child: ExpandedInteractiveViewer(
               image: SanityImageBuilder.imageProviderFor(
-                      sanityImage: widget.thisProfile?.profileImage,
-                      showDefaultImage: true)
+                  sanityImage: widget.thisProfile?.profileImage,
+                  showDefaultImage: true)
                   .image,
-              child: Container(),
             ),
           ),
         ],
