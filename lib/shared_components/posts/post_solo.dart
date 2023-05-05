@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:kookout/models/clients/api_client.dart';
 import 'package:kookout/models/controllers/auth_controller.dart';
 import 'package:kookout/models/like.dart';
@@ -67,7 +68,7 @@ class _PostSoloState extends State<PostSolo> {
     likes = theLikes?.list ?? [];
     if (theLikes?.list != null) {
       try {
-        var myLike = theLikes?.list.firstWhere((element) {
+        var myLike = theLikes?.list.firstWhereOrNull((element) {
           return element.liker?.userId == authController?.myAppUser?.userId;
         });
         isPostLikedByMe = myLike;
