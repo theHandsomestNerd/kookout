@@ -31,6 +31,13 @@ class _SettingsPageMenuState extends State<SettingsPageMenu> {
             icon: const Icon(Icons.logout),
           ),
         ActionButton(
+          tooltip: "Hashtags",
+          onPressed: () {
+            GoRouter.of(context).go('/hashtagCollections');
+          },
+          icon: const Icon(Icons.tag),
+        ),
+        ActionButton(
           tooltip: "Edit Profile",
           onPressed: () {
             widget.updateMenu(SettingsMenuOptions.EDIT_PROFILE.index);
