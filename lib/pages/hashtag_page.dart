@@ -136,9 +136,6 @@ class _HashtagPageState extends State<HashtagPage> {
           Expanded(
             child: Stack(
               children: [
-                Positioned.fill(
-                  child: Container(color: Colors.black87),
-                ),
                 PagedListView<String, Post>(
                   padding: EdgeInsets.fromLTRB(
                     0,
@@ -377,7 +374,7 @@ class _HashtagPageState extends State<HashtagPage> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: 100,
+                                  height: 24,
                                 )
                               ],
                             ),
