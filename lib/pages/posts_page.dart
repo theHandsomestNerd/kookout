@@ -237,7 +237,7 @@ class _PostsPageState extends State<PostsPage> {
                           ),
                         ),
                         const Text(
-                          "Create a Post",
+                          "Upload Photo(s)",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
@@ -346,7 +346,7 @@ class _PostsPageState extends State<PostsPage> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     Text(
-                                                      "Create a Post",
+                                                      "Upload Photo(s)",
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18),
