@@ -44,13 +44,15 @@ class _HashtagLibraryPageState extends State<HashtagLibraryPage> {
       child: FullPageLayout(
         child: Stack(
           children: [
-            ListView(
-              children: hashtagList.map((element) {
-                return Hashtag_Collection_Block(
-                  collectionSlug: element,
-                );
-              }).toList(),
-
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,0,48.0,),
+              child: ListView(
+                children: hashtagList.map((element) {
+                  return Hashtag_Collection_Block(
+                    collectionSlug: element,
+                  );
+                }).toList(),
+              ),
             ),
             SlidingUpPanel(
               onPanelClosed: () {
