@@ -6,6 +6,7 @@ import 'package:kookout/models/spreadsheet_member.dart';
 import 'package:kookout/shared_components/menus/home_page_menu.dart';
 import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:kookout/wrappers/hashtag_collection.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../models/controllers/auth_inherited.dart';
@@ -57,237 +58,241 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                 0,
                 48.0,
               ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    headingTextStyle: TextStyle(fontSize: 18),
-                    columns: [
-                      DataColumn(
-                          numeric: true,
-                          label: Text('ID'),
-                          onSort: (colIndex, asc) {
-                            print(asc);
-                            spreadSheetMembers.sort((l, r) {
-                              if (int.parse(l.spreadsheetId!) >
-                                  int.parse(r.spreadsheetId!)) {
-                                return asc ? 1 : -1;
-                              } else if (int.parse(l.spreadsheetId!) <
-                                  int.parse(r.spreadsheetId!)) {
-                                return asc ? -1 : 1;
-                              }
-                              return 0;
-                            });
-                            setState(() {});
-                          }),
-                      DataColumn(
-                        label: Text('Status'),
-                      ),
-                      DataColumn(
-                        label: Text('Chapter'),
-                      ),
-                      DataColumn(
-                        label: Text('Crossed On'),
-                      ),
-                      DataColumn(
-                        label: Text('Semester'),
-                      ),
-                      DataColumn(
-                          label: Text('Year'),
-                          onSort: (colIndex, asc) {
-                            print(asc);
-                            spreadSheetMembers.sort((l, r) {
-                              if (int.parse(l.year!) > int.parse(r.year!)) {
-                                return asc ? 1 : -1;
-                              } else if (int.parse(l.year!) <
-                                  int.parse(r.year!)) {
-                                return asc ? -1 : 1;
-                              }
-                              return 0;
-                            });
-                            setState(() {});
-                          }),
-                      DataColumn(
-                        label: Text('DOP'),
-                      ),
-                      DataColumn(
-                        label: Text('Name of Line'),
-                      ),
-                      DataColumn(
-                        label: Text('Line Name'),
-                      ),
-                      DataColumn(
-                        label: Text('First Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Middle'),
-                      ),
-                      DataColumn(
-                        label: Text('Last Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Nick Name'),
-                      ),
-                      DataColumn(
-                        label: Text('Cellphone'),
-                      ),
-                      DataColumn(
-                        label: Text('Address'),
-                      ),
-                      DataColumn(
-                        label: Text('Email'),
-                      ),
-                      DataColumn(
-                        label: Text('#'),
-                      ),
-                      DataColumn(
-                        label: Text('Homephone'),
-                      ),
-                      DataColumn(
-                        label: Text('Workphone'),
-                      ),
-                      DataColumn(
-                        label: Text('DOB'),
-                      ),
-                    ],
-                    rows: spreadSheetMembers.map((member) {
-                      return DataRow(
-                        selected: selectedRows.contains(member.spreadsheetId),
-                        onSelectChanged: (e) {
-                          print(e);
-                          if (selectedRows.contains(member.spreadsheetId)) {
-                            selectedRows.remove(member.spreadsheetId);
-                          } else {
-                            selectedRows.add(member.spreadsheetId!);
-                          }
-                          setState(() {
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                child: PlutoGrid(
+                  key: ObjectKey(spreadSheetMembers),
+                  columns: [
+                    PlutoColumn(
+                        readOnly: true,
+                        title: 'ID',
+                        field: 'spreadsheetId',
+                        type: PlutoColumnType.number()),
+                    PlutoColumn(
+                        readOnly: true,
+                        title: 'Status',
+                        field: 'status',
+                        type: PlutoColumnType.text(),
+                        renderer: (renderContext) {
+                          var chapterInvisible = renderContext
+                              .row.cells['status']?.value['isChapterInvisible'];
+                          var livesOnCampus = renderContext
+                              .row.cells['status']?.value['isLivesOnCampus'];
+                          var isOnYard = renderContext
+                              .row.cells['status']?.value['isOnTheYard'];
+                          var campusPosition = renderContext
+                              .row.cells['status']?.value['onCampusPosition'];
 
-                          });
-                        },
-                        cells: [
-                          DataCell(
-                            Text(int.parse(member.spreadsheetId ?? "")
-                                .toString()),
-                          ),
-                          DataCell(
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (member.isChapterInvisible == true)
-                                  Text(
-                                    "Chapter Invisible" ?? "",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                if (member.isLivesOnCampus == true)
-                                  Text(
-                                    "Lives on Campus" ?? "",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                if (member.isOnTheYard == true)
-                                  Text(
-                                    "On the yard" ?? "",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                if (member.onCampusPosition != null)
-                                  Text(
-                                    "Campus Position: ${member.onCampusPosition}" ??
-                                        "",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          DataCell(
-                            Text(member.otherChapterAffiliation ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.crossingDate != null
-                                ? member.crossingDate.toString()
-                                : ""),
-                          ),
-                          DataCell(
-                            Text(member.semester ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.year ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.dopName ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.nameOfLine ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.lineName ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.firstName ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.middleName ?? ""),
-                          ),
-                          DataCell(
-                            Text(
-                                "${member.lastName}${member.title != null && member.title != "" ? ", ${member.title}" : ""}" ??
-                                    ""),
-                          ),
-                          DataCell(
-                            Text("${member.nickName}"),
-                          ),
-                          DataCell(
-                            Text(member.cellPhone ?? ""),
-                          ),
-                          DataCell(
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (member.address != null)
-                                  Text(
-                                    member.address ?? "",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                if (member.city != null)
-                                  Text(
-                                    "${member.city}${member.state != null ? ", ${member.state}" : ""} ${member.postalCode != null ? member.postalCode : ""}",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          DataCell(
-                            Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: member.email?.map((e) {
-                                    return Text(
-                                      e,
-                                      style: TextStyle(fontSize: 12),
-                                    );
-                                  }).toList() ??
-                                  [],
-                            ),
-                          ),
-                          DataCell(
-                            Text(member.lineNumber ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.homePhone ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.workPhone ?? ""),
-                          ),
-                          DataCell(
-                            Text(member.dob != null
-                                ? member.dob.toString()
-                                : ""),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                          return Column(
+                            children: [
+                              if (chapterInvisible == true)
+                                Text('Chapter Invisible'),
+                              if (livesOnCampus == true)
+                                Text('Lives On Campus'),
+                              if (isOnYard == true) Text('On the Yard'),
+                              if (campusPosition != null)
+                                Text('Campus Position: ${campusPosition}')
+                            ],
+                          );
+                        }),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Chapter Affiliation',
+                      field: 'chapterAffiliation',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Crossed On',
+                      field: 'crossingDate',
+                      type: PlutoColumnType.date(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'semester',
+                      field: 'semester',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Year',
+                      field: 'year',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'DOP',
+                      field: 'dop',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Name of Line',
+                      field: 'nameOfLine',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Line Name',
+                      field: 'lineName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'First Name',
+                      field: 'firstName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Middle Name',
+                      field: 'middleName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Last Name',
+                      field: 'lastName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'Nick Name',
+                      field: 'nickName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                        readOnly: true,
+                        title: 'phone',
+                        field: 'phoneNumbers',
+                        type: PlutoColumnType.text(),
+                        renderer: (renderContext) {
+                          var homePhone = renderContext
+                              .row.cells['phoneNumbers']?.value['homeNumber'];
+                          var workPhone = renderContext
+                              .row.cells['phoneNumbers']?.value['workNumber'];
+                          var cellPhone = renderContext
+                              .row.cells['phoneNumbers']?.value['cellNumber'];
+                          return Column(
+                            children: [
+                              if (cellPhone?.trim() != "" && cellPhone != null)
+                                Text(
+                                  "Cell: $cellPhone",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              if (homePhone?.trim() != ""  && homePhone != null)
+                                Text(
+                                  "Home: $homePhone",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              if (workPhone?.trim() != "" && workPhone != null)
+                                Text(
+                                  "Work: $workPhone",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                            ],
+                          );
+                        }),
+                    PlutoColumn(
+                        readOnly: true,
+                        title: 'email',
+                        field: 'email',
+                        type: PlutoColumnType.text(),
+                        renderer: (renderContext) {
+                          var emails = renderContext.row.cells['email']?.value;
+
+                          print(emails);
+
+                          return emails != null
+                              ? Column(
+                                  children: emails?.map<Widget>((e) {
+                                        return Text(
+                                          e,
+                                          style: TextStyle(fontSize: 12),
+                                        );
+                                      }).toList() ??
+                                      <Widget>[])
+                              : Container();
+                        }),
+                    PlutoColumn(
+                        readOnly: true,
+                        title: 'Address',
+                        field: 'address',
+                        type: PlutoColumnType.text(),
+                        renderer: (renderContext) {
+                          var address = renderContext
+                              .row.cells['address']?.value['address'];
+                          var city = renderContext
+                              .row.cells['address']?.value['city'];
+                          var state = renderContext
+                              .row.cells['address']?.value['state'];
+                          var zip = renderContext
+                              .row.cells['address']?.value['zip'];
+                          return Column(
+                            children: [
+                              if (address != null)
+                                Text(
+                                  "$address",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              if (city != null)
+                                Text(
+                                  "$city${state != null? ", $state": ""} ${zip!= null?zip:""}",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                            ],
+                          );
+                        }),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'lineNumber',
+                      field: 'lineNumber',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      readOnly: true,
+                      title: 'dob',
+                      field: 'dob',
+                      type: PlutoColumnType.date(),
+                    ),
+                  ],
+                  rows: spreadSheetMembers.map((member) {
+                    return PlutoRow(cells: {
+                      'spreadsheetId': PlutoCell(value: member.spreadsheetId),
+                      'status': PlutoCell(value: {
+                        'isChapterInvisible': member.isChapterInvisible,
+                        'isOnTheYard': member.isOnTheYard,
+                        'isLivesOnCampus': member.isLivesOnCampus,
+                        'onCampusPosition': member.onCampusPosition,
+                      }),
+                      'chapterAffiliation':
+                          PlutoCell(value: member.otherChapterAffiliation),
+                      'crossingDate': PlutoCell(value: member.crossingDate ?? ""),
+                      'semester': PlutoCell(value: member.semester),
+                      'year': PlutoCell(value: member.year),
+                      'dop': PlutoCell(value: member.dopName ?? ""),
+                      'nameOfLine': PlutoCell(value: member.nameOfLine ?? ""),
+                      'lineName': PlutoCell(value: member.lineName ?? ""),
+                      'firstName': PlutoCell(value: member.firstName ?? ""),
+                      'middleName': PlutoCell(value: member.middleName ?? ""),
+                      'lastName': PlutoCell(value: member.lastName ?? ""),
+                      'nickName': PlutoCell(value: member.nickName ?? ""),
+                      'phoneNumbers': PlutoCell(value: {
+                        'homeNumber': member.homePhone,
+                        'workNumber': member.workPhone,
+                        'cellNumber': member.cellPhone,
+                      }),
+                      'email': PlutoCell(value: member.email),
+                      'address': PlutoCell(value: {
+                        'address': member.address,
+                        'city': member.city,
+                        'state': member.state,
+                        'zip': member.postalCode,
+                      }),
+                      'lineNumber': PlutoCell(value: member.lineNumber ?? ""),
+                      'dob': PlutoCell(value: member.dob ?? ""),
+                    });
+                  }).toList(),
                 ),
               ),
             ),
