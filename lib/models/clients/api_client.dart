@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hashtagable/functions.dart';
 import 'package:http/http.dart' as http;
+import 'package:kookout/models/spreadsheet_member.dart';
 
 import '../../config/default_config.dart';
 import '../app_user.dart';
 import '../block.dart';
+import '../chapter_roster.dart';
 import '../comment.dart';
 import '../extended_profile.dart';
 import '../follow.dart';
@@ -261,6 +263,39 @@ class ApiClient {
     }
     return null;
   }
+
+  Future<List<SpreadsheetMember>?> fetchChapterRoster() async {
+    if (kDebugMode) {
+      print("Retrieving chapter Roster");
+    }
+    String? token = await getIdToken();
+    if (DefaultConfig.theAuthBaseUrl == "") {
+      if (kDebugMode) {
+        print(
+            "Retrieving chapter roster authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
+      return null;
+    }
+
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.get(
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-chapter-roster"),
+          headers: {"Authorization": ("Bearer $token")});
+
+      dynamic processedResponse = jsonDecode(response.body);
+
+      if (processedResponse['chapterRoster'] != null &&
+          processedResponse['chapterRoster'] != "null") {
+        ChapterRoster responseModelList =
+        ChapterRoster.fromJson(processedResponse['chapterRoster']);
+
+        return responseModelList.theMembers;
+      }
+    }
+    return null;
+  }
+
 
   Future<List<Comment>> fetchCommentThreadPaginatedForPost(
       String? postId, String? lastId, int pageSize) async {
