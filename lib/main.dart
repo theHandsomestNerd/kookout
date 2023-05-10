@@ -150,13 +150,13 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => SoloPostPage(
-                thisPostId: state.queryParameters["id"],
+                thisPostId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/profile/:id',
           builder: (BuildContext context, GoRouterState state) {
             return SoloProfilePage(
-              id: state.queryParameters["id"]!,
+              id: state.pathParameters["id"]!,
             );
           }),
       GoRoute(
@@ -169,8 +169,8 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/hashtag/:id',
           builder: (BuildContext context, GoRouterState state) => HashtagPage(
-                key: Key(state.queryParameters["id"]!),
-                thisHashtagId: state.queryParameters["id"],
+                key: Key(state.pathParameters["id"]!),
+                thisHashtagId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/hashtagCollections',
