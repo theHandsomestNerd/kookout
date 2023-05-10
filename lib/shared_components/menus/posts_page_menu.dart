@@ -76,6 +76,13 @@ class _PostsPageMenuState extends State<PostsPageMenu> {
           icon: const Icon(Icons.tag),
         ),
         ActionButton(
+          tooltip: "Chapter Roster",
+          onPressed: () {
+            GoRouter.of(context).go('/chapterRoster');
+          },
+          icon: const Icon(Icons.list),
+        ),
+        ActionButton(
           tooltip: "Posts",
           onPressed: () {
             GoRouter.of(context).go('/postsPage');

@@ -10,6 +10,8 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../models/controllers/auth_inherited.dart';
+import '../shared_components/bug_reporter/bug_reporter_content.dart';
+import 'chapter_member_content.dart';
 import 'create_post_page.dart';
 
 class ChapterRosterPage extends StatefulWidget {
@@ -61,6 +63,28 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
               child: Container(
                 padding: const EdgeInsets.all(15),
                 child: PlutoGrid(
+                  rowColorCallback: (rowColorContext) {
+                    if (rowColorContext
+                            .row.cells['status']?.value['isChapterInvisible'] ==
+                        true) {
+                      return Colors.red[50]!;
+                    }
+                    return rowColorContext.rowIdx % 2 == 0
+                        ? Colors.white
+                        : Colors.grey[50]!;
+                  },
+                  onRowDoubleTap: (e){
+                    showDialog<String>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return ChapterMemberContent(chapterMember: e.row,);
+                        },
+                      );
+                  },
+                  configuration: PlutoGridConfiguration(
+                      style: PlutoGridStyleConfig(
+                  )),
                   key: ObjectKey(spreadSheetMembers),
                   columns: [
                     PlutoColumn(
@@ -84,6 +108,8 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                               .row.cells['status']?.value['onCampusPosition'];
 
                           return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (chapterInvisible == true)
                                 Text('Chapter Invisible'),
@@ -109,7 +135,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                     ),
                     PlutoColumn(
                       readOnly: true,
-                      title: 'semester',
+                      title: 'Semester',
                       field: 'semester',
                       type: PlutoColumnType.text(),
                     ),
@@ -174,13 +200,15 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                           var cellPhone = renderContext
                               .row.cells['phoneNumbers']?.value['cellNumber'];
                           return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (cellPhone?.trim() != "" && cellPhone != null)
                                 Text(
                                   "Cell: $cellPhone",
                                   style: TextStyle(fontSize: 10),
                                 ),
-                              if (homePhone?.trim() != ""  && homePhone != null)
+                              if (homePhone?.trim() != "" && homePhone != null)
                                 Text(
                                   "Home: $homePhone",
                                   style: TextStyle(fontSize: 10),
@@ -222,12 +250,12 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                         renderer: (renderContext) {
                           var address = renderContext
                               .row.cells['address']?.value['address'];
-                          var city = renderContext
-                              .row.cells['address']?.value['city'];
+                          var city =
+                              renderContext.row.cells['address']?.value['city'];
                           var state = renderContext
                               .row.cells['address']?.value['state'];
-                          var zip = renderContext
-                              .row.cells['address']?.value['zip'];
+                          var zip =
+                              renderContext.row.cells['address']?.value['zip'];
                           return Column(
                             children: [
                               if (address != null)
@@ -237,7 +265,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                                 ),
                               if (city != null)
                                 Text(
-                                  "$city${state != null? ", $state": ""} ${zip!= null?zip:""}",
+                                  "$city${state != null ? ", $state" : ""} ${zip != null ? zip : ""}",
                                   style: TextStyle(fontSize: 10),
                                 ),
                             ],
@@ -255,6 +283,12 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       field: 'dob',
                       type: PlutoColumnType.date(),
                     ),
+                  PlutoColumn(
+                      readOnly: true,
+                      title: 'Occupation',
+                      field: 'occupation',
+                      type: PlutoColumnType.text(),
+                    ),
                   ],
                   rows: spreadSheetMembers.map((member) {
                     return PlutoRow(cells: {
@@ -267,7 +301,8 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       }),
                       'chapterAffiliation':
                           PlutoCell(value: member.otherChapterAffiliation),
-                      'crossingDate': PlutoCell(value: member.crossingDate ?? ""),
+                      'crossingDate':
+                          PlutoCell(value: member.crossingDate ?? ""),
                       'semester': PlutoCell(value: member.semester),
                       'year': PlutoCell(value: member.year),
                       'dop': PlutoCell(value: member.dopName ?? ""),
@@ -291,6 +326,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       }),
                       'lineNumber': PlutoCell(value: member.lineNumber ?? ""),
                       'dob': PlutoCell(value: member.dob ?? ""),
+                      'occupation': PlutoCell(value: member.occupation ?? ""),
                     });
                   }).toList(),
                 ),
