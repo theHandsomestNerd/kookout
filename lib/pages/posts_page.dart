@@ -145,6 +145,7 @@ class _PostsPageState extends State<PostsPage> {
                     0,
                     56,
                   ),
+                  cacheExtent: 200,
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate<Post>(
                     noItemsFoundIndicatorBuilder: (build) {
