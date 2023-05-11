@@ -25,28 +25,34 @@ class PostsPage extends StatefulWidget {
 class _PostsPageState extends State<PostsPage> {
   final PagingController<String, Post> _pagingController =
       PagingController(firstPageKey: "");
+
   // AuthController? authController;
   PanelController panelController = PanelController();
   late ApiClient client;
   AnalyticsController? analyticsController;
   bool isPanelOpen = false;
 
-  static const _pageSize = 10;
-  String lastId = "";
+  static const _pageSize = 20;
+  String? lastId = "";
 
   @override
   void initState() {
     _pagingController.addPageRequestListener((theLastId) async {
+      if (theLastId != null && theLastId != "") {
+        lastId = theLastId;
+      }
+
+      if(lastId != "" && lastId != null) {
+        return _fetchPage(lastId!);
+      }
       return _fetchPage(theLastId);
     });
 
     super.initState();
   }
 
-
   @override
   didChangeDependencies() async {
-
     // var theChatController = AuthInherited.of(context)?.chatController;
     // var theAuthController = AuthInherited.of(context)?.authController;
     var theAnalyticsController = AuthInherited.of(context)?.analyticsController;
@@ -104,13 +110,14 @@ class _PostsPageState extends State<PostsPage> {
           _pagingController.appendPage(newItems, nextPageKey);
         }
       }
+      setState(() {
+
+      });
     } catch (error) {
       print(error);
       // _pagingController.error = error;
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
