@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kookout/models/clients/api_client.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../wrappers/loading_button.dart';
+import '../models/controllers/auth_inherited.dart';
 
 class ChapterMemberContent extends StatefulWidget {
   const ChapterMemberContent({Key? key, required this.chapterMember})
@@ -13,6 +15,19 @@ class ChapterMemberContent extends StatefulWidget {
 }
 
 class _ChapterMemberContentState extends State<ChapterMemberContent> {
+  ApiClient? client;
+
+  @override
+  didChangeDependencies() async {
+    var theClient = AuthInherited.of(context)?.chatController?.profileClient;
+    if (theClient != null) {
+      client = theClient;
+    }
+
+    setState(() {});
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -44,9 +59,11 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
                     if (widget.chapterMember.cells['nickName']?.value != null &&
                         widget.chapterMember.cells['nickName']?.value != "")
                       Text("${widget.chapterMember.cells['nickName']?.value}"),
-                    if (widget.chapterMember.cells['occupation']?.value != null &&
+                    if (widget.chapterMember.cells['occupation']?.value !=
+                            null &&
                         widget.chapterMember.cells['occupation']?.value != "")
-                      Text("${widget.chapterMember.cells['occupation']?.value}"),
+                      Text(
+                          "${widget.chapterMember.cells['occupation']?.value}"),
                   ],
                 ),
               ),
@@ -172,9 +189,13 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
                         Row(
                           children: [
                             Text(
-                                "Crossed On:", style: Theme.of(context).textTheme.labelLarge,),
-                          Text(
-                                "${widget.chapterMember.cells['crossingDate']?.value}", style: Theme.of(context).textTheme.bodyMedium,),
+                              "Crossed On:",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            Text(
+                              "${widget.chapterMember.cells['crossingDate']?.value}",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ],
                         ),
                       ],
@@ -233,6 +254,7 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
                         LoadingButton(
                           width: 110,
                           action: (x) async {
+                            await client?.createVerification(widget.chapterMember.cells['spreadsheetId']?.value.toString() ?? "");
                             setState(() {});
                             // Navigator.of(context).pop();
                           },

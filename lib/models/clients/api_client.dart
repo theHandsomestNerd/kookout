@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hashtagable/functions.dart';
 import 'package:http/http.dart' as http;
+import 'package:kookout/models/responses/chat_api_get_verifications_response.dart';
 import 'package:kookout/models/spreadsheet_member.dart';
+import 'package:kookout/models/spreadsheet_member_verification.dart';
 
 import '../../config/default_config.dart';
 import '../app_user.dart';
@@ -229,6 +231,39 @@ class ApiClient {
       }
     }
     return <Post>[];
+  }
+
+  Future<ChatApiGetVerificationsResponse?> fetchVerificationStatuses() async {
+    if (kDebugMode) {
+      print(
+          "Retrieving verification statuses");
+    }
+    String? token = await getIdToken();
+    if (DefaultConfig.theAuthBaseUrl == "") {
+      if (kDebugMode) {
+        print(
+            "Retrieving verification statuses authBaseUrl empty ${DefaultConfig.theAuthBaseUrl}");
+      }
+      return null;
+    }
+
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.get(
+          Uri.parse(
+              "${DefaultConfig.theAuthBaseUrl}/get-verifications"),
+          headers: {"Authorization": ("Bearer $token")});
+
+      dynamic processedResponse = jsonDecode(response.body);
+      // print("hashtagged posts retrieved ${processedResponse}");
+      if (processedResponse != null &&
+          processedResponse != "null") {
+        ChatApiGetVerificationsResponse responseModelList =
+        ChatApiGetVerificationsResponse.fromJson(processedResponse);
+
+        return responseModelList;
+      }
+    }
+    return null;
   }
 
   Future<HashtagCollection?> fetchHashtagCollection(
@@ -987,6 +1022,40 @@ class ApiClient {
           print(processedResponse['likeStatus']);
         }
         String responseModel = processedResponse['likeStatus'];
+        if (kDebugMode) {
+          print("$message status: $responseModel");
+        }
+        return responseModel;
+      } else {
+        return "FAIL";
+      }
+    }
+    return "FAIL";
+  }
+Future<String> createVerification(String rosterId) async {
+    var message = "Create Verification $rosterId";
+    if (kDebugMode) {
+      print(message);
+    }
+
+    String? token = await getIdToken();
+    if (token != null && DefaultConfig.theAuthBaseUrl != "") {
+      final response = await http.post(
+          Uri.parse("${DefaultConfig.theAuthBaseUrl}/create-verification"),
+          body: {
+            "rosterId": rosterId,
+          },
+          headers: {
+            "Authorization": ("Bearer $token")
+          });
+
+      dynamic processedResponse = jsonDecode(response.body);
+
+      if (processedResponse['verificationStatus'] != null) {
+        if (kDebugMode) {
+          print(processedResponse['verificationStatus']);
+        }
+        String responseModel = processedResponse['verificationStatus'];
         if (kDebugMode) {
           print("$message status: $responseModel");
         }

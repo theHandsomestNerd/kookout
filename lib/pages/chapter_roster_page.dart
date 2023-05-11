@@ -1,14 +1,20 @@
+import 'dart:core';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kookout/layout/full_page_layout.dart';
 import 'package:kookout/models/clients/api_client.dart';
+import 'package:kookout/models/responses/chat_api_get_verifications_response.dart';
 import 'package:kookout/models/spreadsheet_member.dart';
+import 'package:kookout/models/spreadsheet_member_verification.dart';
 import 'package:kookout/shared_components/menus/home_page_menu.dart';
 import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:kookout/wrappers/hashtag_collection.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../models/app_user.dart';
 import '../models/controllers/auth_inherited.dart';
 import '../shared_components/bug_reporter/bug_reporter_content.dart';
 import 'chapter_member_content.dart';
@@ -31,17 +37,41 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
 
   List<String> selectedRows = [];
 
+  List<SpreadsheetMemberVerification> verificationStatuses = [];
+  SpreadsheetMemberVerification? myVerificationStatus;
+
   @override
   didChangeDependencies() async {
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
     if (theClient != null) {
       client = theClient;
       spreadSheetMembers = await theClient.fetchChapterRoster() ?? [];
-      print(spreadSheetMembers);
+      ChatApiGetVerificationsResponse? theVerificationStatuses =
+          await theClient.fetchVerificationStatuses();
+      if (theVerificationStatuses != null) {
+        verificationStatuses = theVerificationStatuses.list;
+        myVerificationStatus = theVerificationStatuses.amIInThisList;
+      }
     }
 
     setState(() {});
     super.didChangeDependencies();
+  }
+
+  isMemberVerified(String memberRosterNumber) async {
+
+    var isVerified = verificationStatuses.firstWhereOrNull((element) {
+      return element.spreadsheetMemberRef?.spreadsheetId == memberRosterNumber;
+    });
+
+    if (isVerified != null) {
+      if (isVerified.isApproved == true) {
+        return "VERIFIED";
+      } else if (isVerified.isApproved == false) {
+        return "PENDING";
+      }
+    }
+    return "NOT_VERIFIED";
   }
 
   @override
@@ -73,27 +103,92 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                         ? Colors.white
                         : Colors.grey[50]!;
                   },
-                  onRowDoubleTap: (e){
+                  onRowDoubleTap: (e) {
                     showDialog<String>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return ChapterMemberContent(chapterMember: e.row,);
-                        },
-                      );
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return ChapterMemberContent(
+                          chapterMember: e.row,
+                        );
+                      },
+                    );
                   },
                   configuration: PlutoGridConfiguration(
-                      style: PlutoGridStyleConfig(
-                  )),
+                      style: PlutoGridStyleConfig(rowHeight: 56)),
                   key: ObjectKey(spreadSheetMembers),
                   columns: [
                     PlutoColumn(
                         readOnly: true,
+                        title: 'Verified',
+                        width: PlutoGridSettings.minColumnWidth,
+                        field: 'verified',
+                        type: PlutoColumnType.select([
+                          Icon(Icons.paste),
+                          Icon(Icons.verified),
+                          Icon(Icons.verified_outlined),
+                        ]),
+                        renderer: (rendererContext) {
+                          if (rendererContext.row.cells['verified']?.value !=
+                              null) {
+                            if (rendererContext.row.cells['verified']?.value ==
+                                "VERIFIED") {
+                              return Icon(Icons.verified);
+                            } else if (rendererContext
+                                    .row.cells['verified']?.value ==
+                                "NOT_VERIFIED") {
+                              return Icon(Icons.verified_outlined);
+                            } else if (rendererContext
+                                    .row.cells['verified']?.value ==
+                                "PENDING") {
+                              return Icon(Icons.paste);
+                            }
+                          }
+
+                          return Icon(Icons.verified_outlined);
+                        }),
+                    PlutoColumn(
+                        readOnly: true,
                         title: 'ID',
+                        width: PlutoGridSettings.minColumnWidth,
                         field: 'spreadsheetId',
                         type: PlutoColumnType.number()),
                     PlutoColumn(
                         readOnly: true,
+                        title: 'Full Name',
+                        field: 'name',
+                        width: 230,
+                        type: PlutoColumnType.text(),
+                        renderer: (renderContext) {
+                          var firstName =
+                              renderContext.row.cells['firstName']?.value;
+                          var middle =
+                              renderContext.row.cells['middleName']?.value;
+                          var lastName =
+                              renderContext.row.cells['lastName']?.value;
+                          var title = renderContext.row.cells['title']?.value;
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (firstName != "") Text(firstName),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              if (middle != "") Text(middle),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              if (lastName != "") Text("$lastName"),
+                              if (title != "" && title != null)
+                                Text(", $title"),
+                            ],
+                          );
+                        }),
+                    PlutoColumn(
+                        readOnly: true,
+                        width: 180,
                         title: 'Status',
                         field: 'status',
                         type: PlutoColumnType.text(),
@@ -134,12 +229,14 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       type: PlutoColumnType.date(),
                     ),
                     PlutoColumn(
+                      width: PlutoGridSettings.minColumnWidth,
                       readOnly: true,
                       title: 'Semester',
                       field: 'semester',
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
+                      width: PlutoGridSettings.minColumnWidth,
                       readOnly: true,
                       title: 'Year',
                       field: 'year',
@@ -164,27 +261,38 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
+                      width: 100,
                       readOnly: true,
                       title: 'First Name',
                       field: 'firstName',
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
+                      width: 100,
                       readOnly: true,
                       title: 'Middle Name',
                       field: 'middleName',
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
+                      width: 180,
                       readOnly: true,
                       title: 'Last Name',
                       field: 'lastName',
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
+                      width: 120,
                       readOnly: true,
                       title: 'Nick Name',
                       field: 'nickName',
+                      type: PlutoColumnType.text(),
+                    ),
+                    PlutoColumn(
+                      width: 120,
+                      readOnly: true,
+                      title: 'Title(Jr,Sr)',
+                      field: 'title',
                       type: PlutoColumnType.text(),
                     ),
                     PlutoColumn(
@@ -272,6 +380,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                           );
                         }),
                     PlutoColumn(
+                      width: PlutoGridSettings.minColumnWidth,
                       readOnly: true,
                       title: 'lineNumber',
                       field: 'lineNumber',
@@ -283,7 +392,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       field: 'dob',
                       type: PlutoColumnType.date(),
                     ),
-                  PlutoColumn(
+                    PlutoColumn(
                       readOnly: true,
                       title: 'Occupation',
                       field: 'occupation',
@@ -292,6 +401,9 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                   ],
                   rows: spreadSheetMembers.map((member) {
                     return PlutoRow(cells: {
+                      'verified': PlutoCell(
+                          value: isMemberVerified(member.spreadsheetId ?? "")),
+                      'name': PlutoCell(value: member.firstName),
                       'spreadsheetId': PlutoCell(value: member.spreadsheetId),
                       'status': PlutoCell(value: {
                         'isChapterInvisible': member.isChapterInvisible,
@@ -312,6 +424,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                       'middleName': PlutoCell(value: member.middleName ?? ""),
                       'lastName': PlutoCell(value: member.lastName ?? ""),
                       'nickName': PlutoCell(value: member.nickName ?? ""),
+                      'title': PlutoCell(value: member.title ?? ""),
                       'phoneNumbers': PlutoCell(value: {
                         'homeNumber': member.homePhone,
                         'workNumber': member.workPhone,
