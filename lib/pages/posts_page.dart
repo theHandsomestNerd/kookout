@@ -108,6 +108,9 @@ class _PostsPageState extends State<PostsPage> {
       print(error);
       // _pagingController.error = error;
     }
+    setState(() {
+
+    });
   }
 
   @override
@@ -145,7 +148,7 @@ class _PostsPageState extends State<PostsPage> {
                     0,
                     56,
                   ),
-                  cacheExtent: 200,
+                  cacheExtent: 2000,
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate<Post>(
                     noItemsFoundIndicatorBuilder: (build) {

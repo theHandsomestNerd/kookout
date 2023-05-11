@@ -34,7 +34,7 @@ class SanityImageBuilder {
 
       url = theUrl;
       if (theUrl != "") {
-        image = Image(image: CachedNetworkImageProvider(theUrl)).image;
+        image = CachedNetworkImageProvider(theUrl);
       }
     }
   }
