@@ -42,9 +42,9 @@ class _PostsPageState extends State<PostsPage> {
         lastId = theLastId;
       }
 
-      if(lastId != "" && lastId != null) {
-        return _fetchPage(lastId!);
-      }
+      // if(lastId != "" && lastId != null) {
+      //   return _fetchPage(lastId!);
+      // }
       return _fetchPage(theLastId);
     });
 
