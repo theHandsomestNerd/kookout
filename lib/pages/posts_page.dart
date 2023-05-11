@@ -48,7 +48,7 @@ class _PostsPageState extends State<PostsPage> {
   didChangeDependencies() async {
 
     // var theChatController = AuthInherited.of(context)?.chatController;
-    var theAuthController = AuthInherited.of(context)?.authController;
+    // var theAuthController = AuthInherited.of(context)?.authController;
     var theAnalyticsController = AuthInherited.of(context)?.analyticsController;
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
     if (theClient != null) {
@@ -105,14 +105,15 @@ class _PostsPageState extends State<PostsPage> {
         }
       }
     } catch (error) {
-      _pagingController.error = error;
+      print(error);
+      // _pagingController.error = error;
     }
   }
 
   @override
   void dispose() {
-    super.dispose();
     _pagingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -375,7 +376,7 @@ class _PostsPageState extends State<PostsPage> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: 24,
+                                  height: 84,
                                 )
                               ],
                             ),

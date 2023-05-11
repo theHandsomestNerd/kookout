@@ -287,7 +287,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
             // Navigator.popAndPushNamed(context, '/postsPage');
           },
           text: "Post",
-        )
+        ),
+        SizedBox(height:70),
       ],
     );
   }
