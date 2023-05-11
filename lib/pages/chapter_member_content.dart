@@ -254,7 +254,7 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
                         LoadingButton(
                           width: 110,
                           action: (x) async {
-                            await client?.createVerification(widget.chapterMember.cells['spreadsheetId']?.value.toString() ?? "");
+                            await client?.createVerification(widget.chapterMember.cells['status']?.value['id'] ?? "");
                             setState(() {});
                             // Navigator.of(context).pop();
                           },

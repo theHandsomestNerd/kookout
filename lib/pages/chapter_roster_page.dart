@@ -410,6 +410,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                         'isOnTheYard': member.isOnTheYard,
                         'isLivesOnCampus': member.isLivesOnCampus,
                         'onCampusPosition': member.onCampusPosition,
+                        'id': member.id
                       }),
                       'chapterAffiliation':
                           PlutoCell(value: member.otherChapterAffiliation),
