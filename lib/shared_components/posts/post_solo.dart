@@ -122,43 +122,51 @@ class _PostSoloState extends State<PostSolo> {
                   constraints: BoxConstraints(
                       minHeight: POST_IMAGE_SQUARE_SIZE as double,
                       minWidth: POST_IMAGE_SQUARE_SIZE as double),
-                  child: CardWithActions(
-                    isAction1Active: isPostLikedByMe != null,
-                    action1Text: "${likes.length} likes",
-                    action1Icon: Icons.thumb_up,
-                    action2Icon: Icons.comment,
-                    action2Text: "comments",
-                    isAction1Loading: isLiking,
-                    action1OnPressed: () async {
-                      setState(() {
-                        isLiking = true;
-                      });
-                      if (widget.post.id != null) {
-                        if (isPostLikedByMe == null) {
-                          await likeThisPost(widget.post.id!);
-                        } else {
-                          await unlikeThisPost(widget.post.id!);
-                        }
-                        var theLikes = await profileClient
-                            ?.getProfileLikes(widget.post.id!);
-                        likes = theLikes?.list ?? likes;
-                        await updateLikes();
+                  child: InkWell(
+                    onTap: (){
+                        GoRouter.of(context).go('/post/${widget.post.id}');
 
+                        // Navigator.pushNamed(context, '/post',
+                        //     arguments: {"id": widget.post.id});
+                    },
+                    child: CardWithActions(
+                      isAction1Active: isPostLikedByMe != null,
+                      action1Text: "${likes.length} likes",
+                      action1Icon: Icons.thumb_up,
+                      action2Icon: Icons.comment,
+                      action2Text: "comments",
+                      isAction1Loading: isLiking,
+                      action1OnPressed: () async {
                         setState(() {
-                          isLiking = false;
+                          isLiking = true;
                         });
-                      }
-                    },
-                    action2OnPressed: () async {
-                      GoRouter.of(context).go('/post/${widget.post.id}');
+                        if (widget.post.id != null) {
+                          if (isPostLikedByMe == null) {
+                            await likeThisPost(widget.post.id!);
+                          } else {
+                            await unlikeThisPost(widget.post.id!);
+                          }
+                          var theLikes = await profileClient
+                              ?.getProfileLikes(widget.post.id!);
+                          likes = theLikes?.list ?? likes;
+                          await updateLikes();
 
-                      // Navigator.pushNamed(context, '/post',
-                      //     arguments: {"id": widget.post.id});
-                    },
-                    image: SanityImageBuilder.imageProviderFor(
-                            sanityImage: widget.post.mainImage,
-                            showDefaultImage: true)
-                        .image,
+                          setState(() {
+                            isLiking = false;
+                          });
+                        }
+                      },
+                      action2OnPressed: () async {
+                        GoRouter.of(context).go('/post/${widget.post.id}');
+
+                        // Navigator.pushNamed(context, '/post',
+                        //     arguments: {"id": widget.post.id});
+                      },
+                      image: SanityImageBuilder.imageProviderFor(
+                              sanityImage: widget.post.mainImage,
+                              showDefaultImage: true)
+                          .image,
+                    ),
                   ),
                 ),
               ),

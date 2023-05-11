@@ -25,7 +25,7 @@ class PostsPage extends StatefulWidget {
 class _PostsPageState extends State<PostsPage> {
   final PagingController<String, Post> _pagingController =
       PagingController(firstPageKey: "");
-  AuthController? authController;
+  // AuthController? authController;
   PanelController panelController = PanelController();
   late ApiClient client;
   AnalyticsController? analyticsController;
@@ -53,10 +53,12 @@ class _PostsPageState extends State<PostsPage> {
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
     if (theClient != null) {
       client = theClient;
+      setState(() {});
     }
 
     if (theAnalyticsController != null && analyticsController == null) {
       analyticsController = theAnalyticsController;
+      setState(() {});
     }
 
     // AnalyticsController? theAnalyticsController =
@@ -66,9 +68,10 @@ class _PostsPageState extends State<PostsPage> {
     //   await theAnalyticsController.logScreenView('profiles-page');
     //   analyticsController = theAnalyticsController;
     // }
-    if (authController == null && theAuthController != null) {
-      authController = authController;
-    }
+    // if (authController == null && theAuthController != null) {
+    //   authController = theAuthController;
+    //   setState(() {});
+    // }
     // myUserId =
     //     AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     // if((widget.profiles?.length??-1) > 0){
@@ -80,7 +83,7 @@ class _PostsPageState extends State<PostsPage> {
     // }
 
     // profiles = await chatController?.updateProfiles();
-    setState(() {});
+    // setState(() {});
     super.didChangeDependencies();
   }
 
