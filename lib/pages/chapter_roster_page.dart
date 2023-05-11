@@ -49,6 +49,9 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
       ChatApiGetVerificationsResponse? theVerificationStatuses =
           await theClient.fetchVerificationStatuses();
       if (theVerificationStatuses != null) {
+        theVerificationStatuses.list.map((status) {
+          print(status.spreadsheetMemberRef?.spreadsheetId);
+        });
         verificationStatuses = theVerificationStatuses.list;
         myVerificationStatus = theVerificationStatuses.amIInThisList;
       }
@@ -58,10 +61,12 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
     super.didChangeDependencies();
   }
 
-  isMemberVerified(String memberRosterNumber) async {
-
-    var isVerified = verificationStatuses.firstWhereOrNull((element) {
-      return element.spreadsheetMemberRef?.spreadsheetId == memberRosterNumber;
+  isMemberVerified(String memberRosterNumber) {
+    SpreadsheetMemberVerification? isVerified =
+        verificationStatuses.firstWhereOrNull((element) {
+      var test = element.spreadsheetMemberRef?.spreadsheetId.toString() ==
+          memberRosterNumber.toString();
+      return test;
     });
 
     if (isVerified != null) {
@@ -99,6 +104,19 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                         true) {
                       return Colors.red[50]!;
                     }
+                    if (rowColorContext
+                        .row.cells['status']?.value['onCampusPosition'] !=
+                        "" && rowColorContext
+                        .row.cells['status']?.value['onCampusPosition'] !=
+                        null) {
+                      return Colors.yellow[50]!;
+                    }
+                    if (rowColorContext
+                        .row.cells['status']?.value['isOnTheYard'] ==
+                        true) {
+                      return Colors.green[50]!;
+                    }
+
                     return rowColorContext.rowIdx % 2 == 0
                         ? Colors.white
                         : Colors.grey[50]!;
@@ -115,7 +133,7 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                     );
                   },
                   configuration: PlutoGridConfiguration(
-                      style: PlutoGridStyleConfig(rowHeight: 56)),
+                      style: PlutoGridStyleConfig(rowHeight: 56,)),
                   key: ObjectKey(spreadSheetMembers),
                   columns: [
                     PlutoColumn(
@@ -123,25 +141,21 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                         title: 'Verified',
                         width: PlutoGridSettings.minColumnWidth,
                         field: 'verified',
-                        type: PlutoColumnType.select([
-                          Icon(Icons.paste),
-                          Icon(Icons.verified),
-                          Icon(Icons.verified_outlined),
-                        ]),
+                        type: PlutoColumnType.text(),
                         renderer: (rendererContext) {
                           if (rendererContext.row.cells['verified']?.value !=
                               null) {
                             if (rendererContext.row.cells['verified']?.value ==
                                 "VERIFIED") {
-                              return Icon(Icons.verified);
+                              return Icon(Icons.verified, color:  Colors.red[900],);
                             } else if (rendererContext
                                     .row.cells['verified']?.value ==
                                 "NOT_VERIFIED") {
-                              return Icon(Icons.verified_outlined);
+                              return Icon(Icons.verified_outlined, color: Colors.grey,);
                             } else if (rendererContext
                                     .row.cells['verified']?.value ==
                                 "PENDING") {
-                              return Icon(Icons.paste);
+                              return Icon(Icons.access_time, color: Colors.red[900],);
                             }
                           }
 
@@ -400,9 +414,11 @@ class _ChapterRosterPageState extends State<ChapterRosterPage> {
                     ),
                   ],
                   rows: spreadSheetMembers.map((member) {
+                    var theVerification =
+                        isMemberVerified(member.spreadsheetId ?? "");
+
                     return PlutoRow(cells: {
-                      'verified': PlutoCell(
-                          value: isMemberVerified(member.spreadsheetId ?? "")),
+                      'verified': PlutoCell(value: theVerification),
                       'name': PlutoCell(value: member.firstName),
                       'spreadsheetId': PlutoCell(value: member.spreadsheetId),
                       'status': PlutoCell(value: {

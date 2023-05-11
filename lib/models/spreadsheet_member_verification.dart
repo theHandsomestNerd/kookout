@@ -12,7 +12,7 @@ class SpreadsheetMemberVerification {
       id = json["_id"];
     }
     if (json['userRef'] != null && json['userRef'] != "null") {
-      userRef = AppUser.fromJson(json["tag"]);
+      userRef = AppUser.fromJson(json["userRef"]);
     }
     if (json['spreadsheetMemberRef'] != null && json['spreadsheetMemberRef'] != "null") {
       spreadsheetMemberRef = SpreadsheetMember.fromJson(json["spreadsheetMemberRef"]);

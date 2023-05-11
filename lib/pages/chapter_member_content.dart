@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kookout/models/clients/api_client.dart';
+import 'package:kookout/shared_components/alert_message_popup.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../wrappers/loading_button.dart';
 import '../models/controllers/auth_inherited.dart';
+import '../wrappers/alerts_snackbar.dart';
 
 class ChapterMemberContent extends StatefulWidget {
   const ChapterMemberContent({Key? key, required this.chapterMember})
@@ -17,6 +19,8 @@ class ChapterMemberContent extends StatefulWidget {
 class _ChapterMemberContentState extends State<ChapterMemberContent> {
   ApiClient? client;
 
+  final AlertSnackbar _alertSnackbar = AlertSnackbar();
+
   @override
   didChangeDependencies() async {
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
@@ -28,14 +32,50 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
     super.didChangeDependencies();
   }
 
+  getVerificationIcon(String? verified) {
+    if (verified != null) {
+      if (verified == "VERIFIED") {
+        return Icon(
+          Icons.verified,
+          color: Colors.red[900],
+        );
+      } else if (verified == "NOT_VERIFIED") {
+        return Icon(
+          Icons.verified_outlined,
+          color: Colors.grey,
+        );
+      } else if (verified == "PENDING") {
+        return Icon(
+          Icons.access_time,
+          color: Colors.red[900],
+        );
+      }
+    }
+
+    return Icon(Icons.verified_outlined);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       // key: ObjectKey(isSubmitting),
       // backgroundColor: Colors.green,
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Member ${widget.chapterMember.cells['spreadsheetId']?.value}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                  'Member ${widget.chapterMember.cells['spreadsheetId']?.value}'),
+              Column(children: [
+              getVerificationIcon(widget.chapterMember.cells['verified']?.value),
+                if(widget.chapterMember.cells['verified']?.value == "VERIFIED")Text("Verified", style: TextStyle(fontSize: 10),),
+                if(widget.chapterMember.cells['verified']?.value == "NOT_VERIFIED")Text("Not Verified", style: TextStyle(fontSize: 10),),
+                if(widget.chapterMember.cells['verified']?.value == "PENDING")Text("Pending", style: TextStyle(fontSize: 10),)
+              ],)
+            ],
+          ),
           if (widget.chapterMember.cells['chapterAffiliation']?.value != null &&
               widget.chapterMember.cells['chapterAffiliation']?.value != "")
             Text(
@@ -253,13 +293,30 @@ class _ChapterMemberContentState extends State<ChapterMemberContent> {
                       children: [
                         LoadingButton(
                           width: 110,
+                          isDisabled: widget.chapterMember.cells['verified']?.value == "VERIFIED" || widget.chapterMember.cells['verified']?.value == "PENDING",
                           action: (x) async {
-                            await client?.createVerification(widget.chapterMember.cells['status']?.value['id'] ?? "");
+                            var createVerificationResponse =
+                                await client?.createVerification(widget
+                                        .chapterMember
+                                        .cells['status']
+                                        ?.value['id'] ??
+                                    "");
+
+                            if (createVerificationResponse == "SUCCESS") {
+                              _alertSnackbar.showSuccessAlert(
+                                  "Verification request submitted", context);
+                              Navigator.of(context).pop();
+                            } else {
+                              _alertSnackbar.showErrorAlert(
+                                  "Verification request failed, try again later",
+                                  context);
+                            }
                             setState(() {});
                             // Navigator.of(context).pop();
                           },
                           text: "Is this You?",
                         ),
+                        SizedBox(width: 16,),
                         LoadingButton(
                           width: 110,
                           action: (innerContext) {
