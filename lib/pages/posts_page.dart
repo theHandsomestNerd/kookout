@@ -155,7 +155,7 @@ class _PostsPageState extends State<PostsPage> {
                     0,
                     56,
                   ),
-                  cacheExtent: 2000,
+                  // cacheExtent: 2000,
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate<Post>(
                     noItemsFoundIndicatorBuilder: (build) {
@@ -266,7 +266,7 @@ class _PostsPageState extends State<PostsPage> {
                   color: Colors.transparent,
                   minHeight: 64,
                   panelBuilder: (scrollController) => SingleChildScrollView(
-                    // controller: scrollController,
+                    controller: scrollController,
                     child: Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
