@@ -6,24 +6,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kookout/config/default_config.dart';
-import 'package:kookout/models/controllers/analytics_controller.dart';
-import 'package:kookout/models/controllers/auth_controller.dart';
-import 'package:kookout/models/controllers/chat_controller.dart';
-import 'package:kookout/models/controllers/geolocation_controller.dart';
-import 'package:kookout/models/controllers/post_controller.dart';
-import 'package:kookout/pages/chapter_roster_page.dart';
-import 'package:kookout/pages/hashtag_library_page.dart';
-import 'package:kookout/pages/hashtag_page.dart';
-import 'package:kookout/pages/home_page.dart';
-import 'package:kookout/pages/logout_page.dart';
-import 'package:kookout/pages/posts_page.dart';
-import 'package:kookout/pages/profiles_page.dart';
-import 'package:kookout/pages/register_page.dart';
-import 'package:kookout/pages/settings_page.dart';
-import 'package:kookout/pages/solo_post_page.dart';
-import 'package:kookout/pages/solo_profile_page.dart';
-import 'package:kookout/pages/splash_screen.dart';
+import 'package:cookowt/config/default_config.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/geolocation_controller.dart';
+import 'package:cookowt/models/controllers/post_controller.dart';
+import 'package:cookowt/pages/chapter_roster_page.dart';
+import 'package:cookowt/pages/hashtag_library_page.dart';
+import 'package:cookowt/pages/hashtag_page.dart';
+import 'package:cookowt/pages/home_page.dart';
+import 'package:cookowt/pages/logout_page.dart';
+import 'package:cookowt/pages/posts_page.dart';
+import 'package:cookowt/pages/profiles_page.dart';
+import 'package:cookowt/pages/register_page.dart';
+import 'package:cookowt/pages/settings_page.dart';
+import 'package:cookowt/pages/solo_post_page.dart';
+import 'package:cookowt/pages/solo_profile_page.dart';
+import 'package:cookowt/pages/splash_screen.dart';
 import 'package:meta_seo/meta_seo.dart';
 
 import 'config/firebase_options.dart';
@@ -276,7 +276,7 @@ class _MyAppState extends State<MyApp> {
         routerDelegate: router.routerDelegate,
         // key: ObjectKey(isUserLoggedIn),
         // navigatorObservers: <NavigatorObserver>[routeObserver],
-        title: 'Kookout',
+        title: 'Cookowt',
         // routes: {
         //   '/home': (context) {
         //     return const HomePage();

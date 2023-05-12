@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hashtagable/hashtagable.dart';
-import 'package:kookout/models/controllers/auth_inherited.dart';
-import 'package:kookout/wrappers/alerts_snackbar.dart';
-import 'package:kookout/wrappers/analytics_loading_button.dart';
+import 'package:cookowt/models/controllers/auth_inherited.dart';
+import 'package:cookowt/wrappers/alerts_snackbar.dart';
+import 'package:cookowt/wrappers/analytics_loading_button.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'

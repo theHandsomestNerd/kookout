@@ -1,5 +1,5 @@
-import 'package:kookout/models/hash_tag.dart';
-import 'package:kookout/models/spreadsheet_member.dart';
+import 'package:cookowt/models/hash_tag.dart';
+import 'package:cookowt/models/spreadsheet_member.dart';
 
 import 'hash_tag.dart';
 

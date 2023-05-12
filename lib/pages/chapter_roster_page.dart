@@ -3,14 +3,14 @@ import 'dart:core';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import 'package:kookout/layout/full_page_layout.dart';
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/responses/chat_api_get_verifications_response.dart';
-import 'package:kookout/models/spreadsheet_member.dart';
-import 'package:kookout/models/spreadsheet_member_verification.dart';
-import 'package:kookout/shared_components/menus/home_page_menu.dart';
-import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:kookout/wrappers/hashtag_collection.dart';
+import 'package:cookowt/layout/full_page_layout.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/responses/chat_api_get_verifications_response.dart';
+import 'package:cookowt/models/spreadsheet_member.dart';
+import 'package:cookowt/models/spreadsheet_member_verification.dart';
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/wrappers/hashtag_collection.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

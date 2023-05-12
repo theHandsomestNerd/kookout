@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:kookout/models/hash_tag_collection.dart';
-import 'package:kookout/models/position.dart';
-import 'package:kookout/models/responses/chat_api_get_profile_posts_response.dart';
+import 'package:cookowt/models/hash_tag_collection.dart';
+import 'package:cookowt/models/position.dart';
+import 'package:cookowt/models/responses/chat_api_get_profile_posts_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hashtagable/functions.dart';
 import 'package:http/http.dart' as http;
-import 'package:kookout/models/responses/chat_api_get_verifications_response.dart';
-import 'package:kookout/models/spreadsheet_member.dart';
-import 'package:kookout/models/spreadsheet_member_verification.dart';
+import 'package:cookowt/models/responses/chat_api_get_verifications_response.dart';
+import 'package:cookowt/models/spreadsheet_member.dart';
+import 'package:cookowt/models/spreadsheet_member_verification.dart';
 
 import '../../config/default_config.dart';
 import '../app_user.dart';
@@ -649,86 +649,6 @@ class ApiClient {
       }
       if (newProfile.height != null) {
         body = {...body, "height": json.encode(newProfile.height)};
-      }
-      if (newProfile.facebook != null ) {
-        body = {...body, "facebook": newProfile.facebook};
-      }
-      if (newProfile.twitter != null ) {
-        body = {...body, "twitter": newProfile.twitter};
-      }
-      if (newProfile.instagram != null) {
-        body = {...body, "instagram": newProfile.instagram};
-      }
-      if (newProfile.tiktok != null) {
-        body = {...body, "tiktok": newProfile.tiktok};
-      }
-      if (newProfile.address2 != null) {
-        body = {...body, "address2": newProfile.address2};
-      }
-      if (newProfile.address1 != null) {
-        body = {...body, "address1": newProfile.address1};
-      }
-      if (newProfile.ethnicity != null) {
-        body = {...body, "ethnicity": newProfile.ethnicity};
-      }
-      if (newProfile.occupation != null) {
-        body = {...body, "occupation": newProfile.occupation};
-      }
-      if (newProfile.city != null) {
-        body = {...body, "city": newProfile.city};
-      }
-      if (newProfile.state != null) {
-        body = {...body, "state": newProfile.state};
-      }
-      if (newProfile.zip != null) {
-        body = {...body, "zip": newProfile.zip};
-      }
-      if (newProfile.govtIssuedFirstName != null) {
-        body = {...body, "govtIssuedFirstName": newProfile.govtIssuedFirstName};
-      }
-      if (newProfile.govtIssuedMiddleName != null) {
-        body = {
-          ...body,
-          "govtIssuedMiddleName": newProfile.govtIssuedMiddleName
-        };
-      }
-      if (newProfile.govtIssuedLastName != null) {
-        body = {...body, "govtIssuedLastName": newProfile.govtIssuedLastName};
-      }
-      if (newProfile.lineName != null) {
-        body = {...body, "lineName": newProfile.lineName};
-      }
-      if (newProfile.lineNumber != null) {
-        body = {...body, "lineNumber": newProfile.lineNumber.toString()};
-      }
-      if (newProfile.entireLinesName != null &&
-          newProfile.entireLinesName != "null") {
-        body = {...body, "entireLinesName": newProfile.entireLinesName};
-      }
-      if (newProfile.dopName != null) {
-        body = {...body, "dopName": newProfile.dopName};
-      }
-      if (newProfile.otherChapterAffiliation != null &&
-          newProfile.otherChapterAffiliation != "null") {
-        body = {
-          ...body,
-          "otherChapterAffiliation": newProfile.otherChapterAffiliation
-        };
-      }
-      if (newProfile.crossingDate != null) {
-        body = {...body, "crossingDate": newProfile.crossingDate.toString()};
-      }
-      if (newProfile.dob != null) {
-        body = {...body, "dob": newProfile.dob.toString()};
-      }
-      if (newProfile.homePhone != null) {
-        body = {...body, "homePhone": newProfile.homePhone};
-      }
-      if (newProfile.workPhone != null ) {
-        body = {...body, "workPhone": newProfile.workPhone};
-      }
-      if (newProfile.cellPhone != null) {
-        body = {...body, "cellPhone": newProfile.cellPhone};
       }
 
       if (kDebugMode) {

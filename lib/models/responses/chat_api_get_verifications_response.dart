@@ -1,5 +1,5 @@
-import 'package:kookout/models/like.dart';
-import 'package:kookout/models/spreadsheet_member_verification.dart';
+import 'package:cookowt/models/like.dart';
+import 'package:cookowt/models/spreadsheet_member_verification.dart';
 
 class ChatApiGetVerificationsResponse {
   final List<SpreadsheetMemberVerification> list;

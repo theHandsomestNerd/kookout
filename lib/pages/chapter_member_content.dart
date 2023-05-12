@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/shared_components/alert_message_popup.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/shared_components/alert_message_popup.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../wrappers/loading_button.dart';

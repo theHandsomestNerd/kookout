@@ -1,5 +1,5 @@
-import 'package:kookout/models/app_user.dart';
-import 'package:kookout/models/spreadsheet_member.dart';
+import 'package:cookowt/models/app_user.dart';
+import 'package:cookowt/models/spreadsheet_member.dart';
 
 class SpreadsheetMemberVerification {
   String? id;
