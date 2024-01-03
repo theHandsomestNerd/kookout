@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hashtagable/hashtagable.dart';
+import 'package:hashtagable_v3/hashtagable.dart';
 
 import '../models/app_user.dart';
 import '../sanity/sanity_image_builder.dart';

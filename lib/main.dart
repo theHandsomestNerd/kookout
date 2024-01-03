@@ -33,6 +33,7 @@ import 'pages/login_page.dart';
 //     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
 
+
 Future<void> main() async {
   // await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
   // const _requiredEnvVars = const ['FIREBASE_PROJECT_ID', 'FIREBASE_APP_ID'];
@@ -74,27 +75,29 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late GoRouter router = GoRouter(
-    redirect: (BuildContext context, GoRouterState state) {
-      // print("GO_ROUTER ${state.location} ${state.subloc}");
-      if (state.path!.contains('/register') || state.path!.contains('/splash')) {
-        return null;
-      }
 
-      // if the user is not logged in, they need to login
-      final loggedIn = FirebaseAuth.instance.currentUser != null;
-      final loggingIn = state.path!.contains('/login');
-
-      // print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
-
-      if (!loggedIn) return loggingIn ? null : '/login';
-
-      // if the user is logged in but still on the login page, send them to
-      // the home page
-      if (loggingIn) return '/home';
-
-      // no need to redirect at all
-      return null;
-    },
+    
+    // redirect: (BuildContext context, GoRouterState state) {
+    //   // print("GO_ROUTER ${state.location} ${state.subloc}");
+    //   if (state.path.contains('/register') || state.path!.contains('/splash')) {
+    //     return null;
+    //   }
+    //
+    //   // if the user is not logged in, they need to login
+    //   final loggedIn = FirebaseAuth.instance.currentUser != null;
+    //   final loggingIn = state.path!.contains('/login');
+    //
+    //   // print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
+    //
+    //   if (!loggedIn) return loggingIn ? null : '/login';
+    //
+    //   // if the user is logged in but still on the login page, send them to
+    //   // the home page
+    //   if (loggingIn) return '/home';
+    //
+    //   // no need to redirect at all
+    //   // return null;
+    // },
     routes: <GoRoute>[
       GoRoute(
         path: '/',
@@ -224,7 +227,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
 
     // var intermediate =
     //     AuthInherited.of(context)?.authController?.isLoggedIn ?? false;
@@ -248,6 +250,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
     super.didChangeDependencies();
   }
+  final Future<FirebaseApp> _initializedApp = Firebase.initializeApp();
 
   // This widget is the root of your application.
   @override
@@ -265,139 +268,144 @@ class _MyAppState extends State<MyApp> {
       postController: postController,
       myLoggedInUser: authController.loggedInUser,
       profileImage: authController.myAppUser?.profileImage,
-      child: MaterialApp.router(
-        routeInformationProvider: router.routeInformationProvider,
-        routeInformationParser: router.routeInformationParser,
-        routerDelegate: router.routerDelegate,
-        // key: ObjectKey(isUserLoggedIn),
-        // navigatorObservers: <NavigatorObserver>[routeObserver],
-        title: 'Cookowt',
-        // routes: {
-        //   '/home': (context) {
-        //     return const HomePage();
-        //   },
-        //   '/postsPage': (context) => const PostsPage(),
-        //   '/createPostsPage': (context) =>
-        //       const BugReporter(child: CreatePostPage()),
-        //   '/register': (context) => const RegisterPage(),
-        //   '/': (context) {
-        //     if (kIsWeb) {
-        //       // Define MetaSEO object
-        //       MetaSEO meta = MetaSEO();
-        //       // add meta seo data for web app as you want
-        //       var title = 'Cookowt-The Invite Only Network';
-        //       var image =
-        //           "https://cdn.sanity.io/images/dhhk6mar/production/ae5b21a6e5982153e74ca8a815b90f92368ac9fa-3125x1875.png";
-        //       var description =
-        //           'Cookowt is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookowt. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookowtinvitee';
-        //       meta.ogTitle(ogTitle: title);
-        //       meta.description(description: description);
-        //       meta.keywords(keywords: 'social media, black twitter, memes');
-        //       meta.twitterCard(twitterCard: TwitterCard.summaryLargeImage);
-        //       meta.author(author: "The Handsomest Nerd");
-        //       meta.twitterDescription(twitterDescription: description);
-        //       meta.twitterImage(twitterImage: image);
-        //       meta.twitterTitle(twitterTitle: title);
-        //       meta.ogImage(ogImage: image);
-        //     }
-        //     return const LoginPage();
-        //   },
-        //   // '/editProfile': (context) => const EditProfilePage(),
-        //   '/logout': (context) => const LogoutPage(),
-        //   '/profilesPage': (context) => const ProfilesPage(),
-        //   '/profile': (context) {
-        //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
-        //         <String, dynamic>{}) as Map;
-        //
-        //     String theId;
-        //     if (arguments['id'] != null) {
-        //       theId = arguments['id'];
-        //     } else {
-        //       theId = authController.myAppUser?.userId.toString() ?? "";
-        //     }
-        //
-        //     AppUser? thisProfile;
-        //     for (var element in chatController.profileList) {
-        //       if (element.userId == theId) {
-        //         thisProfile = element;
-        //       }
-        //     }
-        //
-        //     return SoloProfilePage(
-        //       thisProfile: thisProfile,
-        //       key: ObjectKey(arguments["id"]),
-        //       id: theId,
-        //     );
-        //   },
-        //   '/post': (context) {
-        //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
-        //         <String, dynamic>{}) as Map;
-        //
-        //     String? theId;
-        //     if (arguments['id'] != null) {
-        //       theId = arguments['id'];
-        //     }
-        //
-        //     // var thisPost;
-        //     // if (theId != null) {
-        //     //    postController.getPost(theId).then((value){
-        //     //     print("Post retrieved before ");
-        //
-        //     return SoloPostPage(
-        //       thisPostId: theId,
-        //     );
-        //
-        //     // }
-        //     // return Placeholder();
-        //   },
-        //   '/myProfile': (context) {
-        //     String theId = authController.myAppUser?.userId.toString() ?? "";
-        //     AppUser? thisProfile;
-        //     for (var element in chatController.profileList) {
-        //       if (element.userId == theId) {
-        //         thisProfile = element;
-        //       }
-        //     }
-        //     return SoloProfilePage(
-        //       thisProfile: thisProfile,
-        //       id: theId,
-        //     );
-        //   },
-        //   // '/postsPage': (context) {
-        //   //   return PostsThreadPage(
-        //   //     drawer: widget.drawer,
-        //   //   );
-        //   // },
-        //   '/settings': (context) {
-        //     return const SettingsPage();
-        //   },
-        // },
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.red,
-            brightness: Brightness.light,
-            accentColor: Colors.black,
-          ),
-          primaryColor: Colors.red,
-          // This is the theme of your application.
+      child: FutureBuilder(
+        builder: (context, snapshot) {
+          return MaterialApp.router(
+          routeInformationProvider: router.routeInformationProvider,
+          routeInformationParser: router.routeInformationParser,
+          routerDelegate: router.routerDelegate,
+          // key: ObjectKey(isUserLoggedIn),
+          // navigatorObservers: <NavigatorObserver>[routeObserver],
+          title: 'Cookowt',
+          // routes: {
+          //   '/home': (context) {
+          //     return const HomePage();
+          //   },
+          //   '/postsPage': (context) => const PostsPage(),
+          //   '/createPostsPage': (context) =>
+          //       const BugReporter(child: CreatePostPage()),
+          //   '/register': (context) => const RegisterPage(),
+          //   '/': (context) {
+          //     if (kIsWeb) {
+          //       // Define MetaSEO object
+          //       MetaSEO meta = MetaSEO();
+          //       // add meta seo data for web app as you want
+          //       var title = 'Cookowt-The Invite Only Network';
+          //       var image =
+          //           "https://cdn.sanity.io/images/dhhk6mar/production/ae5b21a6e5982153e74ca8a815b90f92368ac9fa-3125x1875.png";
+          //       var description =
+          //           'Cookowt is the next invite only social media app. Invite only means real users unless they are admitted by someone already at the Cookowt. You will be able to link to other Social media to enable cross posting for those not invited. Want the invite? tweet @Cookowtinvitee';
+          //       meta.ogTitle(ogTitle: title);
+          //       meta.description(description: description);
+          //       meta.keywords(keywords: 'social media, black twitter, memes');
+          //       meta.twitterCard(twitterCard: TwitterCard.summaryLargeImage);
+          //       meta.author(author: "The Handsomest Nerd");
+          //       meta.twitterDescription(twitterDescription: description);
+          //       meta.twitterImage(twitterImage: image);
+          //       meta.twitterTitle(twitterTitle: title);
+          //       meta.ogImage(ogImage: image);
+          //     }
+          //     return const LoginPage();
+          //   },
+          //   // '/editProfile': (context) => const EditProfilePage(),
+          //   '/logout': (context) => const LogoutPage(),
+          //   '/profilesPage': (context) => const ProfilesPage(),
+          //   '/profile': (context) {
+          //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
+          //         <String, dynamic>{}) as Map;
           //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          textTheme: const TextTheme(
-            displayLarge:
-                TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            titleLarge: TextStyle(fontSize: 36.0),
-            titleSmall: TextStyle(fontSize: 22.0),
-            bodyLarge: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
-            bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+          //     String theId;
+          //     if (arguments['id'] != null) {
+          //       theId = arguments['id'];
+          //     } else {
+          //       theId = authController.myAppUser?.userId.toString() ?? "";
+          //     }
+          //
+          //     AppUser? thisProfile;
+          //     for (var element in chatController.profileList) {
+          //       if (element.userId == theId) {
+          //         thisProfile = element;
+          //       }
+          //     }
+          //
+          //     return SoloProfilePage(
+          //       thisProfile: thisProfile,
+          //       key: ObjectKey(arguments["id"]),
+          //       id: theId,
+          //     );
+          //   },
+          //   '/post': (context) {
+          //     var arguments = (ModalRoute.of(context)?.settings.arguments ??
+          //         <String, dynamic>{}) as Map;
+          //
+          //     String? theId;
+          //     if (arguments['id'] != null) {
+          //       theId = arguments['id'];
+          //     }
+          //
+          //     // var thisPost;
+          //     // if (theId != null) {
+          //     //    postController.getPost(theId).then((value){
+          //     //     print("Post retrieved before ");
+          //
+          //     return SoloPostPage(
+          //       thisPostId: theId,
+          //     );
+          //
+          //     // }
+          //     // return Placeholder();
+          //   },
+          //   '/myProfile': (context) {
+          //     String theId = authController.myAppUser?.userId.toString() ?? "";
+          //     AppUser? thisProfile;
+          //     for (var element in chatController.profileList) {
+          //       if (element.userId == theId) {
+          //         thisProfile = element;
+          //       }
+          //     }
+          //     return SoloProfilePage(
+          //       thisProfile: thisProfile,
+          //       id: theId,
+          //     );
+          //   },
+          //   // '/postsPage': (context) {
+          //   //   return PostsThreadPage(
+          //   //     drawer: widget.drawer,
+          //   //   );
+          //   // },
+          //   '/settings': (context) {
+          //     return const SettingsPage();
+          //   },
+          // },
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.red,
+              brightness: Brightness.light,
+              accentColor: Colors.black,
+            ),
+            primaryColor: Colors.red,
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            textTheme: const TextTheme(
+              displayLarge:
+                  TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              titleLarge: TextStyle(fontSize: 36.0),
+              titleSmall: TextStyle(fontSize: 22.0),
+              bodyLarge: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
+              bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+            ),
+            // primarySwatch: Colors.grey,
           ),
-          // primarySwatch: Colors.grey,
-        ),
+        );
+        },
+        future: _initializedApp,
       ),
     );
   }
