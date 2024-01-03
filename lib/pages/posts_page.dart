@@ -135,7 +135,7 @@ class _PostsPageState extends State<PostsPage> {
                   child: Container(color: Colors.black87),
                 ),
                 PagedListView<String, Post>(
-                  padding: EdgeInsets.fromLTRB(
+                  padding: const EdgeInsets.fromLTRB(
                     0,
                     0,
                     0,
@@ -341,10 +341,10 @@ class _PostsPageState extends State<PostsPage> {
                                                     height: 3,
                                                   ),
                                                 ),
-                                                Column(
+                                                const Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: const [
+                                                  children: [
                                                     Text(
                                                       "Create a Post",
                                                       style: TextStyle(

@@ -132,7 +132,7 @@ class _HashtagPageState extends State<HashtagPage> {
         direction: Axis.vertical,
         children: [
           Text("#${widget.thisHashtagId}", style: Theme.of(context).textTheme.titleLarge,),
-          Divider(),
+          const Divider(),
           Expanded(
             child: Stack(
               children: [
@@ -140,7 +140,7 @@ class _HashtagPageState extends State<HashtagPage> {
                   child: Container(color: Colors.black87),
                 ),
                 PagedListView<String, Post>(
-                  padding: EdgeInsets.fromLTRB(
+                  padding: const EdgeInsets.fromLTRB(
                     0,
                     0,
                     0,
@@ -346,10 +346,10 @@ class _HashtagPageState extends State<HashtagPage> {
                                                     height: 3,
                                                   ),
                                                 ),
-                                                Column(
+                                                const Column(
                                                   mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                                  children: const [
+                                                  children: [
                                                     Text(
                                                       "Create a Post",
                                                       style: TextStyle(

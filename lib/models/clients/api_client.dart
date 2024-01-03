@@ -200,7 +200,7 @@ class ApiClient {
       String? hashtagId, String? lastId, int pageSize) async {
     if (kDebugMode) {
       print(
-          "Retrieving paginated hashtagged with ${hashtagId} Posts with lastid $lastId and pagesize $pageSize");
+          "Retrieving paginated hashtagged with $hashtagId Posts with lastid $lastId and pagesize $pageSize");
     }
     String? token = await getIdToken();
     if (DefaultConfig.theAuthBaseUrl == "") {
@@ -233,7 +233,7 @@ class ApiClient {
   Future<HashtagCollection?> fetchHashtagCollection(
       String? hashtagCollectionSlug) async {
     if (kDebugMode) {
-      print("Retrieving hashtag collection ${hashtagCollectionSlug}");
+      print("Retrieving hashtag collection $hashtagCollectionSlug");
     }
     String? token = await getIdToken();
     if (DefaultConfig.theAuthBaseUrl == "") {

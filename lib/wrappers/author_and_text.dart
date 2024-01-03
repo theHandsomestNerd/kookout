@@ -84,8 +84,8 @@ class _AuthorAndTextState extends State<AuthorAndText> {
                               padding:
                                   const EdgeInsets.fromLTRB(12, 8.0, 8, 12),
                               child: HashTagText(
-                                decoratedStyle: TextStyle(fontSize: 22,color:Colors.red),
-                                basicStyle: TextStyle(fontSize: 22,color:Colors.black),
+                                decoratedStyle: const TextStyle(fontSize: 22,color:Colors.red),
+                                basicStyle: const TextStyle(fontSize: 22,color:Colors.black),
                                 text:widget.body ?? "",
                                 onTap: (text){
                                   GoRouter.of(context).go('/hashtag/${text.replaceAll("#", "")}');

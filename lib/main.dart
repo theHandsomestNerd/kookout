@@ -17,16 +17,13 @@ import 'package:cookowt/pages/settings_page.dart';
 import 'package:cookowt/pages/solo_post_page.dart';
 import 'package:cookowt/pages/solo_profile_page.dart';
 import 'package:cookowt/pages/splash_screen.dart';
-import 'package:cookowt/shared_components/bug_reporter/bug_reporter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meta_seo/meta_seo.dart';
-import 'package:universal_io/io.dart';
 
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
@@ -120,23 +117,23 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/profilesPage',
         builder: (BuildContext context, GoRouterState state) {
-          return ProfilesPage();
+          return const ProfilesPage();
         },
       ),
       GoRoute(
         path: '/splash',
         builder: (BuildContext context, GoRouterState state) {
-          return SplashPage();
+          return const SplashPage();
         },
       ),
       GoRoute(
           path: '/home',
           builder: (BuildContext context, GoRouterState state) =>
-              HomePage()),
+              const HomePage()),
       GoRoute(
           path: '/postsPage',
           builder: (BuildContext context, GoRouterState state) =>
-              PostsPage()),
+              const PostsPage()),
       // GoRoute(
       //     path: '/createPostsPage',
       //     builder: (BuildContext context, GoRouterState state) =>
@@ -144,11 +141,11 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/register',
           builder: (BuildContext context, GoRouterState state) =>
-              RegisterPage()),
+              const RegisterPage()),
       GoRoute(
           path: '/settings',
           builder: (BuildContext context, GoRouterState state) =>
-              SettingsPage()),
+              const SettingsPage()),
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => SoloPostPage(
