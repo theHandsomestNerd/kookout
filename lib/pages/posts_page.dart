@@ -1,5 +1,5 @@
-import 'package:kookout/shared_components/menus/home_page_menu.dart';
-import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -25,46 +25,38 @@ class PostsPage extends StatefulWidget {
 class _PostsPageState extends State<PostsPage> {
   final PagingController<String, Post> _pagingController =
       PagingController(firstPageKey: "");
-
-  // AuthController? authController;
+  AuthController? authController;
   PanelController panelController = PanelController();
   late ApiClient client;
   AnalyticsController? analyticsController;
   bool isPanelOpen = false;
 
-  static const _pageSize = 20;
-  String? lastId = "";
+  static const _pageSize = 10;
+  String lastId = "";
 
   @override
   void initState() {
     _pagingController.addPageRequestListener((theLastId) async {
-      if (theLastId != null && theLastId != "") {
-        lastId = theLastId;
-      }
-
-      // if(lastId != "" && lastId != null) {
-      //   return _fetchPage(lastId!);
-      // }
       return _fetchPage(theLastId);
     });
 
     super.initState();
   }
 
+
   @override
   didChangeDependencies() async {
+
     // var theChatController = AuthInherited.of(context)?.chatController;
-    // var theAuthController = AuthInherited.of(context)?.authController;
+    var theAuthController = AuthInherited.of(context)?.authController;
     var theAnalyticsController = AuthInherited.of(context)?.analyticsController;
     var theClient = AuthInherited.of(context)?.chatController?.profileClient;
     if (theClient != null) {
       client = theClient;
-      setState(() {});
     }
 
     if (theAnalyticsController != null && analyticsController == null) {
       analyticsController = theAnalyticsController;
-      setState(() {});
     }
 
     // AnalyticsController? theAnalyticsController =
@@ -74,10 +66,9 @@ class _PostsPageState extends State<PostsPage> {
     //   await theAnalyticsController.logScreenView('profiles-page');
     //   analyticsController = theAnalyticsController;
     // }
-    // if (authController == null && theAuthController != null) {
-    //   authController = theAuthController;
-    //   setState(() {});
-    // }
+    if (authController == null && theAuthController != null) {
+      authController = authController;
+    }
     // myUserId =
     //     AuthInherited.of(context)?.authController?.myAppUser?.userId ?? "";
     // if((widget.profiles?.length??-1) > 0){
@@ -89,7 +80,7 @@ class _PostsPageState extends State<PostsPage> {
     // }
 
     // profiles = await chatController?.updateProfiles();
-    // setState(() {});
+    setState(() {});
     super.didChangeDependencies();
   }
 
@@ -110,20 +101,15 @@ class _PostsPageState extends State<PostsPage> {
           _pagingController.appendPage(newItems, nextPageKey);
         }
       }
-      setState(() {
-
-      });
     } catch (error) {
-      print(error);
-      // _pagingController.error = error;
+      _pagingController.error = error;
     }
-    setState(() {});
   }
 
   @override
   void dispose() {
-    _pagingController.dispose();
     super.dispose();
+    _pagingController.dispose();
   }
 
   @override
@@ -155,7 +141,6 @@ class _PostsPageState extends State<PostsPage> {
                     0,
                     56,
                   ),
-                  // cacheExtent: 2000,
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate<Post>(
                     noItemsFoundIndicatorBuilder: (build) {
@@ -252,7 +237,7 @@ class _PostsPageState extends State<PostsPage> {
                           ),
                         ),
                         const Text(
-                          "Upload Photo(s)",
+                          "Create a Post",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
@@ -266,7 +251,7 @@ class _PostsPageState extends State<PostsPage> {
                   color: Colors.transparent,
                   minHeight: 64,
                   panelBuilder: (scrollController) => SingleChildScrollView(
-                    controller: scrollController,
+                    // controller: scrollController,
                     child: Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -361,7 +346,7 @@ class _PostsPageState extends State<PostsPage> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      "Upload Photo(s)",
+                                                      "Create a Post",
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18),
@@ -387,7 +372,7 @@ class _PostsPageState extends State<PostsPage> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: 84,
+                                  height: 24,
                                 )
                               ],
                             ),

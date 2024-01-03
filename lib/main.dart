@@ -21,29 +21,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cookowt/config/default_config.dart';
-import 'package:cookowt/models/controllers/analytics_controller.dart';
-import 'package:cookowt/models/controllers/auth_controller.dart';
-import 'package:cookowt/models/controllers/chat_controller.dart';
-import 'package:cookowt/models/controllers/geolocation_controller.dart';
-import 'package:cookowt/models/controllers/post_controller.dart';
-import 'package:cookowt/pages/chapter_roster_page.dart';
-import 'package:cookowt/pages/hashtag_library_page.dart';
-import 'package:cookowt/pages/hashtag_page.dart';
-import 'package:cookowt/pages/home_page.dart';
-import 'package:cookowt/pages/logout_page.dart';
-import 'package:cookowt/pages/posts_page.dart';
-import 'package:cookowt/pages/profiles_page.dart';
-import 'package:cookowt/pages/register_page.dart';
-import 'package:cookowt/pages/settings_page.dart';
-import 'package:cookowt/pages/solo_post_page.dart';
-import 'package:cookowt/pages/solo_profile_page.dart';
-import 'package:cookowt/pages/splash_screen.dart';
 import 'package:meta_seo/meta_seo.dart';
-import 'package:universal_io/io.dart';
 
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
@@ -52,6 +32,7 @@ import 'pages/login_page.dart';
 // import '../../platform_dependent/image_uploader.dart'
 //     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
 //     if (dart.library.html) '../../platform_dependent/image_uploader_html.dart';
+
 
 Future<void> main() async {
   // await dotenv.load(mergeWith: Platform.environment, fileName: "assets/.env");
@@ -195,10 +176,6 @@ class _MyAppState extends State<MyApp> {
           path: '/hashtagCollections',
           builder: (BuildContext context, GoRouterState state) =>
               const HashtagLibraryPage()),
-    GoRoute(
-          path: '/chapterRoster',
-          builder: (BuildContext context, GoRouterState state) =>
-              const ChapterRosterPage()),
     ],
   );
 

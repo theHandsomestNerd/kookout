@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
               print("got user position $thePosition");
             }
             positions.remove(foundLastPosition);
-            positions.add(thePosition as SanityPosition);
+            positions.add(thePosition);
             // setState(() {
             isPositionLoading = false;
             // });
@@ -710,12 +710,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                 !isPostLoading && (theItem == null)
                                     ? const Text("No Posts with images")
                                     : const Column(
-                                        children: [
-                                          LoadingLogo(),
-                                          Text("Loading Post Previews")
-                                        ],
-                                      ),
-                                    : Column(
                                         children: [
                                           LoadingLogo(),
                                           Text("Loading Post Previews")

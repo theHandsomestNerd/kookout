@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/position.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/position.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -31,7 +31,7 @@ class GeolocationController {
     });
 
     geolocationTimer ??=
-        Timer.periodic(const Duration(seconds: 60), (timer) async {
+        Timer.periodic(const Duration(seconds: 30), (timer) async {
       // print("Location Timer went off $timer");
 
       var theCurrentLocation = await _recordCurrentPosition();
