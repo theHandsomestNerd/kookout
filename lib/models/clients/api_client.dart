@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:hashtagable/functions.dart';
+import 'package:hashtagable_v3/functions.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/default_config.dart';

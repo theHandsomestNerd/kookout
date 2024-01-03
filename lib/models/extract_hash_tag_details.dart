@@ -1,6 +1,6 @@
 import 'package:cookowt/models/hash_tag.dart';
 import 'package:flutter/material.dart';
-import 'package:hashtagable/detector/detector.dart';
+import 'package:hashtagable_v3/detector/detector.dart';
 
 List<Hashtag> extractHashTagWithDetails(String value) {
   final decoratedTextColor = Colors.blue;
