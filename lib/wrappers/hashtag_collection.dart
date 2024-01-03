@@ -1,11 +1,9 @@
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/hash_tag_collection.dart';
-import 'package:kookout/wrappers/hashtag_button.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/hash_tag_collection.dart';
+import 'package:cookowt/wrappers/hashtag_button.dart';
 import 'package:flutter/material.dart';
 
-import '../models/clients/api_client.dart';
 import '../models/controllers/auth_inherited.dart';
-import '../models/hash_tag_collection.dart';
 
 class Hashtag_Collection_Block extends StatefulWidget {
   const Hashtag_Collection_Block({Key? key, this.collectionSlug})
@@ -55,7 +53,7 @@ class _Hashtag_Collection_BlockState extends State<Hashtag_Collection_Block> {
             );
           }).toList()??[],
         ),
-        SizedBox(height: 16,)
+        const SizedBox(height: 16,)
       ],
     );
   }

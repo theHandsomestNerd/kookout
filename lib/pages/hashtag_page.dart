@@ -1,5 +1,5 @@
-import 'package:kookout/shared_components/menus/home_page_menu.dart';
-import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -132,12 +132,15 @@ class _HashtagPageState extends State<HashtagPage> {
         direction: Axis.vertical,
         children: [
           Text("#${widget.thisHashtagId}", style: Theme.of(context).textTheme.titleLarge,),
-          Divider(),
+          const Divider(),
           Expanded(
             child: Stack(
               children: [
+                Positioned.fill(
+                  child: Container(color: Colors.black87),
+                ),
                 PagedListView<String, Post>(
-                  padding: EdgeInsets.fromLTRB(
+                  padding: const EdgeInsets.fromLTRB(
                     0,
                     0,
                     0,
@@ -239,7 +242,7 @@ class _HashtagPageState extends State<HashtagPage> {
                           ),
                         ),
                         const Text(
-                          "Upload Photo(s)",
+                          "Create a Post",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
@@ -343,12 +346,12 @@ class _HashtagPageState extends State<HashtagPage> {
                                                     height: 3,
                                                   ),
                                                 ),
-                                                Column(
+                                                const Column(
                                                   mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                                  children: const [
+                                                  children: [
                                                     Text(
-                                                      "Upload Photo(s)",
+                                                      "Create a Post",
                                                       style: TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18),
@@ -374,7 +377,7 @@ class _HashtagPageState extends State<HashtagPage> {
                                   },
                                 ),
                                 const SizedBox(
-                                  height: 24,
+                                  height: 100,
                                 )
                               ],
                             ),

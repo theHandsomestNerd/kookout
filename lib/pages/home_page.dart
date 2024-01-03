@@ -1,17 +1,15 @@
 import 'dart:async';
 
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/controllers/chat_controller.dart';
-import 'package:kookout/models/controllers/geolocation_controller.dart';
-import 'package:kookout/models/extended_profile.dart';
-import 'package:kookout/models/post.dart';
-import 'package:kookout/pages/splash_screen.dart';
-import 'package:kookout/sanity/sanity_image_builder.dart';
-import 'package:kookout/shared_components/loading_logo.dart';
-import 'package:kookout/shared_components/menus/home_page_menu.dart';
-import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
-import 'package:kookout/wrappers/card_with_actions.dart';
-import 'package:kookout/wrappers/circular_progress_indicator_with_message.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/controllers/geolocation_controller.dart';
+import 'package:cookowt/models/extended_profile.dart';
+import 'package:cookowt/models/post.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/shared_components/loading_logo.dart';
+import 'package:cookowt/shared_components/menus/home_page_menu.dart';
+import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
+import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -69,22 +67,16 @@ class _HomePageState extends State<HomePage> with RouteAware {
       // print("Got more items ${newItems.length}");
       final isLastPage = (newItems.length) < _pageSize;
       if (isLastPage) {
-        if (_profilePageController != null) {
-          _profilePagingController.appendLastPage(newItems);
-        }
-      } else {
+        _profilePagingController.appendLastPage(newItems);
+            } else {
         final nextPageKey = newItems.last.userId;
         if (nextPageKey != null) {
-          if (_profilePageController != null) {
-            _profilePagingController.appendPage(newItems, nextPageKey);
-          }
-        }
+          _profilePagingController.appendPage(newItems, nextPageKey);
+                }
       }
     } catch (error) {
-      if (_postPagingController != null) {
-        // _profilePagingController.error = error;
-      }
-    }
+      // _profilePagingController.error = error;
+        }
   }
 
   Future<void> _fetchPostsPage(String pageKey) async {
@@ -109,7 +101,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
         return;
       }
 
-      if (_postPagingController != null) _postPagingController.error = error;
+      _postPagingController.error = error;
     }
   }
 
@@ -596,7 +588,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               children: [
                                 !isProfileLoading && (theItem != null)
                                     ? const Text("No Profiles with images")
-                                    : Column(
+                                    : const Column(
                                         children: [
                                           LoadingLogo(),
                                           Text("Loading Profile Previews")
@@ -717,7 +709,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               children: [
                                 !isPostLoading && (theItem == null)
                                     ? const Text("No Posts with images")
-                                    : Column(
+                                    : const Column(
                                         children: [
                                           LoadingLogo(),
                                           Text("Loading Post Previews")

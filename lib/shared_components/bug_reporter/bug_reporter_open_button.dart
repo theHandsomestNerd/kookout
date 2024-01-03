@@ -1,4 +1,4 @@
-import 'package:kookout/shared_components/bug_reporter/bug_reporter_content.dart';
+import 'package:cookowt/shared_components/bug_reporter/bug_reporter_content.dart';
 import 'package:flutter/material.dart';
 
 class BugReporterOpenButton extends StatefulWidget {
@@ -30,12 +30,12 @@ class _BugReporterOpenButtonState extends State<BugReporterOpenButton> {
             -32, 0, .0),
         child: MaterialButton(
             color: Colors.green.withOpacity(.8),
-            child: SizedBox(
+            child: const SizedBox(
               height: 48,
               width: 48,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
+                children: [
                   Icon(Icons.bug_report_outlined),
                 ],
               ),

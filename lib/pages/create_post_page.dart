@@ -1,11 +1,11 @@
+import 'package:cookowt/models/controllers/auth_inherited.dart';
+import 'package:cookowt/wrappers/alerts_snackbar.dart';
+import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hashtagable/hashtagable.dart';
-import 'package:kookout/models/controllers/auth_inherited.dart';
-import 'package:kookout/wrappers/alerts_snackbar.dart';
-import 'package:kookout/wrappers/analytics_loading_button.dart';
+import 'package:hashtagable_v3/hashtagable.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
@@ -17,11 +17,14 @@ import '../platform_dependent/image_uploader_abstract.dart';
 import '../shared_components/app_image_uploader.dart';
 
 class CreatePostPage extends StatefulWidget {
-  const CreatePostPage({super.key, this.onClose, required this.onPost});
+  const CreatePostPage({
+    super.key,
+    this.onClose,
+    required this.onPost
+  });
 
   final Function? onClose;
   final Function onPost;
-
   @override
   State<CreatePostPage> createState() => _CreatePostPageState();
 }
@@ -34,13 +37,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
   AnalyticsController? analyticsController;
 
   String? _postBody;
-  List<String> _postBodies = [];
   bool? _isPosting;
   ImageProvider? imageToBeUploaded;
   late SanityImage? profileImage;
 
   Uint8List? theFileBytes;
-
   @override
   initState() {
     super.initState();
@@ -51,7 +52,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       if (kDebugMode) {
         print("image uploader change");
       }
-      if (theUploader.croppedFile != null) {
+      if(theUploader.croppedFile != null){
         if (kDebugMode) {
           print("there iz a cropped");
         }
@@ -62,7 +63,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
         }
         theFileBytes = await theUploader.file?.readAsBytes();
       }
-      setState(() {});
+      setState(() {
+
+      });
     });
     // imageToBeUploaded = _getMyProfileImage(null);
   }
@@ -79,7 +82,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     AnalyticsController? theAnalyticsController =
         AuthInherited.of(context)?.analyticsController;
 
-    theAnalyticsController?.logScreenView('Upload Photos');
+    theAnalyticsController?.logScreenView('Create Post');
 
     analyticsController = theAnalyticsController;
 
@@ -91,71 +94,31 @@ class _CreatePostPageState extends State<CreatePostPage> {
     super.didChangeDependencies();
   }
 
-  void _setPostBody(String newPostBody, int index) async {
-    if (_postBodies.length < (imageUploader?.files?.length ?? 0)) {
-      _postBodies = List.filled(imageUploader?.files?.length ?? 0, "");
-    }
+  void _setPostBody(String newPostBody) async {
     setState(() {
-      _postBodies[index] = newPostBody;
       _postBody = newPostBody;
     });
   }
 
-  List<bool> isPostingArr = [];
-  List<String?> postResponse = [];
-
   _makePost(context) async {
-    if (imageUploader?.files != null) {
-      var counter = 0;
-      isPostingArr = List.filled(imageUploader?.files?.length ?? 0, false);
-      postResponse = List.filled(imageUploader?.files?.length ?? 0, "");
+    setState(() {
+      _isPosting = true;
+    });
+    String? postResponse;
 
-      for (var element in imageUploader!.files!) {
-        setState(() {
-          _isPosting = true;
-          isPostingArr[counter] = true;
-        });
 
-        var thePostBody = "";
-        if (_postBodies.length >= (counter + 1)) {
-          thePostBody = _postBodies[counter];
-        }
+    // print(" make post");
+    postResponse = await postController?.createPost(_postBody ?? "",
+        imageUploader?.file?.name ?? "", theFileBytes, context);
 
-        // print(" make post");
-        try {
-          postResponse[counter] = await postController?.createPost(thePostBody,
-              element?.name ?? "", await element?.readAsBytes(), context);
-        } catch (e) {
-          postResponse[counter] = "FAIL";
-        }
+    setState(() {
+      _isPosting = false;
+    });
 
-        setState(() {
-          isPostingArr[counter] = false;
-          _isPosting = false;
-        });
-        counter++;
-      }
-    }
-    // setState(() {
-    //   _isPosting = true;
-    // });
-    // String? postResponse;
-    //
-    // // print(" make post");
-    // postResponse = await postController?.createPost(_postBody ?? "",
-    //     imageUploader?.file?.name ?? "", theFileBytes, context);
-    //
-    // setState(() {
-    //   _isPosting = false;
-    // });
-
-    if (postResponse.contains('FAIL')) {
-      return "FAIL";
-    } else {
-      return "SUCCESS";
-    }
     // print(" post response $postResponse");
+    return postResponse ?? "FAIL";
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,95 +141,51 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Flexible(
-          child: Flex(
-            direction: Axis.horizontal,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        AppImageUploader(
-                          height: 250,
-                          width: 250,
-                          text: "Add Photo(s)",
-                          imageUploader: imageUploader!,
-                          uploadImage: (uploader) {
-                            imageUploader = uploader;
-                          },
-                        ),
-                        Column(
-                          children: postResponse
-                              .asMap()
-                              .entries
-                              .map((thePostingResponse) {
-                            if (isPostingArr[thePostingResponse.key] == true) {
-                              return SizedBox(
-                                  height: 289,
-                                  child: Container(
-                                      color: Colors.black87.withOpacity(.5),
-                                      child: Center(
-                                          child: CircularProgressIndicator())));
-                            }
-                            return SizedBox(
-                                height: 289,
-                                child: Container(
-                                    color: Colors.black87.withOpacity(.5),
-                                    child: Center(
-                                        child: Text(
-                                      postResponse[thePostingResponse.key] ??
-                                          "Pending",
-                                      style: TextStyle(color: Colors.white70),
-                                    ))));
-                          }).toList(),
-                        )
-                      ],
-                    ),
-                  ],
+        AppImageUploader(
+          height: 350,
+          width: 350,
+          text: "Change Main Post Photo",
+          imageUploader: imageUploader!,
+          uploadImage: (uploader) {
+            imageUploader = uploader;
+          },
+        ),
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              // child: TextFormField(
+              //   onChanged: (e) {
+              //     _setPostBody(e);
+              //   },
+              //   minLines: 2,
+              //   maxLines: 4,
+              //   decoration: const InputDecoration(
+              //     border: UnderlineInputBorder(),
+              //     labelText: 'Post:',
+              //   ),
+              // ),
+              child: HashTagTextField(
+                decoratedStyle: const TextStyle(fontSize: 14, color: Colors.blue),
+                basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                onChanged: (e) {
+                  _setPostBody(e);
+                },
+                decorateAtSign: true,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Post:',
                 ),
               ),
-              if ((imageUploader?.files?.length ?? -1) > 0)
-                Flexible(
-                  flex: 1,
-                  child: Column(
-                    children: imageUploader?.files?.asMap().entries.map((e) {
-                          return SizedBox(
-                            height: 250,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                HashTagTextField(
-                                  decoratedStyle: TextStyle(
-                                      fontSize: 14, color: Colors.blue),
-                                  basicStyle: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                  onChanged: (element) {
-                                    _setPostBody(element, e.key);
-                                  },
-                                  decorateAtSign: true,
-                                  minLines: 2,
-                                  maxLines: 4,
-                                  decoration: const InputDecoration(
-                                    border: UnderlineInputBorder(),
-                                    labelText: 'Hashtags & Description:',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList() ??
-                        [],
-                  ),
-                ),
-            ],
-          ),
+            ),
+          ],
         ),
         AnalyticsLoadingButton(
           analyticsEventName: 'create-post',
-          analyticsEventData: {"body": _postBody.toString(), "author": ""},
+          analyticsEventData: {"body": _postBody, "author": ""},
+          isDisabled: ((_postBody?.length ?? -1) <= 0) || _isPosting == true,
           action: (innerContext) async {
             var status = await _makePost(innerContext);
 
@@ -275,20 +194,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
             } else if (status == "FAIL") {
               await sendError();
             }
+            GoRouter.of(innerContext).go('/postsPage');
+            widget.onPost();
+            setState(() {
 
-            await widget.onPost();
-            setState(() {});
-            if (!postResponse.contains("FAIL")) {
-              _postBodies = [];
-              imageUploader?.clear();
-              // GoRouter.of(innerContext).go('/postsPage');
-            }
+            });
 
             // Navigator.popAndPushNamed(context, '/postsPage');
           },
           text: "Post",
-        ),
-        SizedBox(height:70),
+        )
       ],
     );
   }

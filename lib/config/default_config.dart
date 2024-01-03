@@ -2,12 +2,12 @@
 // ignore_for_file: lines_longer_than_80_chars, avoid_classes_with_only_static_members
 import 'dart:convert';
 
-import 'package:kookout/models/clients/api_client.dart';
+import 'package:cookowt/models/clients/api_client.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart'
     show kDebugMode;
 import 'package:flutter/services.dart';
-import 'package:package_info_plus_web/package_info_plus_web.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class DefaultConfig {
   static String authBaseUrl = "";
@@ -184,7 +184,7 @@ class DefaultConfig {
             apiSanityDB = healthResponse['sanityDB'];
             apiStatus = healthResponse['status'];
 
-            return PackageInfoPlugin().getAll().then((packageInfo) {
+            return PackageInfo.fromPlatform().then((packageInfo) {
               if (kDebugMode) {
                 print("retrieved Package Info $packageInfo");
               }
@@ -219,4 +219,4 @@ class DefaultConfig {
 }
 
 /// Global singleton instance
-// final DefaultConfig kookoutAppConfig = DefaultConfig();
+// final DefaultConfig cookowtAppConfig = DefaultConfig();

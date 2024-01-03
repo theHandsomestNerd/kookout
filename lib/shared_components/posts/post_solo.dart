@@ -1,10 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/controllers/auth_controller.dart';
-import 'package:kookout/models/like.dart';
-import 'package:kookout/sanity/sanity_image_builder.dart';
-import 'package:kookout/wrappers/author_and_text.dart';
-import 'package:kookout/wrappers/card_with_actions.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/auth_controller.dart';
+import 'package:cookowt/models/like.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/wrappers/author_and_text.dart';
+import 'package:cookowt/wrappers/card_with_actions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -68,7 +67,7 @@ class _PostSoloState extends State<PostSolo> {
     likes = theLikes?.list ?? [];
     if (theLikes?.list != null) {
       try {
-        var myLike = theLikes?.list.firstWhereOrNull((element) {
+        var myLike = theLikes?.list.firstWhere((element) {
           return element.liker?.userId == authController?.myAppUser?.userId;
         });
         isPostLikedByMe = myLike;
@@ -122,51 +121,43 @@ class _PostSoloState extends State<PostSolo> {
                   constraints: BoxConstraints(
                       minHeight: POST_IMAGE_SQUARE_SIZE as double,
                       minWidth: POST_IMAGE_SQUARE_SIZE as double),
-                  child: InkWell(
-                    onTap: (){
-                        GoRouter.of(context).go('/post/${widget.post.id}');
-
-                        // Navigator.pushNamed(context, '/post',
-                        //     arguments: {"id": widget.post.id});
-                    },
-                    child: CardWithActions(
-                      isAction1Active: isPostLikedByMe != null,
-                      action1Text: "${likes.length} likes",
-                      action1Icon: Icons.thumb_up,
-                      action2Icon: Icons.comment,
-                      action2Text: "comments",
-                      isAction1Loading: isLiking,
-                      action1OnPressed: () async {
-                        setState(() {
-                          isLiking = true;
-                        });
-                        if (widget.post.id != null) {
-                          if (isPostLikedByMe == null) {
-                            await likeThisPost(widget.post.id!);
-                          } else {
-                            await unlikeThisPost(widget.post.id!);
-                          }
-                          var theLikes = await profileClient
-                              ?.getProfileLikes(widget.post.id!);
-                          likes = theLikes?.list ?? likes;
-                          await updateLikes();
-
-                          setState(() {
-                            isLiking = false;
-                          });
+                  child: CardWithActions(
+                    isAction1Active: isPostLikedByMe != null,
+                    action1Text: "${likes.length} likes",
+                    action1Icon: Icons.thumb_up,
+                    action2Icon: Icons.comment,
+                    action2Text: "comments",
+                    isAction1Loading: isLiking,
+                    action1OnPressed: () async {
+                      setState(() {
+                        isLiking = true;
+                      });
+                      if (widget.post.id != null) {
+                        if (isPostLikedByMe == null) {
+                          await likeThisPost(widget.post.id!);
+                        } else {
+                          await unlikeThisPost(widget.post.id!);
                         }
-                      },
-                      action2OnPressed: () async {
-                        GoRouter.of(context).go('/post/${widget.post.id}');
+                        var theLikes = await profileClient
+                            ?.getProfileLikes(widget.post.id!);
+                        likes = theLikes?.list ?? likes;
+                        await updateLikes();
 
-                        // Navigator.pushNamed(context, '/post',
-                        //     arguments: {"id": widget.post.id});
-                      },
-                      image: SanityImageBuilder.imageProviderFor(
-                              sanityImage: widget.post.mainImage,
-                              showDefaultImage: true)
-                          .image,
-                    ),
+                        setState(() {
+                          isLiking = false;
+                        });
+                      }
+                    },
+                    action2OnPressed: () async {
+                      GoRouter.of(context).go('/post/${widget.post.id}');
+
+                      // Navigator.pushNamed(context, '/post',
+                      //     arguments: {"id": widget.post.id});
+                    },
+                    image: SanityImageBuilder.imageProviderFor(
+                            sanityImage: widget.post.mainImage,
+                            showDefaultImage: true)
+                        .image,
                   ),
                 ),
               ),

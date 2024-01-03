@@ -1,10 +1,10 @@
-import 'package:kookout/models/clients/api_client.dart';
-import 'package:kookout/models/controllers/analytics_controller.dart';
-import 'package:kookout/models/controllers/chat_controller.dart';
-import 'package:kookout/models/extended_profile.dart';
-import 'package:kookout/sanity/sanity_image_builder.dart';
-import 'package:kookout/shared_components/tool_button.dart';
-import 'package:kookout/wrappers/card_with_background.dart';
+import 'package:cookowt/models/clients/api_client.dart';
+import 'package:cookowt/models/controllers/analytics_controller.dart';
+import 'package:cookowt/models/controllers/chat_controller.dart';
+import 'package:cookowt/models/extended_profile.dart';
+import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:cookowt/shared_components/tool_button.dart';
+import 'package:cookowt/wrappers/card_with_background.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -14,7 +14,6 @@ import '../../models/comment.dart';
 import '../../models/controllers/auth_inherited.dart';
 import '../../models/follow.dart';
 import '../../models/like.dart';
-import '../../shared_components/expanded_interactive_viewer.dart';
 
 const PROFILE_IMAGE_SQUARE_SIZE = 200;
 
@@ -184,12 +183,16 @@ class _BioTabState extends State<BioTab> {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          Expanded(
-            child: ExpandedInteractiveViewer(
+          Flexible(
+            flex: 4,
+            child: CardWithBackground(
+              width: 350,
+              height: 350,
               image: SanityImageBuilder.imageProviderFor(
-                  sanityImage: widget.thisProfile?.profileImage,
-                  showDefaultImage: true)
+                      sanityImage: widget.thisProfile?.profileImage,
+                      showDefaultImage: true)
                   .image,
+              child: Container(),
             ),
           ),
         ],
@@ -540,10 +543,10 @@ class _BioTabState extends State<BioTab> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
+                                    const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         Icon(
                                           Icons.pin_drop,
                                           size: 32.0,
@@ -552,25 +555,25 @@ class _BioTabState extends State<BioTab> {
                                         Text('mi. away'),
                                       ],
                                     ),
-                                    if (extProfile?.city?.isNotEmpty ==
+                                    if (extProfile?.whereILive?.isNotEmpty ==
                                         true)
                                       Column(
                                         children: [
                                           ConstrainedBox(
                                             constraints: const BoxConstraints(),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Column(
-                                                  children: const [
+                                                  children: [
                                                     Text("Where I Live?"),
                                                   ],
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Text("${extProfile?.city}, ${extProfile?.state}"),
+                                          Text(extProfile?.whereILive ?? ""),
                                         ],
                                       ),
                                   ],
@@ -673,11 +676,11 @@ class _BioTabState extends State<BioTab> {
                               ListTile(
                                 title: ConstrainedBox(
                                   constraints: const BoxConstraints(),
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Column(
-                                        children: const [
+                                        children: [
                                           Text("Short Bio"),
                                         ],
                                       ),
@@ -688,247 +691,84 @@ class _BioTabState extends State<BioTab> {
                               ),
                             if (extProfile?.longBio?.isNotEmpty == true)
                               ListTile(
-                                title: Column(
-                                  children: const [Text("Long Bio")],
+                                title: const Column(
+                                  children: [Text("Long Bio")],
                                 ),
                                 subtitle: Text(extProfile?.longBio ?? ""),
                               ),
-                            // if (extProfile?.govtIssuedFirstName?.isNotEmpty == true)
+                            if (extProfile?.iAm?.isNotEmpty == true)
                               ExpansionTile(
-                                subtitle: Text("${extProfile?.govtIssuedFirstName} ${extProfile?.govtIssuedMiddleName} ${extProfile?.govtIssuedLastName}"),
-                                title: Row(
+                                subtitle: Text(extProfile?.iAm ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("Name")],
+                                      children: [Text("I am")],
                                     ),
                                   ],
                                 ),
                               ),
-                            if (extProfile?.address1?.isNotEmpty == true)
+                            if (extProfile?.imInto?.isNotEmpty == true)
                               ExpansionTile(
-                                subtitle: Text(extProfile?.address1 ?? ""),
-                                title: Row(
+                                subtitle: Text(extProfile?.imInto ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("Address 1")],
+                                      children: [Text("I'm Into")],
                                     ),
                                   ],
                                 ),
                               ),
-                            if (extProfile?.address2?.isNotEmpty == true)
+                            if (extProfile?.imOpenTo?.isNotEmpty == true)
                               ExpansionTile(
-                                subtitle: Text(extProfile?.address2 ?? ""),
-                                title: Row(
+                                subtitle: Text(extProfile?.imOpenTo ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("Address 2")],
+                                      children: [Text("I'm Open to")],
                                     ),
                                   ],
                                 ),
                               ),
+                            if (extProfile?.whatIDo?.isNotEmpty == true)
                               ExpansionTile(
-                                subtitle: Text("${extProfile?.city}, ${extProfile?.state} ${extProfile?.zip}"),
-                                title: Row(
+                                subtitle: Text(extProfile?.whatIDo ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("City")],
+                                      children: [Text("What I do")],
                                     ),
                                   ],
                                 ),
                               ),
-                            if (extProfile?.ethnicity?.isNotEmpty ==
+                            if (extProfile?.whatImLookingFor?.isNotEmpty ==
                                 true)
                               ExpansionTile(
                                 subtitle:
-                                    Text(extProfile?.ethnicity ?? ""),
-                                title: Row(
+                                    Text(extProfile?.whatImLookingFor ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [
-                                        Text("Ethnicity")
+                                      children: [
+                                        Text("What I'm looking for")
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                            if (extProfile?.occupation?.isNotEmpty == true)
+                            if (extProfile?.whatInterestsMe?.isNotEmpty == true)
                               ExpansionTile(
                                 subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
+                                    Text(extProfile?.whatInterestsMe ?? ""),
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [
-                                        Text("Occupation")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.entireLinesName?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.entireLinesName ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("Entire Line's Name")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ExpansionTile(
-                                subtitle:
-                                    Text("${extProfile?.lineNumber} ${extProfile?.lineName}"),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("Linename & line Number")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
-                                        Text("What Interests me")
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          if (extProfile?.occupation?.isNotEmpty == true)
-                              ExpansionTile(
-                                subtitle:
-                                    Text(extProfile?.occupation ?? ""),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: const [
+                                      children: [
                                         Text("What Interests me")
                                       ],
                                     ),

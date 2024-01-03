@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  file_support
+  file_selector_linux
   image_compression_flutter
 )
 
