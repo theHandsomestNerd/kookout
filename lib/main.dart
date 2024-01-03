@@ -75,8 +75,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late GoRouter router = GoRouter(
-
-    
     // redirect: (BuildContext context, GoRouterState state) {
     //   // print("GO_ROUTER ${state.location} ${state.subloc}");
     //   if (state.path.contains('/register') || state.path!.contains('/splash')) {
