@@ -76,13 +76,13 @@ class _MyAppState extends State<MyApp> {
   late GoRouter router = GoRouter(
     redirect: (BuildContext context, GoRouterState state) {
       // print("GO_ROUTER ${state.location} ${state.subloc}");
-      if (state.subloc == '/register' || state.subloc == '/splash') {
+      if (state.path!.contains('/register') || state.path!.contains('/splash')) {
         return null;
       }
 
       // if the user is not logged in, they need to login
       final loggedIn = FirebaseAuth.instance.currentUser != null;
-      final loggingIn = state.subloc == '/login';
+      final loggingIn = state.path!.contains('/login');
 
       // print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
 
@@ -149,13 +149,13 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => SoloPostPage(
-                thisPostId: state.params["id"],
+                thisPostId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/profile/:id',
           builder: (BuildContext context, GoRouterState state) {
             return SoloProfilePage(
-              id: state.params["id"]!,
+              id: state.pathParameters["id"]!,
             );
           }),
       GoRoute(
@@ -168,8 +168,8 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/hashtag/:id',
           builder: (BuildContext context, GoRouterState state) => HashtagPage(
-                key: Key(state.params["id"]!),
-                thisHashtagId: state.params["id"],
+                key: Key(state.pathParameters["id"]!),
+                thisHashtagId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/hashtagCollections',
