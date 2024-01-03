@@ -300,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 80,
+                          height: 90,
                           child: Column(
                             children: [
                               Text(DefaultConfig.appName),

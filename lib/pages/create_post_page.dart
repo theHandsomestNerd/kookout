@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hashtagable/hashtagable.dart';
+import 'package:hashtagable_v3/hashtagable.dart';
 import 'package:kookout/models/controllers/auth_inherited.dart';
 import 'package:kookout/wrappers/alerts_snackbar.dart';
 import 'package:kookout/wrappers/analytics_loading_button.dart';
