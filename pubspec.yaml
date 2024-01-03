@@ -67,6 +67,7 @@ dependencies:
   collection: ^1.17.0
   hashtagable_v3: ^3.0.1
   sliver_tools: ^0.2.12
+  image_compression_flutter: ^1.0.3
 
 dev_dependencies:
   flutter_test:
