@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hashtagable_v3/detector/detector.dart';
 
 List<Hashtag> extractHashTagWithDetails(String value) {
-  final decoratedTextColor = Colors.blue;
+  const decoratedTextColor = Colors.blue;
   final detector = Detector(
-      textStyle: TextStyle(),
-      decoratedStyle: TextStyle(color: decoratedTextColor));
+      textStyle: const TextStyle(),
+      decoratedStyle: const TextStyle(color: decoratedTextColor));
   final detections = detector.getDetections(value);
   final taggedDetections = detections
       .where((detection) => detection.style!.color == decoratedTextColor)

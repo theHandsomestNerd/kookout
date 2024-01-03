@@ -11,7 +11,7 @@ class BugReportClient {
 
   BugReportClient() {
     FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
-      token = theToken;
+      token = theToken ?? "";
     });
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class LoadingLogo extends StatelessWidget {
   const LoadingLogo({Key? key}) : super(key: key);
@@ -8,14 +7,14 @@ class LoadingLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Center(
+        const Center(
           child: SizedBox(
             height: 150,
             width: 180,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
+                SizedBox(
                     height: 128,
                     child: LinearProgressIndicator(
                       backgroundColor: Colors.white,

@@ -543,10 +543,10 @@ class _BioTabState extends State<BioTab> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
+                                    const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         Icon(
                                           Icons.pin_drop,
                                           size: 32.0,
@@ -561,12 +561,12 @@ class _BioTabState extends State<BioTab> {
                                         children: [
                                           ConstrainedBox(
                                             constraints: const BoxConstraints(),
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Column(
-                                                  children: const [
+                                                  children: [
                                                     Text("Where I Live?"),
                                                   ],
                                                 ),
@@ -676,11 +676,11 @@ class _BioTabState extends State<BioTab> {
                               ListTile(
                                 title: ConstrainedBox(
                                   constraints: const BoxConstraints(),
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Column(
-                                        children: const [
+                                        children: [
                                           Text("Short Bio"),
                                         ],
                                       ),
@@ -691,19 +691,19 @@ class _BioTabState extends State<BioTab> {
                               ),
                             if (extProfile?.longBio?.isNotEmpty == true)
                               ListTile(
-                                title: Column(
-                                  children: const [Text("Long Bio")],
+                                title: const Column(
+                                  children: [Text("Long Bio")],
                                 ),
                                 subtitle: Text(extProfile?.longBio ?? ""),
                               ),
                             if (extProfile?.iAm?.isNotEmpty == true)
                               ExpansionTile(
                                 subtitle: Text(extProfile?.iAm ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("I am")],
+                                      children: [Text("I am")],
                                     ),
                                   ],
                                 ),
@@ -711,11 +711,11 @@ class _BioTabState extends State<BioTab> {
                             if (extProfile?.imInto?.isNotEmpty == true)
                               ExpansionTile(
                                 subtitle: Text(extProfile?.imInto ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("I'm Into")],
+                                      children: [Text("I'm Into")],
                                     ),
                                   ],
                                 ),
@@ -723,11 +723,11 @@ class _BioTabState extends State<BioTab> {
                             if (extProfile?.imOpenTo?.isNotEmpty == true)
                               ExpansionTile(
                                 subtitle: Text(extProfile?.imOpenTo ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("I'm Open to")],
+                                      children: [Text("I'm Open to")],
                                     ),
                                   ],
                                 ),
@@ -735,11 +735,11 @@ class _BioTabState extends State<BioTab> {
                             if (extProfile?.whatIDo?.isNotEmpty == true)
                               ExpansionTile(
                                 subtitle: Text(extProfile?.whatIDo ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [Text("What I do")],
+                                      children: [Text("What I do")],
                                     ),
                                   ],
                                 ),
@@ -749,11 +749,11 @@ class _BioTabState extends State<BioTab> {
                               ExpansionTile(
                                 subtitle:
                                     Text(extProfile?.whatImLookingFor ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [
+                                      children: [
                                         Text("What I'm looking for")
                                       ],
                                     ),
@@ -764,11 +764,11 @@ class _BioTabState extends State<BioTab> {
                               ExpansionTile(
                                 subtitle:
                                     Text(extProfile?.whatInterestsMe ?? ""),
-                                title: Row(
+                                title: const Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Column(
-                                      children: const [
+                                      children: [
                                         Text("What Interests me")
                                       ],
                                     ),

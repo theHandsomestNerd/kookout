@@ -17,16 +17,13 @@ import 'package:cookowt/pages/settings_page.dart';
 import 'package:cookowt/pages/solo_post_page.dart';
 import 'package:cookowt/pages/solo_profile_page.dart';
 import 'package:cookowt/pages/splash_screen.dart';
-import 'package:cookowt/shared_components/bug_reporter/bug_reporter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meta_seo/meta_seo.dart';
-import 'package:universal_io/io.dart';
 
 import 'config/firebase_options.dart';
 import 'models/controllers/auth_inherited.dart';
@@ -79,13 +76,13 @@ class _MyAppState extends State<MyApp> {
   late GoRouter router = GoRouter(
     redirect: (BuildContext context, GoRouterState state) {
       // print("GO_ROUTER ${state.location} ${state.subloc}");
-      if (state.subloc == '/register' || state.subloc == '/splash') {
+      if (state.path!.contains('/register') || state.path!.contains('/splash')) {
         return null;
       }
 
       // if the user is not logged in, they need to login
       final loggedIn = FirebaseAuth.instance.currentUser != null;
-      final loggingIn = state.subloc == '/login';
+      final loggingIn = state.path!.contains('/login');
 
       // print("loggedIn ${loggedIn} loggingIn ${loggingIn}");
 
@@ -120,23 +117,23 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/profilesPage',
         builder: (BuildContext context, GoRouterState state) {
-          return ProfilesPage();
+          return const ProfilesPage();
         },
       ),
       GoRoute(
         path: '/splash',
         builder: (BuildContext context, GoRouterState state) {
-          return SplashPage();
+          return const SplashPage();
         },
       ),
       GoRoute(
           path: '/home',
           builder: (BuildContext context, GoRouterState state) =>
-              HomePage()),
+              const HomePage()),
       GoRoute(
           path: '/postsPage',
           builder: (BuildContext context, GoRouterState state) =>
-              PostsPage()),
+              const PostsPage()),
       // GoRoute(
       //     path: '/createPostsPage',
       //     builder: (BuildContext context, GoRouterState state) =>
@@ -144,21 +141,21 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/register',
           builder: (BuildContext context, GoRouterState state) =>
-              RegisterPage()),
+              const RegisterPage()),
       GoRoute(
           path: '/settings',
           builder: (BuildContext context, GoRouterState state) =>
-              SettingsPage()),
+              const SettingsPage()),
       GoRoute(
           path: '/post/:id',
           builder: (BuildContext context, GoRouterState state) => SoloPostPage(
-                thisPostId: state.params["id"],
+                thisPostId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/profile/:id',
           builder: (BuildContext context, GoRouterState state) {
             return SoloProfilePage(
-              id: state.params["id"]!,
+              id: state.pathParameters["id"]!,
             );
           }),
       GoRoute(
@@ -171,8 +168,8 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
           path: '/hashtag/:id',
           builder: (BuildContext context, GoRouterState state) => HashtagPage(
-                key: Key(state.params["id"]!),
-                thisHashtagId: state.params["id"],
+                key: Key(state.pathParameters["id"]!),
+                thisHashtagId: state.pathParameters["id"],
               )),
       GoRoute(
           path: '/hashtagCollections',
