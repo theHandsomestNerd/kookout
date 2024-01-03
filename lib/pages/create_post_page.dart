@@ -1,6 +1,4 @@
 import 'package:cookowt/models/controllers/auth_inherited.dart';
-import 'package:cookowt/models/extract_hash_tag_details.dart';
-import 'package:cookowt/models/hash_tag.dart';
 import 'package:cookowt/wrappers/alerts_snackbar.dart';
 import 'package:cookowt/wrappers/analytics_loading_button.dart';
 import 'package:flutter/foundation.dart';
@@ -168,8 +166,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
               //   ),
               // ),
               child: HashTagTextField(
-                decoratedStyle: TextStyle(fontSize: 14, color: Colors.blue),
-                basicStyle: TextStyle(fontSize: 14, color: Colors.black),
+                decoratedStyle: const TextStyle(fontSize: 14, color: Colors.blue),
+                basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
                 onChanged: (e) {
                   _setPostBody(e);
                 },

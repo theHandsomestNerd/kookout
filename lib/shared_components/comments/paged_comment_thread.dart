@@ -120,14 +120,14 @@ class _PagedCommentThreadState extends State<PagedCommentThread> {
               Expanded(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 500),
-                  child: Flex(
+                  child: const Flex(
                     direction: Axis.vertical,
                     children: [
                       Expanded(
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text("There are no comments yet."),
                             ],
                           ),

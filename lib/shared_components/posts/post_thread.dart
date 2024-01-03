@@ -116,7 +116,7 @@ class _PostThreadState extends State<PostThread> {
         child: Container(color: Colors.black87),
       ),
       PagedListView<String, Post>(
-        padding: EdgeInsets.fromLTRB(
+        padding: const EdgeInsets.fromLTRB(
           0,
           0,
           0,
@@ -316,9 +316,9 @@ class _PostThreadState extends State<PostThread> {
                                       height: 3,
                                     ),
                                   ),
-                                  Column(
+                                  const Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                    children: [
                                       Text(
                                         "Create a Post",
                                         style: TextStyle(

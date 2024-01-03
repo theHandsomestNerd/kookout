@@ -121,7 +121,7 @@ class _ProfilesPageState extends State<ProfilesPage> {
     // than having to individually change instances of widgets.
 
     return AppScaffoldWrapper(
-      floatingActionMenu: ProfilePageMenu(),
+      floatingActionMenu: const ProfilePageMenu(),
       child: ConstrainedBox(
           constraints: const BoxConstraints(),
           child: _widgetOptions(

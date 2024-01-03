@@ -278,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                                     const SizedBox(
                                       height: 32,
                                     ),
-                                    Text("If you do not have an account..."),
+                                    const Text("If you do not have an account..."),
                                     AnalyticsLoadingButton(
                                       analyticsEventName:
                                           'login-register-button-pressed',
