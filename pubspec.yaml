@@ -65,10 +65,11 @@ dependencies:
   go_router: ^7.0.0
   collection: ^1.17.0
   phone_form_field: ^7.0.6
-  pluto_grid: ^5.4.9
-  hashtagable: ^2.1.0
-  firebase_auth: ^4.2.2
-  cached_network_image: ^3.2.3
+  pluto_grid: ^7.0.2
+  hashtagable_v3: ^3.0.1
+  firebase_auth: ^4.15.3
+  cached_network_image: ^3.3.1
+  sliver_tools: ^0.2.12
 
 dev_dependencies:
   flutter_test:

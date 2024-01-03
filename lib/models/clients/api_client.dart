@@ -6,11 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:hashtagable/functions.dart';
+import 'package:hashtagable_v3/functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:kookout/models/responses/chat_api_get_verifications_response.dart';
 import 'package:kookout/models/spreadsheet_member.dart';
-import 'package:kookout/models/spreadsheet_member_verification.dart';
+// import 'package:kookout/models/spreadsheet_member_verification.dart';
 
 import '../../config/default_config.dart';
 import '../app_user.dart';
@@ -36,7 +36,7 @@ class ApiClient {
 
   ApiClient(String endpointUrl) {
     FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
-      token = theToken;
+      token = theToken ?? "";
     });
   }
 

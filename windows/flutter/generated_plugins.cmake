@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   file_support
+  firebase_auth
   firebase_core
   geolocator_windows
   image_compression_flutter
