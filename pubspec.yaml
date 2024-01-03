@@ -65,8 +65,8 @@ dependencies:
   url_strategy: ^0.2.0
   go_router: ^13.0.0
   collection: ^1.17.0
-  hashtagable: ^2.1.0
-  image_compression_flutter: ^1.0.3
+  hashtagable_v3: ^3.0.1
+  sliver_tools: ^0.2.12
 
 dev_dependencies:
   flutter_test:

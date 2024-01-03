@@ -734,7 +734,7 @@ packages:
     source: hosted
     version: "2.0.0+1"
   sliver_tools:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sliver_tools
       sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6

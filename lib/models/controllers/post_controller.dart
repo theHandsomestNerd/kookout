@@ -6,7 +6,7 @@ import 'package:cookowt/models/responses/chat_api_get_profile_posts_response.dar
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hashtagable/functions.dart';
+import 'package:hashtagable_v3/functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 

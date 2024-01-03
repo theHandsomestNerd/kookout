@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hashtagable/hashtagable.dart';
+import 'package:hashtagable_v3/hashtagable.dart';
 
 import '../../platform_dependent/image_uploader.dart'
     if (dart.library.io) '../../platform_dependent/image_uploader_io.dart'
