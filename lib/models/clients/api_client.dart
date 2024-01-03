@@ -33,7 +33,7 @@ class ApiClient {
 
   ApiClient(String endpointUrl) {
     FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
-      token = theToken;
+      token = theToken ?? "";
     });
   }
 
