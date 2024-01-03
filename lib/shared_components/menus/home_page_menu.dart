@@ -1,4 +1,4 @@
-import 'package:cookowt/sanity/sanity_image_builder.dart';
+import 'package:kookout/sanity/sanity_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanity_image_url/flutter_sanity_image_url.dart';
 import 'package:go_router/go_router.dart';
@@ -85,6 +85,20 @@ class _HomePageMenuState extends State<HomePageMenu> {
         //   },
         //   icon: const Icon(Icons.people),
         // ),
+        ActionButton(
+          tooltip: "Hashtags",
+          onPressed: () {
+            GoRouter.of(context).go('/hashtagCollections');
+          },
+          icon: const Icon(Icons.tag),
+        ),
+        ActionButton(
+          tooltip: "Chapter Roster",
+          onPressed: () {
+            GoRouter.of(context).go('/chapterRoster');
+          },
+          icon: const Icon(Icons.list),
+        ),
         ActionButton(
           tooltip: "Profiles",
           onPressed: () {

@@ -1,16 +1,17 @@
-import 'package:cookowt/layout/full_page_layout.dart';
-import 'package:cookowt/models/clients/api_client.dart';
-import 'package:cookowt/models/controllers/auth_controller.dart';
-import 'package:cookowt/models/controllers/auth_inherited.dart';
-import 'package:cookowt/models/like.dart';
-import 'package:cookowt/models/responses/chat_api_get_profile_likes_response.dart';
-import 'package:cookowt/sanity/sanity_image_builder.dart';
-import 'package:cookowt/shared_components/comments/paged_comment_thread.dart';
-import 'package:cookowt/shared_components/tool_button.dart';
-import 'package:cookowt/wrappers/analytics_loading_button.dart';
-import 'package:cookowt/wrappers/app_scaffold_wrapper.dart';
-import 'package:cookowt/wrappers/author_and_text.dart';
-import 'package:cookowt/wrappers/card_with_background.dart';
+import 'package:kookout/layout/full_page_layout.dart';
+import 'package:kookout/models/clients/api_client.dart';
+import 'package:kookout/models/controllers/auth_controller.dart';
+import 'package:kookout/models/controllers/auth_inherited.dart';
+import 'package:kookout/models/like.dart';
+import 'package:kookout/models/responses/chat_api_get_profile_likes_response.dart';
+import 'package:kookout/sanity/sanity_image_builder.dart';
+import 'package:kookout/shared_components/comments/paged_comment_thread.dart';
+import 'package:kookout/shared_components/expanded_interactive_viewer.dart';
+import 'package:kookout/shared_components/tool_button.dart';
+import 'package:kookout/wrappers/analytics_loading_button.dart';
+import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
+import 'package:kookout/wrappers/author_and_text.dart';
+import 'package:kookout/wrappers/card_with_background.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hashtagable_v3/hashtagable.dart';
@@ -52,8 +53,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
           widget.thisPostId!, 'post-comment');
       if (kDebugMode) {
         print(
-        "The COmments retreived profClient:$profileClient ${widget.thisPostId} $comments",
-      );
+          "The COmments retreived profClient:$profileClient ${widget.thisPostId} $comments",
+        );
       }
       return comments;
     }
@@ -223,6 +224,8 @@ class _SoloPostPageState extends State<SoloPostPage> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
@@ -246,13 +249,11 @@ class _SoloPostPageState extends State<SoloPostPage> {
             Flex(
               direction: Axis.vertical,
               children: [
-                Flexible(
-                  flex: 4,
-                  child: CardWithBackground(
-                    image: SanityImageBuilder.imageProviderFor(
-                            sanityImage: thePost?.mainImage)
-                        .image,
-                    child: Container(),
+                Expanded(
+                  child: ExpandedInteractiveViewer(
+      image: SanityImageBuilder.imageProviderFor(
+          sanityImage: thePost?.mainImage)
+          .image,
                   ),
                 ),
               ],

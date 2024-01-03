@@ -1,5 +1,5 @@
 
-import 'package:cookowt/config/default_config.dart';
+import 'package:kookout/config/default_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
