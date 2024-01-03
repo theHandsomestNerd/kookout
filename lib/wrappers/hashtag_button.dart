@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../models/hash_tag.dart';
 
 class HashtagButton extends StatelessWidget {
   const HashtagButton({
@@ -16,11 +17,11 @@ class HashtagButton extends StatelessWidget {
     return MaterialButton(
       color: Colors.black87,
       onPressed: () {
-        GoRouter.of(context).go("/hashtag/$hashtag");
+        GoRouter.of(context).go("/hashtag/${hashtag}");
       },
       child: Text(
-        "#$hashtag",
-        style: const TextStyle(color: Colors.white),
+        "#${hashtag}",
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

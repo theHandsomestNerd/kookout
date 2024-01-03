@@ -1,6 +1,8 @@
-import 'package:cookowt/config/default_config.dart';
-import 'package:cookowt/models/controllers/analytics_controller.dart';
-import 'package:cookowt/shared_components/loading_logo.dart';
+import 'package:kookout/config/default_config.dart';
+import 'package:kookout/models/controllers/analytics_controller.dart';
+import 'package:kookout/shared_components/loading_logo.dart';
+import 'package:kookout/shared_components/menus/login_menu.dart';
+import 'package:kookout/wrappers/app_scaffold_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +73,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Center(
+            Center(
               child: LoadingLogo(),
             ),
             Column(

@@ -1,12 +1,12 @@
-import 'package:cookowt/models/hash_tag.dart';
+import 'package:kookout/models/hash_tag.dart';
 import 'package:flutter/material.dart';
-import 'package:hashtagable_v3/detector/detector.dart';
+import 'package:hashtagable/detector/detector.dart';
 
 List<Hashtag> extractHashTagWithDetails(String value) {
-  const decoratedTextColor = Colors.blue;
+  final decoratedTextColor = Colors.blue;
   final detector = Detector(
-      textStyle: const TextStyle(),
-      decoratedStyle: const TextStyle(color: decoratedTextColor));
+      textStyle: TextStyle(),
+      decoratedStyle: TextStyle(color: decoratedTextColor));
   final detections = detector.getDetections(value);
   final taggedDetections = detections
       .where((detection) => detection.style!.color == decoratedTextColor)

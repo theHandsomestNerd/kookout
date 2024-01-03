@@ -28,10 +28,10 @@ class LoadingButton extends StatelessWidget {
         height: 48,
         width: width??200,
         child: isLoading == true
-            ? const Column(
+            ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: const [
                     SizedBox(
                       height: 32,
                       width: 32,

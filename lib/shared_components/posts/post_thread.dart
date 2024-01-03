@@ -1,10 +1,10 @@
-import 'package:cookowt/models/clients/api_client.dart';
-import 'package:cookowt/models/controllers/analytics_controller.dart';
-import 'package:cookowt/models/controllers/auth_controller.dart';
-import 'package:cookowt/models/post.dart';
-import 'package:cookowt/pages/create_post_page.dart';
-import 'package:cookowt/shared_components/posts/post_solo.dart';
-import 'package:cookowt/wrappers/analytics_loading_button.dart';
+import 'package:kookout/models/clients/api_client.dart';
+import 'package:kookout/models/controllers/analytics_controller.dart';
+import 'package:kookout/models/controllers/auth_controller.dart';
+import 'package:kookout/models/post.dart';
+import 'package:kookout/pages/create_post_page.dart';
+import 'package:kookout/shared_components/posts/post_solo.dart';
+import 'package:kookout/wrappers/analytics_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -116,7 +116,7 @@ class _PostThreadState extends State<PostThread> {
         child: Container(color: Colors.black87),
       ),
       PagedListView<String, Post>(
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           0,
           0,
           0,
@@ -215,7 +215,7 @@ class _PostThreadState extends State<PostThread> {
                 ),
               ),
               const Text(
-                "Create a Post",
+                "Upload Photo(s)",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ],
@@ -316,11 +316,11 @@ class _PostThreadState extends State<PostThread> {
                                       height: 3,
                                     ),
                                   ),
-                                  const Column(
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Text(
-                                        "Create a Post",
+                                        "Upload Photo(s)",
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 18),
                                       ),
