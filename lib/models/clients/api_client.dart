@@ -32,10 +32,9 @@ class ApiClient {
   String sanityDB = "";
 
   ApiClient(String endpointUrl) {
-    // FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
-    //   token = theToken;
-    // });
-    getIdToken();
+    FirebaseAuth.instance.currentUser?.getIdToken().then((theToken) {
+      token = theToken ?? "";
+    });
   }
 
   Future<String?> getIdToken() async {
